@@ -7,6 +7,7 @@ import com.tieshan.disintegrate.dao.UserDao;
 import com.tieshan.disintegrate.pojo.SysUser;
 import com.tieshan.disintegrate.service.IUserService;
 import com.tieshan.disintegrate.util.IdWorker;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
@@ -29,6 +30,7 @@ public class UserService implements IUserService {
 
     @Autowired
     private SysUserMapper sysUserMapper;
+
     @Override
     public SysUser getUser(SysUser user) {
         return sysUserMapper.selectOne(user);
@@ -41,14 +43,17 @@ public class UserService implements IUserService {
 
     @Override
     public int insert(SysUser user) {
+        IdWorker idWorker = new IdWorker(1, 1, 1);
+        user.setId(idWorker.nextId());
+        user.setUser_password(DigestUtils.md5Hex(user.getLogin_name() + user.getUser_password()));
         return sysUserMapper.insert(user);
     }
 
     @Override
     public SysUser login(String login_name, String password) {
-        if ("admin".equals(login_name) && "111111".equals(password)){
+        if ("admin".equals(login_name) && "111111".equals(password)) {
             SysUser sysUser = new SysUser();
-            IdWorker idWorker = new IdWorker(1,1,1);
+            IdWorker idWorker = new IdWorker(1, 1, 1);
             sysUser.setId(1168779606862467072L);
             sysUser.setLogin_name("tom");
             sysUser.setUser_password("123456");
