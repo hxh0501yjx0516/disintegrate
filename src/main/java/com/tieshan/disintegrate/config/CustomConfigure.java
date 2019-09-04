@@ -18,7 +18,5 @@ public class CustomConfigure implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new CustomInterceptor()).addPathPatterns("/**")
                 .excludePathPatterns("/index.html", "/", "/auth/login");
-//        registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/**")
-//                .excludePathPatterns("/index.html", "/", "/user/login");
     }
 }
