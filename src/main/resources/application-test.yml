@@ -7,9 +7,9 @@ server:
 spring:
   datasource:
     druid:
-      url: jdbc:mysql://127.0.0.1:3306/disintegrate?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+      url: jdbc:mysql://60.205.223.142:3306/disintegrate?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
       username: root
-      password: root
+      password: q1w2e3r4!
       type: com.alibaba.druid.pool.DruidDataSource
       driver-class-name: com.mysql.jdbc.Driver
       initial-size: 10
@@ -26,7 +26,7 @@ spring:
       max-pool-prepared-statement-per-connection-size: 30
       connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
   redis:
-    host: 127.0.0.1
+    host: 101.200.62.57
     port: 6379
     jedis:
       pool:
@@ -34,8 +34,8 @@ spring:
         max-wait: -1
         max-idle: 8
         min-idle: 0
-    timeout: 0
-    password:
+    timeout: 1
+    password: chl@redispass
 mybatis:
   mapper-locations: classpath:mapper/*.xml
 logging:
@@ -43,4 +43,7 @@ logging:
     com.tieshan.disintegrate.dao: debug
 
 testJob: 0/9 * * * * ?
+
+pc_token: 1800
+app_token: 86400
 

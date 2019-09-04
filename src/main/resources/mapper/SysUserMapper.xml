@@ -22,7 +22,7 @@
     </select>
 
 <insert id="insert">
-    INSERT INTO USER ( id, login_name, user_name, user_password, phone, user_status, operator, create_time )
+    INSERT INTO user ( id, login_name, user_name, user_password, phone, user_status, operator, create_time )
 VALUES
 	(#{user.id},#{user.login_name},#{user.user_name},#{user.user_password},#{user.phone},#{user.user_status},#{user.operator},now())
 </insert>

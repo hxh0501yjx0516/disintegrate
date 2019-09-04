@@ -22,7 +22,7 @@
                 department_resource dr
                 INNER JOIN department dt ON dr.department_id = dt.id
                 INNER JOIN department_user du ON du.department_id= dt.id
-                INNER JOIN USER u ON u.id = du.user_id
+                INNER JOIN user u ON u.id = du.user_id
             WHERE
                 u.id	= 1
                 AND dr.resource_id = r.id

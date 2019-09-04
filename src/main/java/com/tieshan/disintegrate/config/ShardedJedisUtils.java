@@ -21,7 +21,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 @Configuration
 public class ShardedJedisUtils {
-    public static ShardedJedisPool shardedJedisPool ;//切片连接池
+    public static ShardedJedisPool shardedJedisPool;//切片连接池
     private static ReentrantLock lockJedis = new ReentrantLock();
 
     @Autowired
@@ -45,21 +45,23 @@ public class ShardedJedisUtils {
 
         // slave链接
         List<JedisShardInfo> shards = new ArrayList<>();
-        shards.add(new JedisShardInfo(env.getProperty("spring.redis.host"),  Integer.parseInt(env.getProperty("spring.redis.port"))));
+        JedisShardInfo jedisShardInfo = new JedisShardInfo(env.getProperty("spring.redis.host"), Integer.parseInt(env.getProperty("spring.redis.port")));
+        jedisShardInfo.setPassword(env.getProperty("spring.redis.password"));
+        shards.add(jedisShardInfo);
         // 构造池
         shardedJedisPool = new ShardedJedisPool(config, shards);
         return shardedJedisPool;
     }
 
 
-    public static ShardedJedis getShardedJedis( int num) {
+    public static ShardedJedis getShardedJedis(int num) {
         lockJedis.lock();
         if (shardedJedisPool == null) {
-           new ShardedJedisUtils().init();
+            new ShardedJedisUtils().init();
         }
-        ShardedJedis shardedJedis= null;
-        try{
-            if (shardedJedisPool!=null) {
+        ShardedJedis shardedJedis = null;
+        try {
+            if (shardedJedisPool != null) {
                 shardedJedis = shardedJedisPool.getResource();
                 Collection<Jedis> collection = shardedJedis.getAllShards();
                 Iterator<Jedis> jedis = collection.iterator();
@@ -67,15 +69,16 @@ public class ShardedJedisUtils {
                     jedis.next().select(num);
                 }
             }
-        }finally {
+        } finally {
             lockJedis.unlock();
         }
 
         return shardedJedis;
     }
+
     public static void cloneShardedJedis() {
         ShardedJedis shardedJedis = shardedJedisPool.getResource();
-        if (shardedJedis!=null) {
+        if (shardedJedis != null) {
             shardedJedis.close();
         }
     }

@@ -7,6 +7,7 @@ import com.tieshan.disintegrate.pojo.SysUser;
 import nl.bitwalker.useragentutils.UserAgent;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -22,6 +23,8 @@ import java.util.Random;
  */
 @Service
 public class TokenService {
+    @Autowired
+    Environment env;
     @Autowired
     private RedisUtil redisUtil;
     //生成token(格式为token:设备-加密的用户名-时间-六位随机数)
@@ -43,9 +46,9 @@ public class TokenService {
     public void save(String token, SysUser user) {
         if (token.startsWith("PC")) {
 
-            redisUtil.setex(token, JSON.toJSONString(user),   1*10*60);
+            redisUtil.setex(token, JSON.toJSONString(user),  Long.parseLong(env.getProperty("pc_token")));
         } else {
-            redisUtil.setex(token, JSONObject.toJSONString(user),24*60*60);
+            redisUtil.setex(token, JSONObject.toJSONString(user),Long.parseLong(env.getProperty("app_token")));
         }
     }
 
