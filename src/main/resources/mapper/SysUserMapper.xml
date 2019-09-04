@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tieshan.disintegrate.dao.SysUserMapper">
+
+<select id="selectOne" resultType="com.tieshan.disintegrate.pojo.SysUser">
+    SELECT
+    *
+    FROM
+    `user`
+    where
+    login_name =#{user.login_name}
+    and
+    user_password=#{user.user_password}
+</select>
+    <select id="selectByUsername" resultType="com.tieshan.disintegrate.pojo.SysUser">
+ SELECT
+    *
+    FROM
+    `user`
+    where
+    login_name =#{username}
+    </select>
+
+<insert id="insert">
+    INSERT INTO USER ( id, login_name, user_name, user_password, phone, user_status, operator, create_time )
+VALUES
+	(#{user.id},#{user.login_name},#{user.user_name},#{user.user_password},#{user.phone},#{user.user_status},#{user.operator},now())
+</insert>
+
+
+
+</mapper>

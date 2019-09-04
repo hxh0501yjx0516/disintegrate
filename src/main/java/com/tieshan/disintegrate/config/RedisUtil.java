@@ -1,0 +1,80 @@
+package com.tieshan.disintegrate.config;
+
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.stereotype.Component;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.ShardedJedis;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
+/**
+ * @description:
+ * @author: huxuanhua
+ * @date: Created in 2019/9/3 11:47
+ * @version: 1.0
+ * @modified By:
+ */
+
+@Component
+public class RedisUtil {
+    public static void set(String key, String value) {
+        ShardedJedis shardedJedis = ShardedJedisUtils.getShardedJedis(1);
+        String keys = key.substring(0, key.lastIndexOf("-")) + "*";
+        del(keys);
+        shardedJedis.set(key, value);
+        shardedJedis.close();
+    }
+
+    public static void setex(String key, String value, long seconds) {
+        ShardedJedis shardedJedis = ShardedJedisUtils.getShardedJedis(1);
+        String keys = key.substring(0, key.lastIndexOf("-")) + "*";
+        del(keys);
+        shardedJedis.del(key);
+        shardedJedis.set(key, value, "NX", "EX", seconds);
+        shardedJedis.close();
+    }
+
+    public static boolean get(String key) {
+        ShardedJedis shardedJedis = ShardedJedisUtils.getShardedJedis(1);
+        boolean isLive = shardedJedis.exists(key);
+        return isLive;
+    }
+
+    public static void close() {
+        ShardedJedis shardedJedis = ShardedJedisUtils.getShardedJedis(1);
+        shardedJedis.close();
+    }
+
+    public static void del(String delkey) {
+        Set<String> set = getByPrefix(delkey);
+        ShardedJedis shardedJedis = ShardedJedisUtils.getShardedJedis(1);
+
+        System.err.println(set);
+
+        for(String key :set)
+
+        {
+            shardedJedis.del(key);
+        }
+
+
+    }
+
+    public static Set<String> getByPrefix(String key) {
+        Set<String> setResult = new HashSet<>();
+        try {
+            ShardedJedis shardedJedis = ShardedJedisUtils.getShardedJedis(1);
+            Iterator<Jedis> jedisIterator = shardedJedis.getAllShards().iterator();
+            while(jedisIterator.hasNext()){
+                setResult = jedisIterator.next().keys(key);
+            }
+        } catch (Exception e) {
+           e.printStackTrace();
+        }
+        return setResult;
+    }
+
+}
+

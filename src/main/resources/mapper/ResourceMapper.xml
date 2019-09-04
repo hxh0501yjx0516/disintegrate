@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tieshan.disintegrate.dao.ResourceMapper">
+
+
+
+
+
+
+
+    <select id="getResourceList" resultType="com.tieshan.disintegrate.pojo.Resource">
+
+            SELECT
+                r.*
+            FROM
+                resource r
+            WHERE
+                EXISTS (
+            SELECT
+                1
+            FROM
+                department_resource dr
+                INNER JOIN department dt ON dr.department_id = dt.id
+                INNER JOIN department_user du ON du.department_id= dt.id
+                INNER JOIN USER u ON u.id = du.user_id
+            WHERE
+                u.id	= 1
+                AND dr.resource_id = r.id
+                )
+                AND r.resource_type = 1
+            ORDER BY
+                r.seq
+    </select>
+
+</mapper>
