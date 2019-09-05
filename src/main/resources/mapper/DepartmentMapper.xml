@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tieshan.disintegrate.dao.DepartmentMapper">
+
+    <select id="allDepartment" resultType="com.tieshan.disintegrate.pojo.Department">
+    SELECT
+	id,
+	department_name,
+	department_status,
+	department_describe,
+	operator,
+	create_time,
+	update_time,
+	seq
+FROM
+	department
+	order by  seq
+
+</select>
+    <select id="getDepart" resultType="com.tieshan.disintegrate.pojo.Department">
+         SELECT
+            id,
+            department_name,
+            department_status,
+            department_describe,
+            operator,
+            create_time,
+            update_time,
+            seq
+        FROM
+            department
+            where department_name=#{department_name}
+    </select>
+    <update id="updateDepart">
+      UPDATE department
+        SET department_name = #{depart.department_name},department_describe=#{depart.department_describe},update_time= now(),operator=#{depart.operator}
+        where id=#{depart.id}
+    </update>
+    <delete id="delDepart">
+    delete  from department where  id=#{id}
+   </delete>
+   <insert id="addDepart">
+        INSERT INTO department ( id, department_name,  department_describe, operator, create_time)
+         VALUES 	(#{depart.id},#{depart.department_name},#{depart.department_describe},#{depart.operator},now())
+   </insert>
+</mapper>

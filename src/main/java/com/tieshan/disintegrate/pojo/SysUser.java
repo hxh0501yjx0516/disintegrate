@@ -10,7 +10,7 @@ import lombok.Data;
  * @modified By:
  */
 @Data
-public class SysUser implements java.io.Serializable  {
+public class SysUser implements java.io.Serializable {
     private Long id;
     private String login_name;
     private String user_name;
@@ -18,4 +18,5 @@ public class SysUser implements java.io.Serializable  {
     private String phone;
     private String user_status;
     private String operator;
+    private Long depart_id;
 }

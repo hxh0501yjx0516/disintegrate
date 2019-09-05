@@ -32,15 +32,14 @@ public class LoginController {
         Dto dto = new Dto();
         SysUser sysUser = userService.login(username, password);
         if (sysUser != null) {
+            request.getSession().setAttribute("user", sysUser);
+            request.getSession().setAttribute("sysUser", sysUser);
             String type = null;
             String userAgent = request.getHeader("user-agent");
             UserAgent userAgent1 = UserAgent.parseUserAgentString(userAgent);
-            System.err.println(userAgent);
             if (userAgent1.getOperatingSystem().isMobileDevice()) {
-//                token.append("MOBILE-");
                 type = "MOBILE-";
             } else {
-//                token.append("PC-");
                 type = "PC-";
 
             }

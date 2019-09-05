@@ -8,6 +8,10 @@ import com.tieshan.disintegrate.util.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * @description: 测试控制类, 分页
@@ -23,7 +27,9 @@ public class UserController {
     private IUserService userService;
 
     @PostMapping(value = "/addUser")
-    public RestResult addUser(@RequestBody SysUser sysUser) {
+    public RestResult addUser(@RequestBody SysUser sysUser, HttpServletRequest request) {
+        SysUser user = (SysUser) request.getSession().getAttribute("user");
+        System.err.println(user);
         int num = userService.insert(sysUser);
         if (num == 1) {
             return new RestResult("添加成功", null, ResultCode.SUCCESS.code());
@@ -31,8 +37,42 @@ public class UserController {
         } else {
             return new RestResult("添加失败", null, ResultCode.ERROR.code());
 
+        }
+    }
+
+    @GetMapping(value = "/getUser")
+    public RestResult getUser(HttpServletRequest request) {
+        List<Map<String, Object>> mapList = userService.getUser();
+
+        return new RestResult("用户信息", mapList, ResultCode.SUCCESS.code());
+
+
+    }
+
+    @PostMapping(value = "/updateUser")
+    public RestResult updateUser(@RequestBody SysUser sysUser, HttpServletRequest request) {
+        int num = userService.updateUser(sysUser);
+        if (num == 1) {
+            return new RestResult("更新成功", null, ResultCode.SUCCESS.code());
+
+        } else {
+            return new RestResult("更新失败", null, ResultCode.ERROR.code());
 
         }
     }
 
+    @GetMapping(value = "/delUser")
+    public RestResult delUser(String id, HttpServletRequest request) {
+        int num = userService.delUser(id);
+
+        if (num == 1) {
+            return new RestResult("删除成功", null, ResultCode.SUCCESS.code());
+
+        } else {
+            return new RestResult("删除失败", null, ResultCode.ERROR.code());
+
+        }
+
+
+    }
 }
