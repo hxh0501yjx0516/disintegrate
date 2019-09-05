@@ -6,6 +6,7 @@ import com.tieshan.disintegrate.pojo.Menu;
 import com.tieshan.disintegrate.pojo.Resource;
 import com.tieshan.disintegrate.service.IResourceService;
 //import com.tieshan.disintegrate.util.SessionUtil;
+import com.tieshan.disintegrate.util.IdWorker;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ResourceService implements IResourceService {
     @Autowired
     private ResourceMapper resourceMapper;
+
     @Override
     public List<Menu> menus() {
 
@@ -52,18 +54,18 @@ public class ResourceService implements IResourceService {
 
     @Override
     public List<Resource> treeList() {
-
         Map<String, Object> params = new HashMap<>();
-//        Long currUid = SessionUtil.getCurrUid();
 
-//        if (currUid != null) {
-            params.put("userId", 0);// 自查自己有权限的资源
-//        }
-
+        params.put("userId", 0);// 自查自己有权限的资源
         List<Resource> resourceList = resourceMapper.getResourceList(params);
+        List<Resource> list = allResource(resourceList);
 
+        return list;
+    }
+
+    private List<Resource> allResource(List<Resource> resourceList) {
         Map<Long, Resource> map = new HashMap<>();
-        resourceList.forEach(resource -> map.put(resource.getId() , resource));
+        resourceList.forEach(resource -> map.put(resource.getId(), resource));
         resourceList.forEach(resource -> resource.setResource_pname(resource.getPid() != 0 ? map.get(resource.getPid()).getResource_name() : null));
 
         List<Resource> list = new ArrayList<>();
@@ -82,8 +84,10 @@ public class ResourceService implements IResourceService {
     }
 
     @Override
-    public void add(Resource resource) {
-
+    public int add(Resource resource) {
+        IdWorker idWorker = new IdWorker(1, 1, 1);
+        resource.setId(idWorker.nextId());
+        return resourceMapper.save(resource);
     }
 
     @Override
@@ -103,8 +107,14 @@ public class ResourceService implements IResourceService {
     }
 
     @Override
-    public List<Resource> getResourceList(Map<String, Object> params) {
-        return null;
+    public List<Resource> getResourceTree() {
+        Map<String, Object> params = new HashMap<>();
+
+        params.put("userId", 0);// 自查自己有权限的资源
+        List<Resource> resourceList = resourceMapper.getAllResource(params);
+        List<Resource> list = allResource(resourceList);
+
+        return list;
     }
 
     private void treeSort(List<Resource> resourceList, List<Resource> list, Resource parent) {
@@ -117,6 +127,7 @@ public class ResourceService implements IResourceService {
             }
         }
     }
+
     private void assembleMenu(List<Menu> menuList, List<Resource> resourceList) {
         for (Resource r : resourceList) {
             if (r.getPid() == 0) {

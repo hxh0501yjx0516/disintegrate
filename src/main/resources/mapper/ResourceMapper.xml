@@ -3,11 +3,6 @@
 <mapper namespace="com.tieshan.disintegrate.dao.ResourceMapper">
 
 
-
-
-
-
-
     <select id="getResourceList" resultType="com.tieshan.disintegrate.pojo.Resource">
 
             SELECT
@@ -31,5 +26,24 @@
             ORDER BY
                 r.seq
     </select>
+
+    <select id="getAllResource" resultType="com.tieshan.disintegrate.pojo.Resource">
+
+            SELECT
+                *
+            FROM
+                resource r
+            WHERE
+
+                  resource_type = 1
+            ORDER BY
+                seq
+    </select>
+    <insert id="save">
+                INSERT INTO resource ( id, resource_name, resource_url, seq, pid, resource_type, create_time, operator )
+              VALUES
+            (#{resource.id},#{resource.resource_name},#{resource.resource_url},#{resource.seq}
+            ,#{resource.pid},#{resource.resource_type},now(),#{resource.operator})
+    </insert>
 
 </mapper>

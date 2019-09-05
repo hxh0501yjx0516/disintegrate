@@ -47,7 +47,7 @@ public interface IResourceService {
      *
      * @param resource
      */
-    public void add(Resource resource);
+    public int add(Resource resource);
 
     /**
      * 删除资源
@@ -73,8 +73,7 @@ public interface IResourceService {
 
     /**
      * 资列表
-     * @param params
      * @return
      */
-    List<Resource> getResourceList(Map<String, Object> params);
+    List<Resource> getResourceTree();
 }

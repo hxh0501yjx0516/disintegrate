@@ -6,9 +6,7 @@ import com.tieshan.disintegrate.service.IResourceService;
 import com.tieshan.disintegrate.util.RestResult;
 import com.tieshan.disintegrate.util.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,6 +32,33 @@ public class MenuController {
     @GetMapping(value = "/treeList")
     public RestResult treeList() {
         RestResult restResult = new RestResult("返回tree", resourceService.treeList(), ResultCode.SUCCESS.code());
+        return restResult;
+    }
+
+    /**
+     * 添加资源
+     *
+     * @param resource
+     * @return
+     */
+    @PostMapping(value = "/addResource")
+    public RestResult addResource(@RequestBody Resource resource) {
+        int num = resourceService.add(resource);
+        if (num == 1) {
+
+            return new RestResult("添加成功", null, ResultCode.SUCCESS.code());
+        }
+        return new RestResult("添加失败", null, ResultCode.ERROR.code());
+    }
+
+    /**
+     * 获取所有资源
+     *
+     * @return
+     */
+    @GetMapping(value = "/resourceTree")
+    public RestResult resourceTree() {
+        RestResult restResult = new RestResult("返回tree", resourceService.getResourceTree(), ResultCode.SUCCESS.code());
         return restResult;
     }
 }

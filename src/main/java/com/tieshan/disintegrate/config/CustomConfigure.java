@@ -17,6 +17,6 @@ public class CustomConfigure implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new CustomInterceptor()).addPathPatterns("/**")
-                .excludePathPatterns("/index.html", "/", "/auth/login");
+                .excludePathPatterns("/index.html", "/", "/auth/login", "/resource/*");
     }
 }

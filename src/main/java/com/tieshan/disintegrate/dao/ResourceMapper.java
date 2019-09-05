@@ -1,6 +1,7 @@
 package com.tieshan.disintegrate.dao;
 
 import com.tieshan.disintegrate.pojo.Resource;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -22,11 +23,19 @@ public interface ResourceMapper {
     List<Resource> getResourceList(Map<String, Object> params);
 
     /**
+     * 获取所有资源
+     *
+     * @param params
+     * @return
+     */
+    List<Resource> getAllResource(Map<String, Object> params);
+
+    /**
      * 增加资源
      *
      * @param resource
      */
-    void save(Resource resource);
+    int save(@Param("resource") Resource resource);
 
     /**
      * 级联删除
@@ -52,6 +61,7 @@ public interface ResourceMapper {
 
     /**
      * 查询角色的资源ID
+     *
      * @param roleId 角色ID
      * @return 资源ID
      */
@@ -59,6 +69,7 @@ public interface ResourceMapper {
 
     /**
      * 角色的资源名称集合
+     *
      * @param roleId 角色ID
      * @return 资源名称
      */

@@ -1,5 +1,6 @@
 package com.tieshan.disintegrate.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.tieshan.disintegrate.pojo.Department;
 import com.tieshan.disintegrate.pojo.SysUser;
 import com.tieshan.disintegrate.service.IDepartmentService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -34,9 +36,10 @@ public class DepartmentController {
      * @return
      */
     @GetMapping(value = "/allDepartment")
-    public RestResult allDepartment(HttpServletRequest request) {
+    public PageInfo<Department> allDepartment(HttpServletRequest request) {
         List<Department> departmentList = departmentService.allDepartment();
-        return new RestResult("部门信息", departmentList, ResultCode.SUCCESS.code());
+        PageInfo<Department> pageInfo = new PageInfo<>(departmentList);
+        return pageInfo;
 
     }
 

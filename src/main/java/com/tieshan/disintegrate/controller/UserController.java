@@ -1,6 +1,7 @@
 package com.tieshan.disintegrate.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.tieshan.disintegrate.constant.ConStants;
 import com.tieshan.disintegrate.pojo.SysUser;
 import com.tieshan.disintegrate.service.IUserService;
 import com.tieshan.disintegrate.util.RestResult;
@@ -14,7 +15,7 @@ import java.util.Map;
 
 
 /**
- * @description: 测试控制类, 分页
+ * @description: 用户管理
  * @author: huxuanhua
  * @date: Created in 2019/8/28 18:07
  * @version: 1.0
@@ -41,10 +42,12 @@ public class UserController {
     }
 
     @GetMapping(value = "/getUser")
-    public RestResult getUser(HttpServletRequest request) {
-        List<Map<String, Object>> mapList = userService.getUser();
+    public  PageInfo<Map<String, Object>> getUser(@RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) int page,
+                              @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) int pageSize) {
 
-        return new RestResult("用户信息", mapList, ResultCode.SUCCESS.code());
+        List<Map<String, Object>> mapList = userService.getUser();
+        PageInfo<Map<String, Object>> pageInfo = new PageInfo<>(mapList);
+        return pageInfo;
 
 
     }
