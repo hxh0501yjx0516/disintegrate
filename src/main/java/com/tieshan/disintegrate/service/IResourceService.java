@@ -16,27 +16,19 @@ import java.util.Map;
 public interface IResourceService {
  /*   public List<Menu> menus();
     public List<Resource> treeList();*/
+
     /**
      * 获得资源树(资源类型为菜单类型)
-     *
+     * <p>
      * 通过用户ID判断，他能看到的资源
      *
      * @return
      */
     public List<Menu> menus();
 
-    /**
-     * 获得资源树(包括所有资源类型)
-     *
-     * 通过用户ID判断，他能看到的资源
-     *
-     * @return
-     */
-    public List<Menu> allMenus();
 
     /**
      * 获得资源列表
-     *
      *
      * @return
      */
@@ -49,31 +41,27 @@ public interface IResourceService {
      */
     public int add(Resource resource);
 
-    /**
-     * 删除资源
-     *
-     * @param id
-     */
-    public void delete(Long id);
-
-    /**
-     * 修改资源
-     *
-     * @param resource
-     */
-    public void edit(Resource resource);
-
-    /**
-     * 获得一个资源
-     *
-     * @param id
-     * @return
-     */
-    public Resource get(Long id);
 
     /**
      * 资列表
+     *
      * @return
      */
     List<Resource> getResourceTree();
+
+    /**
+     * 删除部门资源关系表
+     *
+     * @param department_id
+     * @returns
+     */
+    int updateDR(String department_id, String resource_id);
+
+    /**
+     * 查询部门的资源
+     *
+     * @param department_id
+     * @return
+     */
+    List<Resource> getResourceByDepartId(String department_id);
 }

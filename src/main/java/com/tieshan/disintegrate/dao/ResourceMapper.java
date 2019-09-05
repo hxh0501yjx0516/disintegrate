@@ -2,6 +2,7 @@ package com.tieshan.disintegrate.dao;
 
 import com.tieshan.disintegrate.pojo.Resource;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 import java.util.Map;
@@ -25,10 +26,9 @@ public interface ResourceMapper {
     /**
      * 获取所有资源
      *
-     * @param params
      * @return
      */
-    List<Resource> getAllResource(Map<String, Object> params);
+    List<Resource> getAllResource();
 
     /**
      * 增加资源
@@ -37,41 +37,29 @@ public interface ResourceMapper {
      */
     int save(@Param("resource") Resource resource);
 
-    /**
-     * 级联删除
-     *
-     * @param id 主键
-     */
-    void deleteById(Long id);
 
     /**
-     * 编辑资源
+     * 删除部门资源关系
      *
-     * @param resource 资源
+     * @param department_id
+     * @return
      */
-    void update(Resource resource);
+    int delDepartment_Resource(@Param("department_id") String department_id);
 
     /**
-     * 通过ID获得资源
+     * 插入资源部门关系
      *
-     * @param id ID
-     * @return 资源
+     * @param list
+     * @return
      */
-    Resource getById(Long id);
+    int insertDepartment_Resource(@Param("list") List<Map<String, Object>> list);
 
     /**
-     * 查询角色的资源ID
+     * 查询部门的的资源
      *
-     * @param roleId 角色ID
-     * @return 资源ID
+     * @param department_id
+     * @return
      */
-    List<Long> getRoleResourceIds(Long roleId);
+    List<Map<String, Object>> getDepartment_Resource(@Param("department_id") String department_id);
 
-    /**
-     * 角色的资源名称集合
-     *
-     * @param roleId 角色ID
-     * @return 资源名称
-     */
-    List<String> getRoleResourceNames(Long roleId);
 }

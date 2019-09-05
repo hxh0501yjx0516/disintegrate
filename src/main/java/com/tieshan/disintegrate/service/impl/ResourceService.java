@@ -7,12 +7,16 @@ import com.tieshan.disintegrate.pojo.Resource;
 import com.tieshan.disintegrate.service.IResourceService;
 //import com.tieshan.disintegrate.util.SessionUtil;
 import com.tieshan.disintegrate.util.IdWorker;
+import com.tieshan.disintegrate.util.PubMethod;
+import org.apache.shiro.crypto.hash.Hash;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 /**
  * @description:
@@ -42,15 +46,6 @@ public class ResourceService implements IResourceService {
         return menuList;
     }
 
-    @Override
-    public List<Menu> allMenus() {
-        List<Menu> menuList = new ArrayList<Menu>();
-
-        Map<String, Object> params = new HashMap<>();
-        List<Resource> resourceList = resourceMapper.getResourceList(params);
-        assembleMenu(menuList, resourceList);
-        return menuList;
-    }
 
     @Override
     public List<Resource> treeList() {
@@ -90,31 +85,55 @@ public class ResourceService implements IResourceService {
         return resourceMapper.save(resource);
     }
 
-    @Override
-    public void delete(Long id) {
-        resourceMapper.deleteById(id);
-    }
-
-    @Override
-    public void edit(Resource resource) {
-        resourceMapper.update(resource);
-
-    }
-
-    @Override
-    public Resource get(Long id) {
-        return resourceMapper.getById(id);
-    }
 
     @Override
     public List<Resource> getResourceTree() {
-        Map<String, Object> params = new HashMap<>();
 
-        params.put("userId", 0);// 自查自己有权限的资源
-        List<Resource> resourceList = resourceMapper.getAllResource(params);
+        List<Resource> resourceList = resourceMapper.getAllResource();
         List<Resource> list = allResource(resourceList);
 
         return list;
+    }
+
+    @Override
+    @Transactional
+    public int updateDR(String department_id, String resource_ids) {
+        resourceMapper.delDepartment_Resource(department_id);
+        IdWorker idWorker = new IdWorker(1, 1, 1);
+        String[] ids = resource_ids.split(",");
+        List<String> resource_idList = Arrays.asList(ids);
+        List<Map<String, Object>> mapList = new ArrayList<>();
+        if (!PubMethod.isEmpty(resource_idList)) {
+            for (String id : resource_idList) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("id", idWorker.nextId());
+                map.put("department_id", department_id);
+                map.put("resource_id", id);
+                mapList.add(map);
+            }
+            int num = resourceMapper.insertDepartment_Resource(mapList);
+            return num;
+        }
+        return 0;
+    }
+
+    @Override
+    public List<Resource> getResourceByDepartId(String department_id) {
+        List<Map<String, Object>> mapList = resourceMapper.getDepartment_Resource(department_id);
+        List<Resource> resourceList = resourceMapper.getAllResource();
+
+        if (!PubMethod.isEmpty(mapList)) {
+            Map<String, Map<String, Object>> drMap = new HashMap<>();
+            mapList.stream().forEach(map -> {
+                drMap.put(map.get("resource_id").toString(), map);
+            });
+            resourceList.stream().forEach(resource -> {
+                if (!PubMethod.isEmpty(drMap.get(resource.getId()+""))) {
+                    resource.setIsHaving(ConStants.NO_HAVING);
+                }
+            });
+        }
+        return resourceList;
     }
 
     private void treeSort(List<Resource> resourceList, List<Resource> list, Resource parent) {

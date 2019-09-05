@@ -18,4 +18,10 @@ public class ConStants {
      */
     public static final Integer RESOURCE_TYPE_MENU = 0;
     public static final Integer RESOURCE_TYPE_METHOD = 1;
+    /*
+     是否拥有此资源1:拥有；2：不拥有；
+     */
+    public  static  final  String YES_HAVING="1";
+    public  static  final  String NO_HAVING="2";
+
 }

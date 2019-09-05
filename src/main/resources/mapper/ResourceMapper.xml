@@ -29,10 +29,18 @@
 
     <select id="getAllResource" resultType="com.tieshan.disintegrate.pojo.Resource">
 
-            SELECT
-                *
+           SELECT
+                id,
+                resource_name,
+                resource_url,
+                seq,
+                pid,
+                resource_type,
+                create_time,
+                operator,
+                '1' isHaving
             FROM
-                resource r
+                resource
             WHERE
 
                   resource_type = 1
@@ -45,5 +53,27 @@
             (#{resource.id},#{resource.resource_name},#{resource.resource_url},#{resource.seq}
             ,#{resource.pid},#{resource.resource_type},now(),#{resource.operator})
     </insert>
+    <select id="getDepartment_Resource" resultType="java.util.Map">
 
+            SELECT
+                department_id,
+                resource_id
+            FROM
+                department_resource
+            WHERE
+
+                    department_id=#{department_id}
+
+    </select>
+    <delete id="delDepartment_Resource">
+         delete  from department_resource where  department_id=#{department_id}
+    </delete>
+    <insert id="insertDepartment_Resource">
+        INSERT INTO department_resource ( id, department_id, resource_id )
+        VALUES
+        <foreach item="map" index="index" collection="list"
+                 separator=",">
+            (#{map.id},#{map.department_id},#{map.resource_id})
+        </foreach>
+    </insert>
 </mapper>
