@@ -27,17 +27,18 @@ public class TokenService {
     Environment env;
     @Autowired
     private RedisUtil redisUtil;
+
     //生成token(格式为token:设备-加密的用户名-时间-六位随机数)
     public String generateToken(String type, SysUser user) {
         StringBuilder token = new StringBuilder();
         //设备
-         token.append(type);
+        token.append(type);
         //加密的用户名
-        token.append(DigestUtils.md5Hex(user.getLogin_name()+user.getUser_password())+user.getId()+"-");
+        token.append(DigestUtils.md5Hex(user.getLogin_name() + user.getUser_password()) + user.getId() + "-");
         //时间
         token.append(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()));
 //        //六位随机字符串
-        token.append(new Random().nextInt(999999 - 111111 + 1) + 111111 );
+        token.append(new Random().nextInt(999999 - 111111 + 1) + 111111);
         System.err.println("token-->" + token.toString());
         return token.toString();
     }
@@ -46,11 +47,14 @@ public class TokenService {
     public void save(String token, SysUser user) {
         if (token.startsWith("PC")) {
 
-            redisUtil.setex(token, JSON.toJSONString(user),  Long.parseLong(env.getProperty("pc_token")));
+            redisUtil.setex(token, JSON.toJSONString(user), Long.parseLong(env.getProperty("pc_token")));
         } else {
-            redisUtil.setex(token, JSONObject.toJSONString(user),Long.parseLong(env.getProperty("app_token")));
+            redisUtil.setex(token, JSONObject.toJSONString(user), Long.parseLong(env.getProperty("app_token")));
         }
     }
 
+    public void remove(String delToken) {
+        redisUtil.remove(delToken);
 
+    }
 }
