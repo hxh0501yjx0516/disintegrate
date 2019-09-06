@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tieshan.disintegrate.dao.CarSourceInfoMapper">
+
+    <resultMap type="com.tieshan.disintegrate.pojo.CarSourceInfo" id="carSourceInfoMap">
+        <result property="id" column="id"/>
+        <result property="sourceId" column="source_id"/>
+        <result property="contactName" column="contact_name"/>
+        <result property="contactPhone" column="contact_phone"/>
+        <result property="location" column="location"/>
+        <result property="carPlateNo" column="car_plate_no"/>
+        <result property="handleWay" column="handle_way"/>
+        <result property="handleDate" column="handle_date"/>
+        <result property="proceduresGetWay" column="procedures_get_way"/>
+        <result property="hasDrivingBook" column="has_driving_book"/>
+        <result property="hasRegistrationCertificate" column="has_registration_certificate"/>
+        <result property="hasIdentityDuplicate" column="has_identity_duplicate"/>
+        <result property="hasBusinessDuplicate" column="has_business_duplicate"/>
+        <result property="hasCarScrap" column="has_car_scrap"/>
+        <result property="hasMalfunctionProve" column="has_malfunction_prove"/>
+        <result property="remark" column="remark"/>
+        <result property="operatorName" column="operator_name"/>
+        <result property="operatorId" column="operator_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

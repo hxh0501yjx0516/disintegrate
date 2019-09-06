@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tieshan.disintegrate.dao.CarSourceMapper">
+
+    <resultMap type="com.tieshan.disintegrate.pojo.CarSource" id="carSourceMap">
+        <result property="id" column="id"/>
+        <result property="factoryId" column="factory_id"/>
+        <result property="contactName" column="contact_name"/>
+        <result property="contactPhone" column="contact_phone"/>
+        <result property="carAmount" column="car_amount"/>
+        <result property="location" column="location"/>
+        <result property="bankName" column="bank_name"/>
+        <result property="bankOpenAddress" column="bank_open_address"/>
+        <result property="bankAmount" column="bank_amount"/>
+        <result property="carPlateNo" column="car_plate_no"/>
+        <result property="handleWay" column="handle_way"/>
+        <result property="handleDate" column="handle_date"/>
+        <result property="proceduresGetWay" column="procedures_get_way"/>
+        <result property="procedures" column="procedures"/>
+        <result property="remark" column="remark"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <insert id="insertCarSource">
+        insert into s_car_source(
+            id, factory_id, contact_name, contact_phone, car_amount,
+            location, bank_name, bank_open_address, bank_amount, car_plate_no,
+            handle_way, handle_date, procedures_get_way, procedures, remark
+        )VALUES(
+            #{id},#{factory_id},#{contact_name},#{contact_phone},#{car_amount},
+            #{location},#{bank_name},#{bank_open_address},#{bank_amount},#{car_plate_no},
+            #{handle_way},#{handle_date},#{procedures_get_way},#{procedures},#{remark}
+        )
+
+    </insert>
+
+</mapper>
