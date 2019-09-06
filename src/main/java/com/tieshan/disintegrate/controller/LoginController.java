@@ -61,9 +61,10 @@ public class LoginController {
 
     }
 
-    @GetMapping(value = "go")
-    public RestResult allUser() {
-        return null;
+    @GetMapping(value = "/loginout")
+    public RestResult loginout(HttpServletRequest request) {
+        this.tokenService.remove(request.getHeader("token"));
+        return new RestResult("退出成功", null, ResultCode.SUCCESS.code());
     }
 
 

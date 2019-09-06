@@ -60,6 +60,11 @@ public class RedisUtil {
 
 
     }
+    public static void remove(String delkey) {
+        ShardedJedis shardedJedis = ShardedJedisUtils.getShardedJedis(1);
+           long num =  shardedJedis.del(delkey);
+        System.err.println(num);
+    }
 
     public static Set<String> getByPrefix(String key) {
         Set<String> setResult = new HashSet<>();
