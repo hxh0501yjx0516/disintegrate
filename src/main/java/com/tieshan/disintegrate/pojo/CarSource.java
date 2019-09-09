@@ -57,7 +57,7 @@ public class CarSource implements Serializable {
 	 */
 	private String carPlateNo;
 	/**
-	 * 处理方式 0:拖车,1:代驾,2:自送,3:上门开车
+	 * 处理方式 0:拖车,1:代驾,2:自送,3:上门开车 4
 	 */
 	private Integer handleWay;
 	/**
