@@ -1,9 +1,11 @@
 package com.tieshan.disintegrate.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.tieshan.disintegrate.annotation.LoginUser;
 import com.tieshan.disintegrate.pojo.CarSource;
 import com.tieshan.disintegrate.pojo.Department;
 import com.tieshan.disintegrate.pojo.SysUser;
+import com.tieshan.disintegrate.pojo.User;
 import com.tieshan.disintegrate.service.ICarSourceService;
 import com.tieshan.disintegrate.service.IDepartmentService;
 import com.tieshan.disintegrate.util.IdWorker;
@@ -31,9 +33,8 @@ public class CarSourceController {
     @Autowired
     private ICarSourceService carSourceService;
 
-
     @PostMapping(value = "/add")
-    public RestResult addDepart(@RequestBody CarSource carSource, HttpServletRequest request) {
+    public RestResult addDepart(@RequestBody CarSource carSource, @LoginUser User user) {
         IdWorker idWorker = new IdWorker(1, 1, 1);
         carSource.setId(idWorker.nextId());
         carSourceService.add(carSource);

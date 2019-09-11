@@ -5,6 +5,8 @@ import com.tieshan.disintegrate.util.PubMethod;
 import com.tieshan.disintegrate.util.RestResult;
 import com.tieshan.disintegrate.util.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -20,9 +22,13 @@ import java.io.OutputStream;
  * @version: 1.0
  * @modified By:
  */
+@Component
 public class CustomInterceptor implements HandlerInterceptor {
     @Autowired
+    Environment env;
+    @Autowired
     private RedisUtil redisUtil;
+
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
