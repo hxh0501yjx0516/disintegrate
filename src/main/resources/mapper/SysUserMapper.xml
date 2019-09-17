@@ -26,13 +26,36 @@
     </select>
 
     <select id="login" resultType="com.tieshan.disintegrate.pojo.SysUser">
- SELECT
-    id, login_name, user_name, user_password, phone, user_status
-    FROM
-    `user`
-    where
-    login_name =#{username} and user_password=#{password}
+         SELECT
+
+             IFNULL(u.login_name,'') AS login_name,
+             IFNULL(u.user_name,'') AS user_name,
+             IFNULL(u.user_password,'') AS user_password,
+             IFNULL(u.phone,'') AS phone,
+             IFNULL(d.id,'') AS depart_id,
+            IFNULL(u.id,'') AS id,
+             IFNULL(d.department_name,'') AS department_name,
+             IFNULL(c.company_name,'') AS company_name,
+             IFNULL(c.company_code,'') AS  company_code,
+             IFNULL(c.id,'') AS  company_id
+        FROM
+            user u
+            LEFT JOIN department_user du ON u.id = du.user_id
+            LEFT JOIN department d ON d.id = du.department_id
+            LEFT JOIN company c ON c.company_code = d.company_code
+            where
+            login_name =#{username} and user_password=#{password}
     </select>
+    <insert id="loginlog">
+        INSERT INTO ts_login_log ( id, login_name, user_name, login_time )
+        VALUES
+	    (#{user.id},#{user.login_name},#{user.user_name},now())
+    </insert>
+    <insert id="loginoutlog">
+        INSERT INTO ts_login_log ( id, login_name, user_name,  loginout_time )
+        VALUES
+	    (#{user.id},#{user.login_name},#{user.user_name},now())
+    </insert>
 
     <insert id="insertUser">
         INSERT INTO user ( id, login_name, user_name, user_password, phone, user_status, operator, create_time )
@@ -53,6 +76,13 @@
 				user_password=#{user.user_password},
 				phone=#{user.phone},
 				operator=#{user.operator}
+        where id=#{user.id}
+    </update>
+    <update id="updatePassword">
+       UPDATE user
+        SET
+				user_password=#{user.user_password}
+
         where id=#{user.id}
     </update>
     <delete id="delUser">

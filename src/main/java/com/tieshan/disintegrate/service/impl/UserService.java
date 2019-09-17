@@ -87,6 +87,14 @@ public class UserService implements IUserService {
         return num;
     }
 
+    @Override
+    @Transactional
+    public int updatePassword(SysUser user) {
+        user.setUser_password(DigestUtils.md5Hex(user.getLogin_name() + user.getUser_password()));
+        int num = sysUserMapper.updatePassword(user);
+        return num;
+    }
+
 
     @Override
     @Transactional
@@ -95,6 +103,20 @@ public class UserService implements IUserService {
 
         int num = sysUserMapper.delUser(id);
         return num;
+    }
+
+    @Override
+    public void loginlog(SysUser user) {
+        IdWorker idWorker = new IdWorker(1, 1, 1);
+        user.setId(idWorker.nextId());
+        sysUserMapper.loginlog(user);
+    }
+
+    @Override
+    public void loginoutlog(SysUser user) {
+        IdWorker idWorker = new IdWorker(1, 1, 1);
+        user.setId(idWorker.nextId());
+        sysUserMapper.loginoutlog(user);
     }
 
 
