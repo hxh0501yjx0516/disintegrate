@@ -2,11 +2,13 @@ package com.tieshan.disintegrate.config;
 
 import com.beust.jcommander.internal.Nullable;
 import com.tieshan.disintegrate.util.PubMethod;
+import com.tieshan.disintegrate.util.RedisUtils;
 import com.tieshan.disintegrate.util.RestResult;
 import com.tieshan.disintegrate.util.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -25,9 +27,11 @@ import java.io.OutputStream;
 @Component
 public class CustomInterceptor implements HandlerInterceptor {
     @Autowired
-    Environment env;
+    private Environment env;
+    /*@Autowired
+    private RedisUtil redisUtil;*/
     @Autowired
-    private RedisUtil redisUtil;
+    private RedisUtils redisUtils;
 
 
     @Override
@@ -37,9 +41,10 @@ public class CustomInterceptor implements HandlerInterceptor {
             returnJson(response, "未检出到token", null, ResultCode.TOKEN_NO.code());
             return false;
         } else {
-            boolean isLive = redisUtil.get(token);
-            redisUtil.close();
-            if (!isLive) {
+            //boolean isLive = redisUtil.get(token);
+            //redisUtil.close();
+            String userStr = redisUtils.get(token);
+            if (StringUtils.isEmpty(userStr)) {
                 returnJson(response, "token失效", null, ResultCode.TOKEN_FAILURE.code());
                 return false;
             }

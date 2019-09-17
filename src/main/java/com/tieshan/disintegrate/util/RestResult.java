@@ -56,6 +56,13 @@ public class RestResult {
         result.setMsg(msg);
         return result;
     }
+    public static RestResult error(ResultCode resultCode, String msg) {
+        RestResult result = new RestResult();
+        result.setResultCode(resultCode);
+        result.setData(outMap);
+        result.setMsg(msg);
+        return result;
+    }
 
     public static RestResult success(Object data) {
         RestResult result = new RestResult();

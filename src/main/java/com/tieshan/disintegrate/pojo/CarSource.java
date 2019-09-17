@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * @description:车源信息表
  * 
@@ -27,6 +29,7 @@ public class CarSource implements Serializable {
 	/**
 	 * 联系人姓名
 	 */
+	@NotBlank(message="联系人姓名不能为空")
 	private String contactName;
 	/**
 	 * 联系人电话

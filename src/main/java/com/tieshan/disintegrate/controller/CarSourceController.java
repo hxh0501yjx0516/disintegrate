@@ -12,6 +12,7 @@ import com.tieshan.disintegrate.util.IdWorker;
 import com.tieshan.disintegrate.util.PubMethod;
 import com.tieshan.disintegrate.util.RestResult;
 import com.tieshan.disintegrate.util.ResultCode;
+import com.tieshan.disintegrate.validator.ValidatorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +36,7 @@ public class CarSourceController {
 
     @PostMapping(value = "/add")
     public RestResult addDepart(@RequestBody CarSource carSource, @LoginUser User user) {
+        ValidatorUtils.validateEntity(carSource);
         IdWorker idWorker = new IdWorker(1, 1, 1);
         carSource.setId(idWorker.nextId());
         carSourceService.add(carSource);
