@@ -39,7 +39,6 @@ public class TokenService {
         token.append(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()));
 //        //六位随机字符串
         token.append(new Random().nextInt(999999 - 111111 + 1) + 111111);
-        System.err.println("token-->" + token.toString());
         return token.toString();
     }
 
@@ -51,6 +50,14 @@ public class TokenService {
         } else {
             redisUtil.setex(token, JSONObject.toJSONString(user), Long.parseLong(env.getProperty("app_token")));
         }
+    }
+
+    /*
+      获取token数据
+     */
+    public SysUser getToken(String token) {
+        SysUser sysUser = redisUtil.getToken(token);
+        return sysUser;
     }
 
     public void remove(String delToken) {

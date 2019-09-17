@@ -1,5 +1,7 @@
 package com.tieshan.disintegrate.config;
 
+import com.alibaba.fastjson.JSONObject;
+import com.tieshan.disintegrate.pojo.SysUser;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.ShardedJedis;
@@ -41,6 +43,15 @@ public class RedisUtil {
         return isLive;
     }
 
+    public static SysUser getToken(String key) {
+        ShardedJedis shardedJedis = ShardedJedisUtils.getShardedJedis(1);
+        String tokens = shardedJedis.get(key);
+        JSONObject jsonObject = JSONObject.parseObject(tokens);
+        SysUser sysUser = JSONObject.toJavaObject(jsonObject, SysUser.class);
+
+        return sysUser;
+    }
+
     public static void close() {
         ShardedJedis shardedJedis = ShardedJedisUtils.getShardedJedis(1);
         shardedJedis.close();
@@ -52,18 +63,16 @@ public class RedisUtil {
 
         System.err.println(set);
 
-        for(String key :set)
-
-        {
+        for (String key : set) {
             shardedJedis.del(key);
         }
 
 
     }
+
     public static void remove(String delkey) {
         ShardedJedis shardedJedis = ShardedJedisUtils.getShardedJedis(1);
-           long num =  shardedJedis.del(delkey);
-        System.err.println(num);
+        long num = shardedJedis.del(delkey);
     }
 
     public static Set<String> getByPrefix(String key) {
@@ -71,11 +80,11 @@ public class RedisUtil {
         try {
             ShardedJedis shardedJedis = ShardedJedisUtils.getShardedJedis(1);
             Iterator<Jedis> jedisIterator = shardedJedis.getAllShards().iterator();
-            while(jedisIterator.hasNext()){
+            while (jedisIterator.hasNext()) {
                 setResult = jedisIterator.next().keys(key);
             }
         } catch (Exception e) {
-           e.printStackTrace();
+            e.printStackTrace();
         }
         return setResult;
     }
