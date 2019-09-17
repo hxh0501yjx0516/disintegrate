@@ -21,7 +21,7 @@ import javax.sql.DataSource;
  * @author: huxuanhua
  * @date: Created in 2019/8/28 18:07
  * @version: 1.0
- * @modified By:
+ * @modified By:Leavonson
  */
 @Configuration
 @MapperScan(basePackages = "com.tieshan.disintegrate.dao", sqlSessionTemplateRef = "sqlSessionTemplate")
@@ -33,6 +33,15 @@ public class DatabaseADConfiguration {
         return new DruidDataSource();
     }
 
+ /**
+ * 多数据源下Mybatis驼峰映射配置,若无此配置，驼峰字段会出现NULL值
+ * */
+    @Bean
+    @ConfigurationProperties(prefix = "mybatis.configuration")
+    public org.apache.ibatis.session.Configuration configuration(){
+        return new org.apache.ibatis.session.Configuration();
+    }
+
 //    @Primary
     @Bean(name = "transactionManager")
     public DataSourceTransactionManager setTransactionManager(@Qualifier("dataSource") DataSource dataSource) {
@@ -41,9 +50,10 @@ public class DatabaseADConfiguration {
 
 //    @Primary
     @Bean(name = "sqlSessionFactory")
-    public SqlSessionFactory setSqlSessionFactory(@Qualifier("dataSource") DataSource dataSource) throws Exception {
+    public SqlSessionFactory setSqlSessionFactory(@Qualifier("dataSource") DataSource dataSource,org.apache.ibatis.session.Configuration configuration) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
+        bean.setConfiguration(configuration);
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         bean.setMapperLocations(resolver.getResources("classpath:mapper/*.xml"));
         return bean.getObject();
