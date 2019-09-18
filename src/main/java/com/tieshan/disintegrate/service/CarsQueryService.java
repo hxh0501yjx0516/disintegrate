@@ -1,7 +1,7 @@
 package com.tieshan.disintegrate.service;
 
-import com.tieshan.disintegrate.pojo.CarsQuery;
-import com.tieshan.disintegrate.pojo.PageObject;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @description:
@@ -15,11 +15,14 @@ public interface CarsQueryService {
      * 实现分页查询操作
      *
      * @param findMsg     基于条件查询时的参数名
-     * @param pageCurrent 当前的页码值
+     * @param page 当前的页码值
+     * @param pageSize 当前页个数
      * @return 当前页记录+分页信息
      */
-    PageObject<CarsQuery> findPageObjects(
+    List<Map<String, Object>> findPageObjects(
             String findMsg,
-            Integer pageCurrent);
+            Integer page,
+            Integer pageSize);
+
 }
 
