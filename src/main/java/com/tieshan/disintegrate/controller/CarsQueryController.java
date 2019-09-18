@@ -1,13 +1,16 @@
 package com.tieshan.disintegrate.controller;
 
-import com.tieshan.disintegrate.pojo.CarsQuery;
-import com.tieshan.disintegrate.pojo.PageObject;
+import com.github.pagehelper.PageInfo;
+import com.tieshan.disintegrate.constant.ConStants;
 import com.tieshan.disintegrate.service.CarsQueryService;
-import com.tieshan.disintegrate.util.RestResult;
-import com.tieshan.disintegrate.util.ResultCode;
+import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @description:车辆查询页面展示
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version: 1.0
  * @modified By:
  */
+@CommonsLog
 @RestController
 public class CarsQueryController {
 
@@ -29,11 +33,20 @@ public class CarsQueryController {
      * @return: RestResult(msg, data, code)
      */
     @GetMapping("/doCarsQuery/doFindPageObjects")
-    public RestResult doFindPageObjects(String findMsg, Integer pageCurrent) {
+    public PageInfo<Map<String, Object>> doFindPageObjects(
+            @RequestParam(value = "findMsg", required = false) String findMsg,
+            @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
+            @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize
+    ) {
+        PageInfo<Map<String, Object>> pageInfo = null;
+        try {
+            List<Map<String, Object>> mapList = carsQueryService.findPageObjects(findMsg, page,pageSize);
+            pageInfo = new PageInfo<>(mapList);
+        } catch (Exception e) {
+            log.info("获取车辆信息列表失败------->", e);
+        }
 
-        PageObject<CarsQuery> pageObject =
-                carsQueryService.findPageObjects(findMsg, pageCurrent);
-        return new RestResult("ok", pageObject, ResultCode.SUCCESS.code());
+        return pageInfo;
     }
 
 }
