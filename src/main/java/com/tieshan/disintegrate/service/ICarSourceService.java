@@ -1,6 +1,10 @@
 package com.tieshan.disintegrate.service;
 
+import com.tieshan.disintegrate.pojo.Bank;
 import com.tieshan.disintegrate.pojo.CarSource;
+import com.tieshan.disintegrate.pojo.SysUser;
+
+import java.util.List;
 
 /**
  * @description:
@@ -12,4 +16,8 @@ import com.tieshan.disintegrate.pojo.CarSource;
 public interface ICarSourceService {
 
     void add(CarSource carSource);
+
+    List<SysUser> findUserNameList();
+
+    List<String> findBankNameList();
 }

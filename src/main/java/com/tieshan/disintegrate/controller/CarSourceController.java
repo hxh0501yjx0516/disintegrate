@@ -1,32 +1,24 @@
 package com.tieshan.disintegrate.controller;
 
-import com.github.pagehelper.PageInfo;
-import com.tieshan.disintegrate.annotation.LoginUser;
 import com.tieshan.disintegrate.pojo.CarSource;
-import com.tieshan.disintegrate.pojo.Department;
-import com.tieshan.disintegrate.pojo.SysUser;
 import com.tieshan.disintegrate.pojo.User;
 import com.tieshan.disintegrate.service.ICarSourceService;
-import com.tieshan.disintegrate.service.IDepartmentService;
-import com.tieshan.disintegrate.util.IdWorker;
-import com.tieshan.disintegrate.util.PubMethod;
+import com.tieshan.disintegrate.service.impl.UserService;
 import com.tieshan.disintegrate.util.RestResult;
 import com.tieshan.disintegrate.util.ResultCode;
-import com.tieshan.disintegrate.validator.ValidatorUtils;
+import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 
 /**
  * @description: 测试控制类, 分页
- * @author: renlei
+ * @author: ningfeng
  * @date: Created in 2019/9/6 11:27
  * @version: 1.0
  * @modified By:
  */
+@CommonsLog
 @RestController
 @RequestMapping("/carSource")
 public class CarSourceController {
@@ -34,13 +26,34 @@ public class CarSourceController {
     @Autowired
     private ICarSourceService carSourceService;
 
+
+    /**
+     * 查询所有的用户的姓名和id （业务员）
+     * @return
+     */
+    @GetMapping(value = "/findUserList")
+    public RestResult findUserNameList(){
+        return new RestResult("查询成功", carSourceService.findUserNameList(), ResultCode.SUCCESS.code());
+    }
+
+    /**
+     * 查询所有银行的信息
+     * @return
+     */
+    @GetMapping(value = "/findBankNameList")
+    public RestResult findBankUserNameList(){
+        return new RestResult("查询成功", carSourceService.findBankNameList(), ResultCode.SUCCESS.code());
+    }
+
     @PostMapping(value = "/add")
-    public RestResult addDepart(@RequestBody CarSource carSource, @LoginUser User user) {
-        ValidatorUtils.validateEntity(carSource);
-        IdWorker idWorker = new IdWorker(1, 1, 1);
-        carSource.setId(idWorker.nextId());
-        carSourceService.add(carSource);
-        return new RestResult("添加成功", null, ResultCode.SUCCESS.code());
+    public RestResult addDepart(@RequestBody CarSource carSource) {
+        try {
+            carSourceService.add(carSource);
+        }catch (Exception e){
+            log.info("添加车源失败", e);
+            return new RestResult("添加车源失败", null, ResultCode.ERROR.code());
+        }
+        return new RestResult("添加车源成功", null, ResultCode.SUCCESS.code());
     }
 
 }
