@@ -14,14 +14,40 @@ import java.util.Map;
  * @modified By:
  */
 public interface IUserService {
-    public List<Map<String, Object>> getUser();
+    /**
+     * 获取用户列表
+     *
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    List<Map<String, Object>> getUser(int page, int pageSize);
 
     SysUser selectByUsername(String username);
 
+    /**
+     * 添加用户
+     *
+     * @param user
+     * @return
+     */
     int insert(SysUser user);
 
+    /**
+     * 登录
+     *
+     * @param login_name
+     * @param password
+     * @return
+     */
     SysUser login(String login_name, String password);
 
+    /**
+     * 用户修改
+     *
+     * @param user
+     * @return
+     */
     int updateUser(SysUser user);
 
     /**
@@ -32,6 +58,12 @@ public interface IUserService {
      */
     int updatePassword(SysUser user);
 
+    /**
+     * 删除用户
+     *
+     * @param id
+     * @return
+     */
     int delUser(String id);
 
     /**

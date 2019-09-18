@@ -3,18 +3,18 @@
 <mapper namespace="com.tieshan.disintegrate.dao.SysUserMapper">
 
     <select id="allUser" resultType="java.util.Map">
-       SELECT user
-        .id,
-        user.login_name,
-        user.user_name,
-        d.department_name,
-        du.department_id,
-        user.operator,
-        user.create_time
+              SELECT
+            IFNULL(u.id,'') AS id,
+            IFNULL(u.login_name,'') AS login_name,
+            IFNULL(u.user_name,'') AS user_name,
+            IFNULL(d.department_name,'') AS  department_name,
+            IFNULL(du.department_id,'')  AS department_id,
+            IFNULL(u.operator,'') AS operator,
+            IFNULL(u.create_time,'') AS  create_time
 
-    FROM
-        user user LEFT JOIN department_user du ON user.id = du.user_id
-        LEFT JOIN department d ON d.id = du.department_id
+        FROM
+            user u LEFT JOIN department_user du ON u.id = du.user_id
+            LEFT JOIN department d ON d.id = du.department_id
 </select>
     <select id="selectByUsername" resultType="com.tieshan.disintegrate.pojo.SysUser">
  SELECT
@@ -64,6 +64,9 @@
 </insert>
 
     <insert id="insertDepartment_user">
+
+
+
         INSERT INTO department_user ( id, user_id, department_id )
     VALUES
         (#{department_user.id},#{department_user.user_id},#{department_user.department_id})
@@ -73,8 +76,7 @@
        UPDATE user
         SET login_name = #{user.login_name},
 				user_name=#{user.user_name},
-				user_password=#{user.user_password},
-				phone=#{user.phone},
+ 				phone=#{user.phone},
 				operator=#{user.operator}
         where id=#{user.id}
     </update>
@@ -85,9 +87,9 @@
 
         where id=#{user.id}
     </update>
-    <delete id="delUser">
-    delete  from user where  id=#{id}
-   </delete>
+    <update id="delUser">
+    UPDATE user set user_status='2' where  id=#{id}
+   </update>
     <update id="updateDepartment_user">
        UPDATE department_user
         SET department_id = #{user.depart_id}

@@ -1,6 +1,7 @@
 package com.tieshan.disintegrate.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
 import com.tieshan.disintegrate.config.ShardedJedisUtils;
 import com.tieshan.disintegrate.dao.SysUserMapper;
 import com.tieshan.disintegrate.dao.UserDao;
@@ -38,7 +39,9 @@ public class UserService implements IUserService {
     private Department_user department_user;
 
     @Override
-    public List<Map<String, Object>> getUser() {
+    public List<Map<String, Object>> getUser(int page, int pageSize) {
+        PageHelper.startPage(page, pageSize);
+        PageHelper.orderBy("id desc");
         return sysUserMapper.allUser();
     }
 
@@ -55,6 +58,7 @@ public class UserService implements IUserService {
             IdWorker idWorker = new IdWorker(1, 1, 1);
             user.setId(idWorker.nextId());
             user.setUser_password(DigestUtils.md5Hex(user.getLogin_name() + user.getUser_password()));
+            user.setUser_status("1");
             sysUserMapper.insertUser(user);
             department_user.setId(idWorker.nextId());
             department_user.setDepartment_id(user.getDepart_id());
@@ -80,10 +84,8 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public int updateUser(SysUser user) {
-        user.setUser_password(DigestUtils.md5Hex(user.getLogin_name() + user.getUser_password()));
         sysUserMapper.updateDepartment_user(user);
         int num = sysUserMapper.updateUser(user);
-
         return num;
     }
 
