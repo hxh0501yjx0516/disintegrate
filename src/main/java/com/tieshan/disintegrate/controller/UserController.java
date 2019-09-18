@@ -139,4 +139,26 @@ public class UserController {
         return restResult;
 
     }
+
+    /**
+     * 通过用户主键id查询用户信息
+     *
+     * @param id
+     * @param request
+     * @return
+     */
+    @GetMapping(value = "/getUserByid")
+    public RestResult getUserByid(String id, HttpServletRequest request) {
+        RestResult restResult = null;
+        try {
+            Map<String,Object>resultMap = userService.getUserByid(id);
+            restResult = new RestResult("获取用户信息", resultMap, ResultCode.SUCCESS.code());
+        } catch (Exception e) {
+            log.info("通过用户主键id获取用户失败---->", e);
+            return new RestResult("获取失败", null, ResultCode.ERROR.code());
+
+        }
+        return restResult;
+
+    }
 }
