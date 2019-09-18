@@ -80,5 +80,13 @@ public interface IUserService {
      */
     void loginoutlog(SysUser user);
 
+    /**
+     * 通过用户主键id获取用户信息
+     *
+     * @param id
+     * @return
+     */
+    Map<String, Object> getUserByid(String id);
+
 
 }
