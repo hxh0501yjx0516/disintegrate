@@ -88,5 +88,11 @@ public interface IUserService {
      */
     Map<String, Object> getUserByid(String id);
 
+    /**
+     * 获取所有的用户对象
+     * @return
+     */
+    List<SysUser> findUserList();
+
 
 }

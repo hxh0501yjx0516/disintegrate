@@ -126,5 +126,10 @@ public class UserService implements IUserService {
         return sysUserMapper.getUserByid(id);
     }
 
+    @Override
+    public List<SysUser> findUserList() {
+        return sysUserMapper.findUserList();
+    }
+
 
 }

@@ -113,4 +113,12 @@
                 LEFT JOIN department d ON d.id = du.department_id
                             where u.id=#{id}
     </select>
+
+    <select id="findUserList" resultMap="java.util.List">
+        SELECT
+				IFNULL(u.id, '') AS id,
+				IFNULL(u.user_name, '') AS user_name
+		FROM
+				user u;
+    </select>
 </mapper>
