@@ -43,7 +43,7 @@ public class CarsQueryController {
             List<Map<String, Object>> mapList = carsQueryService.findPageObjects(findMsg, page,pageSize);
             pageInfo = new PageInfo<>(mapList);
         } catch (Exception e) {
-            log.info("获取车辆信息列表失败------->", e);
+            log.info("获取车辆信息列表失败", e);
         }
 
         return pageInfo;
