@@ -18,7 +18,7 @@
 
     <sql id="queryWhereMsg">
         <where>
-            iden.car_no=info.id
+            iden.car_info_id=info.id
             <if test="findMsg!=null and findMsg!=''">
                 and iden.owner like concat("%",#{findMsg},"%")
                 or iden.phone like concat("%",#{findMsg},"%")
