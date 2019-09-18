@@ -121,5 +121,10 @@ public class UserService implements IUserService {
         sysUserMapper.loginoutlog(user);
     }
 
+    @Override
+    public Map<String, Object> getUserByid(String id) {
+        return sysUserMapper.getUserByid(id);
+    }
+
 
 }

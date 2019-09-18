@@ -112,4 +112,12 @@ public interface SysUserMapper {
      */
 
     int delDepartment_user(@Param("id") String id);
+
+    /**
+     * 通过员工主键id查询用户信息
+     *
+     * @param id
+     * @return
+     */
+    Map<String, Object> getUserByid(@Param("id") String id);
 }
