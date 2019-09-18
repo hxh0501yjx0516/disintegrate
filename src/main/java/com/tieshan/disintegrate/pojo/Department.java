@@ -18,5 +18,6 @@ public class Department {
     private String operator;
     private String create_time;
     private String update_time;
+    private String company_code;
     private String seq;
 }

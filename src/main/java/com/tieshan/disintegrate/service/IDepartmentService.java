@@ -12,13 +12,44 @@ import java.util.List;
  * @modified By:
  */
 public interface IDepartmentService {
-    List<Department> allDepartment();
+    /**
+     * 获取所有部门
+     *
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    List<Department> allDepartment(int page, int pageSize);
 
+    /**
+     * 校验部门是否存在
+     *
+     * @param department_name
+     * @return
+     */
     Department getDepart(String department_name);
 
+    /**
+     * 添加部门
+     *
+     * @param department
+     * @return
+     */
     int addDepart(Department department);
 
+    /**
+     * 修改部门
+     *
+     * @param department
+     * @return
+     */
     int updateDepart(Department department);
 
+    /**
+     * 删除部门
+     *
+     * @param id
+     * @return
+     */
     int delDepart(long id);
 }

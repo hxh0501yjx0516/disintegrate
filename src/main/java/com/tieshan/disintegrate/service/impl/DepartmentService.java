@@ -1,8 +1,10 @@
 package com.tieshan.disintegrate.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.tieshan.disintegrate.dao.DepartmentMapper;
 import com.tieshan.disintegrate.pojo.Department;
 import com.tieshan.disintegrate.service.IDepartmentService;
+import com.tieshan.disintegrate.util.IdWorker;
 import com.tieshan.disintegrate.util.PubMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * @description:
+ * @description: 部门业务类
  * @author: huxuanhua
  * @date: Created in 2019/9/4 15:47
  * @version: 1.0
@@ -23,7 +25,9 @@ public class DepartmentService implements IDepartmentService {
     private DepartmentMapper departmentMapper;
 
     @Override
-    public List<Department> allDepartment() {
+    public List<Department> allDepartment(int page, int pageSize) {
+        PageHelper.startPage(page, pageSize);
+        PageHelper.orderBy("seq desc");
         return departmentMapper.allDepartment();
     }
 
@@ -35,6 +39,9 @@ public class DepartmentService implements IDepartmentService {
 
     @Override
     public int addDepart(Department department) {
+        IdWorker idWorker = new IdWorker(1, 1, 1);
+        department.setId(idWorker.nextId());
+        department.setDepartment_status("1");
         int num = departmentMapper.addDepart(department);
         return num;
     }

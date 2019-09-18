@@ -3,18 +3,16 @@
 <mapper namespace="com.tieshan.disintegrate.dao.DepartmentMapper">
 
     <select id="allDepartment" resultType="com.tieshan.disintegrate.pojo.Department">
-    SELECT
-	id,
-	department_name,
-	department_status,
-	department_describe,
-	operator,
-	create_time,
-	update_time,
-	seq
-FROM
-	department
-	order by  seq
+            SELECT
+            IFNULL(id,'') as id,
+            IFNULL(department_name,'') as department_name,
+            IFNULL(department_status,'') as department_status,
+            IFNULL(department_describe,'') as department_describe,
+            IFNULL(create_time,'') as create_time,
+            IFNULL(update_time,'') as update_time,
+            IFNULL(seq,'') as seq
+        FROM
+            department
 
 </select>
     <select id="getDepart" resultType="com.tieshan.disintegrate.pojo.Department">
@@ -33,14 +31,14 @@ FROM
     </select>
     <update id="updateDepart">
       UPDATE department
-        SET department_name = #{depart.department_name},department_describe=#{depart.department_describe},update_time= now(),operator=#{depart.operator}
+        SET department_name = #{depart.department_name},department_describe=#{depart.department_describe},update_time= now()
         where id=#{depart.id}
     </update>
     <delete id="delDepart">
-    delete  from department where  id=#{id}
+    UPDATE department SET department_status = '2' where  id=#{id}
    </delete>
    <insert id="addDepart">
-        INSERT INTO department ( id, department_name,  department_describe, operator, create_time)
-         VALUES 	(#{depart.id},#{depart.department_name},#{depart.department_describe},#{depart.operator},now())
+        INSERT INTO department ( id, department_name,  department_describe,company_code ,operator, create_time)
+         VALUES 	(#{depart.id},#{depart.department_name},#{depart.department_describe},#{depart.company_code},#{depart.operator},now())
    </insert>
 </mapper>
