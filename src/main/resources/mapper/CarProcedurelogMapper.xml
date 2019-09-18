@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tieshan.disintegrate.dao.CarProcedurelogMapper">
+
+    <resultMap type="com.tieshan.disintegrate.pojo.CarProcedurelog" id="carProcedurelogMap">
+        <result property="id" column="id"/>  <!--  -->
+        <result property="disintegratePlantId" column="disintegrate_plant_id"/>  <!-- 解体厂id -->
+        <result property="serviceDealId" column="service_deal_id"/>  <!-- 客户处理主键id -->
+        <result property="carInfoId" column="car_info_id"/>  <!-- 车辆信息主键id -->
+        <result property="type" column="type"/>  <!-- 1：查询历史；2：核档历史；3：客服历史； -->
+        <result property="result" column="result"/>  <!-- 结果 -->
+        <result property="remark" column="remark"/>  <!-- 备注 -->
+        <result property="querytime" column="querytime"/>  <!-- 查询时间 -->
+        <result property="operatorId" column="operator_id"/>  <!-- 操作人id -->
+        <result property="operator" column="operator"/>  <!-- 操作人 -->
+        <result property="state" column="state"/>  <!-- 1:未完成;2完成 -->
+        <result property="isDelete" column="is_delete"/>  <!-- 是否删除。1.删除，2,正常 -->
+    </resultMap>
+
+    <select id="selectOneByMap" resultMap="carProcedurelogMap">
+        SELECT  id, disintegrate_plant_id, service_deal_id, car_info_id, type, result, remark, querytime, operator_id,
+        operator, state, is_delete FROM ts_car_procedurelog
+        <where>
+            <if test="id!=null">
+                AND id=#{id}  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                AND disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
+            </if>
+            <if test="serviceDealId!=null">
+                AND service_deal_id=#{serviceDealId}  <!-- 客户处理主键id -->
+            </if>
+            <if test="carInfoId!=null">
+                AND car_info_id=#{carInfoId}  <!-- 车辆信息主键id -->
+            </if>
+            <if test="type!=null and type!=''">
+                AND type=#{type}  <!-- 1：查询历史；2：核档历史；3：客服历史； -->
+            </if>
+            <if test="result!=null and result!=''">
+                AND result=#{result}  <!-- 结果 -->
+            </if>
+            <if test="remark!=null and remark!=''">
+                AND remark=#{remark}  <!-- 备注 -->
+            </if>
+            <if test="querytime!=null">
+                AND querytime=#{querytime}  <!-- 查询时间 -->
+            </if>
+            <if test="operatorId!=null">
+                AND operator_id=#{operatorId}  <!-- 操作人id -->
+            </if>
+            <if test="operator!=null and operator!=''">
+                AND operator=#{operator}  <!-- 操作人 -->
+            </if>
+            <if test="state!=null and state!=''">
+                AND state=#{state}  <!-- 1:未完成;2完成 -->
+            </if>
+            <if test="isDelete!=null">
+                AND is_delete=#{isDelete}  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </where>
+    </select>
+
+    <select id="selectListByMap" resultMap="carProcedurelogMap">
+        SELECT  id, disintegrate_plant_id, service_deal_id, car_info_id, type, result, remark, querytime, operator_id,
+        operator, state, is_delete FROM ts_car_procedurelog
+        <where>
+            <if test="id!=null">
+                AND id=#{id}  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                AND disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
+            </if>
+            <if test="serviceDealId!=null">
+                AND service_deal_id=#{serviceDealId}  <!-- 客户处理主键id -->
+            </if>
+            <if test="carInfoId!=null">
+                AND car_info_id=#{carInfoId}  <!-- 车辆信息主键id -->
+            </if>
+            <if test="type!=null and type!=''">
+                AND type=#{type}  <!-- 1：查询历史；2：核档历史；3：客服历史； -->
+            </if>
+            <if test="result!=null and result!=''">
+                AND result=#{result}  <!-- 结果 -->
+            </if>
+            <if test="remark!=null and remark!=''">
+                AND remark=#{remark}  <!-- 备注 -->
+            </if>
+            <if test="querytime!=null">
+                AND querytime=#{querytime}  <!-- 查询时间 -->
+            </if>
+            <if test="operatorId!=null">
+                AND operator_id=#{operatorId}  <!-- 操作人id -->
+            </if>
+            <if test="operator!=null and operator!=''">
+                AND operator=#{operator}  <!-- 操作人 -->
+            </if>
+            <if test="state!=null and state!=''">
+                AND state=#{state}  <!-- 1:未完成;2完成 -->
+            </if>
+            <if test="isDelete!=null">
+                AND is_delete=#{isDelete}  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertCarProcedurelog">
+        INSERT INTO ts_car_procedurelog(
+        <trim suffixOverrides=",">
+            <if test="id!=null">
+                id,  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                disintegrate_plant_id,  <!-- 解体厂id -->
+            </if>
+            <if test="serviceDealId!=null">
+                service_deal_id,  <!-- 客户处理主键id -->
+            </if>
+            <if test="carInfoId!=null">
+                car_info_id,  <!-- 车辆信息主键id -->
+            </if>
+            <if test="type!=null and type!=''">
+                type,  <!-- 1：查询历史；2：核档历史；3：客服历史； -->
+            </if>
+            <if test="result!=null and result!=''">
+                result,  <!-- 结果 -->
+            </if>
+            <if test="remark!=null and remark!=''">
+                remark,  <!-- 备注 -->
+            </if>
+            <if test="querytime!=null">
+                querytime,  <!-- 查询时间 -->
+            </if>
+            <if test="operatorId!=null">
+                operator_id,  <!-- 操作人id -->
+            </if>
+            <if test="operator!=null and operator!=''">
+                operator,  <!-- 操作人 -->
+            </if>
+            <if test="state!=null and state!=''">
+                state,  <!-- 1:未完成;2完成 -->
+            </if>
+            <if test="isDelete!=null">
+                is_delete,  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </trim>
+        )VALUES(
+        <trim suffixOverrides=",">
+            <if test="id!=null">
+                #{id},  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                #{disintegratePlantId},  <!-- 解体厂id -->
+            </if>
+            <if test="serviceDealId!=null">
+                #{serviceDealId},  <!-- 客户处理主键id -->
+            </if>
+            <if test="carInfoId!=null">
+                #{carInfoId},  <!-- 车辆信息主键id -->
+            </if>
+            <if test="type!=null and type!=''">
+                #{type},  <!-- 1：查询历史；2：核档历史；3：客服历史； -->
+            </if>
+            <if test="result!=null and result!=''">
+                #{result},  <!-- 结果 -->
+            </if>
+            <if test="remark!=null and remark!=''">
+                #{remark},  <!-- 备注 -->
+            </if>
+            <if test="querytime!=null">
+                #{querytime},  <!-- 查询时间 -->
+            </if>
+            <if test="operatorId!=null">
+                #{operatorId},  <!-- 操作人id -->
+            </if>
+            <if test="operator!=null and operator!=''">
+                #{operator},  <!-- 操作人 -->
+            </if>
+            <if test="state!=null and state!=''">
+                #{state},  <!-- 1:未完成;2完成 -->
+            </if>
+            <if test="isDelete!=null">
+                #{isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </trim>
+        )
+    </insert>
+    <insert id="insertBatchCarProcedurelog">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            INSERT INTO ts_car_procedurelog (
+            <trim suffixOverrides=",">
+                <if test="item.id!=null">
+                    id,  <!--  -->
+                </if>
+                <if test="item.disintegratePlantId!=null">
+                    disintegrate_plant_id,  <!-- 解体厂id -->
+                </if>
+                <if test="item.serviceDealId!=null">
+                    service_deal_id,  <!-- 客户处理主键id -->
+                </if>
+                <if test="item.carInfoId!=null">
+                    car_info_id,  <!-- 车辆信息主键id -->
+                </if>
+                <if test="item.type!=null and item.type!=''">
+                    type,  <!-- 1：查询历史；2：核档历史；3：客服历史； -->
+                </if>
+                <if test="item.result!=null and item.result!=''">
+                    result,  <!-- 结果 -->
+                </if>
+                <if test="item.remark!=null and item.remark!=''">
+                    remark,  <!-- 备注 -->
+                </if>
+                <if test="item.querytime!=null">
+                    querytime,  <!-- 查询时间 -->
+                </if>
+                <if test="item.operatorId!=null">
+                    operator_id,  <!-- 操作人id -->
+                </if>
+                <if test="item.operator!=null and item.operator!=''">
+                    operator,  <!-- 操作人 -->
+                </if>
+                <if test="item.state!=null and item.state!=''">
+                    state,  <!-- 1:未完成;2完成 -->
+                </if>
+                <if test="item.isDelete!=null">
+                    is_delete,  <!-- 是否删除。1.删除，2,正常 -->
+                </if>
+            </trim>
+            )VALUES(
+            <trim suffixOverrides=",">
+                <if test="item.id!=null">
+                    #{item.id},  <!--  -->
+                </if>
+                <if test="item.disintegratePlantId!=null">
+                    #{item.disintegratePlantId},  <!-- 解体厂id -->
+                </if>
+                <if test="item.serviceDealId!=null">
+                    #{item.serviceDealId},  <!-- 客户处理主键id -->
+                </if>
+                <if test="item.carInfoId!=null">
+                    #{item.carInfoId},  <!-- 车辆信息主键id -->
+                </if>
+                <if test="item.type!=null and item.type!=''">
+                    #{item.type},  <!-- 1：查询历史；2：核档历史；3：客服历史； -->
+                </if>
+                <if test="item.result!=null and item.result!=''">
+                    #{item.result},  <!-- 结果 -->
+                </if>
+                <if test="item.remark!=null and item.remark!=''">
+                    #{item.remark},  <!-- 备注 -->
+                </if>
+                <if test="item.querytime!=null">
+                    #{item.querytime},  <!-- 查询时间 -->
+                </if>
+                <if test="item.operatorId!=null">
+                    #{item.operatorId},  <!-- 操作人id -->
+                </if>
+                <if test="item.operator!=null and item.operator!=''">
+                    #{item.operator},  <!-- 操作人 -->
+                </if>
+                <if test="item.state!=null and item.state!=''">
+                    #{item.state},  <!-- 1:未完成;2完成 -->
+                </if>
+                <if test="item.isDelete!=null">
+                    #{item.isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+                </if>
+            </trim>
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateCarProcedurelog">
+        UPDATE ts_car_procedurelog
+        <trim prefix="set" suffixOverrides=",">
+            <if test="id!=null">
+                id=#{id},  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                disintegrate_plant_id=#{disintegratePlantId},  <!-- 解体厂id -->
+            </if>
+            <if test="serviceDealId!=null">
+                service_deal_id=#{serviceDealId},  <!-- 客户处理主键id -->
+            </if>
+            <if test="carInfoId!=null">
+                car_info_id=#{carInfoId},  <!-- 车辆信息主键id -->
+            </if>
+            <if test="type!=null and type!=''">
+                type=#{type},  <!-- 1：查询历史；2：核档历史；3：客服历史； -->
+            </if>
+            <if test="result!=null and result!=''">
+                result=#{result},  <!-- 结果 -->
+            </if>
+            <if test="remark!=null and remark!=''">
+                remark=#{remark},  <!-- 备注 -->
+            </if>
+            <if test="querytime!=null">
+                querytime=#{querytime},  <!-- 查询时间 -->
+            </if>
+            <if test="operatorId!=null">
+                operator_id=#{operatorId},  <!-- 操作人id -->
+            </if>
+            <if test="operator!=null and operator!=''">
+                operator=#{operator},  <!-- 操作人 -->
+            </if>
+            <if test="state!=null and state!=''">
+                state=#{state},  <!-- 1:未完成;2完成 -->
+            </if>
+            <if test="isDelete!=null">
+                is_delete=#{isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </trim>
+        WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
+    </update>
+    <update id="updateBatchCarProcedurelog">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update ts_car_procedurelog
+            <trim prefix="set" suffixOverrides=",">
+                <if test="item.id!=null">
+                    id=#{item.id},  <!--  -->
+                </if>
+                <if test="item.disintegratePlantId!=null">
+                    disintegrate_plant_id=#{item.disintegratePlantId},  <!-- 解体厂id -->
+                </if>
+                <if test="item.serviceDealId!=null">
+                    service_deal_id=#{item.serviceDealId},  <!-- 客户处理主键id -->
+                </if>
+                <if test="item.carInfoId!=null">
+                    car_info_id=#{item.carInfoId},  <!-- 车辆信息主键id -->
+                </if>
+                <if test="item.type!=null and item.type!=''">
+                    type=#{item.type},  <!-- 1：查询历史；2：核档历史；3：客服历史； -->
+                </if>
+                <if test="item.result!=null and item.result!=''">
+                    result=#{item.result},  <!-- 结果 -->
+                </if>
+                <if test="item.remark!=null and item.remark!=''">
+                    remark=#{item.remark},  <!-- 备注 -->
+                </if>
+                <if test="item.querytime!=null">
+                    querytime=#{item.querytime},  <!-- 查询时间 -->
+                </if>
+                <if test="item.operatorId!=null">
+                    operator_id=#{item.operatorId},  <!-- 操作人id -->
+                </if>
+                <if test="item.operator!=null and item.operator!=''">
+                    operator=#{item.operator},  <!-- 操作人 -->
+                </if>
+                <if test="item.state!=null and item.state!=''">
+                    state=#{item.state},  <!-- 1:未完成;2完成 -->
+                </if>
+                <if test="item.isDelete!=null">
+                    is_delete=#{item.isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+                </if>
+            </trim>
+            WHERE id=#{item.id} AND disintegrate_plant_id=#{item.disintegratePlantId}
+        </foreach>
+    </update>
+
+    <delete id="deleteCarProcedurelogByMap">
+        DELETE FROM ts_car_procedurelog WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
+    </delete>
+
+    <delete id="batchDeleteCarProcedurelogByMap">
+        DELETE FROM ts_car_procedurelog
+        WHERE disintegrate_plant_id=#{disintegratePlantId} and id in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

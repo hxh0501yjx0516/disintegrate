@@ -4,6 +4,7 @@ import com.alibaba.druid.support.json.JSONUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.tieshan.disintegrate.annotation.LoginUser;
 import com.tieshan.disintegrate.config.RedisUtil;
+import com.tieshan.disintegrate.pojo.SysUser;
 import com.tieshan.disintegrate.pojo.User;
 import com.tieshan.disintegrate.token.TokenService;
 import com.tieshan.disintegrate.util.RedisUtils;
@@ -43,7 +44,7 @@ public class LoginUserHandlerMethodArgumentResolver implements HandlerMethodArgu
             return null;
         }
         //获取用户信息
-        User user = JSONObject.parseObject(redisUtils.get(object.toString()),User.class);
+        SysUser user = JSONObject.parseObject(redisUtils.get(object.toString()), SysUser.class);
         return user;
     }
 }
