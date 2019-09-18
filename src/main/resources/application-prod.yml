@@ -38,6 +38,8 @@ spring:
     password: chl@redispass
 mybatis:
   mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
 logging:
   level:
     com.tieshan.disintegrate.dao: debug

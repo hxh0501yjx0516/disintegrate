@@ -51,6 +51,8 @@ spring:
         min-idle: 5       # 连接池中的最小空闲连接
 mybatis:
   mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
 logging:
   level:
     com.tieshan.disintegrate.dao: debug
