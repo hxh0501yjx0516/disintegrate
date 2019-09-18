@@ -19,7 +19,7 @@ public class SysUser implements java.io.Serializable {
     private String department_name;
     private String company_name;
     private String company_code;
-    private String company_id;
+    private Long company_id;
     private String user_status;
     private String operator;
     private String login_time;
