@@ -1,0 +1,1588 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tieshan.disintegrate.dao.CarProcessingMapper">
+
+    <resultMap type="com.tieshan.disintegrate.pojo.CarProcessing" id="carProcessingMap">
+        <result property="id" column="id"/>  <!--  -->
+        <result property="disintegratePlantId" column="disintegrate_plant_id"/>  <!-- 解体厂id -->
+        <result property="carInfoId" column="car_info_id"/>  <!-- ts_car_info的主键id -->
+        <result property="registerTime" column="register_time"/>  <!-- 登记时间 -->
+        <result property="registerUserId" column="register_user_id"/>  <!-- 登记人（用户表主键id） -->
+        <result property="isRegister" column="is_register"/>  <!-- 1:未登记;2:已登记 -->
+        <result property="queryResult" column="query_result"/>  <!-- 查询结果 -->
+        <result property="queryTime" column="query_time"/>  <!-- 查询时间 -->
+        <result property="queryUserId" column="query_user_id"/>  <!-- 查询人(用户表主键id） -->
+        <result property="isQuery" column="is_query"/>  <!-- 1:未查询;2:已查询 -->
+        <result property="verifyResult" column="verify_result"/>  <!-- 核档结果 -->
+        <result property="verifyTime" column="verify_time"/>  <!-- 核档时间 -->
+        <result property="verifyUserId" column="verify_user_id"/>  <!-- 核档人(用户表主键id) -->
+        <result property="recordNumber" column="record_number"/>  <!-- 核档号 -->
+        <result property="recycleNumber" column="recycle_number"/>  <!-- 回收证明编号 -->
+        <result property="isVerify" column="is_verify"/>  <!-- 1:未核档；2：已核档 -->
+        <result property="dataUploadTime" column="data_upload_time"/>  <!-- 上传商委时间 -->
+        <result property="dataUploaduserId" column="data_uploaduser_id"/>  <!-- 上传商委人（用户主键id） -->
+        <result property="isDataUpload" column="is_data_upload"/>  <!-- 1:未上传商委;2:已上传商委 -->
+        <result property="dismantleTime" column="dismantle_time"/>  <!-- 拆解时间 -->
+        <result property="dismantleUserId" column="dismantle_user_id"/>  <!-- 拆解人（用户主键id) -->
+        <result property="isDismantle" column="is_dismantle"/>  <!-- 1：未拆解；2：已拆解； -->
+        <result property="picUploadTime" column="pic_upload_time"/>  <!-- 上传商委图片时间 -->
+        <result property="picUploadUserId" column="pic_upload_user_id"/>  <!-- 上传商委图片的人(用户主键id) -->
+        <result property="isPicUpload" column="is_pic_upload"/>  <!-- 1：未上传商委图片；2：已上传商委图片； -->
+        <result property="printRecycleTime" column="print_recycle_time"/>  <!-- 打印回收证明时间 -->
+        <result property="printRecycleUserId" column="print_recycle_user_id"/>  <!-- 打印回收证明的人（用户主键id) -->
+        <result property="isPrintRecycle" column="is_print_recycle"/>  <!-- 1：未打印回收证明；2：已打印回收证明； -->
+        <result property="isLogout" column="is_logout"/>  <!-- 是否录入注销(1:未录入;2:已录入) -->
+        <result property="logoutResult" column="logout_result"/>  <!-- 注销时间 -->
+        <result property="logoutTime" column="logout_time"/>  <!-- 录入的注销时间 -->
+        <result property="logoutUserId" column="logout_user_id"/>  <!-- 录入注销的人（用户主键id) -->
+        <result property="isAppointTime" column="is_appoint_time"/>  <!-- 完成商委注销时间 -->
+        <result property="isAppointUserid" column="is_appoint_userid"/>  <!-- 完成商委注销人(用户主键id) -->
+        <result property="isAppointLogoutTime" column="is_appoint_logout_time"/>  <!-- 1：未上传完成商委注销时间；2：已完成商委注销时间上传； -->
+        <result property="procedureIssueTime" column="procedure_issue_time"/>  <!-- 手续发放时间 -->
+        <result property="procedureIssueUserId" column="procedure_issue_user_id"/>  <!-- 手续发放处理人（用户主键id) -->
+        <result property="registerAddress" column="register_address"/>  <!-- 登记地址 -->
+        <result property="isProcedureIssue" column="is_procedure_issue"/>  <!-- 1：未发放手续；2：已发放手续； -->
+        <result property="grantCarReceiptUserId" column="grant_car_receipt_user_id"/>  <!-- 发放收车凭证的人（用户主键id) -->
+        <result property="grantCarReceiptTime" column="grant_car_receipt_time"/>  <!-- 发放收车凭证的时间 -->
+        <result property="isGrantCarReceipt" column="is_grant_car_receipt"/>  <!-- 1：不发放收车凭据；2：发放收车凭据 -->
+        <result property="printCarLedgerUserId" column="print_car_ledger_user_id"/>  <!-- 打印车辆台账人员（用户主键id) -->
+        <result property="printCarLedgerTime" column="print_car_ledger_time"/>  <!-- 打印车辆台账的时间 -->
+        <result property="isPrintCarLedger" column="is_print_car_ledger"/>  <!-- 1：不打印车辆台账；2：打印车辆台账 -->
+        <result property="printOutputUserId" column="print_output_user_id"/>  <!-- 转档打印的人 -->
+        <result property="printoutPutTime" column="printout_put_time"/>  <!-- 转档打印的时间 -->
+        <result property="isPrintoutPut" column="is_printout_put"/>  <!-- 1：转档打印；2：不转档打印 -->
+        <result property="printCancelProveUserId" column="print_cancel_prove_user_id"/>  <!-- 打印注销证明人员(用户主键id) -->
+        <result property="printCancelProveTime" column="print_cancel_prove_time"/>  <!-- 打印注销证明的时间 -->
+        <result property="printCount" column="print_count"/>  <!-- 打印次数 -->
+        <result property="printLedgerBatch" column="print_ledger_batch"/>  <!-- 批量打印标识 -->
+        <result property="isPrintCancelProve" column="is_print_cancel_prove"/>  <!-- 1：打印注销证明；2：不打印注销证明 -->
+        <result property="isSuperviseSale" column="is_supervise_sale"/>  <!-- 1:监销;2:不监销 -->
+        <result property="superviseSaleUser" column="supervise_sale_user"/>  <!-- 监销人 -->
+        <result property="saleOfAffirmTime" column="sale_of_affirm_time"/>  <!-- 监销确认时间 -->
+        <result property="isDismantleAffirm" column="is_dismantle_affirm"/>  <!-- 1：未拆解;2:已拆解 -->
+        <result property="dismantleAffirmTime" column="dismantle_affirm_time"/>  <!-- 拆解确认时间 -->
+        <result property="dismantleAffirmUserId" column="dismantle_affirm_user_id"/>  <!-- 拆解确认人 -->
+        <result property="isDelete" column="is_delete"/>  <!-- 是否删除。1.删除，2,正常 -->
+    </resultMap>
+
+    <select id="selectOneByMap" resultMap="carProcessingMap">
+        SELECT  id, disintegrate_plant_id, car_info_id, register_time, register_user_id, is_register, query_result,
+        query_time, query_user_id, is_query, verify_result, verify_time, verify_user_id, record_number, recycle_number,
+        is_verify, data_upload_time, data_uploaduser_id, is_data_upload, dismantle_time, dismantle_user_id, is_dismantle,
+        pic_upload_time, pic_upload_user_id, is_pic_upload, print_recycle_time, print_recycle_user_id, is_print_recycle,
+        is_logout, logout_result, logout_time, logout_user_id, is_appoint_time, is_appoint_userid, is_appoint_logout_time,
+        procedure_issue_time, procedure_issue_user_id, register_address, is_procedure_issue, grant_car_receipt_user_id,
+        grant_car_receipt_time, is_grant_car_receipt, print_car_ledger_user_id, print_car_ledger_time, is_print_car_ledger,
+        print_output_user_id, printout_put_time, is_printout_put, print_cancel_prove_user_id, print_cancel_prove_time,
+        print_count, print_ledger_batch, is_print_cancel_prove, is_supervise_sale, supervise_sale_user, sale_of_affirm_time,
+        is_dismantle_affirm, dismantle_affirm_time, dismantle_affirm_user_id, is_delete
+        FROM ts_car_processing
+        <where>
+            <if test="id!=null">
+                AND id=#{id}  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                AND disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                AND car_info_id=#{carInfoId}  <!-- ts_car_info的主键id -->
+            </if>
+            <if test="registerTime!=null">
+                AND register_time=#{registerTime}  <!-- 登记时间 -->
+            </if>
+            <if test="registerUserId!=null">
+                AND register_user_id=#{registerUserId}  <!-- 登记人（用户表主键id） -->
+            </if>
+            <if test="isRegister!=null">
+                AND is_register=#{isRegister}  <!-- 1:未登记;2:已登记 -->
+            </if>
+            <if test="queryResult!=null and queryResult!=''">
+                AND query_result=#{queryResult}  <!-- 查询结果 -->
+            </if>
+            <if test="queryTime!=null">
+                AND query_time=#{queryTime}  <!-- 查询时间 -->
+            </if>
+            <if test="queryUserId!=null">
+                AND query_user_id=#{queryUserId}  <!-- 查询人(用户表主键id） -->
+            </if>
+            <if test="isQuery!=null">
+                AND is_query=#{isQuery}  <!-- 1:未查询;2:已查询 -->
+            </if>
+            <if test="verifyResult!=null and verifyResult!=''">
+                AND verify_result=#{verifyResult}  <!-- 核档结果 -->
+            </if>
+            <if test="verifyTime!=null">
+                AND verify_time=#{verifyTime}  <!-- 核档时间 -->
+            </if>
+            <if test="verifyUserId!=null">
+                AND verify_user_id=#{verifyUserId}  <!-- 核档人(用户表主键id) -->
+            </if>
+            <if test="recordNumber!=null and recordNumber!=''">
+                AND record_number=#{recordNumber}  <!-- 核档号 -->
+            </if>
+            <if test="recycleNumber!=null and recycleNumber!=''">
+                AND recycle_number=#{recycleNumber}  <!-- 回收证明编号 -->
+            </if>
+            <if test="isVerify!=null">
+                AND is_verify=#{isVerify}  <!-- 1:未核档；2：已核档 -->
+            </if>
+            <if test="dataUploadTime!=null">
+                AND data_upload_time=#{dataUploadTime}  <!-- 上传商委时间 -->
+            </if>
+            <if test="dataUploaduserId!=null">
+                AND data_uploaduser_id=#{dataUploaduserId}  <!-- 上传商委人（用户主键id） -->
+            </if>
+            <if test="isDataUpload!=null">
+                AND is_data_upload=#{isDataUpload}  <!-- 1:未上传商委;2:已上传商委 -->
+            </if>
+            <if test="dismantleTime!=null">
+                AND dismantle_time=#{dismantleTime}  <!-- 拆解时间 -->
+            </if>
+            <if test="dismantleUserId!=null">
+                AND dismantle_user_id=#{dismantleUserId}  <!-- 拆解人（用户主键id) -->
+            </if>
+            <if test="isDismantle!=null">
+                AND is_dismantle=#{isDismantle}  <!-- 1：未拆解；2：已拆解； -->
+            </if>
+            <if test="picUploadTime!=null">
+                AND pic_upload_time=#{picUploadTime}  <!-- 上传商委图片时间 -->
+            </if>
+            <if test="picUploadUserId!=null">
+                AND pic_upload_user_id=#{picUploadUserId}  <!-- 上传商委图片的人(用户主键id) -->
+            </if>
+            <if test="isPicUpload!=null">
+                AND is_pic_upload=#{isPicUpload}  <!-- 1：未上传商委图片；2：已上传商委图片； -->
+            </if>
+            <if test="printRecycleTime!=null">
+                AND print_recycle_time=#{printRecycleTime}  <!-- 打印回收证明时间 -->
+            </if>
+            <if test="printRecycleUserId!=null">
+                AND print_recycle_user_id=#{printRecycleUserId}  <!-- 打印回收证明的人（用户主键id) -->
+            </if>
+            <if test="isPrintRecycle!=null">
+                AND is_print_recycle=#{isPrintRecycle}  <!-- 1：未打印回收证明；2：已打印回收证明； -->
+            </if>
+            <if test="isLogout!=null">
+                AND is_logout=#{isLogout}  <!-- 是否录入注销(1:未录入;2:已录入) -->
+            </if>
+            <if test="logoutResult!=null">
+                AND logout_result=#{logoutResult}  <!-- 注销时间 -->
+            </if>
+            <if test="logoutTime!=null">
+                AND logout_time=#{logoutTime}  <!-- 录入的注销时间 -->
+            </if>
+            <if test="logoutUserId!=null">
+                AND logout_user_id=#{logoutUserId}  <!-- 录入注销的人（用户主键id) -->
+            </if>
+            <if test="isAppointTime!=null">
+                AND is_appoint_time=#{isAppointTime}  <!-- 完成商委注销时间 -->
+            </if>
+            <if test="isAppointUserid!=null">
+                AND is_appoint_userid=#{isAppointUserid}  <!-- 完成商委注销人(用户主键id) -->
+            </if>
+            <if test="isAppointLogoutTime!=null">
+                AND is_appoint_logout_time=#{isAppointLogoutTime}  <!-- 1：未上传完成商委注销时间；2：已完成商委注销时间上传； -->
+            </if>
+            <if test="procedureIssueTime!=null">
+                AND procedure_issue_time=#{procedureIssueTime}  <!-- 手续发放时间 -->
+            </if>
+            <if test="procedureIssueUserId!=null">
+                AND procedure_issue_user_id=#{procedureIssueUserId}  <!-- 手续发放处理人（用户主键id) -->
+            </if>
+            <if test="registerAddress!=null and registerAddress!=''">
+                AND register_address=#{registerAddress}  <!-- 登记地址 -->
+            </if>
+            <if test="isProcedureIssue!=null">
+                AND is_procedure_issue=#{isProcedureIssue}  <!-- 1：未发放手续；2：已发放手续； -->
+            </if>
+            <if test="grantCarReceiptUserId!=null">
+                AND grant_car_receipt_user_id=#{grantCarReceiptUserId}  <!-- 发放收车凭证的人（用户主键id) -->
+            </if>
+            <if test="grantCarReceiptTime!=null">
+                AND grant_car_receipt_time=#{grantCarReceiptTime}  <!-- 发放收车凭证的时间 -->
+            </if>
+            <if test="isGrantCarReceipt!=null">
+                AND is_grant_car_receipt=#{isGrantCarReceipt}  <!-- 1：不发放收车凭据；2：发放收车凭据 -->
+            </if>
+            <if test="printCarLedgerUserId!=null">
+                AND print_car_ledger_user_id=#{printCarLedgerUserId}  <!-- 打印车辆台账人员（用户主键id) -->
+            </if>
+            <if test="printCarLedgerTime!=null">
+                AND print_car_ledger_time=#{printCarLedgerTime}  <!-- 打印车辆台账的时间 -->
+            </if>
+            <if test="isPrintCarLedger!=null">
+                AND is_print_car_ledger=#{isPrintCarLedger}  <!-- 1：不打印车辆台账；2：打印车辆台账 -->
+            </if>
+            <if test="printOutputUserId!=null">
+                AND print_output_user_id=#{printOutputUserId}  <!-- 转档打印的人 -->
+            </if>
+            <if test="printoutPutTime!=null">
+                AND printout_put_time=#{printoutPutTime}  <!-- 转档打印的时间 -->
+            </if>
+            <if test="isPrintoutPut!=null">
+                AND is_printout_put=#{isPrintoutPut}  <!-- 1：转档打印；2：不转档打印 -->
+            </if>
+            <if test="printCancelProveUserId!=null">
+                AND print_cancel_prove_user_id=#{printCancelProveUserId}  <!-- 打印注销证明人员(用户主键id) -->
+            </if>
+            <if test="printCancelProveTime!=null">
+                AND print_cancel_prove_time=#{printCancelProveTime}  <!-- 打印注销证明的时间 -->
+            </if>
+            <if test="printCount!=null">
+                AND print_count=#{printCount}  <!-- 打印次数 -->
+            </if>
+            <if test="printLedgerBatch!=null and printLedgerBatch!=''">
+                AND print_ledger_batch=#{printLedgerBatch}  <!-- 批量打印标识 -->
+            </if>
+            <if test="isPrintCancelProve!=null">
+                AND is_print_cancel_prove=#{isPrintCancelProve}  <!-- 1：打印注销证明；2：不打印注销证明 -->
+            </if>
+            <if test="isSuperviseSale!=null">
+                AND is_supervise_sale=#{isSuperviseSale}  <!-- 1:监销;2:不监销 -->
+            </if>
+            <if test="superviseSaleUser!=null and superviseSaleUser!=''">
+                AND supervise_sale_user=#{superviseSaleUser}  <!-- 监销人 -->
+            </if>
+            <if test="saleOfAffirmTime!=null">
+                AND sale_of_affirm_time=#{saleOfAffirmTime}  <!-- 监销确认时间 -->
+            </if>
+            <if test="isDismantleAffirm!=null">
+                AND is_dismantle_affirm=#{isDismantleAffirm}  <!-- 1：未拆解;2:已拆解 -->
+            </if>
+            <if test="dismantleAffirmTime!=null">
+                AND dismantle_affirm_time=#{dismantleAffirmTime}  <!-- 拆解确认时间 -->
+            </if>
+            <if test="dismantleAffirmUserId!=null">
+                AND dismantle_affirm_user_id=#{dismantleAffirmUserId}  <!-- 拆解确认人 -->
+            </if>
+            <if test="isDelete!=null">
+                AND is_delete=#{isDelete}  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </where>
+    </select>
+
+    <select id="selectListByMap" resultMap="carProcessingMap">
+        SELECT  id, disintegrate_plant_id, car_info_id, register_time, register_user_id, is_register, query_result,
+        query_time, query_user_id, is_query, verify_result, verify_time, verify_user_id, record_number, recycle_number,
+        is_verify, data_upload_time, data_uploaduser_id, is_data_upload, dismantle_time, dismantle_user_id, is_dismantle,
+        pic_upload_time, pic_upload_user_id, is_pic_upload, print_recycle_time, print_recycle_user_id, is_print_recycle,
+        is_logout, logout_result, logout_time, logout_user_id, is_appoint_time, is_appoint_userid, is_appoint_logout_time,
+        procedure_issue_time, procedure_issue_user_id, register_address, is_procedure_issue, grant_car_receipt_user_id,
+        grant_car_receipt_time, is_grant_car_receipt, print_car_ledger_user_id, print_car_ledger_time, is_print_car_ledger,
+        print_output_user_id, printout_put_time, is_printout_put, print_cancel_prove_user_id, print_cancel_prove_time,
+        print_count, print_ledger_batch, is_print_cancel_prove, is_supervise_sale, supervise_sale_user, sale_of_affirm_time,
+        is_dismantle_affirm, dismantle_affirm_time, dismantle_affirm_user_id, is_delete
+        FROM ts_car_processing
+        <where>
+            <if test="id!=null">
+                AND id=#{id}  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                AND disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                AND car_info_id=#{carInfoId}  <!-- ts_car_info的主键id -->
+            </if>
+            <if test="registerTime!=null">
+                AND register_time=#{registerTime}  <!-- 登记时间 -->
+            </if>
+            <if test="registerUserId!=null">
+                AND register_user_id=#{registerUserId}  <!-- 登记人（用户表主键id） -->
+            </if>
+            <if test="isRegister!=null">
+                AND is_register=#{isRegister}  <!-- 1:未登记;2:已登记 -->
+            </if>
+            <if test="queryResult!=null and queryResult!=''">
+                AND query_result=#{queryResult}  <!-- 查询结果 -->
+            </if>
+            <if test="queryTime!=null">
+                AND query_time=#{queryTime}  <!-- 查询时间 -->
+            </if>
+            <if test="queryUserId!=null">
+                AND query_user_id=#{queryUserId}  <!-- 查询人(用户表主键id） -->
+            </if>
+            <if test="isQuery!=null">
+                AND is_query=#{isQuery}  <!-- 1:未查询;2:已查询 -->
+            </if>
+            <if test="verifyResult!=null and verifyResult!=''">
+                AND verify_result=#{verifyResult}  <!-- 核档结果 -->
+            </if>
+            <if test="verifyTime!=null">
+                AND verify_time=#{verifyTime}  <!-- 核档时间 -->
+            </if>
+            <if test="verifyUserId!=null">
+                AND verify_user_id=#{verifyUserId}  <!-- 核档人(用户表主键id) -->
+            </if>
+            <if test="recordNumber!=null and recordNumber!=''">
+                AND record_number=#{recordNumber}  <!-- 核档号 -->
+            </if>
+            <if test="recycleNumber!=null and recycleNumber!=''">
+                AND recycle_number=#{recycleNumber}  <!-- 回收证明编号 -->
+            </if>
+            <if test="isVerify!=null">
+                AND is_verify=#{isVerify}  <!-- 1:未核档；2：已核档 -->
+            </if>
+            <if test="dataUploadTime!=null">
+                AND data_upload_time=#{dataUploadTime}  <!-- 上传商委时间 -->
+            </if>
+            <if test="dataUploaduserId!=null">
+                AND data_uploaduser_id=#{dataUploaduserId}  <!-- 上传商委人（用户主键id） -->
+            </if>
+            <if test="isDataUpload!=null">
+                AND is_data_upload=#{isDataUpload}  <!-- 1:未上传商委;2:已上传商委 -->
+            </if>
+            <if test="dismantleTime!=null">
+                AND dismantle_time=#{dismantleTime}  <!-- 拆解时间 -->
+            </if>
+            <if test="dismantleUserId!=null">
+                AND dismantle_user_id=#{dismantleUserId}  <!-- 拆解人（用户主键id) -->
+            </if>
+            <if test="isDismantle!=null">
+                AND is_dismantle=#{isDismantle}  <!-- 1：未拆解；2：已拆解； -->
+            </if>
+            <if test="picUploadTime!=null">
+                AND pic_upload_time=#{picUploadTime}  <!-- 上传商委图片时间 -->
+            </if>
+            <if test="picUploadUserId!=null">
+                AND pic_upload_user_id=#{picUploadUserId}  <!-- 上传商委图片的人(用户主键id) -->
+            </if>
+            <if test="isPicUpload!=null">
+                AND is_pic_upload=#{isPicUpload}  <!-- 1：未上传商委图片；2：已上传商委图片； -->
+            </if>
+            <if test="printRecycleTime!=null">
+                AND print_recycle_time=#{printRecycleTime}  <!-- 打印回收证明时间 -->
+            </if>
+            <if test="printRecycleUserId!=null">
+                AND print_recycle_user_id=#{printRecycleUserId}  <!-- 打印回收证明的人（用户主键id) -->
+            </if>
+            <if test="isPrintRecycle!=null">
+                AND is_print_recycle=#{isPrintRecycle}  <!-- 1：未打印回收证明；2：已打印回收证明； -->
+            </if>
+            <if test="isLogout!=null">
+                AND is_logout=#{isLogout}  <!-- 是否录入注销(1:未录入;2:已录入) -->
+            </if>
+            <if test="logoutResult!=null">
+                AND logout_result=#{logoutResult}  <!-- 注销时间 -->
+            </if>
+            <if test="logoutTime!=null">
+                AND logout_time=#{logoutTime}  <!-- 录入的注销时间 -->
+            </if>
+            <if test="logoutUserId!=null">
+                AND logout_user_id=#{logoutUserId}  <!-- 录入注销的人（用户主键id) -->
+            </if>
+            <if test="isAppointTime!=null">
+                AND is_appoint_time=#{isAppointTime}  <!-- 完成商委注销时间 -->
+            </if>
+            <if test="isAppointUserid!=null">
+                AND is_appoint_userid=#{isAppointUserid}  <!-- 完成商委注销人(用户主键id) -->
+            </if>
+            <if test="isAppointLogoutTime!=null">
+                AND is_appoint_logout_time=#{isAppointLogoutTime}  <!-- 1：未上传完成商委注销时间；2：已完成商委注销时间上传； -->
+            </if>
+            <if test="procedureIssueTime!=null">
+                AND procedure_issue_time=#{procedureIssueTime}  <!-- 手续发放时间 -->
+            </if>
+            <if test="procedureIssueUserId!=null">
+                AND procedure_issue_user_id=#{procedureIssueUserId}  <!-- 手续发放处理人（用户主键id) -->
+            </if>
+            <if test="registerAddress!=null and registerAddress!=''">
+                AND register_address=#{registerAddress}  <!-- 登记地址 -->
+            </if>
+            <if test="isProcedureIssue!=null">
+                AND is_procedure_issue=#{isProcedureIssue}  <!-- 1：未发放手续；2：已发放手续； -->
+            </if>
+            <if test="grantCarReceiptUserId!=null">
+                AND grant_car_receipt_user_id=#{grantCarReceiptUserId}  <!-- 发放收车凭证的人（用户主键id) -->
+            </if>
+            <if test="grantCarReceiptTime!=null">
+                AND grant_car_receipt_time=#{grantCarReceiptTime}  <!-- 发放收车凭证的时间 -->
+            </if>
+            <if test="isGrantCarReceipt!=null">
+                AND is_grant_car_receipt=#{isGrantCarReceipt}  <!-- 1：不发放收车凭据；2：发放收车凭据 -->
+            </if>
+            <if test="printCarLedgerUserId!=null">
+                AND print_car_ledger_user_id=#{printCarLedgerUserId}  <!-- 打印车辆台账人员（用户主键id) -->
+            </if>
+            <if test="printCarLedgerTime!=null">
+                AND print_car_ledger_time=#{printCarLedgerTime}  <!-- 打印车辆台账的时间 -->
+            </if>
+            <if test="isPrintCarLedger!=null">
+                AND is_print_car_ledger=#{isPrintCarLedger}  <!-- 1：不打印车辆台账；2：打印车辆台账 -->
+            </if>
+            <if test="printOutputUserId!=null">
+                AND print_output_user_id=#{printOutputUserId}  <!-- 转档打印的人 -->
+            </if>
+            <if test="printoutPutTime!=null">
+                AND printout_put_time=#{printoutPutTime}  <!-- 转档打印的时间 -->
+            </if>
+            <if test="isPrintoutPut!=null">
+                AND is_printout_put=#{isPrintoutPut}  <!-- 1：转档打印；2：不转档打印 -->
+            </if>
+            <if test="printCancelProveUserId!=null">
+                AND print_cancel_prove_user_id=#{printCancelProveUserId}  <!-- 打印注销证明人员(用户主键id) -->
+            </if>
+            <if test="printCancelProveTime!=null">
+                AND print_cancel_prove_time=#{printCancelProveTime}  <!-- 打印注销证明的时间 -->
+            </if>
+            <if test="printCount!=null">
+                AND print_count=#{printCount}  <!-- 打印次数 -->
+            </if>
+            <if test="printLedgerBatch!=null and printLedgerBatch!=''">
+                AND print_ledger_batch=#{printLedgerBatch}  <!-- 批量打印标识 -->
+            </if>
+            <if test="isPrintCancelProve!=null">
+                AND is_print_cancel_prove=#{isPrintCancelProve}  <!-- 1：打印注销证明；2：不打印注销证明 -->
+            </if>
+            <if test="isSuperviseSale!=null">
+                AND is_supervise_sale=#{isSuperviseSale}  <!-- 1:监销;2:不监销 -->
+            </if>
+            <if test="superviseSaleUser!=null and superviseSaleUser!=''">
+                AND supervise_sale_user=#{superviseSaleUser}  <!-- 监销人 -->
+            </if>
+            <if test="saleOfAffirmTime!=null">
+                AND sale_of_affirm_time=#{saleOfAffirmTime}  <!-- 监销确认时间 -->
+            </if>
+            <if test="isDismantleAffirm!=null">
+                AND is_dismantle_affirm=#{isDismantleAffirm}  <!-- 1：未拆解;2:已拆解 -->
+            </if>
+            <if test="dismantleAffirmTime!=null">
+                AND dismantle_affirm_time=#{dismantleAffirmTime}  <!-- 拆解确认时间 -->
+            </if>
+            <if test="dismantleAffirmUserId!=null">
+                AND dismantle_affirm_user_id=#{dismantleAffirmUserId}  <!-- 拆解确认人 -->
+            </if>
+            <if test="isDelete!=null">
+                AND is_delete=#{isDelete}  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertCarProcessing">
+        INSERT INTO ts_car_processing(
+        <trim suffixOverrides=",">
+            <if test="id!=null">
+                id,  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                disintegrate_plant_id,  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                car_info_id,  <!-- ts_car_info的主键id -->
+            </if>
+            <if test="registerTime!=null">
+                register_time,  <!-- 登记时间 -->
+            </if>
+            <if test="registerUserId!=null">
+                register_user_id,  <!-- 登记人（用户表主键id） -->
+            </if>
+            <if test="isRegister!=null">
+                is_register,  <!-- 1:未登记;2:已登记 -->
+            </if>
+            <if test="queryResult!=null and queryResult!=''">
+                query_result,  <!-- 查询结果 -->
+            </if>
+            <if test="queryTime!=null">
+                query_time,  <!-- 查询时间 -->
+            </if>
+            <if test="queryUserId!=null">
+                query_user_id,  <!-- 查询人(用户表主键id） -->
+            </if>
+            <if test="isQuery!=null">
+                is_query,  <!-- 1:未查询;2:已查询 -->
+            </if>
+            <if test="verifyResult!=null and verifyResult!=''">
+                verify_result,  <!-- 核档结果 -->
+            </if>
+            <if test="verifyTime!=null">
+                verify_time,  <!-- 核档时间 -->
+            </if>
+            <if test="verifyUserId!=null">
+                verify_user_id,  <!-- 核档人(用户表主键id) -->
+            </if>
+            <if test="recordNumber!=null and recordNumber!=''">
+                record_number,  <!-- 核档号 -->
+            </if>
+            <if test="recycleNumber!=null and recycleNumber!=''">
+                recycle_number,  <!-- 回收证明编号 -->
+            </if>
+            <if test="isVerify!=null">
+                is_verify,  <!-- 1:未核档；2：已核档 -->
+            </if>
+            <if test="dataUploadTime!=null">
+                data_upload_time,  <!-- 上传商委时间 -->
+            </if>
+            <if test="dataUploaduserId!=null">
+                data_uploaduser_id,  <!-- 上传商委人（用户主键id） -->
+            </if>
+            <if test="isDataUpload!=null">
+                is_data_upload,  <!-- 1:未上传商委;2:已上传商委 -->
+            </if>
+            <if test="dismantleTime!=null">
+                dismantle_time,  <!-- 拆解时间 -->
+            </if>
+            <if test="dismantleUserId!=null">
+                dismantle_user_id,  <!-- 拆解人（用户主键id) -->
+            </if>
+            <if test="isDismantle!=null">
+                is_dismantle,  <!-- 1：未拆解；2：已拆解； -->
+            </if>
+            <if test="picUploadTime!=null">
+                pic_upload_time,  <!-- 上传商委图片时间 -->
+            </if>
+            <if test="picUploadUserId!=null">
+                pic_upload_user_id,  <!-- 上传商委图片的人(用户主键id) -->
+            </if>
+            <if test="isPicUpload!=null">
+                is_pic_upload,  <!-- 1：未上传商委图片；2：已上传商委图片； -->
+            </if>
+            <if test="printRecycleTime!=null">
+                print_recycle_time,  <!-- 打印回收证明时间 -->
+            </if>
+            <if test="printRecycleUserId!=null">
+                print_recycle_user_id,  <!-- 打印回收证明的人（用户主键id) -->
+            </if>
+            <if test="isPrintRecycle!=null">
+                is_print_recycle,  <!-- 1：未打印回收证明；2：已打印回收证明； -->
+            </if>
+            <if test="isLogout!=null">
+                is_logout,  <!-- 是否录入注销(1:未录入;2:已录入) -->
+            </if>
+            <if test="logoutResult!=null">
+                logout_result,  <!-- 注销时间 -->
+            </if>
+            <if test="logoutTime!=null">
+                logout_time,  <!-- 录入的注销时间 -->
+            </if>
+            <if test="logoutUserId!=null">
+                logout_user_id,  <!-- 录入注销的人（用户主键id) -->
+            </if>
+            <if test="isAppointTime!=null">
+                is_appoint_time,  <!-- 完成商委注销时间 -->
+            </if>
+            <if test="isAppointUserid!=null">
+                is_appoint_userid,  <!-- 完成商委注销人(用户主键id) -->
+            </if>
+            <if test="isAppointLogoutTime!=null">
+                is_appoint_logout_time,  <!-- 1：未上传完成商委注销时间；2：已完成商委注销时间上传； -->
+            </if>
+            <if test="procedureIssueTime!=null">
+                procedure_issue_time,  <!-- 手续发放时间 -->
+            </if>
+            <if test="procedureIssueUserId!=null">
+                procedure_issue_user_id,  <!-- 手续发放处理人（用户主键id) -->
+            </if>
+            <if test="registerAddress!=null and registerAddress!=''">
+                register_address,  <!-- 登记地址 -->
+            </if>
+            <if test="isProcedureIssue!=null">
+                is_procedure_issue,  <!-- 1：未发放手续；2：已发放手续； -->
+            </if>
+            <if test="grantCarReceiptUserId!=null">
+                grant_car_receipt_user_id,  <!-- 发放收车凭证的人（用户主键id) -->
+            </if>
+            <if test="grantCarReceiptTime!=null">
+                grant_car_receipt_time,  <!-- 发放收车凭证的时间 -->
+            </if>
+            <if test="isGrantCarReceipt!=null">
+                is_grant_car_receipt,  <!-- 1：不发放收车凭据；2：发放收车凭据 -->
+            </if>
+            <if test="printCarLedgerUserId!=null">
+                print_car_ledger_user_id,  <!-- 打印车辆台账人员（用户主键id) -->
+            </if>
+            <if test="printCarLedgerTime!=null">
+                print_car_ledger_time,  <!-- 打印车辆台账的时间 -->
+            </if>
+            <if test="isPrintCarLedger!=null">
+                is_print_car_ledger,  <!-- 1：不打印车辆台账；2：打印车辆台账 -->
+            </if>
+            <if test="printOutputUserId!=null">
+                print_output_user_id,  <!-- 转档打印的人 -->
+            </if>
+            <if test="printoutPutTime!=null">
+                printout_put_time,  <!-- 转档打印的时间 -->
+            </if>
+            <if test="isPrintoutPut!=null">
+                is_printout_put,  <!-- 1：转档打印；2：不转档打印 -->
+            </if>
+            <if test="printCancelProveUserId!=null">
+                print_cancel_prove_user_id,  <!-- 打印注销证明人员(用户主键id) -->
+            </if>
+            <if test="printCancelProveTime!=null">
+                print_cancel_prove_time,  <!-- 打印注销证明的时间 -->
+            </if>
+            <if test="printCount!=null">
+                print_count,  <!-- 打印次数 -->
+            </if>
+            <if test="printLedgerBatch!=null and printLedgerBatch!=''">
+                print_ledger_batch,  <!-- 批量打印标识 -->
+            </if>
+            <if test="isPrintCancelProve!=null">
+                is_print_cancel_prove,  <!-- 1：打印注销证明；2：不打印注销证明 -->
+            </if>
+            <if test="isSuperviseSale!=null">
+                is_supervise_sale,  <!-- 1:监销;2:不监销 -->
+            </if>
+            <if test="superviseSaleUser!=null and superviseSaleUser!=''">
+                supervise_sale_user,  <!-- 监销人 -->
+            </if>
+            <if test="saleOfAffirmTime!=null">
+                sale_of_affirm_time,  <!-- 监销确认时间 -->
+            </if>
+            <if test="isDismantleAffirm!=null">
+                is_dismantle_affirm,  <!-- 1：未拆解;2:已拆解 -->
+            </if>
+            <if test="dismantleAffirmTime!=null">
+                dismantle_affirm_time,  <!-- 拆解确认时间 -->
+            </if>
+            <if test="dismantleAffirmUserId!=null">
+                dismantle_affirm_user_id,  <!-- 拆解确认人 -->
+            </if>
+            <if test="isDelete!=null">
+                is_delete,  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </trim>
+        )VALUES(
+        <trim suffixOverrides=",">
+            <if test="id!=null">
+                #{id},  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                #{disintegratePlantId},  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                #{carInfoId},  <!-- ts_car_info的主键id -->
+            </if>
+            <if test="registerTime!=null">
+                #{registerTime},  <!-- 登记时间 -->
+            </if>
+            <if test="registerUserId!=null">
+                #{registerUserId},  <!-- 登记人（用户表主键id） -->
+            </if>
+            <if test="isRegister!=null">
+                #{isRegister},  <!-- 1:未登记;2:已登记 -->
+            </if>
+            <if test="queryResult!=null and queryResult!=''">
+                #{queryResult},  <!-- 查询结果 -->
+            </if>
+            <if test="queryTime!=null">
+                #{queryTime},  <!-- 查询时间 -->
+            </if>
+            <if test="queryUserId!=null">
+                #{queryUserId},  <!-- 查询人(用户表主键id） -->
+            </if>
+            <if test="isQuery!=null">
+                #{isQuery},  <!-- 1:未查询;2:已查询 -->
+            </if>
+            <if test="verifyResult!=null and verifyResult!=''">
+                #{verifyResult},  <!-- 核档结果 -->
+            </if>
+            <if test="verifyTime!=null">
+                #{verifyTime},  <!-- 核档时间 -->
+            </if>
+            <if test="verifyUserId!=null">
+                #{verifyUserId},  <!-- 核档人(用户表主键id) -->
+            </if>
+            <if test="recordNumber!=null and recordNumber!=''">
+                #{recordNumber},  <!-- 核档号 -->
+            </if>
+            <if test="recycleNumber!=null and recycleNumber!=''">
+                #{recycleNumber},  <!-- 回收证明编号 -->
+            </if>
+            <if test="isVerify!=null">
+                #{isVerify},  <!-- 1:未核档；2：已核档 -->
+            </if>
+            <if test="dataUploadTime!=null">
+                #{dataUploadTime},  <!-- 上传商委时间 -->
+            </if>
+            <if test="dataUploaduserId!=null">
+                #{dataUploaduserId},  <!-- 上传商委人（用户主键id） -->
+            </if>
+            <if test="isDataUpload!=null">
+                #{isDataUpload},  <!-- 1:未上传商委;2:已上传商委 -->
+            </if>
+            <if test="dismantleTime!=null">
+                #{dismantleTime},  <!-- 拆解时间 -->
+            </if>
+            <if test="dismantleUserId!=null">
+                #{dismantleUserId},  <!-- 拆解人（用户主键id) -->
+            </if>
+            <if test="isDismantle!=null">
+                #{isDismantle},  <!-- 1：未拆解；2：已拆解； -->
+            </if>
+            <if test="picUploadTime!=null">
+                #{picUploadTime},  <!-- 上传商委图片时间 -->
+            </if>
+            <if test="picUploadUserId!=null">
+                #{picUploadUserId},  <!-- 上传商委图片的人(用户主键id) -->
+            </if>
+            <if test="isPicUpload!=null">
+                #{isPicUpload},  <!-- 1：未上传商委图片；2：已上传商委图片； -->
+            </if>
+            <if test="printRecycleTime!=null">
+                #{printRecycleTime},  <!-- 打印回收证明时间 -->
+            </if>
+            <if test="printRecycleUserId!=null">
+                #{printRecycleUserId},  <!-- 打印回收证明的人（用户主键id) -->
+            </if>
+            <if test="isPrintRecycle!=null">
+                #{isPrintRecycle},  <!-- 1：未打印回收证明；2：已打印回收证明； -->
+            </if>
+            <if test="isLogout!=null">
+                #{isLogout},  <!-- 是否录入注销(1:未录入;2:已录入) -->
+            </if>
+            <if test="logoutResult!=null">
+                #{logoutResult},  <!-- 注销时间 -->
+            </if>
+            <if test="logoutTime!=null">
+                #{logoutTime},  <!-- 录入的注销时间 -->
+            </if>
+            <if test="logoutUserId!=null">
+                #{logoutUserId},  <!-- 录入注销的人（用户主键id) -->
+            </if>
+            <if test="isAppointTime!=null">
+                #{isAppointTime},  <!-- 完成商委注销时间 -->
+            </if>
+            <if test="isAppointUserid!=null">
+                #{isAppointUserid},  <!-- 完成商委注销人(用户主键id) -->
+            </if>
+            <if test="isAppointLogoutTime!=null">
+                #{isAppointLogoutTime},  <!-- 1：未上传完成商委注销时间；2：已完成商委注销时间上传； -->
+            </if>
+            <if test="procedureIssueTime!=null">
+                #{procedureIssueTime},  <!-- 手续发放时间 -->
+            </if>
+            <if test="procedureIssueUserId!=null">
+                #{procedureIssueUserId},  <!-- 手续发放处理人（用户主键id) -->
+            </if>
+            <if test="registerAddress!=null and registerAddress!=''">
+                #{registerAddress},  <!-- 登记地址 -->
+            </if>
+            <if test="isProcedureIssue!=null">
+                #{isProcedureIssue},  <!-- 1：未发放手续；2：已发放手续； -->
+            </if>
+            <if test="grantCarReceiptUserId!=null">
+                #{grantCarReceiptUserId},  <!-- 发放收车凭证的人（用户主键id) -->
+            </if>
+            <if test="grantCarReceiptTime!=null">
+                #{grantCarReceiptTime},  <!-- 发放收车凭证的时间 -->
+            </if>
+            <if test="isGrantCarReceipt!=null">
+                #{isGrantCarReceipt},  <!-- 1：不发放收车凭据；2：发放收车凭据 -->
+            </if>
+            <if test="printCarLedgerUserId!=null">
+                #{printCarLedgerUserId},  <!-- 打印车辆台账人员（用户主键id) -->
+            </if>
+            <if test="printCarLedgerTime!=null">
+                #{printCarLedgerTime},  <!-- 打印车辆台账的时间 -->
+            </if>
+            <if test="isPrintCarLedger!=null">
+                #{isPrintCarLedger},  <!-- 1：不打印车辆台账；2：打印车辆台账 -->
+            </if>
+            <if test="printOutputUserId!=null">
+                #{printOutputUserId},  <!-- 转档打印的人 -->
+            </if>
+            <if test="printoutPutTime!=null">
+                #{printoutPutTime},  <!-- 转档打印的时间 -->
+            </if>
+            <if test="isPrintoutPut!=null">
+                #{isPrintoutPut},  <!-- 1：转档打印；2：不转档打印 -->
+            </if>
+            <if test="printCancelProveUserId!=null">
+                #{printCancelProveUserId},  <!-- 打印注销证明人员(用户主键id) -->
+            </if>
+            <if test="printCancelProveTime!=null">
+                #{printCancelProveTime},  <!-- 打印注销证明的时间 -->
+            </if>
+            <if test="printCount!=null">
+                #{printCount},  <!-- 打印次数 -->
+            </if>
+            <if test="printLedgerBatch!=null and printLedgerBatch!=''">
+                #{printLedgerBatch},  <!-- 批量打印标识 -->
+            </if>
+            <if test="isPrintCancelProve!=null">
+                #{isPrintCancelProve},  <!-- 1：打印注销证明；2：不打印注销证明 -->
+            </if>
+            <if test="isSuperviseSale!=null">
+                #{isSuperviseSale},  <!-- 1:监销;2:不监销 -->
+            </if>
+            <if test="superviseSaleUser!=null and superviseSaleUser!=''">
+                #{superviseSaleUser},  <!-- 监销人 -->
+            </if>
+            <if test="saleOfAffirmTime!=null">
+                #{saleOfAffirmTime},  <!-- 监销确认时间 -->
+            </if>
+            <if test="isDismantleAffirm!=null">
+                #{isDismantleAffirm},  <!-- 1：未拆解;2:已拆解 -->
+            </if>
+            <if test="dismantleAffirmTime!=null">
+                #{dismantleAffirmTime},  <!-- 拆解确认时间 -->
+            </if>
+            <if test="dismantleAffirmUserId!=null">
+                #{dismantleAffirmUserId},  <!-- 拆解确认人 -->
+            </if>
+            <if test="isDelete!=null">
+                #{isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </trim>
+        )
+    </insert>
+    <insert id="insertBatchCarProcessing">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            INSERT INTO ts_car_processing (
+            <trim suffixOverrides=",">
+                <if test="item.id!=null">
+                    id,  <!--  -->
+                </if>
+                <if test="item.disintegratePlantId!=null">
+                    disintegrate_plant_id,  <!-- 解体厂id -->
+                </if>
+                <if test="item.carInfoId!=null">
+                    car_info_id,  <!-- ts_car_info的主键id -->
+                </if>
+                <if test="item.registerTime!=null">
+                    register_time,  <!-- 登记时间 -->
+                </if>
+                <if test="item.registerUserId!=null">
+                    register_user_id,  <!-- 登记人（用户表主键id） -->
+                </if>
+                <if test="item.isRegister!=null">
+                    is_register,  <!-- 1:未登记;2:已登记 -->
+                </if>
+                <if test="item.queryResult!=null and item.queryResult!=''">
+                    query_result,  <!-- 查询结果 -->
+                </if>
+                <if test="item.queryTime!=null">
+                    query_time,  <!-- 查询时间 -->
+                </if>
+                <if test="item.queryUserId!=null">
+                    query_user_id,  <!-- 查询人(用户表主键id） -->
+                </if>
+                <if test="item.isQuery!=null">
+                    is_query,  <!-- 1:未查询;2:已查询 -->
+                </if>
+                <if test="item.verifyResult!=null and item.verifyResult!=''">
+                    verify_result,  <!-- 核档结果 -->
+                </if>
+                <if test="item.verifyTime!=null">
+                    verify_time,  <!-- 核档时间 -->
+                </if>
+                <if test="item.verifyUserId!=null">
+                    verify_user_id,  <!-- 核档人(用户表主键id) -->
+                </if>
+                <if test="item.recordNumber!=null and item.recordNumber!=''">
+                    record_number,  <!-- 核档号 -->
+                </if>
+                <if test="item.recycleNumber!=null and item.recycleNumber!=''">
+                    recycle_number,  <!-- 回收证明编号 -->
+                </if>
+                <if test="item.isVerify!=null">
+                    is_verify,  <!-- 1:未核档；2：已核档 -->
+                </if>
+                <if test="item.dataUploadTime!=null">
+                    data_upload_time,  <!-- 上传商委时间 -->
+                </if>
+                <if test="item.dataUploaduserId!=null">
+                    data_uploaduser_id,  <!-- 上传商委人（用户主键id） -->
+                </if>
+                <if test="item.isDataUpload!=null">
+                    is_data_upload,  <!-- 1:未上传商委;2:已上传商委 -->
+                </if>
+                <if test="item.dismantleTime!=null">
+                    dismantle_time,  <!-- 拆解时间 -->
+                </if>
+                <if test="item.dismantleUserId!=null">
+                    dismantle_user_id,  <!-- 拆解人（用户主键id) -->
+                </if>
+                <if test="item.isDismantle!=null">
+                    is_dismantle,  <!-- 1：未拆解；2：已拆解； -->
+                </if>
+                <if test="item.picUploadTime!=null">
+                    pic_upload_time,  <!-- 上传商委图片时间 -->
+                </if>
+                <if test="item.picUploadUserId!=null">
+                    pic_upload_user_id,  <!-- 上传商委图片的人(用户主键id) -->
+                </if>
+                <if test="item.isPicUpload!=null">
+                    is_pic_upload,  <!-- 1：未上传商委图片；2：已上传商委图片； -->
+                </if>
+                <if test="item.printRecycleTime!=null">
+                    print_recycle_time,  <!-- 打印回收证明时间 -->
+                </if>
+                <if test="item.printRecycleUserId!=null">
+                    print_recycle_user_id,  <!-- 打印回收证明的人（用户主键id) -->
+                </if>
+                <if test="item.isPrintRecycle!=null">
+                    is_print_recycle,  <!-- 1：未打印回收证明；2：已打印回收证明； -->
+                </if>
+                <if test="item.isLogout!=null">
+                    is_logout,  <!-- 是否录入注销(1:未录入;2:已录入) -->
+                </if>
+                <if test="item.logoutResult!=null">
+                    logout_result,  <!-- 注销时间 -->
+                </if>
+                <if test="item.logoutTime!=null">
+                    logout_time,  <!-- 录入的注销时间 -->
+                </if>
+                <if test="item.logoutUserId!=null">
+                    logout_user_id,  <!-- 录入注销的人（用户主键id) -->
+                </if>
+                <if test="item.isAppointTime!=null">
+                    is_appoint_time,  <!-- 完成商委注销时间 -->
+                </if>
+                <if test="item.isAppointUserid!=null">
+                    is_appoint_userid,  <!-- 完成商委注销人(用户主键id) -->
+                </if>
+                <if test="item.isAppointLogoutTime!=null">
+                    is_appoint_logout_time,  <!-- 1：未上传完成商委注销时间；2：已完成商委注销时间上传； -->
+                </if>
+                <if test="item.procedureIssueTime!=null">
+                    procedure_issue_time,  <!-- 手续发放时间 -->
+                </if>
+                <if test="item.procedureIssueUserId!=null">
+                    procedure_issue_user_id,  <!-- 手续发放处理人（用户主键id) -->
+                </if>
+                <if test="item.registerAddress!=null and item.registerAddress!=''">
+                    register_address,  <!-- 登记地址 -->
+                </if>
+                <if test="item.isProcedureIssue!=null">
+                    is_procedure_issue,  <!-- 1：未发放手续；2：已发放手续； -->
+                </if>
+                <if test="item.grantCarReceiptUserId!=null">
+                    grant_car_receipt_user_id,  <!-- 发放收车凭证的人（用户主键id) -->
+                </if>
+                <if test="item.grantCarReceiptTime!=null">
+                    grant_car_receipt_time,  <!-- 发放收车凭证的时间 -->
+                </if>
+                <if test="item.isGrantCarReceipt!=null">
+                    is_grant_car_receipt,  <!-- 1：不发放收车凭据；2：发放收车凭据 -->
+                </if>
+                <if test="item.printCarLedgerUserId!=null">
+                    print_car_ledger_user_id,  <!-- 打印车辆台账人员（用户主键id) -->
+                </if>
+                <if test="item.printCarLedgerTime!=null">
+                    print_car_ledger_time,  <!-- 打印车辆台账的时间 -->
+                </if>
+                <if test="item.isPrintCarLedger!=null">
+                    is_print_car_ledger,  <!-- 1：不打印车辆台账；2：打印车辆台账 -->
+                </if>
+                <if test="item.printOutputUserId!=null">
+                    print_output_user_id,  <!-- 转档打印的人 -->
+                </if>
+                <if test="item.printoutPutTime!=null">
+                    printout_put_time,  <!-- 转档打印的时间 -->
+                </if>
+                <if test="item.isPrintoutPut!=null">
+                    is_printout_put,  <!-- 1：转档打印；2：不转档打印 -->
+                </if>
+                <if test="item.printCancelProveUserId!=null">
+                    print_cancel_prove_user_id,  <!-- 打印注销证明人员(用户主键id) -->
+                </if>
+                <if test="item.printCancelProveTime!=null">
+                    print_cancel_prove_time,  <!-- 打印注销证明的时间 -->
+                </if>
+                <if test="item.printCount!=null">
+                    print_count,  <!-- 打印次数 -->
+                </if>
+                <if test="item.printLedgerBatch!=null and item.printLedgerBatch!=''">
+                    print_ledger_batch,  <!-- 批量打印标识 -->
+                </if>
+                <if test="item.isPrintCancelProve!=null">
+                    is_print_cancel_prove,  <!-- 1：打印注销证明；2：不打印注销证明 -->
+                </if>
+                <if test="item.isSuperviseSale!=null">
+                    is_supervise_sale,  <!-- 1:监销;2:不监销 -->
+                </if>
+                <if test="item.superviseSaleUser!=null and item.superviseSaleUser!=''">
+                    supervise_sale_user,  <!-- 监销人 -->
+                </if>
+                <if test="item.saleOfAffirmTime!=null">
+                    sale_of_affirm_time,  <!-- 监销确认时间 -->
+                </if>
+                <if test="item.isDismantleAffirm!=null">
+                    is_dismantle_affirm,  <!-- 1：未拆解;2:已拆解 -->
+                </if>
+                <if test="item.dismantleAffirmTime!=null">
+                    dismantle_affirm_time,  <!-- 拆解确认时间 -->
+                </if>
+                <if test="item.dismantleAffirmUserId!=null">
+                    dismantle_affirm_user_id,  <!-- 拆解确认人 -->
+                </if>
+                <if test="item.isDelete!=null">
+                    is_delete,  <!-- 是否删除。1.删除，2,正常 -->
+                </if>
+            </trim>
+            )VALUES(
+            <trim suffixOverrides=",">
+                <if test="item.id!=null">
+                    #{item.id},  <!--  -->
+                </if>
+                <if test="item.disintegratePlantId!=null">
+                    #{item.disintegratePlantId},  <!-- 解体厂id -->
+                </if>
+                <if test="item.carInfoId!=null">
+                    #{item.carInfoId},  <!-- ts_car_info的主键id -->
+                </if>
+                <if test="item.registerTime!=null">
+                    #{item.registerTime},  <!-- 登记时间 -->
+                </if>
+                <if test="item.registerUserId!=null">
+                    #{item.registerUserId},  <!-- 登记人（用户表主键id） -->
+                </if>
+                <if test="item.isRegister!=null">
+                    #{item.isRegister},  <!-- 1:未登记;2:已登记 -->
+                </if>
+                <if test="item.queryResult!=null and item.queryResult!=''">
+                    #{item.queryResult},  <!-- 查询结果 -->
+                </if>
+                <if test="item.queryTime!=null">
+                    #{item.queryTime},  <!-- 查询时间 -->
+                </if>
+                <if test="item.queryUserId!=null">
+                    #{item.queryUserId},  <!-- 查询人(用户表主键id） -->
+                </if>
+                <if test="item.isQuery!=null">
+                    #{item.isQuery},  <!-- 1:未查询;2:已查询 -->
+                </if>
+                <if test="item.verifyResult!=null and item.verifyResult!=''">
+                    #{item.verifyResult},  <!-- 核档结果 -->
+                </if>
+                <if test="item.verifyTime!=null">
+                    #{item.verifyTime},  <!-- 核档时间 -->
+                </if>
+                <if test="item.verifyUserId!=null">
+                    #{item.verifyUserId},  <!-- 核档人(用户表主键id) -->
+                </if>
+                <if test="item.recordNumber!=null and item.recordNumber!=''">
+                    #{item.recordNumber},  <!-- 核档号 -->
+                </if>
+                <if test="item.recycleNumber!=null and item.recycleNumber!=''">
+                    #{item.recycleNumber},  <!-- 回收证明编号 -->
+                </if>
+                <if test="item.isVerify!=null">
+                    #{item.isVerify},  <!-- 1:未核档；2：已核档 -->
+                </if>
+                <if test="item.dataUploadTime!=null">
+                    #{item.dataUploadTime},  <!-- 上传商委时间 -->
+                </if>
+                <if test="item.dataUploaduserId!=null">
+                    #{item.dataUploaduserId},  <!-- 上传商委人（用户主键id） -->
+                </if>
+                <if test="item.isDataUpload!=null">
+                    #{item.isDataUpload},  <!-- 1:未上传商委;2:已上传商委 -->
+                </if>
+                <if test="item.dismantleTime!=null">
+                    #{item.dismantleTime},  <!-- 拆解时间 -->
+                </if>
+                <if test="item.dismantleUserId!=null">
+                    #{item.dismantleUserId},  <!-- 拆解人（用户主键id) -->
+                </if>
+                <if test="item.isDismantle!=null">
+                    #{item.isDismantle},  <!-- 1：未拆解；2：已拆解； -->
+                </if>
+                <if test="item.picUploadTime!=null">
+                    #{item.picUploadTime},  <!-- 上传商委图片时间 -->
+                </if>
+                <if test="item.picUploadUserId!=null">
+                    #{item.picUploadUserId},  <!-- 上传商委图片的人(用户主键id) -->
+                </if>
+                <if test="item.isPicUpload!=null">
+                    #{item.isPicUpload},  <!-- 1：未上传商委图片；2：已上传商委图片； -->
+                </if>
+                <if test="item.printRecycleTime!=null">
+                    #{item.printRecycleTime},  <!-- 打印回收证明时间 -->
+                </if>
+                <if test="item.printRecycleUserId!=null">
+                    #{item.printRecycleUserId},  <!-- 打印回收证明的人（用户主键id) -->
+                </if>
+                <if test="item.isPrintRecycle!=null">
+                    #{item.isPrintRecycle},  <!-- 1：未打印回收证明；2：已打印回收证明； -->
+                </if>
+                <if test="item.isLogout!=null">
+                    #{item.isLogout},  <!-- 是否录入注销(1:未录入;2:已录入) -->
+                </if>
+                <if test="item.logoutResult!=null">
+                    #{item.logoutResult},  <!-- 注销时间 -->
+                </if>
+                <if test="item.logoutTime!=null">
+                    #{item.logoutTime},  <!-- 录入的注销时间 -->
+                </if>
+                <if test="item.logoutUserId!=null">
+                    #{item.logoutUserId},  <!-- 录入注销的人（用户主键id) -->
+                </if>
+                <if test="item.isAppointTime!=null">
+                    #{item.isAppointTime},  <!-- 完成商委注销时间 -->
+                </if>
+                <if test="item.isAppointUserid!=null">
+                    #{item.isAppointUserid},  <!-- 完成商委注销人(用户主键id) -->
+                </if>
+                <if test="item.isAppointLogoutTime!=null">
+                    #{item.isAppointLogoutTime},  <!-- 1：未上传完成商委注销时间；2：已完成商委注销时间上传； -->
+                </if>
+                <if test="item.procedureIssueTime!=null">
+                    #{item.procedureIssueTime},  <!-- 手续发放时间 -->
+                </if>
+                <if test="item.procedureIssueUserId!=null">
+                    #{item.procedureIssueUserId},  <!-- 手续发放处理人（用户主键id) -->
+                </if>
+                <if test="item.registerAddress!=null and item.registerAddress!=''">
+                    #{item.registerAddress},  <!-- 登记地址 -->
+                </if>
+                <if test="item.isProcedureIssue!=null">
+                    #{item.isProcedureIssue},  <!-- 1：未发放手续；2：已发放手续； -->
+                </if>
+                <if test="item.grantCarReceiptUserId!=null">
+                    #{item.grantCarReceiptUserId},  <!-- 发放收车凭证的人（用户主键id) -->
+                </if>
+                <if test="item.grantCarReceiptTime!=null">
+                    #{item.grantCarReceiptTime},  <!-- 发放收车凭证的时间 -->
+                </if>
+                <if test="item.isGrantCarReceipt!=null">
+                    #{item.isGrantCarReceipt},  <!-- 1：不发放收车凭据；2：发放收车凭据 -->
+                </if>
+                <if test="item.printCarLedgerUserId!=null">
+                    #{item.printCarLedgerUserId},  <!-- 打印车辆台账人员（用户主键id) -->
+                </if>
+                <if test="item.printCarLedgerTime!=null">
+                    #{item.printCarLedgerTime},  <!-- 打印车辆台账的时间 -->
+                </if>
+                <if test="item.isPrintCarLedger!=null">
+                    #{item.isPrintCarLedger},  <!-- 1：不打印车辆台账；2：打印车辆台账 -->
+                </if>
+                <if test="item.printOutputUserId!=null">
+                    #{item.printOutputUserId},  <!-- 转档打印的人 -->
+                </if>
+                <if test="item.printoutPutTime!=null">
+                    #{item.printoutPutTime},  <!-- 转档打印的时间 -->
+                </if>
+                <if test="item.isPrintoutPut!=null">
+                    #{item.isPrintoutPut},  <!-- 1：转档打印；2：不转档打印 -->
+                </if>
+                <if test="item.printCancelProveUserId!=null">
+                    #{item.printCancelProveUserId},  <!-- 打印注销证明人员(用户主键id) -->
+                </if>
+                <if test="item.printCancelProveTime!=null">
+                    #{item.printCancelProveTime},  <!-- 打印注销证明的时间 -->
+                </if>
+                <if test="item.printCount!=null">
+                    #{item.printCount},  <!-- 打印次数 -->
+                </if>
+                <if test="item.printLedgerBatch!=null and item.printLedgerBatch!=''">
+                    #{item.printLedgerBatch},  <!-- 批量打印标识 -->
+                </if>
+                <if test="item.isPrintCancelProve!=null">
+                    #{item.isPrintCancelProve},  <!-- 1：打印注销证明；2：不打印注销证明 -->
+                </if>
+                <if test="item.isSuperviseSale!=null">
+                    #{item.isSuperviseSale},  <!-- 1:监销;2:不监销 -->
+                </if>
+                <if test="item.superviseSaleUser!=null and item.superviseSaleUser!=''">
+                    #{item.superviseSaleUser},  <!-- 监销人 -->
+                </if>
+                <if test="item.saleOfAffirmTime!=null">
+                    #{item.saleOfAffirmTime},  <!-- 监销确认时间 -->
+                </if>
+                <if test="item.isDismantleAffirm!=null">
+                    #{item.isDismantleAffirm},  <!-- 1：未拆解;2:已拆解 -->
+                </if>
+                <if test="item.dismantleAffirmTime!=null">
+                    #{item.dismantleAffirmTime},  <!-- 拆解确认时间 -->
+                </if>
+                <if test="item.dismantleAffirmUserId!=null">
+                    #{item.dismantleAffirmUserId},  <!-- 拆解确认人 -->
+                </if>
+                <if test="item.isDelete!=null">
+                    #{item.isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+                </if>
+            </trim>
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateCarProcessing">
+        UPDATE ts_car_processing
+        <trim prefix="set" suffixOverrides=",">
+            <if test="id!=null">
+                id=#{id},  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                disintegrate_plant_id=#{disintegratePlantId},  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                car_info_id=#{carInfoId},  <!-- ts_car_info的主键id -->
+            </if>
+            <if test="registerTime!=null">
+                register_time=#{registerTime},  <!-- 登记时间 -->
+            </if>
+            <if test="registerUserId!=null">
+                register_user_id=#{registerUserId},  <!-- 登记人（用户表主键id） -->
+            </if>
+            <if test="isRegister!=null">
+                is_register=#{isRegister},  <!-- 1:未登记;2:已登记 -->
+            </if>
+            <if test="queryResult!=null and queryResult!=''">
+                query_result=#{queryResult},  <!-- 查询结果 -->
+            </if>
+            <if test="queryTime!=null">
+                query_time=#{queryTime},  <!-- 查询时间 -->
+            </if>
+            <if test="queryUserId!=null">
+                query_user_id=#{queryUserId},  <!-- 查询人(用户表主键id） -->
+            </if>
+            <if test="isQuery!=null">
+                is_query=#{isQuery},  <!-- 1:未查询;2:已查询 -->
+            </if>
+            <if test="verifyResult!=null and verifyResult!=''">
+                verify_result=#{verifyResult},  <!-- 核档结果 -->
+            </if>
+            <if test="verifyTime!=null">
+                verify_time=#{verifyTime},  <!-- 核档时间 -->
+            </if>
+            <if test="verifyUserId!=null">
+                verify_user_id=#{verifyUserId},  <!-- 核档人(用户表主键id) -->
+            </if>
+            <if test="recordNumber!=null and recordNumber!=''">
+                record_number=#{recordNumber},  <!-- 核档号 -->
+            </if>
+            <if test="recycleNumber!=null and recycleNumber!=''">
+                recycle_number=#{recycleNumber},  <!-- 回收证明编号 -->
+            </if>
+            <if test="isVerify!=null">
+                is_verify=#{isVerify},  <!-- 1:未核档；2：已核档 -->
+            </if>
+            <if test="dataUploadTime!=null">
+                data_upload_time=#{dataUploadTime},  <!-- 上传商委时间 -->
+            </if>
+            <if test="dataUploaduserId!=null">
+                data_uploaduser_id=#{dataUploaduserId},  <!-- 上传商委人（用户主键id） -->
+            </if>
+            <if test="isDataUpload!=null">
+                is_data_upload=#{isDataUpload},  <!-- 1:未上传商委;2:已上传商委 -->
+            </if>
+            <if test="dismantleTime!=null">
+                dismantle_time=#{dismantleTime},  <!-- 拆解时间 -->
+            </if>
+            <if test="dismantleUserId!=null">
+                dismantle_user_id=#{dismantleUserId},  <!-- 拆解人（用户主键id) -->
+            </if>
+            <if test="isDismantle!=null">
+                is_dismantle=#{isDismantle},  <!-- 1：未拆解；2：已拆解； -->
+            </if>
+            <if test="picUploadTime!=null">
+                pic_upload_time=#{picUploadTime},  <!-- 上传商委图片时间 -->
+            </if>
+            <if test="picUploadUserId!=null">
+                pic_upload_user_id=#{picUploadUserId},  <!-- 上传商委图片的人(用户主键id) -->
+            </if>
+            <if test="isPicUpload!=null">
+                is_pic_upload=#{isPicUpload},  <!-- 1：未上传商委图片；2：已上传商委图片； -->
+            </if>
+            <if test="printRecycleTime!=null">
+                print_recycle_time=#{printRecycleTime},  <!-- 打印回收证明时间 -->
+            </if>
+            <if test="printRecycleUserId!=null">
+                print_recycle_user_id=#{printRecycleUserId},  <!-- 打印回收证明的人（用户主键id) -->
+            </if>
+            <if test="isPrintRecycle!=null">
+                is_print_recycle=#{isPrintRecycle},  <!-- 1：未打印回收证明；2：已打印回收证明； -->
+            </if>
+            <if test="isLogout!=null">
+                is_logout=#{isLogout},  <!-- 是否录入注销(1:未录入;2:已录入) -->
+            </if>
+            <if test="logoutResult!=null">
+                logout_result=#{logoutResult},  <!-- 注销时间 -->
+            </if>
+            <if test="logoutTime!=null">
+                logout_time=#{logoutTime},  <!-- 录入的注销时间 -->
+            </if>
+            <if test="logoutUserId!=null">
+                logout_user_id=#{logoutUserId},  <!-- 录入注销的人（用户主键id) -->
+            </if>
+            <if test="isAppointTime!=null">
+                is_appoint_time=#{isAppointTime},  <!-- 完成商委注销时间 -->
+            </if>
+            <if test="isAppointUserid!=null">
+                is_appoint_userid=#{isAppointUserid},  <!-- 完成商委注销人(用户主键id) -->
+            </if>
+            <if test="isAppointLogoutTime!=null">
+                is_appoint_logout_time=#{isAppointLogoutTime},  <!-- 1：未上传完成商委注销时间；2：已完成商委注销时间上传； -->
+            </if>
+            <if test="procedureIssueTime!=null">
+                procedure_issue_time=#{procedureIssueTime},  <!-- 手续发放时间 -->
+            </if>
+            <if test="procedureIssueUserId!=null">
+                procedure_issue_user_id=#{procedureIssueUserId},  <!-- 手续发放处理人（用户主键id) -->
+            </if>
+            <if test="registerAddress!=null and registerAddress!=''">
+                register_address=#{registerAddress},  <!-- 登记地址 -->
+            </if>
+            <if test="isProcedureIssue!=null">
+                is_procedure_issue=#{isProcedureIssue},  <!-- 1：未发放手续；2：已发放手续； -->
+            </if>
+            <if test="grantCarReceiptUserId!=null">
+                grant_car_receipt_user_id=#{grantCarReceiptUserId},  <!-- 发放收车凭证的人（用户主键id) -->
+            </if>
+            <if test="grantCarReceiptTime!=null">
+                grant_car_receipt_time=#{grantCarReceiptTime},  <!-- 发放收车凭证的时间 -->
+            </if>
+            <if test="isGrantCarReceipt!=null">
+                is_grant_car_receipt=#{isGrantCarReceipt},  <!-- 1：不发放收车凭据；2：发放收车凭据 -->
+            </if>
+            <if test="printCarLedgerUserId!=null">
+                print_car_ledger_user_id=#{printCarLedgerUserId},  <!-- 打印车辆台账人员（用户主键id) -->
+            </if>
+            <if test="printCarLedgerTime!=null">
+                print_car_ledger_time=#{printCarLedgerTime},  <!-- 打印车辆台账的时间 -->
+            </if>
+            <if test="isPrintCarLedger!=null">
+                is_print_car_ledger=#{isPrintCarLedger},  <!-- 1：不打印车辆台账；2：打印车辆台账 -->
+            </if>
+            <if test="printOutputUserId!=null">
+                print_output_user_id=#{printOutputUserId},  <!-- 转档打印的人 -->
+            </if>
+            <if test="printoutPutTime!=null">
+                printout_put_time=#{printoutPutTime},  <!-- 转档打印的时间 -->
+            </if>
+            <if test="isPrintoutPut!=null">
+                is_printout_put=#{isPrintoutPut},  <!-- 1：转档打印；2：不转档打印 -->
+            </if>
+            <if test="printCancelProveUserId!=null">
+                print_cancel_prove_user_id=#{printCancelProveUserId},  <!-- 打印注销证明人员(用户主键id) -->
+            </if>
+            <if test="printCancelProveTime!=null">
+                print_cancel_prove_time=#{printCancelProveTime},  <!-- 打印注销证明的时间 -->
+            </if>
+            <if test="printCount!=null">
+                print_count=#{printCount},  <!-- 打印次数 -->
+            </if>
+            <if test="printLedgerBatch!=null and printLedgerBatch!=''">
+                print_ledger_batch=#{printLedgerBatch},  <!-- 批量打印标识 -->
+            </if>
+            <if test="isPrintCancelProve!=null">
+                is_print_cancel_prove=#{isPrintCancelProve},  <!-- 1：打印注销证明；2：不打印注销证明 -->
+            </if>
+            <if test="isSuperviseSale!=null">
+                is_supervise_sale=#{isSuperviseSale},  <!-- 1:监销;2:不监销 -->
+            </if>
+            <if test="superviseSaleUser!=null and superviseSaleUser!=''">
+                supervise_sale_user=#{superviseSaleUser},  <!-- 监销人 -->
+            </if>
+            <if test="saleOfAffirmTime!=null">
+                sale_of_affirm_time=#{saleOfAffirmTime},  <!-- 监销确认时间 -->
+            </if>
+            <if test="isDismantleAffirm!=null">
+                is_dismantle_affirm=#{isDismantleAffirm},  <!-- 1：未拆解;2:已拆解 -->
+            </if>
+            <if test="dismantleAffirmTime!=null">
+                dismantle_affirm_time=#{dismantleAffirmTime},  <!-- 拆解确认时间 -->
+            </if>
+            <if test="dismantleAffirmUserId!=null">
+                dismantle_affirm_user_id=#{dismantleAffirmUserId},  <!-- 拆解确认人 -->
+            </if>
+            <if test="isDelete!=null">
+                is_delete=#{isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </trim>
+        WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
+    </update>
+    <update id="updateBatchCarProcessing">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update ts_car_processing
+            <trim prefix="set" suffixOverrides=",">
+                <if test="item.id!=null">
+                    id=#{item.id},  <!--  -->
+                </if>
+                <if test="item.disintegratePlantId!=null">
+                    disintegrate_plant_id=#{item.disintegratePlantId},  <!-- 解体厂id -->
+                </if>
+                <if test="item.carInfoId!=null">
+                    car_info_id=#{item.carInfoId},  <!-- ts_car_info的主键id -->
+                </if>
+                <if test="item.registerTime!=null">
+                    register_time=#{item.registerTime},  <!-- 登记时间 -->
+                </if>
+                <if test="item.registerUserId!=null">
+                    register_user_id=#{item.registerUserId},  <!-- 登记人（用户表主键id） -->
+                </if>
+                <if test="item.isRegister!=null">
+                    is_register=#{item.isRegister},  <!-- 1:未登记;2:已登记 -->
+                </if>
+                <if test="item.queryResult!=null and item.queryResult!=''">
+                    query_result=#{item.queryResult},  <!-- 查询结果 -->
+                </if>
+                <if test="item.queryTime!=null">
+                    query_time=#{item.queryTime},  <!-- 查询时间 -->
+                </if>
+                <if test="item.queryUserId!=null">
+                    query_user_id=#{item.queryUserId},  <!-- 查询人(用户表主键id） -->
+                </if>
+                <if test="item.isQuery!=null">
+                    is_query=#{item.isQuery},  <!-- 1:未查询;2:已查询 -->
+                </if>
+                <if test="item.verifyResult!=null and item.verifyResult!=''">
+                    verify_result=#{item.verifyResult},  <!-- 核档结果 -->
+                </if>
+                <if test="item.verifyTime!=null">
+                    verify_time=#{item.verifyTime},  <!-- 核档时间 -->
+                </if>
+                <if test="item.verifyUserId!=null">
+                    verify_user_id=#{item.verifyUserId},  <!-- 核档人(用户表主键id) -->
+                </if>
+                <if test="item.recordNumber!=null and item.recordNumber!=''">
+                    record_number=#{item.recordNumber},  <!-- 核档号 -->
+                </if>
+                <if test="item.recycleNumber!=null and item.recycleNumber!=''">
+                    recycle_number=#{item.recycleNumber},  <!-- 回收证明编号 -->
+                </if>
+                <if test="item.isVerify!=null">
+                    is_verify=#{item.isVerify},  <!-- 1:未核档；2：已核档 -->
+                </if>
+                <if test="item.dataUploadTime!=null">
+                    data_upload_time=#{item.dataUploadTime},  <!-- 上传商委时间 -->
+                </if>
+                <if test="item.dataUploaduserId!=null">
+                    data_uploaduser_id=#{item.dataUploaduserId},  <!-- 上传商委人（用户主键id） -->
+                </if>
+                <if test="item.isDataUpload!=null">
+                    is_data_upload=#{item.isDataUpload},  <!-- 1:未上传商委;2:已上传商委 -->
+                </if>
+                <if test="item.dismantleTime!=null">
+                    dismantle_time=#{item.dismantleTime},  <!-- 拆解时间 -->
+                </if>
+                <if test="item.dismantleUserId!=null">
+                    dismantle_user_id=#{item.dismantleUserId},  <!-- 拆解人（用户主键id) -->
+                </if>
+                <if test="item.isDismantle!=null">
+                    is_dismantle=#{item.isDismantle},  <!-- 1：未拆解；2：已拆解； -->
+                </if>
+                <if test="item.picUploadTime!=null">
+                    pic_upload_time=#{item.picUploadTime},  <!-- 上传商委图片时间 -->
+                </if>
+                <if test="item.picUploadUserId!=null">
+                    pic_upload_user_id=#{item.picUploadUserId},  <!-- 上传商委图片的人(用户主键id) -->
+                </if>
+                <if test="item.isPicUpload!=null">
+                    is_pic_upload=#{item.isPicUpload},  <!-- 1：未上传商委图片；2：已上传商委图片； -->
+                </if>
+                <if test="item.printRecycleTime!=null">
+                    print_recycle_time=#{item.printRecycleTime},  <!-- 打印回收证明时间 -->
+                </if>
+                <if test="item.printRecycleUserId!=null">
+                    print_recycle_user_id=#{item.printRecycleUserId},  <!-- 打印回收证明的人（用户主键id) -->
+                </if>
+                <if test="item.isPrintRecycle!=null">
+                    is_print_recycle=#{item.isPrintRecycle},  <!-- 1：未打印回收证明；2：已打印回收证明； -->
+                </if>
+                <if test="item.isLogout!=null">
+                    is_logout=#{item.isLogout},  <!-- 是否录入注销(1:未录入;2:已录入) -->
+                </if>
+                <if test="item.logoutResult!=null">
+                    logout_result=#{item.logoutResult},  <!-- 注销时间 -->
+                </if>
+                <if test="item.logoutTime!=null">
+                    logout_time=#{item.logoutTime},  <!-- 录入的注销时间 -->
+                </if>
+                <if test="item.logoutUserId!=null">
+                    logout_user_id=#{item.logoutUserId},  <!-- 录入注销的人（用户主键id) -->
+                </if>
+                <if test="item.isAppointTime!=null">
+                    is_appoint_time=#{item.isAppointTime},  <!-- 完成商委注销时间 -->
+                </if>
+                <if test="item.isAppointUserid!=null">
+                    is_appoint_userid=#{item.isAppointUserid},  <!-- 完成商委注销人(用户主键id) -->
+                </if>
+                <if test="item.isAppointLogoutTime!=null">
+                    is_appoint_logout_time=#{item.isAppointLogoutTime},  <!-- 1：未上传完成商委注销时间；2：已完成商委注销时间上传； -->
+                </if>
+                <if test="item.procedureIssueTime!=null">
+                    procedure_issue_time=#{item.procedureIssueTime},  <!-- 手续发放时间 -->
+                </if>
+                <if test="item.procedureIssueUserId!=null">
+                    procedure_issue_user_id=#{item.procedureIssueUserId},  <!-- 手续发放处理人（用户主键id) -->
+                </if>
+                <if test="item.registerAddress!=null and item.registerAddress!=''">
+                    register_address=#{item.registerAddress},  <!-- 登记地址 -->
+                </if>
+                <if test="item.isProcedureIssue!=null">
+                    is_procedure_issue=#{item.isProcedureIssue},  <!-- 1：未发放手续；2：已发放手续； -->
+                </if>
+                <if test="item.grantCarReceiptUserId!=null">
+                    grant_car_receipt_user_id=#{item.grantCarReceiptUserId},  <!-- 发放收车凭证的人（用户主键id) -->
+                </if>
+                <if test="item.grantCarReceiptTime!=null">
+                    grant_car_receipt_time=#{item.grantCarReceiptTime},  <!-- 发放收车凭证的时间 -->
+                </if>
+                <if test="item.isGrantCarReceipt!=null">
+                    is_grant_car_receipt=#{item.isGrantCarReceipt},  <!-- 1：不发放收车凭据；2：发放收车凭据 -->
+                </if>
+                <if test="item.printCarLedgerUserId!=null">
+                    print_car_ledger_user_id=#{item.printCarLedgerUserId},  <!-- 打印车辆台账人员（用户主键id) -->
+                </if>
+                <if test="item.printCarLedgerTime!=null">
+                    print_car_ledger_time=#{item.printCarLedgerTime},  <!-- 打印车辆台账的时间 -->
+                </if>
+                <if test="item.isPrintCarLedger!=null">
+                    is_print_car_ledger=#{item.isPrintCarLedger},  <!-- 1：不打印车辆台账；2：打印车辆台账 -->
+                </if>
+                <if test="item.printOutputUserId!=null">
+                    print_output_user_id=#{item.printOutputUserId},  <!-- 转档打印的人 -->
+                </if>
+                <if test="item.printoutPutTime!=null">
+                    printout_put_time=#{item.printoutPutTime},  <!-- 转档打印的时间 -->
+                </if>
+                <if test="item.isPrintoutPut!=null">
+                    is_printout_put=#{item.isPrintoutPut},  <!-- 1：转档打印；2：不转档打印 -->
+                </if>
+                <if test="item.printCancelProveUserId!=null">
+                    print_cancel_prove_user_id=#{item.printCancelProveUserId},  <!-- 打印注销证明人员(用户主键id) -->
+                </if>
+                <if test="item.printCancelProveTime!=null">
+                    print_cancel_prove_time=#{item.printCancelProveTime},  <!-- 打印注销证明的时间 -->
+                </if>
+                <if test="item.printCount!=null">
+                    print_count=#{item.printCount},  <!-- 打印次数 -->
+                </if>
+                <if test="item.printLedgerBatch!=null and item.printLedgerBatch!=''">
+                    print_ledger_batch=#{item.printLedgerBatch},  <!-- 批量打印标识 -->
+                </if>
+                <if test="item.isPrintCancelProve!=null">
+                    is_print_cancel_prove=#{item.isPrintCancelProve},  <!-- 1：打印注销证明；2：不打印注销证明 -->
+                </if>
+                <if test="item.isSuperviseSale!=null">
+                    is_supervise_sale=#{item.isSuperviseSale},  <!-- 1:监销;2:不监销 -->
+                </if>
+                <if test="item.superviseSaleUser!=null and item.superviseSaleUser!=''">
+                    supervise_sale_user=#{item.superviseSaleUser},  <!-- 监销人 -->
+                </if>
+                <if test="item.saleOfAffirmTime!=null">
+                    sale_of_affirm_time=#{item.saleOfAffirmTime},  <!-- 监销确认时间 -->
+                </if>
+                <if test="item.isDismantleAffirm!=null">
+                    is_dismantle_affirm=#{item.isDismantleAffirm},  <!-- 1：未拆解;2:已拆解 -->
+                </if>
+                <if test="item.dismantleAffirmTime!=null">
+                    dismantle_affirm_time=#{item.dismantleAffirmTime},  <!-- 拆解确认时间 -->
+                </if>
+                <if test="item.dismantleAffirmUserId!=null">
+                    dismantle_affirm_user_id=#{item.dismantleAffirmUserId},  <!-- 拆解确认人 -->
+                </if>
+                <if test="item.isDelete!=null">
+                    is_delete=#{item.isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+                </if>
+            </trim>
+            WHERE id=#{item.id} AND disintegrate_plant_id=#{item.disintegratePlantId}
+        </foreach>
+    </update>
+
+    <delete id="deleteCarProcessingByMap">
+        DELETE FROM ts_car_processing WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
+    </delete>
+
+    <delete id="batchDeleteCarProcessingByMap">
+        DELETE FROM ts_car_processing
+        WHERE disintegrate_plant_id=#{disintegratePlantId} and id in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

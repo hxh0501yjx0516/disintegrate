@@ -1,0 +1,676 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tieshan.disintegrate.dao.CarSurveyMapper">
+
+    <resultMap type="com.tieshan.disintegrate.pojo.CarSurvey" id="carSurveyMap">
+        <result property="id" column="id"/>  <!--  -->
+        <result property="disintegratePlantId" column="disintegrate_plant_id"/>  <!-- 解体厂id -->
+        <result property="carInfoId" column="car_info_id"/>  <!-- carinfo的id -->
+        <result property="plateCount" column="plate_count"/>  <!-- 车牌数量 -->
+        <result property="carDegree" column="car_degree"/>  <!-- 新旧程度 1:正常 ,2:火灾 , 3:碰撞 ,4:水淹 -->
+        <result property="conditionPumpCount" column="condition_pump_count"/>  <!-- 空调泵数量 -->
+        <result property="batteryCount" column="battery_count"/>  <!-- 电池数量 -->
+        <result property="motorCount" column="motor_count"/>  <!-- 马达数量 -->
+        <result property="doorCount" column="door_count"/>  <!-- 车门数量 -->
+        <result property="alloyRimCount" column="alloy_rim_count"/>  <!-- 铝圈数量 -->
+        <result property="cisternCount" column="cistern_count"/>  <!-- 水箱数量 -->
+        <result property="electricalMachineryCount" column="electrical_machinery_count"/>  <!-- 电机数量 -->
+        <result property="tyreCount" column="tyre_count"/>  <!-- 轮胎数量 -->
+        <result property="chairCount" column="chair_count"/>  <!-- 座椅数量 -->
+        <result property="conditionerCount" column="conditioner_count"/>  <!-- 空调数量 -->
+        <result property="catalyticConverterCount" column="catalytic_converter_count"/>  <!-- 三元催化器数量 -->
+        <result property="remark" column="remark"/>  <!-- 备注 -->
+        <result property="createTime" column="create_time"/>  <!--  -->
+        <result property="electricalCount" column="electrical_count"/>  <!-- 电机数量 -->
+        <result property="selfWeight" column="self_weight"/>  <!-- 自重 -->
+        <result property="dismantlingWay" column="dismantling_way"/>  <!-- 拆解方式 1:粗拆 ,2:点拆 , 3:包拆 ,4:精拆 -->
+        <result property="isDelete" column="is_delete"/>  <!-- 是否删除。1.删除，2,正常 -->
+        <result property="createOperator" column="create_operator"/>  <!-- 创建人 -->
+        <result property="createOperatorId" column="create_operator_id"/>  <!-- 创建人id -->
+    </resultMap>
+
+    <select id="selectOneByMap" resultMap="carSurveyMap">
+        SELECT  id, disintegrate_plant_id, car_info_id, plate_count, car_degree, condition_pump_count, battery_count,
+        motor_count, door_count, alloy_rim_count, cistern_count, electrical_machinery_count, tyre_count, chair_count,
+        conditioner_count, catalytic_converter_count, remark, create_time, electrical_count, self_weight, dismantling_way,
+        is_delete, create_operator, create_operator_id
+        FROM ts_car_survey
+        <where>
+            <if test="id!=null">
+                AND id=#{id}  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                AND disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                AND car_info_id=#{carInfoId}  <!-- carinfo的id -->
+            </if>
+            <if test="plateCount!=null">
+                AND plate_count=#{plateCount}  <!-- 车牌数量 -->
+            </if>
+            <if test="carDegree!=null">
+                AND car_degree=#{carDegree}  <!-- 新旧程度 1:正常 ,2:火灾 , 3:碰撞 ,4:水淹 -->
+            </if>
+            <if test="conditionPumpCount!=null">
+                AND condition_pump_count=#{conditionPumpCount}  <!-- 空调泵数量 -->
+            </if>
+            <if test="batteryCount!=null">
+                AND battery_count=#{batteryCount}  <!-- 电池数量 -->
+            </if>
+            <if test="motorCount!=null">
+                AND motor_count=#{motorCount}  <!-- 马达数量 -->
+            </if>
+            <if test="doorCount!=null">
+                AND door_count=#{doorCount}  <!-- 车门数量 -->
+            </if>
+            <if test="alloyRimCount!=null">
+                AND alloy_rim_count=#{alloyRimCount}  <!-- 铝圈数量 -->
+            </if>
+            <if test="cisternCount!=null">
+                AND cistern_count=#{cisternCount}  <!-- 水箱数量 -->
+            </if>
+            <if test="electricalMachineryCount!=null">
+                AND electrical_machinery_count=#{electricalMachineryCount}  <!-- 电机数量 -->
+            </if>
+            <if test="tyreCount!=null">
+                AND tyre_count=#{tyreCount}  <!-- 轮胎数量 -->
+            </if>
+            <if test="chairCount!=null">
+                AND chair_count=#{chairCount}  <!-- 座椅数量 -->
+            </if>
+            <if test="conditionerCount!=null">
+                AND conditioner_count=#{conditionerCount}  <!-- 空调数量 -->
+            </if>
+            <if test="catalyticConverterCount!=null">
+                AND catalytic_converter_count=#{catalyticConverterCount}  <!-- 三元催化器数量 -->
+            </if>
+            <if test="remark!=null and remark!=''">
+                AND remark=#{remark}  <!-- 备注 -->
+            </if>
+            <if test="createTime!=null">
+                AND create_time=#{createTime}  <!--  -->
+            </if>
+            <if test="electricalCount!=null">
+                AND electrical_count=#{electricalCount}  <!-- 电机数量 -->
+            </if>
+            <if test="selfWeight!=null and selfWeight!=''">
+                AND self_weight=#{selfWeight}  <!-- 自重 -->
+            </if>
+            <if test="dismantlingWay!=null">
+                AND dismantling_way=#{dismantlingWay}  <!-- 拆解方式 1:粗拆 ,2:点拆 , 3:包拆 ,4:精拆 -->
+            </if>
+            <if test="isDelete!=null">
+                AND is_delete=#{isDelete}  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+            <if test="createOperator!=null and createOperator!=''">
+                AND create_operator=#{createOperator}  <!-- 创建人 -->
+            </if>
+            <if test="createOperatorId!=null">
+                AND create_operator_id=#{createOperatorId}  <!-- 创建人id -->
+            </if>
+        </where>
+    </select>
+
+    <select id="selectListByMap" resultMap="carSurveyMap">
+        SELECT  id, disintegrate_plant_id, car_info_id, plate_count, car_degree, condition_pump_count, battery_count,
+        motor_count, door_count, alloy_rim_count, cistern_count, electrical_machinery_count, tyre_count, chair_count,
+        conditioner_count, catalytic_converter_count, remark, create_time, electrical_count, self_weight, dismantling_way,
+        is_delete, create_operator, create_operator_id
+        FROM ts_car_survey
+        <where>
+            <if test="id!=null">
+                AND id=#{id}  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                AND disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                AND car_info_id=#{carInfoId}  <!-- carinfo的id -->
+            </if>
+            <if test="plateCount!=null">
+                AND plate_count=#{plateCount}  <!-- 车牌数量 -->
+            </if>
+            <if test="carDegree!=null">
+                AND car_degree=#{carDegree}  <!-- 新旧程度 1:正常 ,2:火灾 , 3:碰撞 ,4:水淹 -->
+            </if>
+            <if test="conditionPumpCount!=null">
+                AND condition_pump_count=#{conditionPumpCount}  <!-- 空调泵数量 -->
+            </if>
+            <if test="batteryCount!=null">
+                AND battery_count=#{batteryCount}  <!-- 电池数量 -->
+            </if>
+            <if test="motorCount!=null">
+                AND motor_count=#{motorCount}  <!-- 马达数量 -->
+            </if>
+            <if test="doorCount!=null">
+                AND door_count=#{doorCount}  <!-- 车门数量 -->
+            </if>
+            <if test="alloyRimCount!=null">
+                AND alloy_rim_count=#{alloyRimCount}  <!-- 铝圈数量 -->
+            </if>
+            <if test="cisternCount!=null">
+                AND cistern_count=#{cisternCount}  <!-- 水箱数量 -->
+            </if>
+            <if test="electricalMachineryCount!=null">
+                AND electrical_machinery_count=#{electricalMachineryCount}  <!-- 电机数量 -->
+            </if>
+            <if test="tyreCount!=null">
+                AND tyre_count=#{tyreCount}  <!-- 轮胎数量 -->
+            </if>
+            <if test="chairCount!=null">
+                AND chair_count=#{chairCount}  <!-- 座椅数量 -->
+            </if>
+            <if test="conditionerCount!=null">
+                AND conditioner_count=#{conditionerCount}  <!-- 空调数量 -->
+            </if>
+            <if test="catalyticConverterCount!=null">
+                AND catalytic_converter_count=#{catalyticConverterCount}  <!-- 三元催化器数量 -->
+            </if>
+            <if test="remark!=null and remark!=''">
+                AND remark=#{remark}  <!-- 备注 -->
+            </if>
+            <if test="createTime!=null">
+                AND create_time=#{createTime}  <!--  -->
+            </if>
+            <if test="electricalCount!=null">
+                AND electrical_count=#{electricalCount}  <!-- 电机数量 -->
+            </if>
+            <if test="selfWeight!=null and selfWeight!=''">
+                AND self_weight=#{selfWeight}  <!-- 自重 -->
+            </if>
+            <if test="dismantlingWay!=null">
+                AND dismantling_way=#{dismantlingWay}  <!-- 拆解方式 1:粗拆 ,2:点拆 , 3:包拆 ,4:精拆 -->
+            </if>
+            <if test="isDelete!=null">
+                AND is_delete=#{isDelete}  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+            <if test="createOperator!=null and createOperator!=''">
+                AND create_operator=#{createOperator}  <!-- 创建人 -->
+            </if>
+            <if test="createOperatorId!=null">
+                AND create_operator_id=#{createOperatorId}  <!-- 创建人id -->
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertCarSurvey">
+        INSERT INTO ts_car_survey(
+        <trim suffixOverrides=",">
+            <if test="id!=null">
+                id,  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                disintegrate_plant_id,  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                car_info_id,  <!-- carinfo的id -->
+            </if>
+            <if test="plateCount!=null">
+                plate_count,  <!-- 车牌数量 -->
+            </if>
+            <if test="carDegree!=null">
+                car_degree,  <!-- 新旧程度 1:正常 ,2:火灾 , 3:碰撞 ,4:水淹 -->
+            </if>
+            <if test="conditionPumpCount!=null">
+                condition_pump_count,  <!-- 空调泵数量 -->
+            </if>
+            <if test="batteryCount!=null">
+                battery_count,  <!-- 电池数量 -->
+            </if>
+            <if test="motorCount!=null">
+                motor_count,  <!-- 马达数量 -->
+            </if>
+            <if test="doorCount!=null">
+                door_count,  <!-- 车门数量 -->
+            </if>
+            <if test="alloyRimCount!=null">
+                alloy_rim_count,  <!-- 铝圈数量 -->
+            </if>
+            <if test="cisternCount!=null">
+                cistern_count,  <!-- 水箱数量 -->
+            </if>
+            <if test="electricalMachineryCount!=null">
+                electrical_machinery_count,  <!-- 电机数量 -->
+            </if>
+            <if test="tyreCount!=null">
+                tyre_count,  <!-- 轮胎数量 -->
+            </if>
+            <if test="chairCount!=null">
+                chair_count,  <!-- 座椅数量 -->
+            </if>
+            <if test="conditionerCount!=null">
+                conditioner_count,  <!-- 空调数量 -->
+            </if>
+            <if test="catalyticConverterCount!=null">
+                catalytic_converter_count,  <!-- 三元催化器数量 -->
+            </if>
+            <if test="remark!=null and remark!=''">
+                remark,  <!-- 备注 -->
+            </if>
+            <if test="createTime!=null">
+                create_time,  <!--  -->
+            </if>
+            <if test="electricalCount!=null">
+                electrical_count,  <!-- 电机数量 -->
+            </if>
+            <if test="selfWeight!=null and selfWeight!=''">
+                self_weight,  <!-- 自重 -->
+            </if>
+            <if test="dismantlingWay!=null">
+                dismantling_way,  <!-- 拆解方式 1:粗拆 ,2:点拆 , 3:包拆 ,4:精拆 -->
+            </if>
+            <if test="isDelete!=null">
+                is_delete,  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+            <if test="createOperator!=null and createOperator!=''">
+                create_operator,  <!-- 创建人 -->
+            </if>
+            <if test="createOperatorId!=null">
+                create_operator_id,  <!-- 创建人id -->
+            </if>
+        </trim>
+        )VALUES(
+        <trim suffixOverrides=",">
+            <if test="id!=null">
+                #{id},  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                #{disintegratePlantId},  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                #{carInfoId},  <!-- carinfo的id -->
+            </if>
+            <if test="plateCount!=null">
+                #{plateCount},  <!-- 车牌数量 -->
+            </if>
+            <if test="carDegree!=null">
+                #{carDegree},  <!-- 新旧程度 1:正常 ,2:火灾 , 3:碰撞 ,4:水淹 -->
+            </if>
+            <if test="conditionPumpCount!=null">
+                #{conditionPumpCount},  <!-- 空调泵数量 -->
+            </if>
+            <if test="batteryCount!=null">
+                #{batteryCount},  <!-- 电池数量 -->
+            </if>
+            <if test="motorCount!=null">
+                #{motorCount},  <!-- 马达数量 -->
+            </if>
+            <if test="doorCount!=null">
+                #{doorCount},  <!-- 车门数量 -->
+            </if>
+            <if test="alloyRimCount!=null">
+                #{alloyRimCount},  <!-- 铝圈数量 -->
+            </if>
+            <if test="cisternCount!=null">
+                #{cisternCount},  <!-- 水箱数量 -->
+            </if>
+            <if test="electricalMachineryCount!=null">
+                #{electricalMachineryCount},  <!-- 电机数量 -->
+            </if>
+            <if test="tyreCount!=null">
+                #{tyreCount},  <!-- 轮胎数量 -->
+            </if>
+            <if test="chairCount!=null">
+                #{chairCount},  <!-- 座椅数量 -->
+            </if>
+            <if test="conditionerCount!=null">
+                #{conditionerCount},  <!-- 空调数量 -->
+            </if>
+            <if test="catalyticConverterCount!=null">
+                #{catalyticConverterCount},  <!-- 三元催化器数量 -->
+            </if>
+            <if test="remark!=null and remark!=''">
+                #{remark},  <!-- 备注 -->
+            </if>
+            <if test="createTime!=null">
+                #{createTime},  <!--  -->
+            </if>
+            <if test="electricalCount!=null">
+                #{electricalCount},  <!-- 电机数量 -->
+            </if>
+            <if test="selfWeight!=null and selfWeight!=''">
+                #{selfWeight},  <!-- 自重 -->
+            </if>
+            <if test="dismantlingWay!=null">
+                #{dismantlingWay},  <!-- 拆解方式 1:粗拆 ,2:点拆 , 3:包拆 ,4:精拆 -->
+            </if>
+            <if test="isDelete!=null">
+                #{isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+            <if test="createOperator!=null and createOperator!=''">
+                #{createOperator},  <!-- 创建人 -->
+            </if>
+            <if test="createOperatorId!=null">
+                #{createOperatorId},  <!-- 创建人id -->
+            </if>
+        </trim>
+        )
+    </insert>
+    <insert id="insertBatchCarSurvey">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            INSERT INTO ts_car_survey (
+            <trim suffixOverrides=",">
+                <if test="item.id!=null">
+                    id,  <!--  -->
+                </if>
+                <if test="item.disintegratePlantId!=null">
+                    disintegrate_plant_id,  <!-- 解体厂id -->
+                </if>
+                <if test="item.carInfoId!=null">
+                    car_info_id,  <!-- carinfo的id -->
+                </if>
+                <if test="item.plateCount!=null">
+                    plate_count,  <!-- 车牌数量 -->
+                </if>
+                <if test="item.carDegree!=null">
+                    car_degree,  <!-- 新旧程度 1:正常 ,2:火灾 , 3:碰撞 ,4:水淹 -->
+                </if>
+                <if test="item.conditionPumpCount!=null">
+                    condition_pump_count,  <!-- 空调泵数量 -->
+                </if>
+                <if test="item.batteryCount!=null">
+                    battery_count,  <!-- 电池数量 -->
+                </if>
+                <if test="item.motorCount!=null">
+                    motor_count,  <!-- 马达数量 -->
+                </if>
+                <if test="item.doorCount!=null">
+                    door_count,  <!-- 车门数量 -->
+                </if>
+                <if test="item.alloyRimCount!=null">
+                    alloy_rim_count,  <!-- 铝圈数量 -->
+                </if>
+                <if test="item.cisternCount!=null">
+                    cistern_count,  <!-- 水箱数量 -->
+                </if>
+                <if test="item.electricalMachineryCount!=null">
+                    electrical_machinery_count,  <!-- 电机数量 -->
+                </if>
+                <if test="item.tyreCount!=null">
+                    tyre_count,  <!-- 轮胎数量 -->
+                </if>
+                <if test="item.chairCount!=null">
+                    chair_count,  <!-- 座椅数量 -->
+                </if>
+                <if test="item.conditionerCount!=null">
+                    conditioner_count,  <!-- 空调数量 -->
+                </if>
+                <if test="item.catalyticConverterCount!=null">
+                    catalytic_converter_count,  <!-- 三元催化器数量 -->
+                </if>
+                <if test="item.remark!=null and item.remark!=''">
+                    remark,  <!-- 备注 -->
+                </if>
+                <if test="item.createTime!=null">
+                    create_time,  <!--  -->
+                </if>
+                <if test="item.electricalCount!=null">
+                    electrical_count,  <!-- 电机数量 -->
+                </if>
+                <if test="item.selfWeight!=null and item.selfWeight!=''">
+                    self_weight,  <!-- 自重 -->
+                </if>
+                <if test="item.dismantlingWay!=null">
+                    dismantling_way,  <!-- 拆解方式 1:粗拆 ,2:点拆 , 3:包拆 ,4:精拆 -->
+                </if>
+                <if test="item.isDelete!=null">
+                    is_delete,  <!-- 是否删除。1.删除，2,正常 -->
+                </if>
+                <if test="item.createOperator!=null and item.createOperator!=''">
+                    create_operator,  <!-- 创建人 -->
+                </if>
+                <if test="item.createOperatorId!=null">
+                    create_operator_id,  <!-- 创建人id -->
+                </if>
+            </trim>
+            )VALUES(
+            <trim suffixOverrides=",">
+                <if test="item.id!=null">
+                    #{item.id},  <!--  -->
+                </if>
+                <if test="item.disintegratePlantId!=null">
+                    #{item.disintegratePlantId},  <!-- 解体厂id -->
+                </if>
+                <if test="item.carInfoId!=null">
+                    #{item.carInfoId},  <!-- carinfo的id -->
+                </if>
+                <if test="item.plateCount!=null">
+                    #{item.plateCount},  <!-- 车牌数量 -->
+                </if>
+                <if test="item.carDegree!=null">
+                    #{item.carDegree},  <!-- 新旧程度 1:正常 ,2:火灾 , 3:碰撞 ,4:水淹 -->
+                </if>
+                <if test="item.conditionPumpCount!=null">
+                    #{item.conditionPumpCount},  <!-- 空调泵数量 -->
+                </if>
+                <if test="item.batteryCount!=null">
+                    #{item.batteryCount},  <!-- 电池数量 -->
+                </if>
+                <if test="item.motorCount!=null">
+                    #{item.motorCount},  <!-- 马达数量 -->
+                </if>
+                <if test="item.doorCount!=null">
+                    #{item.doorCount},  <!-- 车门数量 -->
+                </if>
+                <if test="item.alloyRimCount!=null">
+                    #{item.alloyRimCount},  <!-- 铝圈数量 -->
+                </if>
+                <if test="item.cisternCount!=null">
+                    #{item.cisternCount},  <!-- 水箱数量 -->
+                </if>
+                <if test="item.electricalMachineryCount!=null">
+                    #{item.electricalMachineryCount},  <!-- 电机数量 -->
+                </if>
+                <if test="item.tyreCount!=null">
+                    #{item.tyreCount},  <!-- 轮胎数量 -->
+                </if>
+                <if test="item.chairCount!=null">
+                    #{item.chairCount},  <!-- 座椅数量 -->
+                </if>
+                <if test="item.conditionerCount!=null">
+                    #{item.conditionerCount},  <!-- 空调数量 -->
+                </if>
+                <if test="item.catalyticConverterCount!=null">
+                    #{item.catalyticConverterCount},  <!-- 三元催化器数量 -->
+                </if>
+                <if test="item.remark!=null and item.remark!=''">
+                    #{item.remark},  <!-- 备注 -->
+                </if>
+                <if test="item.createTime!=null">
+                    #{item.createTime},  <!--  -->
+                </if>
+                <if test="item.electricalCount!=null">
+                    #{item.electricalCount},  <!-- 电机数量 -->
+                </if>
+                <if test="item.selfWeight!=null and item.selfWeight!=''">
+                    #{item.selfWeight},  <!-- 自重 -->
+                </if>
+                <if test="item.dismantlingWay!=null">
+                    #{item.dismantlingWay},  <!-- 拆解方式 1:粗拆 ,2:点拆 , 3:包拆 ,4:精拆 -->
+                </if>
+                <if test="item.isDelete!=null">
+                    #{item.isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+                </if>
+                <if test="item.createOperator!=null and item.createOperator!=''">
+                    #{item.createOperator},  <!-- 创建人 -->
+                </if>
+                <if test="item.createOperatorId!=null">
+                    #{item.createOperatorId},  <!-- 创建人id -->
+                </if>
+            </trim>
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateCarSurvey">
+        UPDATE ts_car_survey
+        <trim prefix="set" suffixOverrides=",">
+            <if test="id!=null">
+                id=#{id},  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                disintegrate_plant_id=#{disintegratePlantId},  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                car_info_id=#{carInfoId},  <!-- carinfo的id -->
+            </if>
+            <if test="plateCount!=null">
+                plate_count=#{plateCount},  <!-- 车牌数量 -->
+            </if>
+            <if test="carDegree!=null">
+                car_degree=#{carDegree},  <!-- 新旧程度 1:正常 ,2:火灾 , 3:碰撞 ,4:水淹 -->
+            </if>
+            <if test="conditionPumpCount!=null">
+                condition_pump_count=#{conditionPumpCount},  <!-- 空调泵数量 -->
+            </if>
+            <if test="batteryCount!=null">
+                battery_count=#{batteryCount},  <!-- 电池数量 -->
+            </if>
+            <if test="motorCount!=null">
+                motor_count=#{motorCount},  <!-- 马达数量 -->
+            </if>
+            <if test="doorCount!=null">
+                door_count=#{doorCount},  <!-- 车门数量 -->
+            </if>
+            <if test="alloyRimCount!=null">
+                alloy_rim_count=#{alloyRimCount},  <!-- 铝圈数量 -->
+            </if>
+            <if test="cisternCount!=null">
+                cistern_count=#{cisternCount},  <!-- 水箱数量 -->
+            </if>
+            <if test="electricalMachineryCount!=null">
+                electrical_machinery_count=#{electricalMachineryCount},  <!-- 电机数量 -->
+            </if>
+            <if test="tyreCount!=null">
+                tyre_count=#{tyreCount},  <!-- 轮胎数量 -->
+            </if>
+            <if test="chairCount!=null">
+                chair_count=#{chairCount},  <!-- 座椅数量 -->
+            </if>
+            <if test="conditionerCount!=null">
+                conditioner_count=#{conditionerCount},  <!-- 空调数量 -->
+            </if>
+            <if test="catalyticConverterCount!=null">
+                catalytic_converter_count=#{catalyticConverterCount},  <!-- 三元催化器数量 -->
+            </if>
+            <if test="remark!=null and remark!=''">
+                remark=#{remark},  <!-- 备注 -->
+            </if>
+            <if test="createTime!=null">
+                create_time=#{createTime},  <!--  -->
+            </if>
+            <if test="electricalCount!=null">
+                electrical_count=#{electricalCount},  <!-- 电机数量 -->
+            </if>
+            <if test="selfWeight!=null and selfWeight!=''">
+                self_weight=#{selfWeight},  <!-- 自重 -->
+            </if>
+            <if test="dismantlingWay!=null">
+                dismantling_way=#{dismantlingWay},  <!-- 拆解方式 1:粗拆 ,2:点拆 , 3:包拆 ,4:精拆 -->
+            </if>
+            <if test="isDelete!=null">
+                is_delete=#{isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+            <if test="createOperator!=null and createOperator!=''">
+                create_operator=#{createOperator},  <!-- 创建人 -->
+            </if>
+            <if test="createOperatorId!=null">
+                create_operator_id=#{createOperatorId},  <!-- 创建人id -->
+            </if>
+        </trim>
+        WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
+    </update>
+    <update id="updateBatchCarSurvey">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update ts_car_survey
+            <trim prefix="set" suffixOverrides=",">
+                <if test="item.id!=null">
+                    id=#{item.id},  <!--  -->
+                </if>
+                <if test="item.disintegratePlantId!=null">
+                    disintegrate_plant_id=#{item.disintegratePlantId},  <!-- 解体厂id -->
+                </if>
+                <if test="item.carInfoId!=null">
+                    car_info_id=#{item.carInfoId},  <!-- carinfo的id -->
+                </if>
+                <if test="item.plateCount!=null">
+                    plate_count=#{item.plateCount},  <!-- 车牌数量 -->
+                </if>
+                <if test="item.carDegree!=null">
+                    car_degree=#{item.carDegree},  <!-- 新旧程度 1:正常 ,2:火灾 , 3:碰撞 ,4:水淹 -->
+                </if>
+                <if test="item.conditionPumpCount!=null">
+                    condition_pump_count=#{item.conditionPumpCount},  <!-- 空调泵数量 -->
+                </if>
+                <if test="item.batteryCount!=null">
+                    battery_count=#{item.batteryCount},  <!-- 电池数量 -->
+                </if>
+                <if test="item.motorCount!=null">
+                    motor_count=#{item.motorCount},  <!-- 马达数量 -->
+                </if>
+                <if test="item.doorCount!=null">
+                    door_count=#{item.doorCount},  <!-- 车门数量 -->
+                </if>
+                <if test="item.alloyRimCount!=null">
+                    alloy_rim_count=#{item.alloyRimCount},  <!-- 铝圈数量 -->
+                </if>
+                <if test="item.cisternCount!=null">
+                    cistern_count=#{item.cisternCount},  <!-- 水箱数量 -->
+                </if>
+                <if test="item.electricalMachineryCount!=null">
+                    electrical_machinery_count=#{item.electricalMachineryCount},  <!-- 电机数量 -->
+                </if>
+                <if test="item.tyreCount!=null">
+                    tyre_count=#{item.tyreCount},  <!-- 轮胎数量 -->
+                </if>
+                <if test="item.chairCount!=null">
+                    chair_count=#{item.chairCount},  <!-- 座椅数量 -->
+                </if>
+                <if test="item.conditionerCount!=null">
+                    conditioner_count=#{item.conditionerCount},  <!-- 空调数量 -->
+                </if>
+                <if test="item.catalyticConverterCount!=null">
+                    catalytic_converter_count=#{item.catalyticConverterCount},  <!-- 三元催化器数量 -->
+                </if>
+                <if test="item.remark!=null and item.remark!=''">
+                    remark=#{item.remark},  <!-- 备注 -->
+                </if>
+                <if test="item.createTime!=null">
+                    create_time=#{item.createTime},  <!--  -->
+                </if>
+                <if test="item.electricalCount!=null">
+                    electrical_count=#{item.electricalCount},  <!-- 电机数量 -->
+                </if>
+                <if test="item.selfWeight!=null and item.selfWeight!=''">
+                    self_weight=#{item.selfWeight},  <!-- 自重 -->
+                </if>
+                <if test="item.dismantlingWay!=null">
+                    dismantling_way=#{item.dismantlingWay},  <!-- 拆解方式 1:粗拆 ,2:点拆 , 3:包拆 ,4:精拆 -->
+                </if>
+                <if test="item.isDelete!=null">
+                    is_delete=#{item.isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+                </if>
+                <if test="item.createOperator!=null and item.createOperator!=''">
+                    create_operator=#{item.createOperator},  <!-- 创建人 -->
+                </if>
+                <if test="item.createOperatorId!=null">
+                    create_operator_id=#{item.createOperatorId},  <!-- 创建人id -->
+                </if>
+            </trim>
+            WHERE id=#{item.id} AND disintegrate_plant_id=#{item.disintegratePlantId}
+        </foreach>
+    </update>
+
+    <delete id="deleteCarSurveyByMap">
+        DELETE FROM ts_car_survey WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
+    </delete>
+
+    <delete id="batchDeleteCarSurveyByMap">
+        DELETE FROM ts_car_survey
+        WHERE disintegrate_plant_id=#{disintegratePlantId} and id in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

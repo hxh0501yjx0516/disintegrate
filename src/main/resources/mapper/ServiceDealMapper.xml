@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tieshan.disintegrate.dao.ServiceDealMapper">
+
+    <resultMap type="com.tieshan.disintegrate.pojo.ServiceDeal" id="serviceDealMap">
+        <result property="id" column="id"/>  <!--  -->
+        <result property="disintegratePlantId" column="disintegrate_plant_id"/>  <!-- 解体厂id -->
+        <result property="carInfoId" column="car_info_id"/>  <!-- 车辆信息主键id -->
+        <result property="anomalyDate" column="anomaly_date"/>  <!-- 异常日期 -->
+        <result property="anomalyCause" column="anomaly_cause"/>  <!-- 异常原因 -->
+        <result property="lastUserId" column="last_user_id"/>  <!-- 处理人（用户主键id) -->
+        <result property="lastUser" column="last_user"/>  <!-- 处理人 -->
+        <result property="isDelete" column="is_delete"/>  <!-- 是否删除。1.删除，2,正常 -->
+    </resultMap>
+
+    <select id="selectOneByMap" resultMap="serviceDealMap">
+        SELECT  id, disintegrate_plant_id, car_info_id, anomaly_date, anomaly_cause, last_user_id, last_user, is_delete
+        FROM ts_service_deal
+        <where>
+            <if test="id!=null">
+                AND id=#{id}  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                AND disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                AND car_info_id=#{carInfoId}  <!-- 车辆信息主键id -->
+            </if>
+            <if test="anomalyDate!=null">
+                AND anomaly_date=#{anomalyDate}  <!-- 异常日期 -->
+            </if>
+            <if test="anomalyCause!=null and anomalyCause!=''">
+                AND anomaly_cause=#{anomalyCause}  <!-- 异常原因 -->
+            </if>
+            <if test="lastUserId!=null">
+                AND last_user_id=#{lastUserId}  <!-- 处理人（用户主键id) -->
+            </if>
+            <if test="lastUser!=null and lastUser!=''">
+                AND last_user=#{lastUser}  <!-- 处理人 -->
+            </if>
+            <if test="isDelete!=null">
+                AND is_delete=#{isDelete}  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </where>
+    </select>
+
+    <select id="selectListByMap" resultMap="serviceDealMap">
+        SELECT  id, disintegrate_plant_id, car_info_id, anomaly_date, anomaly_cause, last_user_id, last_user, is_delete
+        FROM ts_service_deal
+        <where>
+            <if test="id!=null">
+                AND id=#{id}  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                AND disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                AND car_info_id=#{carInfoId}  <!-- 车辆信息主键id -->
+            </if>
+            <if test="anomalyDate!=null">
+                AND anomaly_date=#{anomalyDate}  <!-- 异常日期 -->
+            </if>
+            <if test="anomalyCause!=null and anomalyCause!=''">
+                AND anomaly_cause=#{anomalyCause}  <!-- 异常原因 -->
+            </if>
+            <if test="lastUserId!=null">
+                AND last_user_id=#{lastUserId}  <!-- 处理人（用户主键id) -->
+            </if>
+            <if test="lastUser!=null and lastUser!=''">
+                AND last_user=#{lastUser}  <!-- 处理人 -->
+            </if>
+            <if test="isDelete!=null">
+                AND is_delete=#{isDelete}  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertServiceDeal">
+        INSERT INTO ts_service_deal(
+        <trim suffixOverrides=",">
+            <if test="id!=null">
+                id,  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                disintegrate_plant_id,  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                car_info_id,  <!-- 车辆信息主键id -->
+            </if>
+            <if test="anomalyDate!=null">
+                anomaly_date,  <!-- 异常日期 -->
+            </if>
+            <if test="anomalyCause!=null and anomalyCause!=''">
+                anomaly_cause,  <!-- 异常原因 -->
+            </if>
+            <if test="lastUserId!=null">
+                last_user_id,  <!-- 处理人（用户主键id) -->
+            </if>
+            <if test="lastUser!=null and lastUser!=''">
+                last_user,  <!-- 处理人 -->
+            </if>
+            <if test="isDelete!=null">
+                is_delete,  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </trim>
+        )VALUES(
+        <trim suffixOverrides=",">
+            <if test="id!=null">
+                #{id},  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                #{disintegratePlantId},  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                #{carInfoId},  <!-- 车辆信息主键id -->
+            </if>
+            <if test="anomalyDate!=null">
+                #{anomalyDate},  <!-- 异常日期 -->
+            </if>
+            <if test="anomalyCause!=null and anomalyCause!=''">
+                #{anomalyCause},  <!-- 异常原因 -->
+            </if>
+            <if test="lastUserId!=null">
+                #{lastUserId},  <!-- 处理人（用户主键id) -->
+            </if>
+            <if test="lastUser!=null and lastUser!=''">
+                #{lastUser},  <!-- 处理人 -->
+            </if>
+            <if test="isDelete!=null">
+                #{isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </trim>
+        )
+    </insert>
+    <insert id="insertBatchServiceDeal">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            INSERT INTO ts_service_deal (
+            <trim suffixOverrides=",">
+                <if test="item.id!=null">
+                    id,  <!--  -->
+                </if>
+                <if test="item.disintegratePlantId!=null">
+                    disintegrate_plant_id,  <!-- 解体厂id -->
+                </if>
+                <if test="item.carInfoId!=null">
+                    car_info_id,  <!-- 车辆信息主键id -->
+                </if>
+                <if test="item.anomalyDate!=null">
+                    anomaly_date,  <!-- 异常日期 -->
+                </if>
+                <if test="item.anomalyCause!=null and item.anomalyCause!=''">
+                    anomaly_cause,  <!-- 异常原因 -->
+                </if>
+                <if test="item.lastUserId!=null">
+                    last_user_id,  <!-- 处理人（用户主键id) -->
+                </if>
+                <if test="item.lastUser!=null and item.lastUser!=''">
+                    last_user,  <!-- 处理人 -->
+                </if>
+                <if test="item.isDelete!=null">
+                    is_delete,  <!-- 是否删除。1.删除，2,正常 -->
+                </if>
+            </trim>
+            )VALUES(
+            <trim suffixOverrides=",">
+                <if test="item.id!=null">
+                    #{item.id},  <!--  -->
+                </if>
+                <if test="item.disintegratePlantId!=null">
+                    #{item.disintegratePlantId},  <!-- 解体厂id -->
+                </if>
+                <if test="item.carInfoId!=null">
+                    #{item.carInfoId},  <!-- 车辆信息主键id -->
+                </if>
+                <if test="item.anomalyDate!=null">
+                    #{item.anomalyDate},  <!-- 异常日期 -->
+                </if>
+                <if test="item.anomalyCause!=null and item.anomalyCause!=''">
+                    #{item.anomalyCause},  <!-- 异常原因 -->
+                </if>
+                <if test="item.lastUserId!=null">
+                    #{item.lastUserId},  <!-- 处理人（用户主键id) -->
+                </if>
+                <if test="item.lastUser!=null and item.lastUser!=''">
+                    #{item.lastUser},  <!-- 处理人 -->
+                </if>
+                <if test="item.isDelete!=null">
+                    #{item.isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+                </if>
+            </trim>
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateServiceDeal">
+        UPDATE ts_service_deal
+        <trim prefix="set" suffixOverrides=",">
+            <if test="id!=null">
+                id=#{id},  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                disintegrate_plant_id=#{disintegratePlantId},  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                car_info_id=#{carInfoId},  <!-- 车辆信息主键id -->
+            </if>
+            <if test="anomalyDate!=null">
+                anomaly_date=#{anomalyDate},  <!-- 异常日期 -->
+            </if>
+            <if test="anomalyCause!=null and anomalyCause!=''">
+                anomaly_cause=#{anomalyCause},  <!-- 异常原因 -->
+            </if>
+            <if test="lastUserId!=null">
+                last_user_id=#{lastUserId},  <!-- 处理人（用户主键id) -->
+            </if>
+            <if test="lastUser!=null and lastUser!=''">
+                last_user=#{lastUser},  <!-- 处理人 -->
+            </if>
+            <if test="isDelete!=null">
+                is_delete=#{isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </trim>
+        WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
+    </update>
+    <update id="updateBatchServiceDeal">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update ts_service_deal
+            <trim prefix="set" suffixOverrides=",">
+                <if test="item.id!=null">
+                    id=#{item.id},  <!--  -->
+                </if>
+                <if test="item.disintegratePlantId!=null">
+                    disintegrate_plant_id=#{item.disintegratePlantId},  <!-- 解体厂id -->
+                </if>
+                <if test="item.carInfoId!=null">
+                    car_info_id=#{item.carInfoId},  <!-- 车辆信息主键id -->
+                </if>
+                <if test="item.anomalyDate!=null">
+                    anomaly_date=#{item.anomalyDate},  <!-- 异常日期 -->
+                </if>
+                <if test="item.anomalyCause!=null and item.anomalyCause!=''">
+                    anomaly_cause=#{item.anomalyCause},  <!-- 异常原因 -->
+                </if>
+                <if test="item.lastUserId!=null">
+                    last_user_id=#{item.lastUserId},  <!-- 处理人（用户主键id) -->
+                </if>
+                <if test="item.lastUser!=null and item.lastUser!=''">
+                    last_user=#{item.lastUser},  <!-- 处理人 -->
+                </if>
+                <if test="item.isDelete!=null">
+                    is_delete=#{item.isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+                </if>
+            </trim>
+            WHERE id=#{item.id} AND disintegrate_plant_id=#{item.disintegratePlantId}
+        </foreach>
+    </update>
+
+    <delete id="deleteServiceDealByMap">
+        DELETE FROM ts_service_deal WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
+    </delete>
+
+    <delete id="batchDeleteServiceDealByMap">
+        DELETE FROM ts_service_deal
+        WHERE disintegrate_plant_id=#{disintegratePlantId} and id in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

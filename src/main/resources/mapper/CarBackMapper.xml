@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tieshan.disintegrate.dao.CarBackMapper">
+
+    <resultMap type="com.tieshan.disintegrate.pojo.CarBack" id="carBackMap">
+        <result property="id" column="id"/>  <!--  -->
+        <result property="disintegratePlantId" column="disintegrate_plant_id"/>  <!-- 解体厂id -->
+        <result property="carInfoId" column="car_info_id"/>  <!-- 车辆主键id -->
+        <result property="isPrintCarOrder" column="is_print_car_order"/>  <!-- 1：未打印退车单；2：已打印退车单； -->
+        <result property="printCarOrderTime" column="print_car_order_time"/>  <!-- 打印退车单的时间 -->
+        <result property="printCarOrderUserId" column="print_car_order_user_id"/>  <!-- 打印退车的人（用户主键id) -->
+        <result property="isGetProcedure" column="is_get_procedure"/>  <!-- 1：未领取车辆手续；2：已领取车辆手续； -->
+        <result property="getProcedureTime" column="get_procedure_time"/>  <!-- 领取车辆手续时间 -->
+        <result property="getProcedureUserId" column="get_procedure_user_id"/>  <!-- 领取车辆手续人(用户主键id) -->
+        <result property="isGetCar" column="is_get_car"/>  <!-- 1：未领取车辆；2：已领取车辆； -->
+        <result property="getCarTime" column="get_car_time"/>  <!-- 领取车辆时间 -->
+        <result property="getCarUser" column="get_car_user"/>  <!-- 领取人 -->
+        <result property="isPicCarOrder" column="is_pic_car_order"/>  <!-- 1：未上传退车单照片；2：已上传退车单照片； -->
+        <result property="picCarOrderTime" column="pic_car_order_time"/>  <!-- 退车单照片上传时间 -->
+        <result property="picCarOrderUserId" column="pic_car_order_user_id"/>  <!-- 退车单照片上传人 -->
+        <result property="createTime" column="create_time"/>  <!-- 创建时间 -->
+        <result property="carBackReason" column="car_back_reason"/>  <!-- 退车原因 -->
+        <result property="carOrderAddress" column="car_order_address"/>  <!-- 退车单地址 -->
+        <result property="isDelete" column="is_delete"/>  <!-- 是否删除。1.删除，2,正常 -->
+    </resultMap>
+
+    <select id="selectOneByMap" resultMap="carBackMap">
+        SELECT  id, disintegrate_plant_id, car_info_id, is_print_car_order, print_car_order_time, print_car_order_user_id,
+        is_get_procedure, get_procedure_time, get_procedure_user_id, is_get_car, get_car_time, get_car_user,
+        is_pic_car_order, pic_car_order_time, pic_car_order_user_id, create_time, car_back_reason, car_order_address, is_delete
+        FROM ts_car_back
+        <where>
+            <if test="id!=null">
+                AND id=#{id}  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                AND disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                AND car_info_id=#{carInfoId}  <!-- 车辆主键id -->
+            </if>
+            <if test="isPrintCarOrder!=null">
+                AND is_print_car_order=#{isPrintCarOrder}  <!-- 1：未打印退车单；2：已打印退车单； -->
+            </if>
+            <if test="printCarOrderTime!=null">
+                AND print_car_order_time=#{printCarOrderTime}  <!-- 打印退车单的时间 -->
+            </if>
+            <if test="printCarOrderUserId!=null">
+                AND print_car_order_user_id=#{printCarOrderUserId}  <!-- 打印退车的人（用户主键id) -->
+            </if>
+            <if test="isGetProcedure!=null">
+                AND is_get_procedure=#{isGetProcedure}  <!-- 1：未领取车辆手续；2：已领取车辆手续； -->
+            </if>
+            <if test="getProcedureTime!=null">
+                AND get_procedure_time=#{getProcedureTime}  <!-- 领取车辆手续时间 -->
+            </if>
+            <if test="getProcedureUserId!=null">
+                AND get_procedure_user_id=#{getProcedureUserId}  <!-- 领取车辆手续人(用户主键id) -->
+            </if>
+            <if test="isGetCar!=null">
+                AND is_get_car=#{isGetCar}  <!-- 1：未领取车辆；2：已领取车辆； -->
+            </if>
+            <if test="getCarTime!=null">
+                AND get_car_time=#{getCarTime}  <!-- 领取车辆时间 -->
+            </if>
+            <if test="getCarUser!=null and getCarUser!=''">
+                AND get_car_user=#{getCarUser}  <!-- 领取人 -->
+            </if>
+            <if test="isPicCarOrder!=null">
+                AND is_pic_car_order=#{isPicCarOrder}  <!-- 1：未上传退车单照片；2：已上传退车单照片； -->
+            </if>
+            <if test="picCarOrderTime!=null">
+                AND pic_car_order_time=#{picCarOrderTime}  <!-- 退车单照片上传时间 -->
+            </if>
+            <if test="picCarOrderUserId!=null">
+                AND pic_car_order_user_id=#{picCarOrderUserId}  <!-- 退车单照片上传人 -->
+            </if>
+            <if test="createTime!=null">
+                AND create_time=#{createTime}  <!-- 创建时间 -->
+            </if>
+            <if test="carBackReason!=null and carBackReason!=''">
+                AND car_back_reason=#{carBackReason}  <!-- 退车原因 -->
+            </if>
+            <if test="carOrderAddress!=null and carOrderAddress!=''">
+                AND car_order_address=#{carOrderAddress}  <!-- 退车单地址 -->
+            </if>
+            <if test="isDelete!=null">
+                AND is_delete=#{isDelete}  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </where>
+    </select>
+
+    <select id="selectListByMap" resultMap="carBackMap">
+        SELECT  id, disintegrate_plant_id, car_info_id, is_print_car_order, print_car_order_time, print_car_order_user_id,
+        is_get_procedure, get_procedure_time, get_procedure_user_id, is_get_car, get_car_time, get_car_user, is_pic_car_order,
+        pic_car_order_time, pic_car_order_user_id, create_time, car_back_reason, car_order_address, is_delete
+        FROM ts_car_back
+        <where>
+            <if test="id!=null">
+                AND id=#{id}  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                AND disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                AND car_info_id=#{carInfoId}  <!-- 车辆主键id -->
+            </if>
+            <if test="isPrintCarOrder!=null">
+                AND is_print_car_order=#{isPrintCarOrder}  <!-- 1：未打印退车单；2：已打印退车单； -->
+            </if>
+            <if test="printCarOrderTime!=null">
+                AND print_car_order_time=#{printCarOrderTime}  <!-- 打印退车单的时间 -->
+            </if>
+            <if test="printCarOrderUserId!=null">
+                AND print_car_order_user_id=#{printCarOrderUserId}  <!-- 打印退车的人（用户主键id) -->
+            </if>
+            <if test="isGetProcedure!=null">
+                AND is_get_procedure=#{isGetProcedure}  <!-- 1：未领取车辆手续；2：已领取车辆手续； -->
+            </if>
+            <if test="getProcedureTime!=null">
+                AND get_procedure_time=#{getProcedureTime}  <!-- 领取车辆手续时间 -->
+            </if>
+            <if test="getProcedureUserId!=null">
+                AND get_procedure_user_id=#{getProcedureUserId}  <!-- 领取车辆手续人(用户主键id) -->
+            </if>
+            <if test="isGetCar!=null">
+                AND is_get_car=#{isGetCar}  <!-- 1：未领取车辆；2：已领取车辆； -->
+            </if>
+            <if test="getCarTime!=null">
+                AND get_car_time=#{getCarTime}  <!-- 领取车辆时间 -->
+            </if>
+            <if test="getCarUser!=null and getCarUser!=''">
+                AND get_car_user=#{getCarUser}  <!-- 领取人 -->
+            </if>
+            <if test="isPicCarOrder!=null">
+                AND is_pic_car_order=#{isPicCarOrder}  <!-- 1：未上传退车单照片；2：已上传退车单照片； -->
+            </if>
+            <if test="picCarOrderTime!=null">
+                AND pic_car_order_time=#{picCarOrderTime}  <!-- 退车单照片上传时间 -->
+            </if>
+            <if test="picCarOrderUserId!=null">
+                AND pic_car_order_user_id=#{picCarOrderUserId}  <!-- 退车单照片上传人 -->
+            </if>
+            <if test="createTime!=null">
+                AND create_time=#{createTime}  <!-- 创建时间 -->
+            </if>
+            <if test="carBackReason!=null and carBackReason!=''">
+                AND car_back_reason=#{carBackReason}  <!-- 退车原因 -->
+            </if>
+            <if test="carOrderAddress!=null and carOrderAddress!=''">
+                AND car_order_address=#{carOrderAddress}  <!-- 退车单地址 -->
+            </if>
+            <if test="isDelete!=null">
+                AND is_delete=#{isDelete}  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertCarBack">
+        INSERT INTO ts_car_back(
+        <trim suffixOverrides=",">
+            <if test="id!=null">
+                id,  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                disintegrate_plant_id,  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                car_info_id,  <!-- 车辆主键id -->
+            </if>
+            <if test="isPrintCarOrder!=null">
+                is_print_car_order,  <!-- 1：未打印退车单；2：已打印退车单； -->
+            </if>
+            <if test="printCarOrderTime!=null">
+                print_car_order_time,  <!-- 打印退车单的时间 -->
+            </if>
+            <if test="printCarOrderUserId!=null">
+                print_car_order_user_id,  <!-- 打印退车的人（用户主键id) -->
+            </if>
+            <if test="isGetProcedure!=null">
+                is_get_procedure,  <!-- 1：未领取车辆手续；2：已领取车辆手续； -->
+            </if>
+            <if test="getProcedureTime!=null">
+                get_procedure_time,  <!-- 领取车辆手续时间 -->
+            </if>
+            <if test="getProcedureUserId!=null">
+                get_procedure_user_id,  <!-- 领取车辆手续人(用户主键id) -->
+            </if>
+            <if test="isGetCar!=null">
+                is_get_car,  <!-- 1：未领取车辆；2：已领取车辆； -->
+            </if>
+            <if test="getCarTime!=null">
+                get_car_time,  <!-- 领取车辆时间 -->
+            </if>
+            <if test="getCarUser!=null and getCarUser!=''">
+                get_car_user,  <!-- 领取人 -->
+            </if>
+            <if test="isPicCarOrder!=null">
+                is_pic_car_order,  <!-- 1：未上传退车单照片；2：已上传退车单照片； -->
+            </if>
+            <if test="picCarOrderTime!=null">
+                pic_car_order_time,  <!-- 退车单照片上传时间 -->
+            </if>
+            <if test="picCarOrderUserId!=null">
+                pic_car_order_user_id,  <!-- 退车单照片上传人 -->
+            </if>
+            <if test="createTime!=null">
+                create_time,  <!-- 创建时间 -->
+            </if>
+            <if test="carBackReason!=null and carBackReason!=''">
+                car_back_reason,  <!-- 退车原因 -->
+            </if>
+            <if test="carOrderAddress!=null and carOrderAddress!=''">
+                car_order_address,  <!-- 退车单地址 -->
+            </if>
+            <if test="isDelete!=null">
+                is_delete,  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </trim>
+        )VALUES(
+        <trim suffixOverrides=",">
+            <if test="id!=null">
+                #{id},  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                #{disintegratePlantId},  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                #{carInfoId},  <!-- 车辆主键id -->
+            </if>
+            <if test="isPrintCarOrder!=null">
+                #{isPrintCarOrder},  <!-- 1：未打印退车单；2：已打印退车单； -->
+            </if>
+            <if test="printCarOrderTime!=null">
+                #{printCarOrderTime},  <!-- 打印退车单的时间 -->
+            </if>
+            <if test="printCarOrderUserId!=null">
+                #{printCarOrderUserId},  <!-- 打印退车的人（用户主键id) -->
+            </if>
+            <if test="isGetProcedure!=null">
+                #{isGetProcedure},  <!-- 1：未领取车辆手续；2：已领取车辆手续； -->
+            </if>
+            <if test="getProcedureTime!=null">
+                #{getProcedureTime},  <!-- 领取车辆手续时间 -->
+            </if>
+            <if test="getProcedureUserId!=null">
+                #{getProcedureUserId},  <!-- 领取车辆手续人(用户主键id) -->
+            </if>
+            <if test="isGetCar!=null">
+                #{isGetCar},  <!-- 1：未领取车辆；2：已领取车辆； -->
+            </if>
+            <if test="getCarTime!=null">
+                #{getCarTime},  <!-- 领取车辆时间 -->
+            </if>
+            <if test="getCarUser!=null and getCarUser!=''">
+                #{getCarUser},  <!-- 领取人 -->
+            </if>
+            <if test="isPicCarOrder!=null">
+                #{isPicCarOrder},  <!-- 1：未上传退车单照片；2：已上传退车单照片； -->
+            </if>
+            <if test="picCarOrderTime!=null">
+                #{picCarOrderTime},  <!-- 退车单照片上传时间 -->
+            </if>
+            <if test="picCarOrderUserId!=null">
+                #{picCarOrderUserId},  <!-- 退车单照片上传人 -->
+            </if>
+            <if test="createTime!=null">
+                #{createTime},  <!-- 创建时间 -->
+            </if>
+            <if test="carBackReason!=null and carBackReason!=''">
+                #{carBackReason},  <!-- 退车原因 -->
+            </if>
+            <if test="carOrderAddress!=null and carOrderAddress!=''">
+                #{carOrderAddress},  <!-- 退车单地址 -->
+            </if>
+            <if test="isDelete!=null">
+                #{isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </trim>
+        )
+    </insert>
+    <insert id="insertBatchCarBack">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            INSERT INTO ts_car_back (
+            <trim suffixOverrides=",">
+                <if test="item.id!=null">
+                    id,  <!--  -->
+                </if>
+                <if test="item.disintegratePlantId!=null">
+                    disintegrate_plant_id,  <!-- 解体厂id -->
+                </if>
+                <if test="item.carInfoId!=null">
+                    car_info_id,  <!-- 车辆主键id -->
+                </if>
+                <if test="item.isPrintCarOrder!=null">
+                    is_print_car_order,  <!-- 1：未打印退车单；2：已打印退车单； -->
+                </if>
+                <if test="item.printCarOrderTime!=null">
+                    print_car_order_time,  <!-- 打印退车单的时间 -->
+                </if>
+                <if test="item.printCarOrderUserId!=null">
+                    print_car_order_user_id,  <!-- 打印退车的人（用户主键id) -->
+                </if>
+                <if test="item.isGetProcedure!=null">
+                    is_get_procedure,  <!-- 1：未领取车辆手续；2：已领取车辆手续； -->
+                </if>
+                <if test="item.getProcedureTime!=null">
+                    get_procedure_time,  <!-- 领取车辆手续时间 -->
+                </if>
+                <if test="item.getProcedureUserId!=null">
+                    get_procedure_user_id,  <!-- 领取车辆手续人(用户主键id) -->
+                </if>
+                <if test="item.isGetCar!=null">
+                    is_get_car,  <!-- 1：未领取车辆；2：已领取车辆； -->
+                </if>
+                <if test="item.getCarTime!=null">
+                    get_car_time,  <!-- 领取车辆时间 -->
+                </if>
+                <if test="item.getCarUser!=null and item.getCarUser!=''">
+                    get_car_user,  <!-- 领取人 -->
+                </if>
+                <if test="item.isPicCarOrder!=null">
+                    is_pic_car_order,  <!-- 1：未上传退车单照片；2：已上传退车单照片； -->
+                </if>
+                <if test="item.picCarOrderTime!=null">
+                    pic_car_order_time,  <!-- 退车单照片上传时间 -->
+                </if>
+                <if test="item.picCarOrderUserId!=null">
+                    pic_car_order_user_id,  <!-- 退车单照片上传人 -->
+                </if>
+                <if test="item.createTime!=null">
+                    create_time,  <!-- 创建时间 -->
+                </if>
+                <if test="item.carBackReason!=null and item.carBackReason!=''">
+                    car_back_reason,  <!-- 退车原因 -->
+                </if>
+                <if test="item.carOrderAddress!=null and item.carOrderAddress!=''">
+                    car_order_address,  <!-- 退车单地址 -->
+                </if>
+                <if test="item.isDelete!=null">
+                    is_delete,  <!-- 是否删除。1.删除，2,正常 -->
+                </if>
+            </trim>
+            )VALUES(
+            <trim suffixOverrides=",">
+                <if test="item.id!=null">
+                    #{item.id},  <!--  -->
+                </if>
+                <if test="item.disintegratePlantId!=null">
+                    #{item.disintegratePlantId},  <!-- 解体厂id -->
+                </if>
+                <if test="item.carInfoId!=null">
+                    #{item.carInfoId},  <!-- 车辆主键id -->
+                </if>
+                <if test="item.isPrintCarOrder!=null">
+                    #{item.isPrintCarOrder},  <!-- 1：未打印退车单；2：已打印退车单； -->
+                </if>
+                <if test="item.printCarOrderTime!=null">
+                    #{item.printCarOrderTime},  <!-- 打印退车单的时间 -->
+                </if>
+                <if test="item.printCarOrderUserId!=null">
+                    #{item.printCarOrderUserId},  <!-- 打印退车的人（用户主键id) -->
+                </if>
+                <if test="item.isGetProcedure!=null">
+                    #{item.isGetProcedure},  <!-- 1：未领取车辆手续；2：已领取车辆手续； -->
+                </if>
+                <if test="item.getProcedureTime!=null">
+                    #{item.getProcedureTime},  <!-- 领取车辆手续时间 -->
+                </if>
+                <if test="item.getProcedureUserId!=null">
+                    #{item.getProcedureUserId},  <!-- 领取车辆手续人(用户主键id) -->
+                </if>
+                <if test="item.isGetCar!=null">
+                    #{item.isGetCar},  <!-- 1：未领取车辆；2：已领取车辆； -->
+                </if>
+                <if test="item.getCarTime!=null">
+                    #{item.getCarTime},  <!-- 领取车辆时间 -->
+                </if>
+                <if test="item.getCarUser!=null and item.getCarUser!=''">
+                    #{item.getCarUser},  <!-- 领取人 -->
+                </if>
+                <if test="item.isPicCarOrder!=null">
+                    #{item.isPicCarOrder},  <!-- 1：未上传退车单照片；2：已上传退车单照片； -->
+                </if>
+                <if test="item.picCarOrderTime!=null">
+                    #{item.picCarOrderTime},  <!-- 退车单照片上传时间 -->
+                </if>
+                <if test="item.picCarOrderUserId!=null">
+                    #{item.picCarOrderUserId},  <!-- 退车单照片上传人 -->
+                </if>
+                <if test="item.createTime!=null">
+                    #{item.createTime},  <!-- 创建时间 -->
+                </if>
+                <if test="item.carBackReason!=null and item.carBackReason!=''">
+                    #{item.carBackReason},  <!-- 退车原因 -->
+                </if>
+                <if test="item.carOrderAddress!=null and item.carOrderAddress!=''">
+                    #{item.carOrderAddress},  <!-- 退车单地址 -->
+                </if>
+                <if test="item.isDelete!=null">
+                    #{item.isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+                </if>
+            </trim>
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateCarBack">
+        UPDATE ts_car_back
+        <trim prefix="set" suffixOverrides=",">
+            <if test="id!=null">
+                id=#{id},  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                disintegrate_plant_id=#{disintegratePlantId},  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                car_info_id=#{carInfoId},  <!-- 车辆主键id -->
+            </if>
+            <if test="isPrintCarOrder!=null">
+                is_print_car_order=#{isPrintCarOrder},  <!-- 1：未打印退车单；2：已打印退车单； -->
+            </if>
+            <if test="printCarOrderTime!=null">
+                print_car_order_time=#{printCarOrderTime},  <!-- 打印退车单的时间 -->
+            </if>
+            <if test="printCarOrderUserId!=null">
+                print_car_order_user_id=#{printCarOrderUserId},  <!-- 打印退车的人（用户主键id) -->
+            </if>
+            <if test="isGetProcedure!=null">
+                is_get_procedure=#{isGetProcedure},  <!-- 1：未领取车辆手续；2：已领取车辆手续； -->
+            </if>
+            <if test="getProcedureTime!=null">
+                get_procedure_time=#{getProcedureTime},  <!-- 领取车辆手续时间 -->
+            </if>
+            <if test="getProcedureUserId!=null">
+                get_procedure_user_id=#{getProcedureUserId},  <!-- 领取车辆手续人(用户主键id) -->
+            </if>
+            <if test="isGetCar!=null">
+                is_get_car=#{isGetCar},  <!-- 1：未领取车辆；2：已领取车辆； -->
+            </if>
+            <if test="getCarTime!=null">
+                get_car_time=#{getCarTime},  <!-- 领取车辆时间 -->
+            </if>
+            <if test="getCarUser!=null and getCarUser!=''">
+                get_car_user=#{getCarUser},  <!-- 领取人 -->
+            </if>
+            <if test="isPicCarOrder!=null">
+                is_pic_car_order=#{isPicCarOrder},  <!-- 1：未上传退车单照片；2：已上传退车单照片； -->
+            </if>
+            <if test="picCarOrderTime!=null">
+                pic_car_order_time=#{picCarOrderTime},  <!-- 退车单照片上传时间 -->
+            </if>
+            <if test="picCarOrderUserId!=null">
+                pic_car_order_user_id=#{picCarOrderUserId},  <!-- 退车单照片上传人 -->
+            </if>
+            <if test="createTime!=null">
+                create_time=#{createTime},  <!-- 创建时间 -->
+            </if>
+            <if test="carBackReason!=null and carBackReason!=''">
+                car_back_reason=#{carBackReason},  <!-- 退车原因 -->
+            </if>
+            <if test="carOrderAddress!=null and carOrderAddress!=''">
+                car_order_address=#{carOrderAddress},  <!-- 退车单地址 -->
+            </if>
+            <if test="isDelete!=null">
+                is_delete=#{isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </trim>
+        WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
+    </update>
+    <update id="updateBatchCarBack">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update ts_car_back
+            <trim prefix="set" suffixOverrides=",">
+                <if test="item.id!=null">
+                    id=#{item.id},  <!--  -->
+                </if>
+                <if test="item.disintegratePlantId!=null">
+                    disintegrate_plant_id=#{item.disintegratePlantId},  <!-- 解体厂id -->
+                </if>
+                <if test="item.carInfoId!=null">
+                    car_info_id=#{item.carInfoId},  <!-- 车辆主键id -->
+                </if>
+                <if test="item.isPrintCarOrder!=null">
+                    is_print_car_order=#{item.isPrintCarOrder},  <!-- 1：未打印退车单；2：已打印退车单； -->
+                </if>
+                <if test="item.printCarOrderTime!=null">
+                    print_car_order_time=#{item.printCarOrderTime},  <!-- 打印退车单的时间 -->
+                </if>
+                <if test="item.printCarOrderUserId!=null">
+                    print_car_order_user_id=#{item.printCarOrderUserId},  <!-- 打印退车的人（用户主键id) -->
+                </if>
+                <if test="item.isGetProcedure!=null">
+                    is_get_procedure=#{item.isGetProcedure},  <!-- 1：未领取车辆手续；2：已领取车辆手续； -->
+                </if>
+                <if test="item.getProcedureTime!=null">
+                    get_procedure_time=#{item.getProcedureTime},  <!-- 领取车辆手续时间 -->
+                </if>
+                <if test="item.getProcedureUserId!=null">
+                    get_procedure_user_id=#{item.getProcedureUserId},  <!-- 领取车辆手续人(用户主键id) -->
+                </if>
+                <if test="item.isGetCar!=null">
+                    is_get_car=#{item.isGetCar},  <!-- 1：未领取车辆；2：已领取车辆； -->
+                </if>
+                <if test="item.getCarTime!=null">
+                    get_car_time=#{item.getCarTime},  <!-- 领取车辆时间 -->
+                </if>
+                <if test="item.getCarUser!=null and item.getCarUser!=''">
+                    get_car_user=#{item.getCarUser},  <!-- 领取人 -->
+                </if>
+                <if test="item.isPicCarOrder!=null">
+                    is_pic_car_order=#{item.isPicCarOrder},  <!-- 1：未上传退车单照片；2：已上传退车单照片； -->
+                </if>
+                <if test="item.picCarOrderTime!=null">
+                    pic_car_order_time=#{item.picCarOrderTime},  <!-- 退车单照片上传时间 -->
+                </if>
+                <if test="item.picCarOrderUserId!=null">
+                    pic_car_order_user_id=#{item.picCarOrderUserId},  <!-- 退车单照片上传人 -->
+                </if>
+                <if test="item.createTime!=null">
+                    create_time=#{item.createTime},  <!-- 创建时间 -->
+                </if>
+                <if test="item.carBackReason!=null and item.carBackReason!=''">
+                    car_back_reason=#{item.carBackReason},  <!-- 退车原因 -->
+                </if>
+                <if test="item.carOrderAddress!=null and item.carOrderAddress!=''">
+                    car_order_address=#{item.carOrderAddress},  <!-- 退车单地址 -->
+                </if>
+                <if test="item.isDelete!=null">
+                    is_delete=#{item.isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+                </if>
+            </trim>
+            WHERE id=#{item.id} AND disintegrate_plant_id=#{item.disintegratePlantId}
+        </foreach>
+    </update>
+
+    <delete id="deleteCarBackByMap">
+        DELETE FROM ts_car_back WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
+    </delete>
+
+    <delete id="batchDeleteCarBackByMap">
+        DELETE FROM ts_car_back
+        WHERE disintegrate_plant_id=#{disintegratePlantId} and id in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

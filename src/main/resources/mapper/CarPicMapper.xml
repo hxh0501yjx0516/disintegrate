@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tieshan.disintegrate.dao.CarPicMapper">
+
+    <resultMap type="com.tieshan.disintegrate.pojo.CarPic" id="carPicMap">
+        <result property="id" column="id"/>  <!--  -->
+        <result property="disintegratePlantId" column="disintegrate_plant_id"/>  <!-- 解体厂id -->
+        <result property="fileName" column="file_name"/>  <!-- 图片名字 -->
+        <result property="fileUrl" column="file_url"/>  <!-- 图片地址 -->
+        <result property="firstType" column="first_type"/>  <!-- 一级类型（来之字典） -->
+        <result property="twoType" column="two_type"/>  <!-- 二级类型（来之字典) -->
+        <result property="carNo" column="car_no"/>  <!-- carinfo的主键id -->
+        <result property="operatorId" column="operator_id"/>  <!-- 操作人id -->
+        <result property="operator" column="operator"/>  <!-- 操作人 -->
+        <result property="createTime" column="create_time"/>  <!--  -->
+        <result property="isDelete" column="is_delete"/>  <!-- 是否删除。1.删除，2,正常 -->
+    </resultMap>
+
+    <select id="selectOneByMap" resultMap="carPicMap">
+        SELECT  id, disintegrate_plant_id, file_name, file_url, first_type, two_type, car_no, operator_id, operator, create_time, is_delete, FROM ts_car_pic
+        <where>
+            <if test="id!=null">
+                AND id=#{id}  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                AND disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
+            </if>
+            <if test="fileName!=null and fileName!=''">
+                AND file_name=#{fileName}  <!-- 图片名字 -->
+            </if>
+            <if test="fileUrl!=null and fileUrl!=''">
+                AND file_url=#{fileUrl}  <!-- 图片地址 -->
+            </if>
+            <if test="firstType!=null and firstType!=''">
+                AND first_type=#{firstType}  <!-- 一级类型（来之字典） -->
+            </if>
+            <if test="twoType!=null and twoType!=''">
+                AND two_type=#{twoType}  <!-- 二级类型（来之字典) -->
+            </if>
+            <if test="carNo!=null">
+                AND car_no=#{carNo}  <!-- carinfo的主键id -->
+            </if>
+            <if test="operatorId!=null">
+                AND operator_id=#{operatorId}  <!-- 操作人id -->
+            </if>
+            <if test="operator!=null and operator!=''">
+                AND operator=#{operator}  <!-- 操作人 -->
+            </if>
+            <if test="createTime!=null">
+                AND create_time=#{createTime}  <!--  -->
+            </if>
+            <if test="isDelete!=null">
+                AND is_delete=#{isDelete}  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </where>
+    </select>
+
+    <select id="selectListByMap" resultMap="carPicMap">
+        SELECT  id, disintegrate_plant_id, file_name, file_url, first_type, two_type, car_no, operator_id, operator, create_time, is_delete, FROM ts_car_pic
+        <where>
+            <if test="id!=null">
+                AND id=#{id}  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                AND disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
+            </if>
+            <if test="fileName!=null and fileName!=''">
+                AND file_name=#{fileName}  <!-- 图片名字 -->
+            </if>
+            <if test="fileUrl!=null and fileUrl!=''">
+                AND file_url=#{fileUrl}  <!-- 图片地址 -->
+            </if>
+            <if test="firstType!=null and firstType!=''">
+                AND first_type=#{firstType}  <!-- 一级类型（来之字典） -->
+            </if>
+            <if test="twoType!=null and twoType!=''">
+                AND two_type=#{twoType}  <!-- 二级类型（来之字典) -->
+            </if>
+            <if test="carNo!=null">
+                AND car_no=#{carNo}  <!-- carinfo的主键id -->
+            </if>
+            <if test="operatorId!=null">
+                AND operator_id=#{operatorId}  <!-- 操作人id -->
+            </if>
+            <if test="operator!=null and operator!=''">
+                AND operator=#{operator}  <!-- 操作人 -->
+            </if>
+            <if test="createTime!=null">
+                AND create_time=#{createTime}  <!--  -->
+            </if>
+            <if test="isDelete!=null">
+                AND is_delete=#{isDelete}  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertCarPic">
+        INSERT INTO ts_car_pic(
+        <trim suffixOverrides=",">
+            <if test="id!=null">
+                id,  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                disintegrate_plant_id,  <!-- 解体厂id -->
+            </if>
+            <if test="fileName!=null and fileName!=''">
+                file_name,  <!-- 图片名字 -->
+            </if>
+            <if test="fileUrl!=null and fileUrl!=''">
+                file_url,  <!-- 图片地址 -->
+            </if>
+            <if test="firstType!=null and firstType!=''">
+                first_type,  <!-- 一级类型（来之字典） -->
+            </if>
+            <if test="twoType!=null and twoType!=''">
+                two_type,  <!-- 二级类型（来之字典) -->
+            </if>
+            <if test="carNo!=null">
+                car_no,  <!-- carinfo的主键id -->
+            </if>
+            <if test="operatorId!=null">
+                operator_id,  <!-- 操作人id -->
+            </if>
+            <if test="operator!=null and operator!=''">
+                operator,  <!-- 操作人 -->
+            </if>
+            <if test="createTime!=null">
+                create_time,  <!--  -->
+            </if>
+            <if test="isDelete!=null">
+                is_delete,  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </trim>
+        )VALUES(
+        <trim suffixOverrides=",">
+            <if test="id!=null">
+                #{id},  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                #{disintegratePlantId},  <!-- 解体厂id -->
+            </if>
+            <if test="fileName!=null and fileName!=''">
+                #{fileName},  <!-- 图片名字 -->
+            </if>
+            <if test="fileUrl!=null and fileUrl!=''">
+                #{fileUrl},  <!-- 图片地址 -->
+            </if>
+            <if test="firstType!=null and firstType!=''">
+                #{firstType},  <!-- 一级类型（来之字典） -->
+            </if>
+            <if test="twoType!=null and twoType!=''">
+                #{twoType},  <!-- 二级类型（来之字典) -->
+            </if>
+            <if test="carNo!=null">
+                #{carNo},  <!-- carinfo的主键id -->
+            </if>
+            <if test="operatorId!=null">
+                #{operatorId},  <!-- 操作人id -->
+            </if>
+            <if test="operator!=null and operator!=''">
+                #{operator},  <!-- 操作人 -->
+            </if>
+            <if test="createTime!=null">
+                #{createTime},  <!--  -->
+            </if>
+            <if test="isDelete!=null">
+                #{isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </trim>
+        )
+    </insert>
+    <insert id="insertBatchCarPic">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            INSERT INTO ts_car_pic (
+            <trim suffixOverrides=",">
+                <if test="item.id!=null">
+                    id,  <!--  -->
+                </if>
+                <if test="item.disintegratePlantId!=null">
+                    disintegrate_plant_id,  <!-- 解体厂id -->
+                </if>
+                <if test="item.fileName!=null and item.fileName!=''">
+                    file_name,  <!-- 图片名字 -->
+                </if>
+                <if test="item.fileUrl!=null and item.fileUrl!=''">
+                    file_url,  <!-- 图片地址 -->
+                </if>
+                <if test="item.firstType!=null and item.firstType!=''">
+                    first_type,  <!-- 一级类型（来之字典） -->
+                </if>
+                <if test="item.twoType!=null and item.twoType!=''">
+                    two_type,  <!-- 二级类型（来之字典) -->
+                </if>
+                <if test="item.carNo!=null">
+                    car_no,  <!-- carinfo的主键id -->
+                </if>
+                <if test="item.operatorId!=null">
+                    operator_id,  <!-- 操作人id -->
+                </if>
+                <if test="item.operator!=null and item.operator!=''">
+                    operator,  <!-- 操作人 -->
+                </if>
+                <if test="item.createTime!=null">
+                    create_time,  <!--  -->
+                </if>
+                <if test="item.isDelete!=null">
+                    is_delete,  <!-- 是否删除。1.删除，2,正常 -->
+                </if>
+            </trim>
+            )VALUES(
+            <trim suffixOverrides=",">
+                <if test="item.id!=null">
+                    #{item.id},  <!--  -->
+                </if>
+                <if test="item.disintegratePlantId!=null">
+                    #{item.disintegratePlantId},  <!-- 解体厂id -->
+                </if>
+                <if test="item.fileName!=null and item.fileName!=''">
+                    #{item.fileName},  <!-- 图片名字 -->
+                </if>
+                <if test="item.fileUrl!=null and item.fileUrl!=''">
+                    #{item.fileUrl},  <!-- 图片地址 -->
+                </if>
+                <if test="item.firstType!=null and item.firstType!=''">
+                    #{item.firstType},  <!-- 一级类型（来之字典） -->
+                </if>
+                <if test="item.twoType!=null and item.twoType!=''">
+                    #{item.twoType},  <!-- 二级类型（来之字典) -->
+                </if>
+                <if test="item.carNo!=null">
+                    #{item.carNo},  <!-- carinfo的主键id -->
+                </if>
+                <if test="item.operatorId!=null">
+                    #{item.operatorId},  <!-- 操作人id -->
+                </if>
+                <if test="item.operator!=null and item.operator!=''">
+                    #{item.operator},  <!-- 操作人 -->
+                </if>
+                <if test="item.createTime!=null">
+                    #{item.createTime},  <!--  -->
+                </if>
+                <if test="item.isDelete!=null">
+                    #{item.isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+                </if>
+            </trim>
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateCarPic">
+        UPDATE ts_car_pic
+        <trim prefix="set" suffixOverrides=",">
+            <if test="id!=null">
+                id=#{id},  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                disintegrate_plant_id=#{disintegratePlantId},  <!-- 解体厂id -->
+            </if>
+            <if test="fileName!=null and fileName!=''">
+                file_name=#{fileName},  <!-- 图片名字 -->
+            </if>
+            <if test="fileUrl!=null and fileUrl!=''">
+                file_url=#{fileUrl},  <!-- 图片地址 -->
+            </if>
+            <if test="firstType!=null and firstType!=''">
+                first_type=#{firstType},  <!-- 一级类型（来之字典） -->
+            </if>
+            <if test="twoType!=null and twoType!=''">
+                two_type=#{twoType},  <!-- 二级类型（来之字典) -->
+            </if>
+            <if test="carNo!=null">
+                car_no=#{carNo},  <!-- carinfo的主键id -->
+            </if>
+            <if test="operatorId!=null">
+                operator_id=#{operatorId},  <!-- 操作人id -->
+            </if>
+            <if test="operator!=null and operator!=''">
+                operator=#{operator},  <!-- 操作人 -->
+            </if>
+            <if test="createTime!=null">
+                create_time=#{createTime},  <!--  -->
+            </if>
+            <if test="isDelete!=null">
+                is_delete=#{isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </trim>
+        WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
+    </update>
+    <update id="updateBatchCarPic">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update ts_car_pic
+            <trim prefix="set" suffixOverrides=",">
+                <if test="item.id!=null">
+                    id=#{item.id},  <!--  -->
+                </if>
+                <if test="item.disintegratePlantId!=null">
+                    disintegrate_plant_id=#{item.disintegratePlantId},  <!-- 解体厂id -->
+                </if>
+                <if test="item.fileName!=null and item.fileName!=''">
+                    file_name=#{item.fileName},  <!-- 图片名字 -->
+                </if>
+                <if test="item.fileUrl!=null and item.fileUrl!=''">
+                    file_url=#{item.fileUrl},  <!-- 图片地址 -->
+                </if>
+                <if test="item.firstType!=null and item.firstType!=''">
+                    first_type=#{item.firstType},  <!-- 一级类型（来之字典） -->
+                </if>
+                <if test="item.twoType!=null and item.twoType!=''">
+                    two_type=#{item.twoType},  <!-- 二级类型（来之字典) -->
+                </if>
+                <if test="item.carNo!=null">
+                    car_no=#{item.carNo},  <!-- carinfo的主键id -->
+                </if>
+                <if test="item.operatorId!=null">
+                    operator_id=#{item.operatorId},  <!-- 操作人id -->
+                </if>
+                <if test="item.operator!=null and item.operator!=''">
+                    operator=#{item.operator},  <!-- 操作人 -->
+                </if>
+                <if test="item.createTime!=null">
+                    create_time=#{item.createTime},  <!--  -->
+                </if>
+                <if test="item.isDelete!=null">
+                    is_delete=#{item.isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+                </if>
+            </trim>
+            WHERE id=#{item.id} AND disintegrate_plant_id=#{item.disintegratePlantId}
+        </foreach>
+    </update>
+
+    <delete id="deleteCarPicByMap">
+        DELETE FROM ts_car_pic WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
+    </delete>
+
+    <delete id="batchDeleteCarPicByMap">
+        DELETE FROM ts_car_pic
+        WHERE disintegrate_plant_id=#{disintegratePlantId} and id in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>
