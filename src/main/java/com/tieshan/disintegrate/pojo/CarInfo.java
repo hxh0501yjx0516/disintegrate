@@ -29,13 +29,18 @@ public class CarInfo implements Serializable {
 	 */
 	private Long carSource;
 	/**
-	 * 车辆联系人
+	 * 交车人
 	 */
 	private String contacts;
 	/**
-	 * 手机号
+	 * 交车人手机号
 	 */
 	private String contactsPhone;
+	/**
+	 * 交车人地址
+	 */
+
+	private String contactsAddress;
 	/**
 	 * 车牌号
 	 */
@@ -80,5 +85,6 @@ public class CarInfo implements Serializable {
 	 * 是否删除。1.删除，2,正常
 	 */
 	private Integer isDelete;
+
 
 }
