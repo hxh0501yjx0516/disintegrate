@@ -5,6 +5,7 @@ import com.tieshan.disintegrate.pojo.CarSource;
 import com.tieshan.disintegrate.pojo.SysUser;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @description:
@@ -17,7 +18,7 @@ public interface ICarSourceService {
 
     void add(CarSource carSource);
 
-    List<SysUser> findUserNameList();
+    List<Map<String, Object>>  findUserNameList();
 
     List<String> findBankNameList();
 }

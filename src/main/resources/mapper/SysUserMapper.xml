@@ -114,7 +114,7 @@
                             where u.id=#{id}
     </select>
 
-    <select id="findUserList" resultMap="java.util.List">
+    <select id="findUserList" resultType="java.util.Map">
         SELECT
 				IFNULL(u.id, '') AS id,
 				IFNULL(u.user_name, '') AS user_name

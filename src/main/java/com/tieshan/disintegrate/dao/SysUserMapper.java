@@ -123,7 +123,8 @@ public interface SysUserMapper {
 
     /**
      * 获取所有的用户
+     *
      * @return
      */
-    List<SysUser> findUserList();
+    List<Map<String, Object>> findUserList();
 }
