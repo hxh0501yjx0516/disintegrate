@@ -1,0 +1,789 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tieshan.disintegrate.dao.CarIdentityMapper">
+
+    <resultMap type="com.tieshan.disintegrate.pojo.CarIdentity" id="carIdentityMap">
+        <result property="id" column="id"/>  <!--  -->
+        <result property="disintegratePlantId" column="disintegrate_plant_id"/>  <!-- 解体厂id -->
+        <result property="ascription" column="ascription"/>  <!-- 车辆归宿(来自字典表) -->
+        <result property="carInfoId" column="car_info_id"/>  <!-- car_info主键id -->
+        <result property="colour" column="colour"/>  <!-- 车辆颜色(来自字典表) -->
+        <result property="owner" column="owner"/>  <!-- 车主姓名（或组织结构名称） -->
+        <result property="phone" column="phone"/>  <!-- 车主电话 -->
+        <result property="idCard" column="id_card"/>  <!-- 车主身份证号（组织结构代码） -->
+        <result property="agend" column="agend"/>  <!-- 代理人 -->
+        <result property="agendIdcard" column="agend_idcard"/>  <!-- 代理人身份证号 -->
+        <result property="carKind" column="car_kind"/>  <!-- 车辆性质(来之字典表) -->
+        <result property="fuelType" column="fuel_type"/>  <!-- 燃油性质(来之字典表） -->
+        <result property="regTime" column="reg_time"/>  <!-- 注册时间 -->
+        <result property="issueTime" column="issue_time"/>  <!-- 发证日期 -->
+        <result property="natureUsege" column="nature_usege"/>  <!-- 使用性质(来之字典表),营运非营运。。。 -->
+        <result property="carType" column="car_type"/>  <!-- 车辆型号 -->
+        <result property="vin" column="vin"/>  <!-- 车辆识别代码(vin） -->
+        <result property="engine" column="engine"/>  <!-- 发动机号码 -->
+        <result property="issueSize" column="issue_size"/>  <!-- 外廓尺寸 -->
+        <result property="displacement" column="displacement"/>  <!-- 汽车排量 -->
+        <result property="carryingCapacity" column="carrying_capacity"/>  <!-- 核定载人数 -->
+        <result property="remarks" column="remarks"/>  <!-- 备注 -->
+        <result property="frameNumber" column="frame_number"/>  <!-- 车架号码 -->
+        <result property="carWeight" column="car_weight"/>  <!-- 整车质量(车本上的质量) -->
+        <result property="ownerAddress" column="owner_address"/>  <!-- 车主地址 -->
+        <result property="ownerZipcode" column="owner_zipcode"/>  <!-- 车主邮编 -->
+        <result property="carProperties" column="car_properties"/>  <!-- 车辆性质(来之字典表) 小轿车，大卡车。。。 -->
+        <result property="isDelete" column="is_delete"/>  <!-- 是否删除。1.删除，2,正常 -->
+        <result property="cardColor" column="card_color"/>  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
+    </resultMap>
+
+    <select id="selectOneByMap" resultMap="carIdentityMap">
+        SELECT  id, disintegrate_plant_id, ascription, car_info_id, colour, owner, phone, id_card, agend, agend_idcard,
+        car_kind, fuel_type, reg_time, issue_time, nature_usege, car_type, vin, engine, issue_size, displacement,
+        carrying_capacity, remarks, frame_number, car_weight, owner_address, owner_zipcode, car_properties,
+        is_delete, card_color
+        FROM ts_car_identity
+        <where>
+            <if test="id!=null">
+                AND id=#{id}  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                AND disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
+            </if>
+            <if test="ascription!=null and ascription!=''">
+                AND ascription=#{ascription}  <!-- 车辆归宿(来自字典表) -->
+            </if>
+            <if test="carInfoId!=null">
+                AND car_info_id=#{carInfoId}  <!-- car_info主键id -->
+            </if>
+            <if test="colour!=null and colour!=''">
+                AND colour=#{colour}  <!-- 车辆颜色(来自字典表) -->
+            </if>
+            <if test="owner!=null and owner!=''">
+                AND owner=#{owner}  <!-- 车主姓名（或组织结构名称） -->
+            </if>
+            <if test="phone!=null and phone!=''">
+                AND phone=#{phone}  <!-- 车主电话 -->
+            </if>
+            <if test="idCard!=null and idCard!=''">
+                AND id_card=#{idCard}  <!-- 车主身份证号（组织结构代码） -->
+            </if>
+            <if test="agend!=null and agend!=''">
+                AND agend=#{agend}  <!-- 代理人 -->
+            </if>
+            <if test="agendIdcard!=null and agendIdcard!=''">
+                AND agend_idcard=#{agendIdcard}  <!-- 代理人身份证号 -->
+            </if>
+            <if test="carKind!=null and carKind!=''">
+                AND car_kind=#{carKind}  <!-- 车辆性质(来之字典表) -->
+            </if>
+            <if test="fuelType!=null and fuelType!=''">
+                AND fuel_type=#{fuelType}  <!-- 燃油性质(来之字典表） -->
+            </if>
+            <if test="regTime!=null">
+                AND reg_time=#{regTime}  <!-- 注册时间 -->
+            </if>
+            <if test="issueTime!=null">
+                AND issue_time=#{issueTime}  <!-- 发证日期 -->
+            </if>
+            <if test="natureUsege!=null and natureUsege!=''">
+                AND nature_usege=#{natureUsege}  <!-- 使用性质(来之字典表),营运非营运。。。 -->
+            </if>
+            <if test="carType!=null and carType!=''">
+                AND car_type=#{carType}  <!-- 车辆型号 -->
+            </if>
+            <if test="vin!=null and vin!=''">
+                AND vin=#{vin}  <!-- 车辆识别代码(vin） -->
+            </if>
+            <if test="engine!=null and engine!=''">
+                AND engine=#{engine}  <!-- 发动机号码 -->
+            </if>
+            <if test="issueSize!=null and issueSize!=''">
+                AND issue_size=#{issueSize}  <!-- 外廓尺寸 -->
+            </if>
+            <if test="displacement!=null and displacement!=''">
+                AND displacement=#{displacement}  <!-- 汽车排量 -->
+            </if>
+            <if test="carryingCapacity!=null and carryingCapacity!=''">
+                AND carrying_capacity=#{carryingCapacity}  <!-- 核定载人数 -->
+            </if>
+            <if test="remarks!=null and remarks!=''">
+                AND remarks=#{remarks}  <!-- 备注 -->
+            </if>
+            <if test="frameNumber!=null and frameNumber!=''">
+                AND frame_number=#{frameNumber}  <!-- 车架号码 -->
+            </if>
+            <if test="carWeight!=null and carWeight!=''">
+                AND car_weight=#{carWeight}  <!-- 整车质量(车本上的质量) -->
+            </if>
+            <if test="ownerAddress!=null and ownerAddress!=''">
+                AND owner_address=#{ownerAddress}  <!-- 车主地址 -->
+            </if>
+            <if test="ownerZipcode!=null and ownerZipcode!=''">
+                AND owner_zipcode=#{ownerZipcode}  <!-- 车主邮编 -->
+            </if>
+            <if test="carProperties!=null and carProperties!=''">
+                AND car_properties=#{carProperties}  <!-- 车辆性质(来之字典表) 小轿车，大卡车。。。 -->
+            </if>
+            <if test="isDelete!=null">
+                AND is_delete=#{isDelete}  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+            <if test="cardColor!=null and cardColor!=''">
+                AND card_color=#{cardColor}  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
+            </if>
+        </where>
+    </select>
+
+    <select id="selectListByMap" resultMap="carIdentityMap">
+        SELECT  id, disintegrate_plant_id, ascription, car_info_id, colour, owner, phone, id_card, agend, agend_idcard,
+        car_kind, fuel_type, reg_time, issue_time, nature_usege, car_type, vin, engine, issue_size, displacement,
+        carrying_capacity, remarks, frame_number, car_weight, owner_address, owner_zipcode, car_properties,
+        is_delete, card_color
+        FROM ts_car_identity
+        <where>
+            <if test="id!=null">
+                AND id=#{id}  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                AND disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
+            </if>
+            <if test="ascription!=null and ascription!=''">
+                AND ascription=#{ascription}  <!-- 车辆归宿(来自字典表) -->
+            </if>
+            <if test="carInfoId!=null">
+                AND car_info_id=#{carInfoId}  <!-- car_info主键id -->
+            </if>
+            <if test="colour!=null and colour!=''">
+                AND colour=#{colour}  <!-- 车辆颜色(来自字典表) -->
+            </if>
+            <if test="owner!=null and owner!=''">
+                AND owner=#{owner}  <!-- 车主姓名（或组织结构名称） -->
+            </if>
+            <if test="phone!=null and phone!=''">
+                AND phone=#{phone}  <!-- 车主电话 -->
+            </if>
+            <if test="idCard!=null and idCard!=''">
+                AND id_card=#{idCard}  <!-- 车主身份证号（组织结构代码） -->
+            </if>
+            <if test="agend!=null and agend!=''">
+                AND agend=#{agend}  <!-- 代理人 -->
+            </if>
+            <if test="agendIdcard!=null and agendIdcard!=''">
+                AND agend_idcard=#{agendIdcard}  <!-- 代理人身份证号 -->
+            </if>
+            <if test="carKind!=null and carKind!=''">
+                AND car_kind=#{carKind}  <!-- 车辆性质(来之字典表) -->
+            </if>
+            <if test="fuelType!=null and fuelType!=''">
+                AND fuel_type=#{fuelType}  <!-- 燃油性质(来之字典表） -->
+            </if>
+            <if test="regTime!=null">
+                AND reg_time=#{regTime}  <!-- 注册时间 -->
+            </if>
+            <if test="issueTime!=null">
+                AND issue_time=#{issueTime}  <!-- 发证日期 -->
+            </if>
+            <if test="natureUsege!=null and natureUsege!=''">
+                AND nature_usege=#{natureUsege}  <!-- 使用性质(来之字典表),营运非营运。。。 -->
+            </if>
+            <if test="carType!=null and carType!=''">
+                AND car_type=#{carType}  <!-- 车辆型号 -->
+            </if>
+            <if test="vin!=null and vin!=''">
+                AND vin=#{vin}  <!-- 车辆识别代码(vin） -->
+            </if>
+            <if test="engine!=null and engine!=''">
+                AND engine=#{engine}  <!-- 发动机号码 -->
+            </if>
+            <if test="issueSize!=null and issueSize!=''">
+                AND issue_size=#{issueSize}  <!-- 外廓尺寸 -->
+            </if>
+            <if test="displacement!=null and displacement!=''">
+                AND displacement=#{displacement}  <!-- 汽车排量 -->
+            </if>
+            <if test="carryingCapacity!=null and carryingCapacity!=''">
+                AND carrying_capacity=#{carryingCapacity}  <!-- 核定载人数 -->
+            </if>
+            <if test="remarks!=null and remarks!=''">
+                AND remarks=#{remarks}  <!-- 备注 -->
+            </if>
+            <if test="frameNumber!=null and frameNumber!=''">
+                AND frame_number=#{frameNumber}  <!-- 车架号码 -->
+            </if>
+            <if test="carWeight!=null and carWeight!=''">
+                AND car_weight=#{carWeight}  <!-- 整车质量(车本上的质量) -->
+            </if>
+            <if test="ownerAddress!=null and ownerAddress!=''">
+                AND owner_address=#{ownerAddress}  <!-- 车主地址 -->
+            </if>
+            <if test="ownerZipcode!=null and ownerZipcode!=''">
+                AND owner_zipcode=#{ownerZipcode}  <!-- 车主邮编 -->
+            </if>
+            <if test="carProperties!=null and carProperties!=''">
+                AND car_properties=#{carProperties}  <!-- 车辆性质(来之字典表) 小轿车，大卡车。。。 -->
+            </if>
+            <if test="isDelete!=null">
+                AND is_delete=#{isDelete}  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+            <if test="cardColor!=null and cardColor!=''">
+                AND card_color=#{cardColor}  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertCarIdentity">
+        INSERT INTO ts_car_identity(
+        <trim suffixOverrides=",">
+            <if test="id!=null">
+                id,  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                disintegrate_plant_id,  <!-- 解体厂id -->
+            </if>
+            <if test="ascription!=null and ascription!=''">
+                ascription,  <!-- 车辆归宿(来自字典表) -->
+            </if>
+            <if test="carInfoId!=null">
+                car_info_id,  <!-- car_info主键id -->
+            </if>
+            <if test="colour!=null and colour!=''">
+                colour,  <!-- 车辆颜色(来自字典表) -->
+            </if>
+            <if test="owner!=null and owner!=''">
+                owner,  <!-- 车主姓名（或组织结构名称） -->
+            </if>
+            <if test="phone!=null and phone!=''">
+                phone,  <!-- 车主电话 -->
+            </if>
+            <if test="idCard!=null and idCard!=''">
+                id_card,  <!-- 车主身份证号（组织结构代码） -->
+            </if>
+            <if test="agend!=null and agend!=''">
+                agend,  <!-- 代理人 -->
+            </if>
+            <if test="agendIdcard!=null and agendIdcard!=''">
+                agend_idcard,  <!-- 代理人身份证号 -->
+            </if>
+            <if test="carKind!=null and carKind!=''">
+                car_kind,  <!-- 车辆性质(来之字典表) -->
+            </if>
+            <if test="fuelType!=null and fuelType!=''">
+                fuel_type,  <!-- 燃油性质(来之字典表） -->
+            </if>
+            <if test="regTime!=null">
+                reg_time,  <!-- 注册时间 -->
+            </if>
+            <if test="issueTime!=null">
+                issue_time,  <!-- 发证日期 -->
+            </if>
+            <if test="natureUsege!=null and natureUsege!=''">
+                nature_usege,  <!-- 使用性质(来之字典表),营运非营运。。。 -->
+            </if>
+            <if test="carType!=null and carType!=''">
+                car_type,  <!-- 车辆型号 -->
+            </if>
+            <if test="vin!=null and vin!=''">
+                vin,  <!-- 车辆识别代码(vin） -->
+            </if>
+            <if test="engine!=null and engine!=''">
+                engine,  <!-- 发动机号码 -->
+            </if>
+            <if test="issueSize!=null and issueSize!=''">
+                issue_size,  <!-- 外廓尺寸 -->
+            </if>
+            <if test="displacement!=null and displacement!=''">
+                displacement,  <!-- 汽车排量 -->
+            </if>
+            <if test="carryingCapacity!=null and carryingCapacity!=''">
+                carrying_capacity,  <!-- 核定载人数 -->
+            </if>
+            <if test="remarks!=null and remarks!=''">
+                remarks,  <!-- 备注 -->
+            </if>
+            <if test="frameNumber!=null and frameNumber!=''">
+                frame_number,  <!-- 车架号码 -->
+            </if>
+            <if test="carWeight!=null and carWeight!=''">
+                car_weight,  <!-- 整车质量(车本上的质量) -->
+            </if>
+            <if test="ownerAddress!=null and ownerAddress!=''">
+                owner_address,  <!-- 车主地址 -->
+            </if>
+            <if test="ownerZipcode!=null and ownerZipcode!=''">
+                owner_zipcode,  <!-- 车主邮编 -->
+            </if>
+            <if test="carProperties!=null and carProperties!=''">
+                car_properties,  <!-- 车辆性质(来之字典表) 小轿车，大卡车。。。 -->
+            </if>
+            <if test="isDelete!=null">
+                is_delete,  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+            <if test="cardColor!=null and cardColor!=''">
+                card_color,  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
+            </if>
+        </trim>
+        )VALUES(
+        <trim suffixOverrides=",">
+            <if test="id!=null">
+                #{id},  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                #{disintegratePlantId},  <!-- 解体厂id -->
+            </if>
+            <if test="ascription!=null and ascription!=''">
+                #{ascription},  <!-- 车辆归宿(来自字典表) -->
+            </if>
+            <if test="carInfoId!=null">
+                #{carInfoId},  <!-- car_info主键id -->
+            </if>
+            <if test="colour!=null and colour!=''">
+                #{colour},  <!-- 车辆颜色(来自字典表) -->
+            </if>
+            <if test="owner!=null and owner!=''">
+                #{owner},  <!-- 车主姓名（或组织结构名称） -->
+            </if>
+            <if test="phone!=null and phone!=''">
+                #{phone},  <!-- 车主电话 -->
+            </if>
+            <if test="idCard!=null and idCard!=''">
+                #{idCard},  <!-- 车主身份证号（组织结构代码） -->
+            </if>
+            <if test="agend!=null and agend!=''">
+                #{agend},  <!-- 代理人 -->
+            </if>
+            <if test="agendIdcard!=null and agendIdcard!=''">
+                #{agendIdcard},  <!-- 代理人身份证号 -->
+            </if>
+            <if test="carKind!=null and carKind!=''">
+                #{carKind},  <!-- 车辆性质(来之字典表) -->
+            </if>
+            <if test="fuelType!=null and fuelType!=''">
+                #{fuelType},  <!-- 燃油性质(来之字典表） -->
+            </if>
+            <if test="regTime!=null">
+                #{regTime},  <!-- 注册时间 -->
+            </if>
+            <if test="issueTime!=null">
+                #{issueTime},  <!-- 发证日期 -->
+            </if>
+            <if test="natureUsege!=null and natureUsege!=''">
+                #{natureUsege},  <!-- 使用性质(来之字典表),营运非营运。。。 -->
+            </if>
+            <if test="carType!=null and carType!=''">
+                #{carType},  <!-- 车辆型号 -->
+            </if>
+            <if test="vin!=null and vin!=''">
+                #{vin},  <!-- 车辆识别代码(vin） -->
+            </if>
+            <if test="engine!=null and engine!=''">
+                #{engine},  <!-- 发动机号码 -->
+            </if>
+            <if test="issueSize!=null and issueSize!=''">
+                #{issueSize},  <!-- 外廓尺寸 -->
+            </if>
+            <if test="displacement!=null and displacement!=''">
+                #{displacement},  <!-- 汽车排量 -->
+            </if>
+            <if test="carryingCapacity!=null and carryingCapacity!=''">
+                #{carryingCapacity},  <!-- 核定载人数 -->
+            </if>
+            <if test="remarks!=null and remarks!=''">
+                #{remarks},  <!-- 备注 -->
+            </if>
+            <if test="frameNumber!=null and frameNumber!=''">
+                #{frameNumber},  <!-- 车架号码 -->
+            </if>
+            <if test="carWeight!=null and carWeight!=''">
+                #{carWeight},  <!-- 整车质量(车本上的质量) -->
+            </if>
+            <if test="ownerAddress!=null and ownerAddress!=''">
+                #{ownerAddress},  <!-- 车主地址 -->
+            </if>
+            <if test="ownerZipcode!=null and ownerZipcode!=''">
+                #{ownerZipcode},  <!-- 车主邮编 -->
+            </if>
+            <if test="carProperties!=null and carProperties!=''">
+                #{carProperties},  <!-- 车辆性质(来之字典表) 小轿车，大卡车。。。 -->
+            </if>
+            <if test="isDelete!=null">
+                #{isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+            <if test="cardColor!=null and cardColor!=''">
+                #{cardColor},  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
+            </if>
+        </trim>
+        )
+    </insert>
+    <insert id="insertBatchCarIdentity">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            INSERT INTO ts_car_identity (
+            <trim suffixOverrides=",">
+                <if test="item.id!=null">
+                    id,  <!--  -->
+                </if>
+                <if test="item.disintegratePlantId!=null">
+                    disintegrate_plant_id,  <!-- 解体厂id -->
+                </if>
+                <if test="item.ascription!=null and item.ascription!=''">
+                    ascription,  <!-- 车辆归宿(来自字典表) -->
+                </if>
+                <if test="item.carInfoId!=null">
+                    car_info_id,  <!-- car_info主键id -->
+                </if>
+                <if test="item.colour!=null and item.colour!=''">
+                    colour,  <!-- 车辆颜色(来自字典表) -->
+                </if>
+                <if test="item.owner!=null and item.owner!=''">
+                    owner,  <!-- 车主姓名（或组织结构名称） -->
+                </if>
+                <if test="item.phone!=null and item.phone!=''">
+                    phone,  <!-- 车主电话 -->
+                </if>
+                <if test="item.idCard!=null and item.idCard!=''">
+                    id_card,  <!-- 车主身份证号（组织结构代码） -->
+                </if>
+                <if test="item.agend!=null and item.agend!=''">
+                    agend,  <!-- 代理人 -->
+                </if>
+                <if test="item.agendIdcard!=null and item.agendIdcard!=''">
+                    agend_idcard,  <!-- 代理人身份证号 -->
+                </if>
+                <if test="item.carKind!=null and item.carKind!=''">
+                    car_kind,  <!-- 车辆性质(来之字典表) -->
+                </if>
+                <if test="item.fuelType!=null and item.fuelType!=''">
+                    fuel_type,  <!-- 燃油性质(来之字典表） -->
+                </if>
+                <if test="item.regTime!=null">
+                    reg_time,  <!-- 注册时间 -->
+                </if>
+                <if test="item.issueTime!=null">
+                    issue_time,  <!-- 发证日期 -->
+                </if>
+                <if test="item.natureUsege!=null and item.natureUsege!=''">
+                    nature_usege,  <!-- 使用性质(来之字典表),营运非营运。。。 -->
+                </if>
+                <if test="item.carType!=null and item.carType!=''">
+                    car_type,  <!-- 车辆型号 -->
+                </if>
+                <if test="item.vin!=null and item.vin!=''">
+                    vin,  <!-- 车辆识别代码(vin） -->
+                </if>
+                <if test="item.engine!=null and item.engine!=''">
+                    engine,  <!-- 发动机号码 -->
+                </if>
+                <if test="item.issueSize!=null and item.issueSize!=''">
+                    issue_size,  <!-- 外廓尺寸 -->
+                </if>
+                <if test="item.displacement!=null and item.displacement!=''">
+                    displacement,  <!-- 汽车排量 -->
+                </if>
+                <if test="item.carryingCapacity!=null and item.carryingCapacity!=''">
+                    carrying_capacity,  <!-- 核定载人数 -->
+                </if>
+                <if test="item.remarks!=null and item.remarks!=''">
+                    remarks,  <!-- 备注 -->
+                </if>
+                <if test="item.frameNumber!=null and item.frameNumber!=''">
+                    frame_number,  <!-- 车架号码 -->
+                </if>
+                <if test="item.carWeight!=null and item.carWeight!=''">
+                    car_weight,  <!-- 整车质量(车本上的质量) -->
+                </if>
+                <if test="item.ownerAddress!=null and item.ownerAddress!=''">
+                    owner_address,  <!-- 车主地址 -->
+                </if>
+                <if test="item.ownerZipcode!=null and item.ownerZipcode!=''">
+                    owner_zipcode,  <!-- 车主邮编 -->
+                </if>
+                <if test="item.carProperties!=null and item.carProperties!=''">
+                    car_properties,  <!-- 车辆性质(来之字典表) 小轿车，大卡车。。。 -->
+                </if>
+                <if test="item.isDelete!=null">
+                    is_delete,  <!-- 是否删除。1.删除，2,正常 -->
+                </if>
+                <if test="item.cardColor!=null and item.cardColor!=''">
+                    card_color,  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
+                </if>
+            </trim>
+            )VALUES(
+            <trim suffixOverrides=",">
+                <if test="item.id!=null">
+                    #{item.id},  <!--  -->
+                </if>
+                <if test="item.disintegratePlantId!=null">
+                    #{item.disintegratePlantId},  <!-- 解体厂id -->
+                </if>
+                <if test="item.ascription!=null and item.ascription!=''">
+                    #{item.ascription},  <!-- 车辆归宿(来自字典表) -->
+                </if>
+                <if test="item.carInfoId!=null">
+                    #{item.carInfoId},  <!-- car_info主键id -->
+                </if>
+                <if test="item.colour!=null and item.colour!=''">
+                    #{item.colour},  <!-- 车辆颜色(来自字典表) -->
+                </if>
+                <if test="item.owner!=null and item.owner!=''">
+                    #{item.owner},  <!-- 车主姓名（或组织结构名称） -->
+                </if>
+                <if test="item.phone!=null and item.phone!=''">
+                    #{item.phone},  <!-- 车主电话 -->
+                </if>
+                <if test="item.idCard!=null and item.idCard!=''">
+                    #{item.idCard},  <!-- 车主身份证号（组织结构代码） -->
+                </if>
+                <if test="item.agend!=null and item.agend!=''">
+                    #{item.agend},  <!-- 代理人 -->
+                </if>
+                <if test="item.agendIdcard!=null and item.agendIdcard!=''">
+                    #{item.agendIdcard},  <!-- 代理人身份证号 -->
+                </if>
+                <if test="item.carKind!=null and item.carKind!=''">
+                    #{item.carKind},  <!-- 车辆性质(来之字典表) -->
+                </if>
+                <if test="item.fuelType!=null and item.fuelType!=''">
+                    #{item.fuelType},  <!-- 燃油性质(来之字典表） -->
+                </if>
+                <if test="item.regTime!=null">
+                    #{item.regTime},  <!-- 注册时间 -->
+                </if>
+                <if test="item.issueTime!=null">
+                    #{item.issueTime},  <!-- 发证日期 -->
+                </if>
+                <if test="item.natureUsege!=null and item.natureUsege!=''">
+                    #{item.natureUsege},  <!-- 使用性质(来之字典表),营运非营运。。。 -->
+                </if>
+                <if test="item.carType!=null and item.carType!=''">
+                    #{item.carType},  <!-- 车辆型号 -->
+                </if>
+                <if test="item.vin!=null and item.vin!=''">
+                    #{item.vin},  <!-- 车辆识别代码(vin） -->
+                </if>
+                <if test="item.engine!=null and item.engine!=''">
+                    #{item.engine},  <!-- 发动机号码 -->
+                </if>
+                <if test="item.issueSize!=null and item.issueSize!=''">
+                    #{item.issueSize},  <!-- 外廓尺寸 -->
+                </if>
+                <if test="item.displacement!=null and item.displacement!=''">
+                    #{item.displacement},  <!-- 汽车排量 -->
+                </if>
+                <if test="item.carryingCapacity!=null and item.carryingCapacity!=''">
+                    #{item.carryingCapacity},  <!-- 核定载人数 -->
+                </if>
+                <if test="item.remarks!=null and item.remarks!=''">
+                    #{item.remarks},  <!-- 备注 -->
+                </if>
+                <if test="item.frameNumber!=null and item.frameNumber!=''">
+                    #{item.frameNumber},  <!-- 车架号码 -->
+                </if>
+                <if test="item.carWeight!=null and item.carWeight!=''">
+                    #{item.carWeight},  <!-- 整车质量(车本上的质量) -->
+                </if>
+                <if test="item.ownerAddress!=null and item.ownerAddress!=''">
+                    #{item.ownerAddress},  <!-- 车主地址 -->
+                </if>
+                <if test="item.ownerZipcode!=null and item.ownerZipcode!=''">
+                    #{item.ownerZipcode},  <!-- 车主邮编 -->
+                </if>
+                <if test="item.carProperties!=null and item.carProperties!=''">
+                    #{item.carProperties},  <!-- 车辆性质(来之字典表) 小轿车，大卡车。。。 -->
+                </if>
+                <if test="item.isDelete!=null">
+                    #{item.isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+                </if>
+                <if test="item.cardColor!=null and item.cardColor!=''">
+                    #{item.cardColor},  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
+                </if>
+            </trim>
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateCarIdentity">
+        UPDATE ts_car_identity
+        <trim prefix="set" suffixOverrides=",">
+            <if test="ascription!=null and ascription!=''">
+                ascription=#{ascription},  <!-- 车辆归宿(来自字典表) -->
+            </if>
+            <if test="carInfoId!=null">
+                car_info_id=#{carInfoId},  <!-- car_info主键id -->
+            </if>
+            <if test="colour!=null and colour!=''">
+                colour=#{colour},  <!-- 车辆颜色(来自字典表) -->
+            </if>
+            <if test="owner!=null and owner!=''">
+                owner=#{owner},  <!-- 车主姓名（或组织结构名称） -->
+            </if>
+            <if test="phone!=null and phone!=''">
+                phone=#{phone},  <!-- 车主电话 -->
+            </if>
+            <if test="idCard!=null and idCard!=''">
+                id_card=#{idCard},  <!-- 车主身份证号（组织结构代码） -->
+            </if>
+            <if test="agend!=null and agend!=''">
+                agend=#{agend},  <!-- 代理人 -->
+            </if>
+            <if test="agendIdcard!=null and agendIdcard!=''">
+                agend_idcard=#{agendIdcard},  <!-- 代理人身份证号 -->
+            </if>
+            <if test="carKind!=null and carKind!=''">
+                car_kind=#{carKind},  <!-- 车辆性质(来之字典表) -->
+            </if>
+            <if test="fuelType!=null and fuelType!=''">
+                fuel_type=#{fuelType},  <!-- 燃油性质(来之字典表） -->
+            </if>
+            <if test="regTime!=null">
+                reg_time=#{regTime},  <!-- 注册时间 -->
+            </if>
+            <if test="issueTime!=null">
+                issue_time=#{issueTime},  <!-- 发证日期 -->
+            </if>
+            <if test="natureUsege!=null and natureUsege!=''">
+                nature_usege=#{natureUsege},  <!-- 使用性质(来之字典表),营运非营运。。。 -->
+            </if>
+            <if test="carType!=null and carType!=''">
+                car_type=#{carType},  <!-- 车辆型号 -->
+            </if>
+            <if test="vin!=null and vin!=''">
+                vin=#{vin},  <!-- 车辆识别代码(vin） -->
+            </if>
+            <if test="engine!=null and engine!=''">
+                engine=#{engine},  <!-- 发动机号码 -->
+            </if>
+            <if test="issueSize!=null and issueSize!=''">
+                issue_size=#{issueSize},  <!-- 外廓尺寸 -->
+            </if>
+            <if test="displacement!=null and displacement!=''">
+                displacement=#{displacement},  <!-- 汽车排量 -->
+            </if>
+            <if test="carryingCapacity!=null and carryingCapacity!=''">
+                carrying_capacity=#{carryingCapacity},  <!-- 核定载人数 -->
+            </if>
+            <if test="remarks!=null and remarks!=''">
+                remarks=#{remarks},  <!-- 备注 -->
+            </if>
+            <if test="frameNumber!=null and frameNumber!=''">
+                frame_number=#{frameNumber},  <!-- 车架号码 -->
+            </if>
+            <if test="carWeight!=null and carWeight!=''">
+                car_weight=#{carWeight},  <!-- 整车质量(车本上的质量) -->
+            </if>
+            <if test="ownerAddress!=null and ownerAddress!=''">
+                owner_address=#{ownerAddress},  <!-- 车主地址 -->
+            </if>
+            <if test="ownerZipcode!=null and ownerZipcode!=''">
+                owner_zipcode=#{ownerZipcode},  <!-- 车主邮编 -->
+            </if>
+            <if test="carProperties!=null and carProperties!=''">
+                car_properties=#{carProperties},  <!-- 车辆性质(来之字典表) 小轿车，大卡车。。。 -->
+            </if>
+            <if test="isDelete!=null">
+                is_delete=#{isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+            <if test="cardColor!=null and cardColor!=''">
+                card_color=#{cardColor},  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
+            </if>
+        </trim>
+        WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
+    </update>
+    <update id="updateBatchCarIdentity">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update ts_car_identity
+            <trim prefix="set" suffixOverrides=",">
+                <if test="item.ascription!=null and item.ascription!=''">
+                    ascription=#{item.ascription},  <!-- 车辆归宿(来自字典表) -->
+                </if>
+                <if test="item.carInfoId!=null">
+                    car_info_id=#{item.carInfoId},  <!-- car_info主键id -->
+                </if>
+                <if test="item.colour!=null and item.colour!=''">
+                    colour=#{item.colour},  <!-- 车辆颜色(来自字典表) -->
+                </if>
+                <if test="item.owner!=null and item.owner!=''">
+                    owner=#{item.owner},  <!-- 车主姓名（或组织结构名称） -->
+                </if>
+                <if test="item.phone!=null and item.phone!=''">
+                    phone=#{item.phone},  <!-- 车主电话 -->
+                </if>
+                <if test="item.idCard!=null and item.idCard!=''">
+                    id_card=#{item.idCard},  <!-- 车主身份证号（组织结构代码） -->
+                </if>
+                <if test="item.agend!=null and item.agend!=''">
+                    agend=#{item.agend},  <!-- 代理人 -->
+                </if>
+                <if test="item.agendIdcard!=null and item.agendIdcard!=''">
+                    agend_idcard=#{item.agendIdcard},  <!-- 代理人身份证号 -->
+                </if>
+                <if test="item.carKind!=null and item.carKind!=''">
+                    car_kind=#{item.carKind},  <!-- 车辆性质(来之字典表) -->
+                </if>
+                <if test="item.fuelType!=null and item.fuelType!=''">
+                    fuel_type=#{item.fuelType},  <!-- 燃油性质(来之字典表） -->
+                </if>
+                <if test="item.regTime!=null">
+                    reg_time=#{item.regTime},  <!-- 注册时间 -->
+                </if>
+                <if test="item.issueTime!=null">
+                    issue_time=#{item.issueTime},  <!-- 发证日期 -->
+                </if>
+                <if test="item.natureUsege!=null and item.natureUsege!=''">
+                    nature_usege=#{item.natureUsege},  <!-- 使用性质(来之字典表),营运非营运。。。 -->
+                </if>
+                <if test="item.carType!=null and item.carType!=''">
+                    car_type=#{item.carType},  <!-- 车辆型号 -->
+                </if>
+                <if test="item.vin!=null and item.vin!=''">
+                    vin=#{item.vin},  <!-- 车辆识别代码(vin） -->
+                </if>
+                <if test="item.engine!=null and item.engine!=''">
+                    engine=#{item.engine},  <!-- 发动机号码 -->
+                </if>
+                <if test="item.issueSize!=null and item.issueSize!=''">
+                    issue_size=#{item.issueSize},  <!-- 外廓尺寸 -->
+                </if>
+                <if test="item.displacement!=null and item.displacement!=''">
+                    displacement=#{item.displacement},  <!-- 汽车排量 -->
+                </if>
+                <if test="item.carryingCapacity!=null and item.carryingCapacity!=''">
+                    carrying_capacity=#{item.carryingCapacity},  <!-- 核定载人数 -->
+                </if>
+                <if test="item.remarks!=null and item.remarks!=''">
+                    remarks=#{item.remarks},  <!-- 备注 -->
+                </if>
+                <if test="item.frameNumber!=null and item.frameNumber!=''">
+                    frame_number=#{item.frameNumber},  <!-- 车架号码 -->
+                </if>
+                <if test="item.carWeight!=null and item.carWeight!=''">
+                    car_weight=#{item.carWeight},  <!-- 整车质量(车本上的质量) -->
+                </if>
+                <if test="item.ownerAddress!=null and item.ownerAddress!=''">
+                    owner_address=#{item.ownerAddress},  <!-- 车主地址 -->
+                </if>
+                <if test="item.ownerZipcode!=null and item.ownerZipcode!=''">
+                    owner_zipcode=#{item.ownerZipcode},  <!-- 车主邮编 -->
+                </if>
+                <if test="item.carProperties!=null and item.carProperties!=''">
+                    car_properties=#{item.carProperties},  <!-- 车辆性质(来之字典表) 小轿车，大卡车。。。 -->
+                </if>
+                <if test="item.isDelete!=null">
+                    is_delete=#{item.isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+                </if>
+                <if test="item.cardColor!=null and item.cardColor!=''">
+                    card_color=#{item.cardColor},  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
+                </if>
+            </trim>
+            WHERE id=#{item.id} AND disintegrate_plant_id=#{item.disintegratePlantId}
+        </foreach>
+    </update>
+
+    <delete id="deleteCarIdentityByMap">
+        DELETE FROM ts_car_identity WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
+    </delete>
+
+    <delete id="batchDeleteCarIdentityByMap">
+        DELETE FROM ts_car_identity
+        WHERE disintegrate_plant_id=#{disintegratePlantId} and id in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>
