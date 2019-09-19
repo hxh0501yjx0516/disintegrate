@@ -10,4 +10,6 @@
 	    WHERE
 	    	first_type = "bank";
     </select>
+
+
 </mapper>

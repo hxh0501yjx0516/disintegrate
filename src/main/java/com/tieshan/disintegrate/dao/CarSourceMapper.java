@@ -1,5 +1,7 @@
 package com.tieshan.disintegrate.dao;
 
+import com.tieshan.disintegrate.pojo.Bank;
+import com.tieshan.disintegrate.pojo.CarInfo;
 import com.tieshan.disintegrate.pojo.CarSource;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -26,4 +28,14 @@ public interface CarSourceMapper {
     CarSource selectOneByMap(Map map);
 
     void deleteByMap(Map map);
+
+    void insertBank(Bank bank);
+
+    List<Map<String,Object>> selectCarSourceList(String sourceType);
+
+    List<String> selectProcessingTypeOrProceduresType(String firstName);
+
+    void addCar(CarInfo carInfo);
+
+    CarSource selectCarSource(Long id);
 }

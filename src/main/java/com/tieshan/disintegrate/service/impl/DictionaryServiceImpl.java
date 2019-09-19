@@ -24,4 +24,5 @@ public class DictionaryServiceImpl implements DictionaryService {
     public List<String> findBankNameList() {
         return dictionaryMapper.findBankNameList();
     }
+
 }
