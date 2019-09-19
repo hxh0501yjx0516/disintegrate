@@ -4,9 +4,22 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tieshan.disintegrate.dao.CarsQueryDao">
 
+    <resultMap type="com.tieshan.disintegrate.pojo.CarsQuery" id="carsQueryMap">
+        <result property="carNo" column="car_no"/>
+        <result property="carInfoId" column="car_info_id"/>
+        <result property="cardColor" column="card_color"/>
+        <result property="carName" column="car_name"/>
+        <result property="carKind" column="car_kind"/>
+        <result property="natureUsege" column="nature_usege"/>
+        <result property="carProperties" column="car_properties"/>
+        <result property="regTime" column="reg_time"/>
+        <result property="issueTime" column="issue_time"/>
+        <result property="contactsPhone" column="contacts_phone"/>
+    </resultMap>
+
     <!-- 查询列表数据 -->
     <select id="findPageObjects"
-            resultType="com.tieshan.disintegrate.pojo.CarsQuery">
+            resultMap="carsQueryMap">
         select info.id,info.car_no,iden.card_color,info.car_name,iden.car_kind,iden.nature_usege,
         iden.car_properties,iden.reg_time,iden.issue_time,iden.owner,iden.phone,info.contacts,
         info.contacts_phone,iden.vin,iden.engine
@@ -14,19 +27,12 @@
         <include refid="queryWhereMsg"/>
     </select>
 
-
-
     <sql id="queryWhereMsg">
         <where>
             iden.car_info_id=info.id
             <if test="findMsg!=null and findMsg!=''">
-                and iden.owner like concat("%",#{findMsg},"%")
-                or iden.phone like concat("%",#{findMsg},"%")
-                or info.car_name like concat("%",#{findMsg},"%")
-                or info.car_no like concat("%",#{findMsg},"%")
-                or info.id like concat("%",#{findMsg},"%")
-                or iden.vin like concat("%",#{findMsg},"%")
-                or iden.engine like concat("%",#{findMsg},"%")
+            and concat(iden.owner,iden.phone,info.car_name,info.car_no,info.id,iden.vin,iden.engine)
+            like concat("%",#{findMsg},"%")
             </if>
         </where>
     </sql>

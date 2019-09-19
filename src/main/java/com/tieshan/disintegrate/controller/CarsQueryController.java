@@ -2,6 +2,7 @@ package com.tieshan.disintegrate.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.tieshan.disintegrate.constant.ConStants;
+import com.tieshan.disintegrate.pojo.CarsQuery;
 import com.tieshan.disintegrate.service.CarsQueryService;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,15 +34,15 @@ public class CarsQueryController {
      * @return: RestResult(msg, data, code)
      */
     @GetMapping("/doCarsQuery/doFindPageObjects")
-    public PageInfo<Map<String, Object>> doFindPageObjects(
+    public PageInfo<CarsQuery> doFindPageObjects(
             @RequestParam(value = "findMsg", required = false) String findMsg,
             @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
             @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize
     ) {
-        PageInfo<Map<String, Object>> pageInfo = null;
+        PageInfo<CarsQuery> pageInfo = null;
         try {
-            List<Map<String, Object>> mapList = carsQueryService.findPageObjects(findMsg, page,pageSize);
-            pageInfo = new PageInfo<>(mapList);
+            List<CarsQuery> list = carsQueryService.findPageObjects(findMsg, page,pageSize);
+            pageInfo = new PageInfo<>(list);
         } catch (Exception e) {
             log.info("获取车辆信息列表失败", e);
         }

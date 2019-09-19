@@ -1,5 +1,7 @@
 package com.tieshan.disintegrate.service;
 
+import com.tieshan.disintegrate.pojo.CarsQuery;
+
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +21,7 @@ public interface CarsQueryService {
      * @param pageSize 当前页个数
      * @return 当前页记录+分页信息
      */
-    List<Map<String, Object>> findPageObjects(
+    List<CarsQuery> findPageObjects(
             String findMsg,
             Integer page,
             Integer pageSize);

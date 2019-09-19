@@ -2,6 +2,7 @@ package com.tieshan.disintegrate.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.tieshan.disintegrate.dao.CarsQueryDao;
+import com.tieshan.disintegrate.pojo.CarsQuery;
 import com.tieshan.disintegrate.service.CarsQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class CarsQueryServiceImpl implements CarsQueryService {
     private CarsQueryDao carsQueryDao;
 
     @Override
-    public List<Map<String, Object>> findPageObjects(String findMsg, Integer page, Integer pageSize) {
+    public List<CarsQuery> findPageObjects(String findMsg, Integer page, Integer pageSize) {
         PageHelper.startPage(page, pageSize);
         PageHelper.orderBy("reg_time desc");
         return carsQueryDao.findPageObjects(findMsg);
