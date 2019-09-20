@@ -71,7 +71,10 @@ public class ProceduresController {
 
     /**
      * 档案查询结果
-     * @param params
+     * @param params carProcessingId 手续id
+     *               queryResultId  查询结果id
+     *               state          状态 1:未完成(暂存);2完成;3:不通过;
+     *               remark         备注
      * @param user
      * @return
      */
@@ -83,7 +86,10 @@ public class ProceduresController {
 
     /**
      * 档案核验结果
-     * @param params
+     * @param params carProcessingId 手续id
+     *               verificationResultId  档案核验结果id
+     *               state          状态 1:未完成(暂存);2完成;3:不通过;
+     *               remark         备注
      * @param user
      * @return
      */
@@ -95,22 +101,28 @@ public class ProceduresController {
 
     /**
      * 档案查询客服处理结果
-     * @param params
+     * @param params carProcessingId 手续id
+     *               queryResultId  查询结果id
+     *               state          状态 1:未完成(暂存);2完成;3:不通过;
+     *               remark         备注
      * @param user
      * @return
      */
-    @PostMapping(value = "/recordVerificationResult")
+    @PostMapping(value = "/recordQueryCustomerResult")
     public RestResult recordQueryCustomerResult(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         proceduresService.recordQueryCustomerResult(params, user);
         return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
     }
     /**
      * 档案核验客服处理结果
-     * @param params
+     * @param params carProcessingId 手续id
+     *               verificationResultId  查询结果id
+     *               state          状态 1:未完成(暂存);2完成;3:不通过;4:退车;
+     *               remark         备注
      * @param user
      * @return
      */
-    @PostMapping(value = "/recordVerificationResult")
+    @PostMapping(value = "/recordVerificationCustomerResult")
     public RestResult recordVerificationCustomerResult(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         proceduresService.recordVerificationCustomerResult(params, user);
         return new RestResult("保存成功", "", ResultCode.SUCCESS.code());

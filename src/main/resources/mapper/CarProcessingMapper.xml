@@ -1556,21 +1556,21 @@
         </foreach>
     </update>
     <update id="updateQueryCarProcessing">
-        UPDATE ts_car_processing
+        UPDATE ts_car_processing set
         query_result=#{queryResult},  <!-- 查询结果 -->
         query_time=#{queryTime},  <!-- 查询时间 -->
         query_user_id=#{queryUserId},  <!-- 查询人(用户表主键id） -->
-        is_query=#{isQuery},  <!-- 1:未查询;2:已查询;3:查询不通过 -->
+        is_query=#{isQuery}  <!-- 1:未查询;2:已查询;3:查询不通过 -->
         WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
     </update>
     <update id="updateVerifyCarProcessing">
-        UPDATE ts_car_processing
+        UPDATE ts_car_processing set
         verify_result=#{verifyResult},  <!-- 核档结果 -->
         verify_time=#{verifyTime},  <!-- 核档时间 -->
         verify_user_id=#{verifyUserId},  <!-- 核档人(用户表主键id) -->
         record_number=#{recordNumber},  <!-- 核档号 -->
         recycle_number=#{recycleNumber},  <!-- 回收证明编号 -->
-        is_verify=#{isVerify},  <!-- 1:未核档；2：已核档；3:核档不通过 -->
+        is_verify=#{isVerify}  <!-- 1:未核档；2：已核档；3:核档不通过 -->
         WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
     </update>
 

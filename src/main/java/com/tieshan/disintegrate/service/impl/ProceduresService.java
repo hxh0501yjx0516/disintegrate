@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,10 +47,10 @@ public class ProceduresService implements IProceduresService {
         if (StringUtils.isEmpty(proceduresVo.getCarInfoId())) {
             throw new CustomException("车辆编码不能为空");
         }
-        map.put("id", proceduresVo.getCarInfoId());
-        CarInfo carInfo = carInfoMapper.selectOneByMap(map);
-        if (carInfo == null) {
-            throw new CustomException("未知的车辆编码");
+        map.put("carInfoId", proceduresVo.getCarInfoId());
+        List<CarIdentity> carIdentities = carIdentityMapper.selectListByMap(map);
+        if (carIdentities != null && carIdentities.size() >= 1) {
+            throw new CustomException("该车辆已录入手续");
         }
         IdWorker idWorker = new IdWorker(1, 1, 1);
         proceduresVo.setId(idWorker.nextId());
@@ -117,7 +118,6 @@ public class ProceduresService implements IProceduresService {
      * @param params carProcessingId
      *               carProcedureLogId
      *               state
-     *               result
      *               remark
      * @param user
      */
@@ -142,8 +142,12 @@ public class ProceduresService implements IProceduresService {
 
         carProcedurelog.setDisintegratePlantId(user.getCompany_id());
         carProcedurelog.setType(1);
-        carProcedurelog.setResult(params.get("result").toString());
-        carProcedurelog.setRemark(params.get("remark").toString());
+        if (!StringUtils.isEmpty(params.get("remark"))) {
+            carProcedurelog.setRemark(params.get("remark").toString());
+        } else if (state == 3) {
+            throw new CustomException("查询不通过需要在备注里填写相关原因！");
+        }
+
         carProcedurelog.setCreateTime(new Date());
         carProcedurelog.setOperatorId(user.getId());
         carProcedurelog.setOperator(user.getUser_name());
@@ -160,7 +164,6 @@ public class ProceduresService implements IProceduresService {
         }
 
         carProcessing.setIsQuery(state);
-        carProcessing.setQueryResult(params.get("result").toString());
         carProcessing.setQueryTime(new Date());
         carProcessing.setQueryUserId(user.getId());
         carProcessingMapper.updateCarProcessing(carProcessing);
@@ -170,7 +173,6 @@ public class ProceduresService implements IProceduresService {
      * @param params carProcessingId
      *               carProcedureLogId
      *               state
-     *               result
      *               remark
      * @param user
      */
@@ -195,8 +197,11 @@ public class ProceduresService implements IProceduresService {
 
         carProcedurelog.setDisintegratePlantId(user.getCompany_id());
         carProcedurelog.setType(2);
-        carProcedurelog.setResult(params.get("result").toString());
-        carProcedurelog.setRemark(params.get("remark").toString());
+        if (!StringUtils.isEmpty(params.get("remark"))) {
+            carProcedurelog.setRemark(params.get("remark").toString());
+        } else if (state == 3) {
+            throw new CustomException("核档不通过需要在备注里填写相关原因！");
+        }
         carProcedurelog.setCreateTime(new Date());
         carProcedurelog.setOperatorId(user.getId());
         carProcedurelog.setOperator(user.getUser_name());
@@ -213,7 +218,6 @@ public class ProceduresService implements IProceduresService {
         }
 
         carProcessing.setIsVerify(state);
-        carProcessing.setVerifyResult(params.get("result").toString());
         carProcessing.setVerifyTime(new Date());
         carProcessing.setVerifyUserId(user.getId());
         carProcessingMapper.updateCarProcessing(carProcessing);
@@ -238,11 +242,14 @@ public class ProceduresService implements IProceduresService {
         CarProcedureLog carProcedurelog = new CarProcedureLog();
         carProcedurelog.setCarInfoId(carProcessing.getCarInfoId());
         carProcedurelog.setDisintegratePlantId(user.getCompany_id());
-        carProcedurelog.setProcedureLogId(Long.valueOf(params.get("carProcedureLogId").toString()));
+        carProcedurelog.setProcedureLogId(Long.valueOf(params.get("queryResultId").toString()));
 
         carProcedurelog.setType(3);
-        carProcedurelog.setResult(params.get("result").toString());
-        carProcedurelog.setRemark(params.get("remark").toString());
+        if (!StringUtils.isEmpty(params.get("remark"))) {
+            carProcedurelog.setRemark(params.get("remark").toString());
+        } else if (state == 4) {
+            throw new CustomException("处理不通过需要在备注里填写相关原因！");
+        }
         carProcedurelog.setCreateTime(new Date());
         carProcedurelog.setOperatorId(user.getId());
         carProcedurelog.setOperator(user.getUser_name());
@@ -262,7 +269,7 @@ public class ProceduresService implements IProceduresService {
             carProcessing.setQueryTime(null);
             carProcessing.setQueryUserId(null);
             carProcessingMapper.updateQueryCarProcessing(carProcessing);
-        } else if (state == 3) {//退车
+        } else if (state == 4) {//退车
             CarBack carBack = new CarBack();
             carBack.setId(idWorker.nextId());
             carBack.setCarInfoId(carProcessing.getCarInfoId());
@@ -294,11 +301,14 @@ public class ProceduresService implements IProceduresService {
         CarProcedureLog carProcedurelog = new CarProcedureLog();
         carProcedurelog.setCarInfoId(carProcessing.getCarInfoId());
         carProcedurelog.setDisintegratePlantId(user.getCompany_id());
-        carProcedurelog.setProcedureLogId(Long.valueOf(params.get("carProcedureLogId").toString()));
+        carProcedurelog.setProcedureLogId(Long.valueOf(params.get("verificationResultId").toString()));
 
         carProcedurelog.setType(3);
-        carProcedurelog.setResult(params.get("result").toString());
-        carProcedurelog.setRemark(params.get("remark").toString());
+        if (!StringUtils.isEmpty(params.get("remark"))) {
+            carProcedurelog.setRemark(params.get("remark").toString());
+        } else if (state == 4) {
+            throw new CustomException("处理不通过需要在备注里填写相关原因！");
+        }
         carProcedurelog.setCreateTime(new Date());
         carProcedurelog.setOperatorId(user.getId());
         carProcedurelog.setOperator(user.getUser_name());
@@ -318,7 +328,7 @@ public class ProceduresService implements IProceduresService {
             carProcessing.setVerifyTime(null);
             carProcessing.setVerifyUserId(null);
             carProcessingMapper.updateQueryCarProcessing(carProcessing);
-        } else if (state == 3) {//退车
+        } else if (state == 4) {//退车
             CarBack carBack = new CarBack();
             carBack.setId(idWorker.nextId());
             carBack.setCarInfoId(carProcessing.getCarInfoId());
