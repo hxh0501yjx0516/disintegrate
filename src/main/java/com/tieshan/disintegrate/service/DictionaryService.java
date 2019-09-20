@@ -16,4 +16,5 @@ public interface DictionaryService {
      * @return
      */
     List<String> findBankNameList();
+
 }

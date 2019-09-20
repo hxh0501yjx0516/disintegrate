@@ -15,7 +15,6 @@ import javax.validation.constraints.NotBlank;
  * @modified By:
  */
 @Data
-
 public class CarSource implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -36,6 +35,8 @@ public class CarSource implements Serializable {
 	private Long bankId;
 	// 1:银行打款;2:现金结算
 	private String payType;
+	// 车源状态    （1：待入场;2:已入场;3:异常)
+	private String sourceType;
 	// 1:已打款;2:待打款
 	private String payStatus;
 	// 付款金额
@@ -47,7 +48,9 @@ public class CarSource implements Serializable {
 	// 创建人id
 	private Long createOperatorId;
 	// 创建时间
-	private Date create_time;
+	private Date createTime;
 	// 是否删除  1.删除，2,正常
-	private Integer is_delete;
+	private Integer isDelete;
+	// 银行信息
+	private Bank bank = new Bank();
 }
