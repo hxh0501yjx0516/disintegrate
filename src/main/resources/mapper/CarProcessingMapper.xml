@@ -1202,15 +1202,6 @@
     <update id="updateCarProcessing">
         UPDATE ts_car_processing
         <trim prefix="set" suffixOverrides=",">
-            <if test="id!=null">
-                id=#{id},  <!--  -->
-            </if>
-            <if test="disintegratePlantId!=null">
-                disintegrate_plant_id=#{disintegratePlantId},  <!-- 解体厂id -->
-            </if>
-            <if test="carInfoId!=null">
-                car_info_id=#{carInfoId},  <!-- ts_car_info的主键id -->
-            </if>
             <if test="registerTime!=null">
                 register_time=#{registerTime},  <!-- 登记时间 -->
             </if>
@@ -1389,15 +1380,6 @@
         <foreach collection="list" item="item" index="index" open="" close="" separator=";">
             update ts_car_processing
             <trim prefix="set" suffixOverrides=",">
-                <if test="item.id!=null">
-                    id=#{item.id},  <!--  -->
-                </if>
-                <if test="item.disintegratePlantId!=null">
-                    disintegrate_plant_id=#{item.disintegratePlantId},  <!-- 解体厂id -->
-                </if>
-                <if test="item.carInfoId!=null">
-                    car_info_id=#{item.carInfoId},  <!-- ts_car_info的主键id -->
-                </if>
                 <if test="item.registerTime!=null">
                     register_time=#{item.registerTime},  <!-- 登记时间 -->
                 </if>
@@ -1572,6 +1554,24 @@
             </trim>
             WHERE id=#{item.id} AND disintegrate_plant_id=#{item.disintegratePlantId}
         </foreach>
+    </update>
+    <update id="updateQueryCarProcessing">
+        UPDATE ts_car_processing
+        query_result=#{queryResult},  <!-- 查询结果 -->
+        query_time=#{queryTime},  <!-- 查询时间 -->
+        query_user_id=#{queryUserId},  <!-- 查询人(用户表主键id） -->
+        is_query=#{isQuery},  <!-- 1:未查询;2:已查询;3:查询不通过 -->
+        WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
+    </update>
+    <update id="updateVerifyCarProcessing">
+        UPDATE ts_car_processing
+        verify_result=#{verifyResult},  <!-- 核档结果 -->
+        verify_time=#{verifyTime},  <!-- 核档时间 -->
+        verify_user_id=#{verifyUserId},  <!-- 核档人(用户表主键id) -->
+        record_number=#{recordNumber},  <!-- 核档号 -->
+        recycle_number=#{recycleNumber},  <!-- 回收证明编号 -->
+        is_verify=#{isVerify},  <!-- 1:未核档；2：已核档；3:核档不通过 -->
+        WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
     </update>
 
     <delete id="deleteCarProcessingByMap">

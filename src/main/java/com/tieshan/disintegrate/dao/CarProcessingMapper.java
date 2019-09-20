@@ -28,6 +28,10 @@ public interface CarProcessingMapper {
 
     void updateCarProcessing(CarProcessing CarProcessing);
 
+    void updateQueryCarProcessing(CarProcessing CarProcessing);
+
+    void updateVerifyCarProcessing(CarProcessing CarProcessing);
+
     void updateBatchCarProcessing(Map<String, Object> map);
 
     void deleteCarProcessingByMap(Map<String, Object> map);

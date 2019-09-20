@@ -8,12 +8,12 @@ import lombok.Data;
  * 车辆手续日志表
  *
  * @author ren lei
- * @date 2019-09-18 15:39:56
+ * @date 2019-09-19 17:44:04
  * @version: 1.0
  * @modified By:
  */
 @Data
-public class CarProcedurelog implements Serializable {
+public class CarProcedureLog implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -25,9 +25,9 @@ public class CarProcedurelog implements Serializable {
 	 */
 	private Long disintegratePlantId;
 	/**
-	 * 客户处理主键id
+	 * 父id
 	 */
-	private Long serviceDealId;
+	private Long procedureLogId;
 	/**
 	 * 车辆信息主键id
 	 */
@@ -35,7 +35,7 @@ public class CarProcedurelog implements Serializable {
 	/**
 	 * 1：查询历史；2：核档历史；3：客服历史；
 	 */
-	private String type;
+	private Integer type;
 	/**
 	 * 结果
 	 */
@@ -45,9 +45,9 @@ public class CarProcedurelog implements Serializable {
 	 */
 	private String remark;
 	/**
-	 * 查询时间
+	 * 发生时间
 	 */
-	private Date querytime;
+	private Date createTime;
 	/**
 	 * 操作人id
 	 */
@@ -57,9 +57,9 @@ public class CarProcedurelog implements Serializable {
 	 */
 	private String operator;
 	/**
-	 * 1:未完成;2完成
+	 * 1:未完成;2完成；3:暂存 4：退车（对应客服）
 	 */
-	private String state;
+	private Integer state;
 	/**
 	 * 是否删除。1.删除，2,正常
 	 */

@@ -8,7 +8,7 @@ import lombok.Data;
  * 车辆身份表
  *
  * @author ren lei
- * @date 2019-09-18 17:01:47
+ * @date 2019-09-19 16:30:14
  * @version: 1.0
  * @modified By:
  */
@@ -132,5 +132,13 @@ public class CarIdentity implements Serializable {
 	 * 车牌颜色(来之字典表),蓝色，黄色。。。
 	 */
 	private String cardColor;
+	/**
+	 * 1:暂存，2:提交（登记完成）
+	 */
+	private Integer status;
+	/**
+	 * 档案号
+	 */
+	private String recordNo;
 
 }

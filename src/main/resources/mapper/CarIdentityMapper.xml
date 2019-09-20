@@ -33,13 +33,15 @@
         <result property="carProperties" column="car_properties"/>  <!-- 车辆性质(来之字典表) 小轿车，大卡车。。。 -->
         <result property="isDelete" column="is_delete"/>  <!-- 是否删除。1.删除，2,正常 -->
         <result property="cardColor" column="card_color"/>  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
+        <result property="status" column="status"/>  <!-- 1:暂存，2:提交（登记完成） -->
+        <result property="recordNo" column="record_no"/>  <!-- 档案号 -->
     </resultMap>
 
     <select id="selectOneByMap" resultMap="carIdentityMap">
         SELECT  id, disintegrate_plant_id, ascription, car_info_id, colour, owner, phone, id_card, agend, agend_idcard,
         car_kind, fuel_type, reg_time, issue_time, nature_usege, car_type, vin, engine, issue_size, displacement,
         carrying_capacity, remarks, frame_number, car_weight, owner_address, owner_zipcode, car_properties,
-        is_delete, card_color
+        is_delete, card_color, status, record_no
         FROM ts_car_identity
         <where>
             <if test="id!=null">
@@ -128,6 +130,12 @@
             </if>
             <if test="cardColor!=null and cardColor!=''">
                 AND card_color=#{cardColor}  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
+            </if>
+            <if test="status!=null">
+                AND status=#{status}  <!-- 1:暂存，2:提交（登记完成） -->
+            </if>
+            <if test="recordNo!=null and recordNo!=''">
+                AND  record_no=#{ recordNo}  <!-- 档案号 -->
             </if>
         </where>
     </select>
@@ -136,7 +144,7 @@
         SELECT  id, disintegrate_plant_id, ascription, car_info_id, colour, owner, phone, id_card, agend, agend_idcard,
         car_kind, fuel_type, reg_time, issue_time, nature_usege, car_type, vin, engine, issue_size, displacement,
         carrying_capacity, remarks, frame_number, car_weight, owner_address, owner_zipcode, car_properties,
-        is_delete, card_color
+        is_delete, card_color, status, record_no
         FROM ts_car_identity
         <where>
             <if test="id!=null">
@@ -225,6 +233,12 @@
             </if>
             <if test="cardColor!=null and cardColor!=''">
                 AND card_color=#{cardColor}  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
+            </if>
+            <if test="status!=null">
+                AND status=#{status}  <!-- 1:暂存，2:提交（登记完成） -->
+            </if>
+            <if test="recordNo!=null and recordNo!=''">
+                AND record_no=#{recordNo}  <!-- 档案号 -->
             </if>
         </where>
     </select>
@@ -319,6 +333,12 @@
             <if test="cardColor!=null and cardColor!=''">
                 card_color,  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
             </if>
+            <if test="status!=null">
+                status,  <!-- 1:暂存，2:提交（登记完成） -->
+            </if>
+            <if test="recordNo!=null and recordNo!=''">
+                record_no,  <!-- 档案号 -->
+            </if>
         </trim>
         )VALUES(
         <trim suffixOverrides=",">
@@ -408,6 +428,12 @@
             </if>
             <if test="cardColor!=null and cardColor!=''">
                 #{cardColor},  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
+            </if>
+            <if test="status!=null">
+                #{status},  <!-- 1:暂存，2:提交（登记完成） -->
+            </if>
+            <if test="recordNo!=null and recordNo!=''">
+                #{recordNo},  <!-- 档案号 -->
             </if>
         </trim>
         )
@@ -503,6 +529,12 @@
                 <if test="item.cardColor!=null and item.cardColor!=''">
                     card_color,  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
                 </if>
+                <if test="item.status!=null">
+                    status,  <!-- 1:暂存，2:提交（登记完成） -->
+                </if>
+                <if test="item.recordNo!=null and item.recordNo!=''">
+                    record_no,  <!-- 档案号 -->
+                </if>
             </trim>
             )VALUES(
             <trim suffixOverrides=",">
@@ -593,6 +625,12 @@
                 <if test="item.cardColor!=null and item.cardColor!=''">
                     #{item.cardColor},  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
                 </if>
+                <if test="item.status!=null">
+                    #{item.status},  <!-- 1:暂存，2:提交（登记完成） -->
+                </if>
+                <if test="item.recordNo!=null and item.recordNo!=''">
+                    #{item.recordNo},  <!-- 档案号 -->
+                </if>
             </trim>
             )
         </foreach>
@@ -682,6 +720,12 @@
             <if test="cardColor!=null and cardColor!=''">
                 card_color=#{cardColor},  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
             </if>
+            <if test="status!=null">
+                status=#{status},  <!-- 1:暂存，2:提交（登记完成） -->
+            </if>
+            <if test="recordNo!=null and recordNo!=''">
+                record_no=#{recordNo},  <!-- 档案号 -->
+            </if>
         </trim>
         WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
     </update>
@@ -769,6 +813,12 @@
                 </if>
                 <if test="item.cardColor!=null and item.cardColor!=''">
                     card_color=#{item.cardColor},  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
+                </if>
+                <if test="item.status!=null">
+                    status=#{item.status},  <!-- 1:暂存，2:提交（登记完成） -->
+                </if>
+                <if test="item.recordNo!=null and item.recordNo!=''">
+                    record_no=#{item.recordNo},  <!-- 档案号 -->
                 </if>
             </trim>
             WHERE id=#{item.id} AND disintegrate_plant_id=#{item.disintegratePlantId}
