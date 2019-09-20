@@ -24,7 +24,7 @@ public interface IResourceService {
      *
      * @return
      */
-    public List<Menu> menus();
+    public List<Menu> departTree(String depart_id);
 
 
     /**
@@ -32,7 +32,7 @@ public interface IResourceService {
      *
      * @return
      */
-    public List<Resource> treeList();
+    public List<Menu> departMenus(String id);
 
     /**
      * 添加资源
@@ -47,7 +47,7 @@ public interface IResourceService {
      *
      * @return
      */
-    List<Resource> getResourceTree();
+    List<Menu> getResourceTree();
 
     /**
      * 删除部门资源关系表
@@ -63,5 +63,5 @@ public interface IResourceService {
      * @param department_id
      * @return
      */
-    List<Resource> getResourceByDepartId(String department_id);
+    List<Menu> getResourceByDepartId(String department_id);
 }

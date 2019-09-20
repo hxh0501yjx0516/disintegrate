@@ -1,5 +1,6 @@
 package com.tieshan.disintegrate.dao;
 
+import com.tieshan.disintegrate.pojo.Menu;
 import com.tieshan.disintegrate.pojo.Resource;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,20 +16,28 @@ import java.util.Map;
  * @modified By:
  */
 public interface ResourceMapper {
-    /**
+   /* *//**
      * 获取资源列表
      *
-     * @param params 参数
+     * @param id 参数
+     * @return
+     *//*
+    List<Resource> departMenus(String id);*/
+
+    /**
+     * 获取当前用户的菜单
+     *
+     * @param depart_id 参数
      * @return
      */
-    List<Resource> getResourceList(Map<String, Object> params);
+    List<Menu> departTree(@Param("depart_id") String depart_id);
 
     /**
      * 获取所有资源
      *
      * @return
      */
-    List<Resource> getAllResource();
+    List<Menu> getAllResource();
 
     /**
      * 增加资源
