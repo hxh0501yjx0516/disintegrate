@@ -1,14 +1,17 @@
 package com.tieshan.disintegrate.controller;
 
-import com.tieshan.disintegrate.pojo.Menu;
 import com.tieshan.disintegrate.pojo.Resource;
+import com.tieshan.disintegrate.pojo.SysUser;
 import com.tieshan.disintegrate.service.IResourceService;
+import com.tieshan.disintegrate.token.TokenService;
 import com.tieshan.disintegrate.util.RestResult;
 import com.tieshan.disintegrate.util.ResultCode;
+import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * @description:菜单控制类
@@ -17,21 +20,48 @@ import java.util.List;
  * @version: 1.0
  * @modified By:
  */
+@CommonsLog
 @RestController
 @RequestMapping(value = "resource")
 public class MenuController {
     @Autowired
     private IResourceService resourceService;
+    @Autowired
+    private TokenService tokenService;
 
-    @GetMapping("/menus")
-    public RestResult menus() {
-        RestResult restResult = new RestResult("返回目录", resourceService.menus(), ResultCode.SUCCESS.code());
+    /**
+     * 查询部门右测的资源
+     *
+     * @return
+     */
+    @GetMapping("/departTree")
+    public RestResult departTree(String depart_id) {
+        RestResult restResult = null;
+        try {
+            restResult = new RestResult("获取资源", resourceService.departTree(depart_id), ResultCode.SUCCESS.code());
+        } catch (Exception e) {
+            log.info("查询部门右测的资源失败------->", e);
+            return new RestResult("查询部门右测的资源失败", null, ResultCode.ERROR.code());
+        }
         return restResult;
     }
 
-    @GetMapping(value = "/treeList")
-    public RestResult treeList() {
-        RestResult restResult = new RestResult("返回tree", resourceService.treeList(), ResultCode.SUCCESS.code());
+    /**
+     * 查询登录人相关左侧菜单
+     *
+     * @return
+     */
+    @GetMapping(value = "/departMenus")
+    public RestResult departMenus(HttpServletRequest request) {
+        RestResult restResult = null;
+        try {
+            String token = request.getHeader("token");
+            SysUser sysUser = tokenService.getToken(token);
+            restResult = new RestResult("获取菜单", resourceService.departMenus(sysUser.getDepart_id() + ""), ResultCode.SUCCESS.code());
+        } catch (Exception e) {
+            log.info("获取菜单失败------->", e);
+            return new RestResult("获取菜单失败", null, ResultCode.ERROR.code());
+        }
         return restResult;
     }
 
@@ -43,12 +73,19 @@ public class MenuController {
      */
     @PostMapping(value = "/addResource")
     public RestResult addResource(@RequestBody Resource resource) {
-        int num = resourceService.add(resource);
-        if (num == 1) {
-
-            return new RestResult("添加成功", null, ResultCode.SUCCESS.code());
+        RestResult restResult = null;
+        try {
+            int num = resourceService.add(resource);
+            if (num > 0) {
+                restResult = new RestResult("添加成功", null, ResultCode.SUCCESS.code());
+            } else {
+                restResult = new RestResult("添加失败", null, ResultCode.ERROR.code());
+            }
+        } catch (Exception e) {
+            log.info("添加资源接口报错----->" + e);
+            restResult = new RestResult("添加失败", null, ResultCode.ERROR.code());
         }
-        return new RestResult("添加失败", null, ResultCode.ERROR.code());
+        return restResult;
     }
 
     /**
@@ -83,8 +120,8 @@ public class MenuController {
      * @return
      */
     @GetMapping(value = "/getResourceByDpartId")
-    public RestResult getResourceByDpartId(String department_id) {
-        RestResult restResult = new RestResult("获取部门资源", resourceService.getResourceByDepartId(department_id), ResultCode.SUCCESS.code());
+    public RestResult getResourceByDpartId(String depart_id) {
+        RestResult restResult = new RestResult("获取部门资源", resourceService.getResourceByDepartId(depart_id), ResultCode.SUCCESS.code());
         return restResult;
     }
 

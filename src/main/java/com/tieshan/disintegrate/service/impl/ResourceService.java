@@ -1,5 +1,7 @@
 package com.tieshan.disintegrate.service.impl;
 
+import com.beust.jcommander.internal.Lists;
+import com.google.common.collect.Maps;
 import com.tieshan.disintegrate.constant.ConStants;
 import com.tieshan.disintegrate.dao.ResourceMapper;
 import com.tieshan.disintegrate.pojo.Menu;
@@ -30,47 +32,73 @@ public class ResourceService implements IResourceService {
     @Autowired
     private ResourceMapper resourceMapper;
 
+    //    @Override
+//    public List<Menu> menus() {
+//
+//        List<Menu> menuList = new ArrayList<>();
+//
+//        Map<String, Object> params = new HashMap<>();
+//        params.put("type", ConStants.RESOURCE_TYPE_MENU);// 菜单类型的资源
+////        Long currUid = SessionUtil.getCurrUid();
+//        params.put("userId", 0);// 只查自己有权限的资源
+//
+//        List<Resource> resourceList = resourceMapper.getResourceList(params);
+//
+//        assembleMenu(menuList, resourceList);
+//        return menuList;
+//    }
     @Override
-    public List<Menu> menus() {
-
-        List<Menu> menuList = new ArrayList<>();
-
-        Map<String, Object> params = new HashMap<>();
-        params.put("type", ConStants.RESOURCE_TYPE_MENU);// 菜单类型的资源
-//        Long currUid = SessionUtil.getCurrUid();
-        params.put("userId", 0);// 只查自己有权限的资源
-
-        List<Resource> resourceList = resourceMapper.getResourceList(params);
-
-        assembleMenu(menuList, resourceList);
-        return menuList;
+    public List<Menu> departTree(String depart_id) {   //调用的方法入口
+        List<Menu> bodyList = resourceMapper.departTree(depart_id);
+        Menu m = bodyList.remove(0);
+        List<Menu> rootList = new ArrayList<>();
+        rootList.add(m);
+        if (bodyList != null && !bodyList.isEmpty()) {
+            //声明一个map，用来过滤已操作过的数据
+            Map<String, Object> map = Maps.newHashMapWithExpectedSize(bodyList.size());
+            rootList.forEach(menu -> getChild(menu, bodyList, map));
+            return rootList;
+        }
+        return null;
     }
 
+    private static void getChild(Menu menu, List<Menu> bodyList, Map<String, Object> map) {
+        List<Menu> childList = Lists.newArrayList();
+        bodyList.stream()
+                .filter(c -> !map.containsKey(c.getId()))
+                .filter(c -> c.getPid().equals(menu.getId()))
+                .forEach(c -> {
+                    map.put(c.getId().toString(), c.getPid());
+                    getChild(c, bodyList, map);
+                    childList.add(c);
+                });
+        menu.setChildren(childList);
+
+    }
 
     @Override
-    public List<Resource> treeList() {
-        Map<String, Object> params = new HashMap<>();
+    public List<Menu> departMenus(String depart_id) {
 
-        params.put("userId", 0);// 自查自己有权限的资源
-        List<Resource> resourceList = resourceMapper.getResourceList(params);
-        List<Resource> list = allResource(resourceList);
+        List<Menu> resourceList = resourceMapper.departTree(depart_id);
+        List<Menu> list = allResource(resourceList);
 
         return list;
     }
 
-    private List<Resource> allResource(List<Resource> resourceList) {
-        Map<Long, Resource> map = new HashMap<>();
-        resourceList.forEach(resource -> map.put(resource.getId(), resource));
-        resourceList.forEach(resource -> resource.setResource_pname(resource.getPid() != 0 ? map.get(resource.getPid()).getResource_name() : null));
+    private List<Menu> allResource(List<Menu> resourceList) {
+        Map<Long, Menu> map = new HashMap<>();
+        resourceList.forEach(menu -> map.put(menu.getId(), menu));
+        resourceList.forEach(menu -> menu.setResource_pname(menu.getPid() != 0L ?
+              !PubMethod.isEmpty(map.get(menu.getPid()))? map.get(menu.getPid()).getResource_name():null : null));
 
-        List<Resource> list = new ArrayList<>();
+        List<Menu> list = new ArrayList<>();
 
         resourceList = new CopyOnWriteArrayList<>(resourceList);
-        for (Resource resource : resourceList) {
-            if (resource.getPid() == 0) {
-                list.add(resource);
-                resourceList.remove(resource);
-                treeSort(resourceList, list, resource);
+        for (Menu menu : resourceList) {
+            if (menu.getPid() == 0) {
+                list.add(menu);
+                resourceList.remove(menu);
+                treeSort(resourceList, list, menu);
             }
         }
 
@@ -87,10 +115,10 @@ public class ResourceService implements IResourceService {
 
 
     @Override
-    public List<Resource> getResourceTree() {
+    public List<Menu> getResourceTree() {
 
-        List<Resource> resourceList = resourceMapper.getAllResource();
-        List<Resource> list = allResource(resourceList);
+        List<Menu> resourceList = resourceMapper.getAllResource();
+        List<Menu> list = allResource(resourceList);
 
         return list;
     }
@@ -117,10 +145,10 @@ public class ResourceService implements IResourceService {
         return 0;
     }
 
-    @Override
-    public List<Resource> getResourceByDepartId(String department_id) {
+   // @Override
+    public List<Menu> getResourceByDepartId(String department_id) {
         List<Map<String, Object>> mapList = resourceMapper.getDepartment_Resource(department_id);
-        List<Resource> resourceList = resourceMapper.getAllResource();
+        List<Menu> resourceList = resourceMapper.getAllResource();
 
         if (!PubMethod.isEmpty(mapList)) {
             Map<String, Map<String, Object>> drMap = new HashMap<>();
@@ -128,7 +156,7 @@ public class ResourceService implements IResourceService {
                 drMap.put(map.get("resource_id").toString(), map);
             });
             resourceList.stream().forEach(resource -> {
-                if (!PubMethod.isEmpty(drMap.get(resource.getId()+""))) {
+                if (!PubMethod.isEmpty(drMap.get(resource.getId() + ""))) {
                     resource.setIsHaving(ConStants.NO_HAVING);
                 }
             });
@@ -136,13 +164,13 @@ public class ResourceService implements IResourceService {
         return resourceList;
     }
 
-    private void treeSort(List<Resource> resourceList, List<Resource> list, Resource parent) {
+    private void treeSort(List<Menu> resourceList, List<Menu> list, Menu parent) {
 
-        for (Resource resource : resourceList) {
-            if (Objects.equals(parent.getId(), resource.getPid())) {
-                list.add(resource);
-                resourceList.remove(resource);
-                treeSort(resourceList, list, resource);
+        for (Menu menu : resourceList) {
+            if (Objects.equals(parent.getId(), menu.getPid())) {
+                list.add(menu);
+                resourceList.remove(menu);
+                treeSort(resourceList, list, menu);
             }
         }
     }
@@ -152,13 +180,13 @@ public class ResourceService implements IResourceService {
             if (r.getPid() == 0) {
                 Menu menu = new Menu();
                 BeanUtils.copyProperties(r, menu);
-                menu.setName(r.getResource_name());
+                menu.setResource_name(r.getResource_name());
                 List<Menu> children = new ArrayList<>();
                 for (Resource r1 : resourceList) {
                     if (Objects.equals(r1.getPid(), r.getId())) {
                         Menu child = new Menu();
                         BeanUtils.copyProperties(r1, child);
-                        child.setName(r1.getResource_name());
+                        child.setResource_name(r1.getResource_name());
                         children.add(child);
                     }
                 }

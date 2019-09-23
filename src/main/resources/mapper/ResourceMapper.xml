@@ -3,10 +3,15 @@
 <mapper namespace="com.tieshan.disintegrate.dao.ResourceMapper">
 
 
-    <select id="getResourceList" resultType="com.tieshan.disintegrate.pojo.Resource">
+    <!--<select id="departMenus" resultType="com.tieshan.disintegrate.pojo.Resource">
 
             SELECT
-                r.*
+             IFNULL(r.id,'') as id,
+             IFNULL(r.resource_name,'') as resource_name,
+             IFNULL(r.resource_url,'') as resource_url,
+             IFNULL(r.seq,'') as seq,
+             IFNULL(r.pid,'') as pid,
+             IFNULL(r.create_time,'') as create_time
             FROM
                 resource r
             WHERE
@@ -25,20 +30,46 @@
                 AND r.resource_type = 1
             ORDER BY
                 r.seq
+    </select>-->
+    <select id="departTree" resultType="com.tieshan.disintegrate.pojo.Menu">
+
+            SELECT
+             IFNULL(r.id,'') as id,
+             IFNULL(r.resource_name,'') as resource_name,
+             IFNULL(r.resource_url,'') as resource_url,
+             IFNULL(r.resource_url,'') as resource_url,
+             IFNULL(r.seq,'') as seq,
+             IFNULL(r.pid,'') as pid
+            FROM
+                resource r
+            WHERE
+                EXISTS (
+            SELECT
+                1
+            FROM
+                department_resource dr
+                INNER JOIN department dt ON dr.department_id = dt.id
+                INNER JOIN department_user du ON du.department_id= dt.id
+                INNER JOIN user u ON u.id = du.user_id
+            WHERE
+               dt.id	= #{depart_id}
+                AND dr.resource_id = r.id
+                )
+                AND r.resource_type = 1
+            ORDER BY
+                r.seq
     </select>
 
-    <select id="getAllResource" resultType="com.tieshan.disintegrate.pojo.Resource">
+
+    <select id="getAllResource" resultType="com.tieshan.disintegrate.pojo.Menu">
 
            SELECT
-                id,
-                resource_name,
-                resource_url,
-                seq,
-                pid,
-                resource_type,
-                create_time,
-                operator,
-                '1' isHaving
+             IFNULL(id,'') as id,
+             IFNULL(resource_name,'') as resource_name,
+             IFNULL(resource_url,'') as resource_url,
+             IFNULL(resource_type,'') as resource_type,
+             IFNULL(seq,'') as seq,
+             IFNULL(pid,'') as pid
             FROM
                 resource
             WHERE
