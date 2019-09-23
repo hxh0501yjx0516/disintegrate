@@ -97,6 +97,15 @@
                     department_id=#{department_id}
 
     </select>
+    <select id="getNode" resultType="java.util.Map">
+
+            SELECT
+                IFNULL ( id, '' ) AS pid,
+                IFNULL ( resource_name, '' ) AS resource_pname
+            FROM
+                resource
+
+    </select>
     <delete id="delDepartment_Resource">
          delete  from department_resource where  department_id=#{department_id}
     </delete>

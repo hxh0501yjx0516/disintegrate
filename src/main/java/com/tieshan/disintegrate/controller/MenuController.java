@@ -131,14 +131,19 @@ public class MenuController {
     }
 
     /**
-     * 获取部门的资源
+     * 获取资源节点
      *
      * @return
      */
-//    @GetMapping(value = "/getResourceByDpartId")
-//    public RestResult getResourceByDpartId(String depart_id) {
-//        RestResult restResult = new RestResult("获取部门资源", resourceService.getResourceByDepartId(depart_id), ResultCode.SUCCESS.code());
-//        return restResult;
-//    }
-
+    @GetMapping(value = "/getNode")
+    public RestResult getNode() {
+        RestResult restResult = null;
+        try {
+            restResult = new RestResult("返回tree", resourceService.getNode(), ResultCode.SUCCESS.code());
+        } catch (Exception e) {
+            log.info("获取资源失败----->" + e);
+            return new RestResult("获取资源失败", null, ResultCode.ERROR.code());
+        }
+        return restResult;
+    }
 }

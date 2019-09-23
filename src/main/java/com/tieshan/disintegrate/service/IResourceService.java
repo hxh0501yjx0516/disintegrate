@@ -55,6 +55,13 @@ public interface IResourceService {
      */
     int updateDR(String department_id, String resource_id);
 
+    /**
+     *
+     * @return
+     */
+    List<Map<String, Object>> getNode();
+
+
 //    /**
 //     * 查询部门的资源
 //     *

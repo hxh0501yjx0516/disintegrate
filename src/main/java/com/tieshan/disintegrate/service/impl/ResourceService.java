@@ -89,7 +89,7 @@ public class ResourceService implements IResourceService {
         Map<Long, Menu> map = new HashMap<>();
         resourceList.forEach(menu -> map.put(menu.getId(), menu));
         resourceList.forEach(menu -> menu.setResource_pname(menu.getPid() != 0L ?
-              !PubMethod.isEmpty(map.get(menu.getPid()))? map.get(menu.getPid()).getResource_name():null : null));
+                !PubMethod.isEmpty(map.get(menu.getPid())) ? map.get(menu.getPid()).getResource_name() : null : null));
 
         List<Menu> list = new ArrayList<>();
 
@@ -109,7 +109,7 @@ public class ResourceService implements IResourceService {
     @Override
     public int add(Resource resource) {
         IdWorker idWorker = new IdWorker(1, 1, 1);
-        resource.setId(idWorker.nextId()+"");
+        resource.setId(idWorker.nextId() + "");
 
         return resourceMapper.save(resource);
     }
@@ -154,7 +154,12 @@ public class ResourceService implements IResourceService {
         return 0;
     }
 
-   // @Override
+    @Override
+    public List<Map<String, Object>> getNode() {
+        return resourceMapper.getNode();
+    }
+
+    // @Override
     private List<Menu> getResourceByDepartId(String department_id) {
         List<Map<String, Object>> mapList = resourceMapper.getDepartment_Resource(department_id);
         List<Menu> resourceList = resourceMapper.getAllResource();
