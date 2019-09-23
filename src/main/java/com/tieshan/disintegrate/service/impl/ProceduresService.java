@@ -364,4 +364,9 @@ public class ProceduresService implements IProceduresService {
         carProcessing.setDataUploadTime(new Date());
         carProcessingMapper.updateCarProcessing(carProcessing);
     }
+
+    @Override
+    public void queryQueryResultList(Map<String, Object> params, SysUser user) {
+
+    }
 }

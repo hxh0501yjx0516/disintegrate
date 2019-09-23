@@ -160,9 +160,9 @@ public class ProceduresController {
      * @param user
      * @return
      */
-    @PostMapping(value = "/queryQueryResult")
-    public RestResult queryQueryResult(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
-        proceduresService.saveUploadShangWeiDataRecord(params, user);
+    @PostMapping(value = "/queryQueryResultList")
+    public RestResult queryQueryResultList(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
+        proceduresService.queryQueryResultList(params, user);
         return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
     }
 }

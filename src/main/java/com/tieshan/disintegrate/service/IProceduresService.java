@@ -31,4 +31,6 @@ public interface IProceduresService {
     void savePrintVerificationRecord(Map<String, Object> params, SysUser user);
 
     void saveUploadShangWeiDataRecord(Map<String, Object> params, SysUser user);
+
+    void queryQueryResultList(Map<String, Object> params, SysUser user);
 }
