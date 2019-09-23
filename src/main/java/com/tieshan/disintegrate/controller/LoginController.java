@@ -106,9 +106,11 @@ public class LoginController {
      * @return
      */
     @PostMapping(value = "/uppssword")
-    public RestResult updatePassword(@RequestBody SysUser sysUser) {
+    public RestResult updatePassword(@RequestBody SysUser sysUser,HttpServletRequest request) {
         RestResult restResult = null;
         try {
+            String token = request.getHeader("token");
+            this.tokenService.remove(token);
             int num = userService.updatePassword(sysUser);
             if (num > 0) {
                 restResult = new RestResult("修改成功", null, ResultCode.SUCCESS.code());
