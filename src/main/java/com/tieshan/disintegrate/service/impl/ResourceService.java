@@ -49,7 +49,7 @@ public class ResourceService implements IResourceService {
 //    }
     @Override
     public List<Menu> departTree(String depart_id) {   //调用的方法入口
-        List<Menu> bodyList = resourceMapper.departTree(depart_id);
+        List<Menu> bodyList = getResourceByDepartId(depart_id);
         Menu m = bodyList.remove(0);
         List<Menu> rootList = new ArrayList<>();
         rootList.add(m);
@@ -109,7 +109,8 @@ public class ResourceService implements IResourceService {
     @Override
     public int add(Resource resource) {
         IdWorker idWorker = new IdWorker(1, 1, 1);
-        resource.setId(idWorker.nextId());
+        resource.setId(idWorker.nextId()+"");
+
         return resourceMapper.save(resource);
     }
 
@@ -117,10 +118,18 @@ public class ResourceService implements IResourceService {
     @Override
     public List<Menu> getResourceTree() {
 
-        List<Menu> resourceList = resourceMapper.getAllResource();
-        List<Menu> list = allResource(resourceList);
-
-        return list;
+        List<Menu> bodyList = resourceMapper.getAllResource();
+//        List<Menu> list = allResource(resourceList);
+        Menu m = bodyList.remove(0);
+        List<Menu> rootList = new ArrayList<>();
+        rootList.add(m);
+        if (bodyList != null && !bodyList.isEmpty()) {
+            //声明一个map，用来过滤已操作过的数据
+            Map<String, Object> map = Maps.newHashMapWithExpectedSize(bodyList.size());
+            rootList.forEach(menu -> getChild(menu, bodyList, map));
+            return rootList;
+        }
+        return null;
     }
 
     @Override
@@ -146,7 +155,7 @@ public class ResourceService implements IResourceService {
     }
 
    // @Override
-    public List<Menu> getResourceByDepartId(String department_id) {
+    private List<Menu> getResourceByDepartId(String department_id) {
         List<Map<String, Object>> mapList = resourceMapper.getDepartment_Resource(department_id);
         List<Menu> resourceList = resourceMapper.getAllResource();
 
@@ -157,7 +166,7 @@ public class ResourceService implements IResourceService {
             });
             resourceList.stream().forEach(resource -> {
                 if (!PubMethod.isEmpty(drMap.get(resource.getId() + ""))) {
-                    resource.setIsHaving(ConStants.NO_HAVING);
+                    resource.setIsHaving(ConStants.YES_HAVING);
                 }
             });
         }
@@ -175,24 +184,24 @@ public class ResourceService implements IResourceService {
         }
     }
 
-    private void assembleMenu(List<Menu> menuList, List<Resource> resourceList) {
-        for (Resource r : resourceList) {
-            if (r.getPid() == 0) {
-                Menu menu = new Menu();
-                BeanUtils.copyProperties(r, menu);
-                menu.setResource_name(r.getResource_name());
-                List<Menu> children = new ArrayList<>();
-                for (Resource r1 : resourceList) {
-                    if (Objects.equals(r1.getPid(), r.getId())) {
-                        Menu child = new Menu();
-                        BeanUtils.copyProperties(r1, child);
-                        child.setResource_name(r1.getResource_name());
-                        children.add(child);
-                    }
-                }
-                menu.setChildren(children);
-                menuList.add(menu);
-            }
-        }
-    }
+//    private void assembleMenu(List<Menu> menuList, List<Resource> resourceList) {
+//        for (Resource r : resourceList) {
+//            if (r.getPid() == 0) {
+//                Menu menu = new Menu();
+//                BeanUtils.copyProperties(r, menu);
+//                menu.setResource_name(r.getResource_name());
+//                List<Menu> children = new ArrayList<>();
+//                for (Resource r1 : resourceList) {
+//                    if (Objects.equals(r1.getPid(), r.getId())) {
+//                        Menu child = new Menu();
+//                        BeanUtils.copyProperties(r1, child);
+//                        child.setResource_name(r1.getResource_name());
+//                        children.add(child);
+//                    }
+//                }
+//                menu.setChildren(children);
+//                menuList.add(menu);
+//            }
+//        }
+//    }
 }

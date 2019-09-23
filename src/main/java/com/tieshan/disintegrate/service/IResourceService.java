@@ -18,21 +18,19 @@ public interface IResourceService {
     public List<Resource> treeList();*/
 
     /**
-     * 获得资源树(资源类型为菜单类型)
-     * <p>
-     * 通过用户ID判断，他能看到的资源
-     *
+     * 查询部门右测的资源
+     * @param depart_id
      * @return
      */
     public List<Menu> departTree(String depart_id);
 
 
     /**
-     * 获得资源列表
-     *
+     * 查询登录人相关左侧菜单
+     * @param depart_id
      * @return
      */
-    public List<Menu> departMenus(String id);
+    public List<Menu> departMenus(String depart_id);
 
     /**
      * 添加资源
@@ -43,25 +41,25 @@ public interface IResourceService {
 
 
     /**
-     * 资列表
+     * 所有资源列表
      *
      * @return
      */
     List<Menu> getResourceTree();
 
     /**
-     * 删除部门资源关系表
+     * 更新部门和资源的关系
      *
      * @param department_id
      * @returns
      */
     int updateDR(String department_id, String resource_id);
 
-    /**
-     * 查询部门的资源
-     *
-     * @param department_id
-     * @return
-     */
-    List<Menu> getResourceByDepartId(String department_id);
+//    /**
+//     * 查询部门的资源
+//     *
+//     * @param department_id
+//     * @return
+//     */
+//    List<Menu> getResourceByDepartId(String department_id);
 }

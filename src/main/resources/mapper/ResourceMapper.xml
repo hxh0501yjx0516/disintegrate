@@ -69,6 +69,7 @@
              IFNULL(resource_url,'') as resource_url,
              IFNULL(resource_type,'') as resource_type,
              IFNULL(seq,'') as seq,
+             '2'  isHaving ,
              IFNULL(pid,'') as pid
             FROM
                 resource
@@ -79,10 +80,10 @@
                 seq
     </select>
     <insert id="save">
-                INSERT INTO resource ( id, resource_name, resource_url, seq, pid, resource_type, create_time, operator )
+                INSERT INTO resource ( id, resource_name, resource_url,resource_describe, seq, pid,create_time, operator )
               VALUES
-            (#{resource.id},#{resource.resource_name},#{resource.resource_url},#{resource.seq}
-            ,#{resource.pid},#{resource.resource_type},now(),#{resource.operator})
+            (#{resource.id},#{resource.resource_name},#{resource.resource_url},#{resource.resource_describe},#{resource.seq}
+            ,#{resource.pid},now(),#{resource.operator})
     </insert>
     <select id="getDepartment_Resource" resultType="java.util.Map">
 
@@ -104,7 +105,11 @@
         VALUES
         <foreach item="map" index="index" collection="list"
                  separator=",">
-            (#{map.id},#{map.department_id},#{map.resource_id})
+            (
+            #{map.id},
+            #{map.department_id},
+            #{map.resource_id}
+            )
         </foreach>
     </insert>
 </mapper>
