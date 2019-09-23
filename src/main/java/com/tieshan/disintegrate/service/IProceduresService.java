@@ -27,4 +27,10 @@ public interface IProceduresService {
     void recordQueryCustomerResult(Map<String, Object> params, SysUser user);
 
     void recordVerificationCustomerResult(Map<String, Object> params, SysUser user);
+
+    void savePrintVerificationRecord(Map<String, Object> params, SysUser user);
+
+    void saveUploadShangWeiDataRecord(Map<String, Object> params, SysUser user);
+
+    void queryQueryResultList(Map<String, Object> params, SysUser user);
 }

@@ -38,10 +38,10 @@ public class MenuController {
     public RestResult departTree(String depart_id) {
         RestResult restResult = null;
         try {
-            restResult = new RestResult("获取资源", resourceService.departTree(depart_id), ResultCode.SUCCESS.code());
+            restResult = new RestResult("获取部门权限", resourceService.departTree(depart_id), ResultCode.SUCCESS.code());
         } catch (Exception e) {
-            log.info("查询部门右测的资源失败------->", e);
-            return new RestResult("查询部门右测的资源失败", null, ResultCode.ERROR.code());
+            log.info("获取部门权限失败------->", e);
+            return new RestResult("获取部门权限失败", null, ResultCode.ERROR.code());
         }
         return restResult;
     }
@@ -72,8 +72,11 @@ public class MenuController {
      * @return
      */
     @PostMapping(value = "/addResource")
-    public RestResult addResource(@RequestBody Resource resource) {
+    public RestResult addResource(@RequestBody Resource resource, HttpServletRequest request) {
         RestResult restResult = null;
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        resource.setOperator(sysUser.getLogin_name());
         try {
             int num = resourceService.add(resource);
             if (num > 0) {
@@ -93,9 +96,15 @@ public class MenuController {
      *
      * @return
      */
-    @GetMapping(value = "/resourceTree")
+    @GetMapping(value = "/allTree")
     public RestResult resourceTree() {
-        RestResult restResult = new RestResult("返回tree", resourceService.getResourceTree(), ResultCode.SUCCESS.code());
+        RestResult restResult = null;
+        try {
+            restResult = new RestResult("返回tree", resourceService.getResourceTree(), ResultCode.SUCCESS.code());
+        } catch (Exception e) {
+            log.info("获取资源失败----->" + e);
+            return new RestResult("获取资源失败", null, ResultCode.ERROR.code());
+        }
         return restResult;
     }
 
@@ -105,24 +114,36 @@ public class MenuController {
      * @return
      */
     @PostMapping(value = "/updateDR")
-    public RestResult updateDR(String department_id, String resource_ids) {
-        int num = resourceService.updateDR(department_id, resource_ids);
-        if (num != 0) {
-
-            return new RestResult("修改成功", null, ResultCode.SUCCESS.code());
+    public RestResult updateDR(String depart_id, String resource_ids) {
+        RestResult restResult = null;
+        try {
+            int num = resourceService.updateDR(depart_id, resource_ids);
+            if (num > 0) {
+                restResult = new RestResult("修改成功", null, ResultCode.SUCCESS.code());
+            } else {
+                restResult = new RestResult("修改失败", null, ResultCode.ERROR.code());
+            }
+        } catch (Exception e) {
+            log.info("修改失败----->" + e);
+            return new RestResult("修改失败", null, ResultCode.ERROR.code());
         }
-        return new RestResult("修改失败", null, ResultCode.ERROR.code());
-    }
-
-    /**
-     * 获取部门的资源
-     *
-     * @return
-     */
-    @GetMapping(value = "/getResourceByDpartId")
-    public RestResult getResourceByDpartId(String depart_id) {
-        RestResult restResult = new RestResult("获取部门资源", resourceService.getResourceByDepartId(depart_id), ResultCode.SUCCESS.code());
         return restResult;
     }
 
+    /**
+     * 获取资源节点
+     *
+     * @return
+     */
+    @GetMapping(value = "/getNode")
+    public RestResult getNode() {
+        RestResult restResult = null;
+        try {
+            restResult = new RestResult("返回tree", resourceService.getNode(), ResultCode.SUCCESS.code());
+        } catch (Exception e) {
+            log.info("获取资源失败----->" + e);
+            return new RestResult("获取资源失败", null, ResultCode.ERROR.code());
+        }
+        return restResult;
+    }
 }
