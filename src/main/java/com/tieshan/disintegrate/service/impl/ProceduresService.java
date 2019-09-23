@@ -256,11 +256,11 @@ public class ProceduresService implements IProceduresService {
         carProcedurelog.setState(state);
 
         IdWorker idWorker = new IdWorker(1, 1, 1);
-        if (StringUtils.isEmpty(params.get("carProcedureLogId"))) {
+        if (StringUtils.isEmpty(params.get("recordQueryResultId"))) {
             carProcedurelog.setId(idWorker.nextId());
             carProcedureLogMapper.insertCarProcedureLog(carProcedurelog);
         } else {
-            carProcedurelog.setId(Long.valueOf(params.get("carProcedureLogId").toString()));
+            carProcedurelog.setId(Long.valueOf(params.get("recordQueryResultId").toString()));
             carProcedureLogMapper.updateCarProcedureLog(carProcedurelog);
         }
         if (state == 2) {
@@ -301,7 +301,7 @@ public class ProceduresService implements IProceduresService {
         CarProcedureLog carProcedurelog = new CarProcedureLog();
         carProcedurelog.setCarInfoId(carProcessing.getCarInfoId());
         carProcedurelog.setDisintegratePlantId(user.getCompany_id());
-        carProcedurelog.setProcedureLogId(Long.valueOf(params.get("verificationResultId").toString()));
+        carProcedurelog.setProcedureLogId(Long.valueOf(params.get("recordVerificationResultId").toString()));
 
         carProcedurelog.setType(3);
         if (!StringUtils.isEmpty(params.get("remark"))) {
@@ -315,11 +315,11 @@ public class ProceduresService implements IProceduresService {
         carProcedurelog.setState(state);
 
         IdWorker idWorker = new IdWorker(1, 1, 1);
-        if (StringUtils.isEmpty(params.get("carProcedureLogId"))) {
+        if (StringUtils.isEmpty(params.get("verificationResultId"))) {
             carProcedurelog.setId(idWorker.nextId());
             carProcedureLogMapper.insertCarProcedureLog(carProcedurelog);
         } else {
-            carProcedurelog.setId(Long.valueOf(params.get("carProcedureLogId").toString()));
+            carProcedurelog.setId(Long.valueOf(params.get("verificationResultId").toString()));
             carProcedureLogMapper.updateCarProcedureLog(carProcedurelog);
         }
         if (state == 2) {
@@ -337,5 +337,31 @@ public class ProceduresService implements IProceduresService {
             carBack.setCarBackReason(params.get("remark").toString());
             carBackMapper.insertCarBack(carBack);
         }
+    }
+
+    @Override
+    public void savePrintVerificationRecord(Map<String, Object> params, SysUser user) {
+        params.put("disintegratePlantId", user.getCompany_id());
+        CarProcessing carProcessing = carProcessingMapper.selectOneByMap(params);
+        if (carProcessing == null) {
+            throw new CustomException("车辆信息不存在！");
+        }
+        carProcessing.setIsPrintVerifyBill(2);
+        carProcessing.setPrintVerifyBillUserId(user.getId());
+        carProcessing.setPrintVerifyBillTime(new Date());
+        carProcessingMapper.updateCarProcessing(carProcessing);
+    }
+
+    @Override
+    public void saveUploadShangWeiDataRecord(Map<String, Object> params, SysUser user) {
+        params.put("disintegratePlantId", user.getCompany_id());
+        CarProcessing carProcessing = carProcessingMapper.selectOneByMap(params);
+        if (carProcessing == null) {
+            throw new CustomException("车辆信息不存在！");
+        }
+        carProcessing.setIsDataUpload(2);
+        carProcessing.setDataUploadUserId(user.getId());
+        carProcessing.setDataUploadTime(new Date());
+        carProcessingMapper.updateCarProcessing(carProcessing);
     }
 }

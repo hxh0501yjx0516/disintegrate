@@ -13,15 +13,18 @@
         <result property="queryResult" column="query_result"/>  <!-- 查询结果 -->
         <result property="queryTime" column="query_time"/>  <!-- 查询时间 -->
         <result property="queryUserId" column="query_user_id"/>  <!-- 查询人(用户表主键id） -->
-        <result property="isQuery" column="is_query"/>  <!-- 1:未查询;2:已查询 -->
+        <result property="isQuery" column="is_query"/>  <!-- 1:未查询;2:已查询;3:查询不通过 -->
         <result property="verifyResult" column="verify_result"/>  <!-- 核档结果 -->
         <result property="verifyTime" column="verify_time"/>  <!-- 核档时间 -->
         <result property="verifyUserId" column="verify_user_id"/>  <!-- 核档人(用户表主键id) -->
         <result property="recordNumber" column="record_number"/>  <!-- 核档号 -->
         <result property="recycleNumber" column="recycle_number"/>  <!-- 回收证明编号 -->
-        <result property="isVerify" column="is_verify"/>  <!-- 1:未核档；2：已核档 -->
+        <result property="isVerify" column="is_verify"/>  <!-- 1:未核档；2：已核档；3:核档不通过 -->
+        <result property="isPrintVerifyBill" column="is_print_verify_bill"/>  <!-- 1:未打印核档单；2：已打印核档单 -->
+        <result property="printVerifyBillUserId" column="print_verify_bill_user_id"/>  <!-- 打印核档单人id -->
+        <result property="printVerifyBillTime" column="print_verify_bill_time"/>  <!-- 打印核档单时间 -->
         <result property="dataUploadTime" column="data_upload_time"/>  <!-- 上传商委时间 -->
-        <result property="dataUploaduserId" column="data_uploaduser_id"/>  <!-- 上传商委人（用户主键id） -->
+        <result property="dataUploadUserId" column="data_upload_user_id"/>  <!-- 上传商委人（用户主键id） -->
         <result property="isDataUpload" column="is_data_upload"/>  <!-- 1:未上传商委;2:已上传商委 -->
         <result property="dismantleTime" column="dismantle_time"/>  <!-- 拆解时间 -->
         <result property="dismantleUserId" column="dismantle_user_id"/>  <!-- 拆解人（用户主键id) -->
@@ -50,7 +53,7 @@
         <result property="printCarLedgerTime" column="print_car_ledger_time"/>  <!-- 打印车辆台账的时间 -->
         <result property="isPrintCarLedger" column="is_print_car_ledger"/>  <!-- 1：不打印车辆台账；2：打印车辆台账 -->
         <result property="printOutputUserId" column="print_output_user_id"/>  <!-- 转档打印的人 -->
-        <result property="printoutPutTime" column="printout_put_time"/>  <!-- 转档打印的时间 -->
+        <result property="printOutputTime" column="print_output_time"/>  <!-- 转档打印的时间 -->
         <result property="isPrintoutPut" column="is_printout_put"/>  <!-- 1：转档打印；2：不转档打印 -->
         <result property="printCancelProveUserId" column="print_cancel_prove_user_id"/>  <!-- 打印注销证明人员(用户主键id) -->
         <result property="printCancelProveTime" column="print_cancel_prove_time"/>  <!-- 打印注销证明的时间 -->
@@ -69,12 +72,13 @@
     <select id="selectOneByMap" resultMap="carProcessingMap">
         SELECT  id, disintegrate_plant_id, car_info_id, register_time, register_user_id, is_register, query_result,
         query_time, query_user_id, is_query, verify_result, verify_time, verify_user_id, record_number, recycle_number,
-        is_verify, data_upload_time, data_uploaduser_id, is_data_upload, dismantle_time, dismantle_user_id, is_dismantle,
-        pic_upload_time, pic_upload_user_id, is_pic_upload, print_recycle_time, print_recycle_user_id, is_print_recycle,
-        is_logout, logout_result, logout_time, logout_user_id, is_appoint_time, is_appoint_userid, is_appoint_logout_time,
+        is_verify, is_print_verify_bill, print_verify_bill_user_id, print_verify_bill_time, data_upload_time,
+        data_upload_user_id, is_data_upload, dismantle_time, dismantle_user_id, is_dismantle, pic_upload_time,
+        pic_upload_user_id, is_pic_upload, print_recycle_time, print_recycle_user_id, is_print_recycle, is_logout,
+        logout_result, logout_time, logout_user_id, is_appoint_time, is_appoint_userid, is_appoint_logout_time,
         procedure_issue_time, procedure_issue_user_id, register_address, is_procedure_issue, grant_car_receipt_user_id,
         grant_car_receipt_time, is_grant_car_receipt, print_car_ledger_user_id, print_car_ledger_time, is_print_car_ledger,
-        print_output_user_id, printout_put_time, is_printout_put, print_cancel_prove_user_id, print_cancel_prove_time,
+        print_output_user_id, print_output_time, is_printout_put, print_cancel_prove_user_id, print_cancel_prove_time,
         print_count, print_ledger_batch, is_print_cancel_prove, is_supervise_sale, supervise_sale_user, sale_of_affirm_time,
         is_dismantle_affirm, dismantle_affirm_time, dismantle_affirm_user_id, is_delete
         FROM ts_car_processing
@@ -107,7 +111,7 @@
                 AND query_user_id=#{queryUserId}  <!-- 查询人(用户表主键id） -->
             </if>
             <if test="isQuery!=null">
-                AND is_query=#{isQuery}  <!-- 1:未查询;2:已查询 -->
+                AND is_query=#{isQuery}  <!-- 1:未查询;2:已查询;3:查询不通过 -->
             </if>
             <if test="verifyResult!=null and verifyResult!=''">
                 AND verify_result=#{verifyResult}  <!-- 核档结果 -->
@@ -125,13 +129,22 @@
                 AND recycle_number=#{recycleNumber}  <!-- 回收证明编号 -->
             </if>
             <if test="isVerify!=null">
-                AND is_verify=#{isVerify}  <!-- 1:未核档；2：已核档 -->
+                AND is_verify=#{isVerify}  <!-- 1:未核档；2：已核档；3:核档不通过 -->
+            </if>
+            <if test="isPrintVerifyBill!=null">
+                AND is_print_verify_bill=#{isPrintVerifyBill}  <!-- 1:未打印核档单；2：已打印核档单 -->
+            </if>
+            <if test="printVerifyBillUserId!=null">
+                AND print_verify_bill_user_id=#{printVerifyBillUserId}  <!-- 打印核档单人id -->
+            </if>
+            <if test="printVerifyBillTime!=null">
+                AND print_verify_bill_time=#{printVerifyBillTime}  <!-- 打印核档单时间 -->
             </if>
             <if test="dataUploadTime!=null">
                 AND data_upload_time=#{dataUploadTime}  <!-- 上传商委时间 -->
             </if>
-            <if test="dataUploaduserId!=null">
-                AND data_uploaduser_id=#{dataUploaduserId}  <!-- 上传商委人（用户主键id） -->
+            <if test="dataUploadUserId!=null">
+                AND data_upload_user_id=#{dataUploadUserId}  <!-- 上传商委人（用户主键id） -->
             </if>
             <if test="isDataUpload!=null">
                 AND is_data_upload=#{isDataUpload}  <!-- 1:未上传商委;2:已上传商委 -->
@@ -217,8 +230,8 @@
             <if test="printOutputUserId!=null">
                 AND print_output_user_id=#{printOutputUserId}  <!-- 转档打印的人 -->
             </if>
-            <if test="printoutPutTime!=null">
-                AND printout_put_time=#{printoutPutTime}  <!-- 转档打印的时间 -->
+            <if test="printOutputTime!=null">
+                AND print_output_time=#{printOutputTime}  <!-- 转档打印的时间 -->
             </if>
             <if test="isPrintoutPut!=null">
                 AND is_printout_put=#{isPrintoutPut}  <!-- 1：转档打印；2：不转档打印 -->
@@ -265,12 +278,13 @@
     <select id="selectListByMap" resultMap="carProcessingMap">
         SELECT  id, disintegrate_plant_id, car_info_id, register_time, register_user_id, is_register, query_result,
         query_time, query_user_id, is_query, verify_result, verify_time, verify_user_id, record_number, recycle_number,
-        is_verify, data_upload_time, data_uploaduser_id, is_data_upload, dismantle_time, dismantle_user_id, is_dismantle,
-        pic_upload_time, pic_upload_user_id, is_pic_upload, print_recycle_time, print_recycle_user_id, is_print_recycle,
-        is_logout, logout_result, logout_time, logout_user_id, is_appoint_time, is_appoint_userid, is_appoint_logout_time,
+        is_verify, is_print_verify_bill, print_verify_bill_user_id, print_verify_bill_time, data_upload_time,
+        data_upload_user_id, is_data_upload, dismantle_time, dismantle_user_id, is_dismantle, pic_upload_time,
+        pic_upload_user_id, is_pic_upload, print_recycle_time, print_recycle_user_id, is_print_recycle, is_logout,
+        logout_result, logout_time, logout_user_id, is_appoint_time, is_appoint_userid, is_appoint_logout_time,
         procedure_issue_time, procedure_issue_user_id, register_address, is_procedure_issue, grant_car_receipt_user_id,
         grant_car_receipt_time, is_grant_car_receipt, print_car_ledger_user_id, print_car_ledger_time, is_print_car_ledger,
-        print_output_user_id, printout_put_time, is_printout_put, print_cancel_prove_user_id, print_cancel_prove_time,
+        print_output_user_id, print_output_time, is_printout_put, print_cancel_prove_user_id, print_cancel_prove_time,
         print_count, print_ledger_batch, is_print_cancel_prove, is_supervise_sale, supervise_sale_user, sale_of_affirm_time,
         is_dismantle_affirm, dismantle_affirm_time, dismantle_affirm_user_id, is_delete
         FROM ts_car_processing
@@ -303,7 +317,7 @@
                 AND query_user_id=#{queryUserId}  <!-- 查询人(用户表主键id） -->
             </if>
             <if test="isQuery!=null">
-                AND is_query=#{isQuery}  <!-- 1:未查询;2:已查询 -->
+                AND is_query=#{isQuery}  <!-- 1:未查询;2:已查询;3:查询不通过 -->
             </if>
             <if test="verifyResult!=null and verifyResult!=''">
                 AND verify_result=#{verifyResult}  <!-- 核档结果 -->
@@ -321,13 +335,22 @@
                 AND recycle_number=#{recycleNumber}  <!-- 回收证明编号 -->
             </if>
             <if test="isVerify!=null">
-                AND is_verify=#{isVerify}  <!-- 1:未核档；2：已核档 -->
+                AND is_verify=#{isVerify}  <!-- 1:未核档；2：已核档；3:核档不通过 -->
+            </if>
+            <if test="isPrintVerifyBill!=null">
+                AND is_print_verify_bill=#{isPrintVerifyBill}  <!-- 1:未打印核档单；2：已打印核档单 -->
+            </if>
+            <if test="printVerifyBillUserId!=null">
+                AND print_verify_bill_user_id=#{printVerifyBillUserId}  <!-- 打印核档单人id -->
+            </if>
+            <if test="printVerifyBillTime!=null">
+                AND print_verify_bill_time=#{printVerifyBillTime}  <!-- 打印核档单时间 -->
             </if>
             <if test="dataUploadTime!=null">
                 AND data_upload_time=#{dataUploadTime}  <!-- 上传商委时间 -->
             </if>
-            <if test="dataUploaduserId!=null">
-                AND data_uploaduser_id=#{dataUploaduserId}  <!-- 上传商委人（用户主键id） -->
+            <if test="dataUploadUserId!=null">
+                AND data_upload_user_id=#{dataUploadUserId}  <!-- 上传商委人（用户主键id） -->
             </if>
             <if test="isDataUpload!=null">
                 AND is_data_upload=#{isDataUpload}  <!-- 1:未上传商委;2:已上传商委 -->
@@ -413,8 +436,8 @@
             <if test="printOutputUserId!=null">
                 AND print_output_user_id=#{printOutputUserId}  <!-- 转档打印的人 -->
             </if>
-            <if test="printoutPutTime!=null">
-                AND printout_put_time=#{printoutPutTime}  <!-- 转档打印的时间 -->
+            <if test="printOutputTime!=null">
+                AND print_output_time=#{printOutputTime}  <!-- 转档打印的时间 -->
             </if>
             <if test="isPrintoutPut!=null">
                 AND is_printout_put=#{isPrintoutPut}  <!-- 1：转档打印；2：不转档打印 -->
@@ -489,7 +512,7 @@
                 query_user_id,  <!-- 查询人(用户表主键id） -->
             </if>
             <if test="isQuery!=null">
-                is_query,  <!-- 1:未查询;2:已查询 -->
+                is_query,  <!-- 1:未查询;2:已查询;3:查询不通过 -->
             </if>
             <if test="verifyResult!=null and verifyResult!=''">
                 verify_result,  <!-- 核档结果 -->
@@ -507,13 +530,22 @@
                 recycle_number,  <!-- 回收证明编号 -->
             </if>
             <if test="isVerify!=null">
-                is_verify,  <!-- 1:未核档；2：已核档 -->
+                is_verify,  <!-- 1:未核档；2：已核档；3:核档不通过 -->
+            </if>
+            <if test="isPrintVerifyBill!=null">
+                is_print_verify_bill,  <!-- 1:未打印核档单；2：已打印核档单 -->
+            </if>
+            <if test="printVerifyBillUserId!=null">
+                print_verify_bill_user_id,  <!-- 打印核档单人id -->
+            </if>
+            <if test="printVerifyBillTime!=null">
+                print_verify_bill_time,  <!-- 打印核档单时间 -->
             </if>
             <if test="dataUploadTime!=null">
                 data_upload_time,  <!-- 上传商委时间 -->
             </if>
-            <if test="dataUploaduserId!=null">
-                data_uploaduser_id,  <!-- 上传商委人（用户主键id） -->
+            <if test="dataUploadUserId!=null">
+                data_upload_user_id,  <!-- 上传商委人（用户主键id） -->
             </if>
             <if test="isDataUpload!=null">
                 is_data_upload,  <!-- 1:未上传商委;2:已上传商委 -->
@@ -599,8 +631,8 @@
             <if test="printOutputUserId!=null">
                 print_output_user_id,  <!-- 转档打印的人 -->
             </if>
-            <if test="printoutPutTime!=null">
-                printout_put_time,  <!-- 转档打印的时间 -->
+            <if test="printOutputTime!=null">
+                print_output_time,  <!-- 转档打印的时间 -->
             </if>
             <if test="isPrintoutPut!=null">
                 is_printout_put,  <!-- 1：转档打印；2：不转档打印 -->
@@ -672,7 +704,7 @@
                 #{queryUserId},  <!-- 查询人(用户表主键id） -->
             </if>
             <if test="isQuery!=null">
-                #{isQuery},  <!-- 1:未查询;2:已查询 -->
+                #{isQuery},  <!-- 1:未查询;2:已查询;3:查询不通过 -->
             </if>
             <if test="verifyResult!=null and verifyResult!=''">
                 #{verifyResult},  <!-- 核档结果 -->
@@ -690,13 +722,22 @@
                 #{recycleNumber},  <!-- 回收证明编号 -->
             </if>
             <if test="isVerify!=null">
-                #{isVerify},  <!-- 1:未核档；2：已核档 -->
+                #{isVerify},  <!-- 1:未核档；2：已核档；3:核档不通过 -->
+            </if>
+            <if test="isPrintVerifyBill!=null">
+                #{isPrintVerifyBill},  <!-- 1:未打印核档单；2：已打印核档单 -->
+            </if>
+            <if test="printVerifyBillUserId!=null">
+                #{printVerifyBillUserId},  <!-- 打印核档单人id -->
+            </if>
+            <if test="printVerifyBillTime!=null">
+                #{printVerifyBillTime},  <!-- 打印核档单时间 -->
             </if>
             <if test="dataUploadTime!=null">
                 #{dataUploadTime},  <!-- 上传商委时间 -->
             </if>
-            <if test="dataUploaduserId!=null">
-                #{dataUploaduserId},  <!-- 上传商委人（用户主键id） -->
+            <if test="dataUploadUserId!=null">
+                #{dataUploadUserId},  <!-- 上传商委人（用户主键id） -->
             </if>
             <if test="isDataUpload!=null">
                 #{isDataUpload},  <!-- 1:未上传商委;2:已上传商委 -->
@@ -782,8 +823,8 @@
             <if test="printOutputUserId!=null">
                 #{printOutputUserId},  <!-- 转档打印的人 -->
             </if>
-            <if test="printoutPutTime!=null">
-                #{printoutPutTime},  <!-- 转档打印的时间 -->
+            <if test="printOutputTime!=null">
+                #{printOutputTime},  <!-- 转档打印的时间 -->
             </if>
             <if test="isPrintoutPut!=null">
                 #{isPrintoutPut},  <!-- 1：转档打印；2：不转档打印 -->
@@ -859,7 +900,7 @@
                     query_user_id,  <!-- 查询人(用户表主键id） -->
                 </if>
                 <if test="item.isQuery!=null">
-                    is_query,  <!-- 1:未查询;2:已查询 -->
+                    is_query,  <!-- 1:未查询;2:已查询;3:查询不通过 -->
                 </if>
                 <if test="item.verifyResult!=null and item.verifyResult!=''">
                     verify_result,  <!-- 核档结果 -->
@@ -877,13 +918,22 @@
                     recycle_number,  <!-- 回收证明编号 -->
                 </if>
                 <if test="item.isVerify!=null">
-                    is_verify,  <!-- 1:未核档；2：已核档 -->
+                    is_verify,  <!-- 1:未核档；2：已核档；3:核档不通过 -->
+                </if>
+                <if test="item.isPrintVerifyBill!=null">
+                    is_print_verify_bill,  <!-- 1:未打印核档单；2：已打印核档单 -->
+                </if>
+                <if test="item.printVerifyBillUserId!=null">
+                    print_verify_bill_user_id,  <!-- 打印核档单人id -->
+                </if>
+                <if test="item.printVerifyBillTime!=null">
+                    print_verify_bill_time,  <!-- 打印核档单时间 -->
                 </if>
                 <if test="item.dataUploadTime!=null">
                     data_upload_time,  <!-- 上传商委时间 -->
                 </if>
-                <if test="item.dataUploaduserId!=null">
-                    data_uploaduser_id,  <!-- 上传商委人（用户主键id） -->
+                <if test="item.dataUploadUserId!=null">
+                    data_upload_user_id,  <!-- 上传商委人（用户主键id） -->
                 </if>
                 <if test="item.isDataUpload!=null">
                     is_data_upload,  <!-- 1:未上传商委;2:已上传商委 -->
@@ -969,8 +1019,8 @@
                 <if test="item.printOutputUserId!=null">
                     print_output_user_id,  <!-- 转档打印的人 -->
                 </if>
-                <if test="item.printoutPutTime!=null">
-                    printout_put_time,  <!-- 转档打印的时间 -->
+                <if test="item.printOutputTime!=null">
+                    print_output_time,  <!-- 转档打印的时间 -->
                 </if>
                 <if test="item.isPrintoutPut!=null">
                     is_printout_put,  <!-- 1：转档打印；2：不转档打印 -->
@@ -1042,7 +1092,7 @@
                     #{item.queryUserId},  <!-- 查询人(用户表主键id） -->
                 </if>
                 <if test="item.isQuery!=null">
-                    #{item.isQuery},  <!-- 1:未查询;2:已查询 -->
+                    #{item.isQuery},  <!-- 1:未查询;2:已查询;3:查询不通过 -->
                 </if>
                 <if test="item.verifyResult!=null and item.verifyResult!=''">
                     #{item.verifyResult},  <!-- 核档结果 -->
@@ -1060,13 +1110,22 @@
                     #{item.recycleNumber},  <!-- 回收证明编号 -->
                 </if>
                 <if test="item.isVerify!=null">
-                    #{item.isVerify},  <!-- 1:未核档；2：已核档 -->
+                    #{item.isVerify},  <!-- 1:未核档；2：已核档；3:核档不通过 -->
+                </if>
+                <if test="item.isPrintVerifyBill!=null">
+                    #{item.isPrintVerifyBill},  <!-- 1:未打印核档单；2：已打印核档单 -->
+                </if>
+                <if test="item.printVerifyBillUserId!=null">
+                    #{item.printVerifyBillUserId},  <!-- 打印核档单人id -->
+                </if>
+                <if test="item.printVerifyBillTime!=null">
+                    #{item.printVerifyBillTime},  <!-- 打印核档单时间 -->
                 </if>
                 <if test="item.dataUploadTime!=null">
                     #{item.dataUploadTime},  <!-- 上传商委时间 -->
                 </if>
-                <if test="item.dataUploaduserId!=null">
-                    #{item.dataUploaduserId},  <!-- 上传商委人（用户主键id） -->
+                <if test="item.dataUploadUserId!=null">
+                    #{item.dataUploadUserId},  <!-- 上传商委人（用户主键id） -->
                 </if>
                 <if test="item.isDataUpload!=null">
                     #{item.isDataUpload},  <!-- 1:未上传商委;2:已上传商委 -->
@@ -1152,8 +1211,8 @@
                 <if test="item.printOutputUserId!=null">
                     #{item.printOutputUserId},  <!-- 转档打印的人 -->
                 </if>
-                <if test="item.printoutPutTime!=null">
-                    #{item.printoutPutTime},  <!-- 转档打印的时间 -->
+                <if test="item.printOutputTime!=null">
+                    #{item.printOutputTime},  <!-- 转档打印的时间 -->
                 </if>
                 <if test="item.isPrintoutPut!=null">
                     #{item.isPrintoutPut},  <!-- 1：转档打印；2：不转档打印 -->
@@ -1199,6 +1258,25 @@
         </foreach>
     </insert>
 
+    <update id="updateQueryCarProcessing">
+        UPDATE ts_car_processing set
+        query_result=#{queryResult},  <!-- 查询结果 -->
+        query_time=#{queryTime},  <!-- 查询时间 -->
+        query_user_id=#{queryUserId},  <!-- 查询人(用户表主键id） -->
+        is_query=#{isQuery}  <!-- 1:未查询;2:已查询;3:查询不通过 -->
+        WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
+    </update>
+    <update id="updateVerifyCarProcessing">
+        UPDATE ts_car_processing set
+        verify_result=#{verifyResult},  <!-- 核档结果 -->
+        verify_time=#{verifyTime},  <!-- 核档时间 -->
+        verify_user_id=#{verifyUserId},  <!-- 核档人(用户表主键id) -->
+        record_number=#{recordNumber},  <!-- 核档号 -->
+        recycle_number=#{recycleNumber},  <!-- 回收证明编号 -->
+        is_verify=#{isVerify}  <!-- 1:未核档；2：已核档；3:核档不通过 -->
+        WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
+    </update>
+
     <update id="updateCarProcessing">
         UPDATE ts_car_processing
         <trim prefix="set" suffixOverrides=",">
@@ -1221,7 +1299,7 @@
                 query_user_id=#{queryUserId},  <!-- 查询人(用户表主键id） -->
             </if>
             <if test="isQuery!=null">
-                is_query=#{isQuery},  <!-- 1:未查询;2:已查询 -->
+                is_query=#{isQuery},  <!-- 1:未查询;2:已查询;3:查询不通过 -->
             </if>
             <if test="verifyResult!=null and verifyResult!=''">
                 verify_result=#{verifyResult},  <!-- 核档结果 -->
@@ -1239,13 +1317,22 @@
                 recycle_number=#{recycleNumber},  <!-- 回收证明编号 -->
             </if>
             <if test="isVerify!=null">
-                is_verify=#{isVerify},  <!-- 1:未核档；2：已核档 -->
+                is_verify=#{isVerify},  <!-- 1:未核档；2：已核档；3:核档不通过 -->
+            </if>
+            <if test="isPrintVerifyBill!=null">
+                is_print_verify_bill=#{isPrintVerifyBill},  <!-- 1:未打印核档单；2：已打印核档单 -->
+            </if>
+            <if test="printVerifyBillUserId!=null">
+                print_verify_bill_user_id=#{printVerifyBillUserId},  <!-- 打印核档单人id -->
+            </if>
+            <if test="printVerifyBillTime!=null">
+                print_verify_bill_time=#{printVerifyBillTime},  <!-- 打印核档单时间 -->
             </if>
             <if test="dataUploadTime!=null">
                 data_upload_time=#{dataUploadTime},  <!-- 上传商委时间 -->
             </if>
-            <if test="dataUploaduserId!=null">
-                data_uploaduser_id=#{dataUploaduserId},  <!-- 上传商委人（用户主键id） -->
+            <if test="dataUploadUserId!=null">
+                data_upload_user_id=#{dataUploadUserId},  <!-- 上传商委人（用户主键id） -->
             </if>
             <if test="isDataUpload!=null">
                 is_data_upload=#{isDataUpload},  <!-- 1:未上传商委;2:已上传商委 -->
@@ -1331,8 +1418,8 @@
             <if test="printOutputUserId!=null">
                 print_output_user_id=#{printOutputUserId},  <!-- 转档打印的人 -->
             </if>
-            <if test="printoutPutTime!=null">
-                printout_put_time=#{printoutPutTime},  <!-- 转档打印的时间 -->
+            <if test="printOutputTime!=null">
+                print_output_time=#{printOutputTime},  <!-- 转档打印的时间 -->
             </if>
             <if test="isPrintoutPut!=null">
                 is_printout_put=#{isPrintoutPut},  <!-- 1：转档打印；2：不转档打印 -->
@@ -1399,7 +1486,7 @@
                     query_user_id=#{item.queryUserId},  <!-- 查询人(用户表主键id） -->
                 </if>
                 <if test="item.isQuery!=null">
-                    is_query=#{item.isQuery},  <!-- 1:未查询;2:已查询 -->
+                    is_query=#{item.isQuery},  <!-- 1:未查询;2:已查询;3:查询不通过 -->
                 </if>
                 <if test="item.verifyResult!=null and item.verifyResult!=''">
                     verify_result=#{item.verifyResult},  <!-- 核档结果 -->
@@ -1417,13 +1504,22 @@
                     recycle_number=#{item.recycleNumber},  <!-- 回收证明编号 -->
                 </if>
                 <if test="item.isVerify!=null">
-                    is_verify=#{item.isVerify},  <!-- 1:未核档；2：已核档 -->
+                    is_verify=#{item.isVerify},  <!-- 1:未核档；2：已核档；3:核档不通过 -->
+                </if>
+                <if test="item.isPrintVerifyBill!=null">
+                    is_print_verify_bill=#{item.isPrintVerifyBill},  <!-- 1:未打印核档单；2：已打印核档单 -->
+                </if>
+                <if test="item.printVerifyBillUserId!=null">
+                    print_verify_bill_user_id=#{item.printVerifyBillUserId},  <!-- 打印核档单人id -->
+                </if>
+                <if test="item.printVerifyBillTime!=null">
+                    print_verify_bill_time=#{item.printVerifyBillTime},  <!-- 打印核档单时间 -->
                 </if>
                 <if test="item.dataUploadTime!=null">
                     data_upload_time=#{item.dataUploadTime},  <!-- 上传商委时间 -->
                 </if>
-                <if test="item.dataUploaduserId!=null">
-                    data_uploaduser_id=#{item.dataUploaduserId},  <!-- 上传商委人（用户主键id） -->
+                <if test="item.dataUploadUserId!=null">
+                    data_upload_user_id=#{item.dataUploadUserId},  <!-- 上传商委人（用户主键id） -->
                 </if>
                 <if test="item.isDataUpload!=null">
                     is_data_upload=#{item.isDataUpload},  <!-- 1:未上传商委;2:已上传商委 -->
@@ -1509,8 +1605,8 @@
                 <if test="item.printOutputUserId!=null">
                     print_output_user_id=#{item.printOutputUserId},  <!-- 转档打印的人 -->
                 </if>
-                <if test="item.printoutPutTime!=null">
-                    printout_put_time=#{item.printoutPutTime},  <!-- 转档打印的时间 -->
+                <if test="item.printOutputTime!=null">
+                    print_output_time=#{item.printOutputTime},  <!-- 转档打印的时间 -->
                 </if>
                 <if test="item.isPrintoutPut!=null">
                     is_printout_put=#{item.isPrintoutPut},  <!-- 1：转档打印；2：不转档打印 -->
@@ -1555,24 +1651,7 @@
             WHERE id=#{item.id} AND disintegrate_plant_id=#{item.disintegratePlantId}
         </foreach>
     </update>
-    <update id="updateQueryCarProcessing">
-        UPDATE ts_car_processing set
-        query_result=#{queryResult},  <!-- 查询结果 -->
-        query_time=#{queryTime},  <!-- 查询时间 -->
-        query_user_id=#{queryUserId},  <!-- 查询人(用户表主键id） -->
-        is_query=#{isQuery}  <!-- 1:未查询;2:已查询;3:查询不通过 -->
-        WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
-    </update>
-    <update id="updateVerifyCarProcessing">
-        UPDATE ts_car_processing set
-        verify_result=#{verifyResult},  <!-- 核档结果 -->
-        verify_time=#{verifyTime},  <!-- 核档时间 -->
-        verify_user_id=#{verifyUserId},  <!-- 核档人(用户表主键id) -->
-        record_number=#{recordNumber},  <!-- 核档号 -->
-        recycle_number=#{recycleNumber},  <!-- 回收证明编号 -->
-        is_verify=#{isVerify}  <!-- 1:未核档；2：已核档；3:核档不通过 -->
-        WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
-    </update>
+
 
     <delete id="deleteCarProcessingByMap">
         DELETE FROM ts_car_processing WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
