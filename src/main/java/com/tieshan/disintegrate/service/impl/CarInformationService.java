@@ -1,8 +1,6 @@
 package com.tieshan.disintegrate.service.impl;
 
-import com.tieshan.disintegrate.dao.CarInformationDao;
-import com.tieshan.disintegrate.dao.CarInformationIdentityDao;
-import com.tieshan.disintegrate.dao.CarInformationSourceDao;
+import com.tieshan.disintegrate.dao.*;
 import com.tieshan.disintegrate.exception.CustomException;
 import com.tieshan.disintegrate.service.ICarInformationService;
 import com.tieshan.disintegrate.util.PubMethod;
@@ -29,6 +27,10 @@ public class CarInformationService implements ICarInformationService {
     private CarInformationIdentityDao carInformationIdentityDao;
     @Autowired
     private CarInformationSourceDao carInformationSourceDao;
+    @Autowired
+    private CarInformationBreakDao carInformationBreakDao;
+    @Autowired
+    private CarInformationSalvageDao carInformationSalvageDao;
 
     @Override
     public List<Map<String, Object>> findCarById(Long carInfoId) {
@@ -95,4 +97,50 @@ public class CarInformationService implements ICarInformationService {
         }
         return list;
     }
+
+    @Override
+    public List<Object> findBreakAll(Long carInfoId) {
+        List<Object> list = new LinkedList<>();
+        if (!PubMethod.isEmpty(carInformationBreakDao.findCarBreakById(carInfoId))) {
+            list.add(carInformationBreakDao.findCarBreakById(carInfoId));
+        } else {
+            list.add(null);
+            //throw new CustomException("没有查询到拆解信息");
+        }
+        if (!PubMethod.isEmpty(carInformationBreakDao.findCarBreakPicById(carInfoId))) {
+            list.add(carInformationBreakDao.findCarBreakPicById(carInfoId));
+        } else {
+            list.add(null);
+            //throw new CustomException("没有查询到拆解图片");
+        }
+        if (!PubMethod.isEmpty(carInformationBreakDao.findCarBreakLogById(carInfoId))) {
+            list.add(carInformationBreakDao.findCarBreakLogById(carInfoId));
+        } else {
+            list.add(null);
+            //throw new CustomException("没有查询到拆解日志");
+        }
+        return list;
+
+    }
+
+    @Override
+    public List<Object> findSalvageAll(Long carInfoId) {
+        List<Object> list = new LinkedList<>();
+        if (!PubMethod.isEmpty(carInformationSalvageDao.findCarBreakById(carInfoId))) {
+            list.add(carInformationSalvageDao.findCarBreakById(carInfoId));
+        } else {
+            list.isEmpty();
+            list.add(null);
+            //throw new CustomException("没有查询到残值信息");
+        }
+        if (!PubMethod.isEmpty(carInformationSalvageDao.findCarBreakLogById(carInfoId))) {
+            list.add(carInformationSalvageDao.findCarBreakLogById(carInfoId));
+        } else {
+            list.isEmpty();
+            list.add(null);
+            //throw new CustomException("没有查询到残值日志信息");
+        }
+        return list;
+    }
+
 }

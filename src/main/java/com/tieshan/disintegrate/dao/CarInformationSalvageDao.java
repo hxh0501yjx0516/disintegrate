@@ -16,7 +16,21 @@ import java.util.Map;
  */
 @Mapper
 public interface CarInformationSalvageDao {
+    /**
+     *@Description: 残值信息查询
+     * @param: carInfoId car_info的主键(车辆编号ID)
+     * @return: List
+     */
+    @Select("select salvage,is_get_salvage,operator,get_salvage_time from ts_car_salvage where car_info_id=#{carInfoId}")
+    List<Map<String,Object>> findCarBreakById(@Param("carInfoId") Long carInfoId);
 
+    /**
+     *@Description: 残值处理日志查询
+     * @param: carInfoId car_info的主键(车辆编号ID)
+     * @return: List
+     */
+    @Select("select create_time,operator,remark from ts_car_procedure_log where car_info_id=#{carInfoId} and type=7")
+    List<Map<String,Object>> findCarBreakLogById(@Param("carInfoId") Long carInfoId);
 
 
 }

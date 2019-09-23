@@ -207,23 +207,74 @@ public class CarInformationController {
         return  restResult;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    @GetMapping("/findCarSalvage")
-    public RestResult findCarSalvage() {
-        return null;
+    /**
+     * showdoc
+     * @catalog 解体厂-PC/车辆查询/拆解信息
+     * @title 车辆查询页面-拆解信息数据查询
+     * @description 车辆查询页面-拆解信息数据查询
+     * @method get
+     * @url http://localhost:8002/car/findBreakAll
+     * @param carInfoId 必选 Long 车辆编号
+     * @return {"msg": "车辆查询页面-拆解信息数据查询","data": [[{"dismantle_time": "2019-09-22 20:01:45","dismantle_way": 4,"dismantle_user_id": 111111}],[{"file_url": "https://aaaaa","create_time": "2019-09-19 20:51:05","file_name": "毁型1","operator": "lisi"},{"file_url": "https://aaaaa","create_time": "2019-09-19 20:51:05","file_name": "毁型2","operator": "lisi"}],[{"create_time": "2019-09-20 14:56:40","remark": "1","operator": "王老五"}]],"ret_code": "0"}
+     * @return_param dismantle_time Date 确定拆解方式时间
+     * @return_param dismantle_way int 拆解方式
+     * @return_param dismantle_user_id Long 拆解方式确认人
+     * @return_param file_url string 拆解照片路径
+     * @return_param create_time date 拆解照片时间
+     * @return_param file_name string 拆解照片名称
+     * @return_param operator string 操作人
+     * @return_param create_time date 拆解日志时间
+     * @return_param remark string 拆解日志信息备注
+     * @remark 拆解信息数据查询
+     * @number 6
+     */
+    @GetMapping("/findBreakAll")
+    public RestResult findBreakAll(@RequestParam(value = "carInfoId", required = false) Long carInfoId) {
+        if (PubMethod.isEmpty(carInfoId)||carInfoId<1) {
+            return new RestResult("没有车辆编号", null, ResultCode.PARAM_IS_INVALID.code());
+        }
+        RestResult restResult = new RestResult("车辆查询页面-拆解信息数据查询",iCarInformationService.findBreakAll(carInfoId),ResultCode.SUCCESS.code());
+        return  restResult;
     }
+
+    /**
+     * showdoc
+     * @catalog 解体厂-PC/车辆查询/残值信息
+     * @title 车辆查询页面-残值信息数据查询
+     * @description 车辆查询页面-残值信息数据查询
+     * @method get
+     * @url http://localhost:8002/car/findSalvageAll
+     * @param carInfoId 必选 Long 车辆编号
+     * @return {"msg": "车辆查询页面-残值信息数据查询","data": [[{"is_get_salvage": 2,"get_salvage_time": "2019-09-23 20:45:01","salvage": "2000","operator": "马云"}],[{"create_time": "2019-09-20 14:56:40","remark": "1","operator": "李大钊"}]],"ret_code": "0"}
+     * @return_param is_get_salvage int 残值领取状态
+     * @return_param get_salvage_time date 残值领取时间
+     * @return_param salvage string 残值金额
+     * @return_param operator string 残值发放人
+     * @return_param create_time date 残值信息记录时间
+     * @return_param remark string 备注
+     * @return_param operator string 经办人
+     * @remark 残值信息数据查询
+     * @number 6
+     */
+    @GetMapping("/findSalvageAll")
+    public RestResult findSalvageAll(@RequestParam(value = "carInfoId", required = false) Long carInfoId) {
+        if (PubMethod.isEmpty(carInfoId)||carInfoId<1) {
+            return new RestResult("没有车辆编号", null, ResultCode.PARAM_IS_INVALID.code());
+        }
+        RestResult restResult = new RestResult("车辆查询页面-残值信息数据查询",iCarInformationService.findSalvageAll(carInfoId),ResultCode.SUCCESS.code());
+        return  restResult;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
