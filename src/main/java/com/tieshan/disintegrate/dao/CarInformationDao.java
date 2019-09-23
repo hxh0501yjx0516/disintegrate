@@ -1,6 +1,5 @@
 package com.tieshan.disintegrate.dao;
 
-import com.tieshan.disintegrate.pojo.CarIdentity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -9,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @description:车辆信息查询
+ * @description: 车辆查询页面-车辆信息信息数据查询
  * @author: Leavonson
  * @date: Created in 2019/9/18 16:27
  * @version: 1.0
@@ -55,13 +54,5 @@ public interface CarInformationDao {
     List<Map<String, Object>> findCarTuoPicById(@Param("carId") Long carInfoId);
 
 
-
-    /**
-     * 查询手续信息
-     */
-    @Select("select * from ts_car_identity where id=#{carId}")
-    CarIdentity findCarIdentityById(@Param("carId") Integer id);
-    /**查询车源信息*/
-    /**查询拆解信息*/
 
 }

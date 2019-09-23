@@ -45,7 +45,7 @@ public class CarInformationController {
     }
 
     /**
-     *@Description: 查询车辆信息，预处理、拓号 照片
+     *@Description: 车辆查询页面-车辆信息信息数据查询
      * @param: carInfoId 车辆编号
      * @param: dicType 来自字典
      * @return: RestResult
@@ -61,13 +61,17 @@ public class CarInformationController {
     }
 
     /**
-     *@Description: 查询车辆手续信息
-     * @param:
-     * @return:
+     *@Description: 车辆查询页面-手续信息数据查询
+     * @param: carInfoId 车辆编号
+     * @return: RestResult
      */
-    @GetMapping("/findCarSource")
-    public RestResult findCarSource() {
-        return null;
+    @GetMapping("/findProcedureAll")
+    public RestResult findProcedureAll(@RequestParam(value = "carInfoId", required = false) Long carInfoId) {
+        if (PubMethod.isEmpty(carInfoId)||carInfoId<1) {
+            return new RestResult("没有车辆编号", null, ResultCode.PARAM_IS_INVALID.code());
+        }
+        RestResult restResult = new RestResult("手续信息，手续处理周期",iCarInformationService.findProcedureAll(carInfoId),ResultCode.SUCCESS.code());
+        return  restResult;
     }
 
 
