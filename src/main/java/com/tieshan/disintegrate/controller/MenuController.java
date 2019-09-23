@@ -38,10 +38,10 @@ public class MenuController {
     public RestResult departTree(String depart_id) {
         RestResult restResult = null;
         try {
-            restResult = new RestResult("获取资源", resourceService.departTree(depart_id), ResultCode.SUCCESS.code());
+            restResult = new RestResult("获取部门权限", resourceService.departTree(depart_id), ResultCode.SUCCESS.code());
         } catch (Exception e) {
-            log.info("查询部门右测的资源失败------->", e);
-            return new RestResult("查询部门右测的资源失败", null, ResultCode.ERROR.code());
+            log.info("获取部门权限失败------->", e);
+            return new RestResult("获取部门权限失败", null, ResultCode.ERROR.code());
         }
         return restResult;
     }
