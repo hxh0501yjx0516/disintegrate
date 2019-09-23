@@ -40,8 +40,8 @@ public interface CarInformationDao {
      * @param: carInfoId car_info的主键(车辆编号ID)
      * @return:
      */
-    @Select("select pic.file_name,pic.file_url,pic.car_info_id,pic.create_time from ts_car_pic pic " +
-            "where pic.car_info_id=#{carId} and pic.two_type='pre_pic'")
+    @Select("select pic.file_name,pic.file_url,pic.create_time,pic.operator from ts_car_pic pic " +
+            "where pic.car_info_id=#{carId} and pic.first_type='pre_pic'")
     List<Map<String, Object>> findCarPrePicById(@Param("carId") Long carInfoId);
 
     /**
@@ -49,8 +49,8 @@ public interface CarInformationDao {
      * @param: carInfoId car_info的主键(车辆编号ID)
      * @return:
      */
-    @Select("select pic.file_name,pic.file_url,pic.car_info_id,pic.create_time from ts_car_pic pic " +
-            "where pic.car_info_id=#{carId} and pic.two_type='tuo_pic'")
+    @Select("select pic.file_name,pic.file_url,pic.create_time,pic.operator from ts_car_pic pic " +
+            "where pic.car_info_id=#{carId} and pic.first_type='tuo_pic'")
     List<Map<String, Object>> findCarTuoPicById(@Param("carId") Long carInfoId);
 
 

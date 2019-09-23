@@ -28,7 +28,7 @@ public class CarsQueryController {
 
     /**
      * showdoc
-     * @catalog 车辆查询
+     * @catalog 解体厂-PC/车辆查询/车辆列表
      * @title 车辆列表
      * @description 车辆列表首页查询接口
      * @method get

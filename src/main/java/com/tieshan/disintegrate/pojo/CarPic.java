@@ -43,7 +43,7 @@ public class CarPic implements Serializable {
 	/**
 	 * carinfo的主键id
 	 */
-	private Long carNo;
+	private Long carInfoId;
 	/**
 	 * 操作人id
 	 */
