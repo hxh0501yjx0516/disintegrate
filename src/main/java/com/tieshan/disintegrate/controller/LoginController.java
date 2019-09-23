@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @description:登录
@@ -43,7 +45,9 @@ public class LoginController {
         if (PubMethod.isEmpty(username) || PubMethod.isEmpty(password)) {
             return new RestResult("用户名或密码不能为空", null, ResultCode.ERROR.code());
         }
-        Dto dto = new Dto();
+//        Dto dto = new Dto();
+        RestResult restResult = null;
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             SysUser sysUser = userService.login(username, password);
             if (sysUser != null) {
@@ -57,21 +61,20 @@ public class LoginController {
                 }
                 String token = this.tokenService.generateToken(type, sysUser);
                 this.tokenService.save(token, sysUser);
-                dto.setIsLogin("true");
-                dto.setToken(token);
-                long time = System.currentTimeMillis();
-                dto.setTokenCreatedDate(time);
-                // dto.setTokenExpiryDate(time + 24 * 60 * 1000);
-            } else {
-                dto.setIsLogin("false");
+                resultMap.put("token",token);
+                resultMap.put("login_name",sysUser.getLogin_name());
+                resultMap.put("user_name",sysUser.getUser_name());
+                resultMap.put("department_name",sysUser.getDepartment_name());
             }
             userService.loginlog(sysUser);
-            return new RestResult("登录成功", dto, ResultCode.SUCCESS.code());
+            restResult = new RestResult("登录成功", resultMap, ResultCode.SUCCESS.code());
 
         } catch (Exception e) {
             log.info("登录接口报错----->" + e);
+            return new RestResult("登录失败", resultMap, ResultCode.ERROR.code());
+
         }
-        return new RestResult("登录失败", dto, ResultCode.ERROR.code());
+        return restResult;
 
     }
 
