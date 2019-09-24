@@ -71,4 +71,10 @@ public interface ResourceMapper {
      */
     List<Map<String, Object>> getDepartment_Resource(@Param("department_id") String department_id);
 
+    /**
+     * 获取所有节点
+     * @return
+     */
+    List<Map<String, Object>> getNode();
+
 }

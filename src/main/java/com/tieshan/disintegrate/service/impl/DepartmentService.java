@@ -41,7 +41,6 @@ public class DepartmentService implements IDepartmentService {
     public int addDepart(Department department) {
         IdWorker idWorker = new IdWorker(1, 1, 1);
         department.setId(idWorker.nextId());
-        department.setDepartment_status("1");
         int num = departmentMapper.addDepart(department);
         return num;
     }

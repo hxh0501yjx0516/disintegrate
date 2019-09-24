@@ -8,7 +8,7 @@ import lombok.Data;
  * 手续管理
  *
  * @author ren lei
- * @date 2019-09-18 15:39:56
+ * @date 2019-09-23 09:45:57
  * @version: 1.0
  * @modified By:
  */
@@ -53,7 +53,7 @@ public class CarProcessing implements Serializable {
 	 */
 	private Long queryUserId;
 	/**
-	 * 1:未查询;2:已查询
+	 * 1:未查询;2:已查询;3:查询不通过
 	 */
 	private Integer isQuery;
 	/**
@@ -77,9 +77,21 @@ public class CarProcessing implements Serializable {
 	 */
 	private String recycleNumber;
 	/**
-	 * 1:未核档；2：已核档
+	 * 1:未核档；2：已核档；3:核档不通过
 	 */
 	private Integer isVerify;
+	/**
+	 * 1:未打印核档单；2：已打印核档单
+	 */
+	private Integer isPrintVerifyBill;
+	/**
+	 * 打印核档单人id
+	 */
+	private Long printVerifyBillUserId;
+	/**
+	 * 打印核档单时间
+	 */
+	private Date printVerifyBillTime;
 	/**
 	 * 上传商委时间
 	 */
@@ -87,7 +99,7 @@ public class CarProcessing implements Serializable {
 	/**
 	 * 上传商委人（用户主键id）
 	 */
-	private Long dataUploaduserId;
+	private Long dataUploadUserId;
 	/**
 	 * 1:未上传商委;2:已上传商委
 	 */
@@ -203,7 +215,7 @@ public class CarProcessing implements Serializable {
 	/**
 	 * 转档打印的时间
 	 */
-	private Date printoutPutTime;
+	private Date printOutputTime;
 	/**
 	 * 1：转档打印；2：不转档打印
 	 */

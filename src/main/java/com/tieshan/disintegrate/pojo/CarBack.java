@@ -8,7 +8,7 @@ import lombok.Data;
  * 车辆退车表
  *
  * @author ren lei
- * @date 2019-09-18 15:39:56
+ * @date 2019-09-20 17:18:06
  * @version: 1.0
  * @modified By:
  */
@@ -63,7 +63,7 @@ public class CarBack implements Serializable {
 	/**
 	 * 领取人
 	 */
-	private String getCarUser;
+	private Long getCarUser;
 	/**
 	 * 1：未上传退车单照片；2：已上传退车单照片；
 	 */

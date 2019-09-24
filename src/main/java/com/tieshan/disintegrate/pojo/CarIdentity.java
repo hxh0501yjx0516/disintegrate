@@ -2,6 +2,8 @@ package com.tieshan.disintegrate.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 /**
@@ -67,10 +69,12 @@ public class CarIdentity implements Serializable {
 	/**
 	 * 注册时间
 	 */
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
 	private Date regTime;
 	/**
 	 * 发证日期
 	 */
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
 	private Date issueTime;
 	/**
 	 * 使用性质(来之字典表),营运非营运。。。

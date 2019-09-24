@@ -24,17 +24,18 @@ public class Resource implements java.io.Serializable {
             `operator` varchar(64) DEFAULT NULL COMMENT '操作人',
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='菜单';*/
-    private long id;
+    private String id;
     private String resource_name;
     private String resource_pname;
     private String resource_url;
+    private String resource_describe;
     private int seq;
-    private long pid;
+    private String pid;
     private String resource_type;
     private String create_time;
     private Integer modify_time;
     private String operator;
-    private long department_id;
+    private String department_id;
     private String department_name;
     private String isHaving;
 

@@ -32,4 +32,25 @@ public interface ICarInformationService {
      */
     List<Object> findProcedureAll(Long carInfoId);
 
+    /**
+     *@Description: 车辆查询页面-车源信息数据查询
+     * @param: id car_info的主键(车辆编号ID)
+     * @return: List
+     */
+    List<Object> findSourceAll(Long carInfoId);
+
+    /**
+     *@Description: 车辆查询页面-拆解信息数据查询
+     * @param: id car_info的主键(车辆编号ID)
+     * @return: List
+     */
+    List<Object> findBreakAll(Long carInfoId);
+
+    /**
+     *@Description: 车辆查询页面-残值信息数据查询
+     * @param: id car_info的主键(车辆编号ID)
+     * @return: List
+     */
+    List<Object> findSalvageAll(Long carInfoId);
+
 }
