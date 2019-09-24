@@ -14,9 +14,12 @@ public class SysUser implements java.io.Serializable {
     private Long id;
     private String login_name;
     private String user_name;
+    private String head_url;
     private String user_password;
+    private String old_password;
     private String phone;
     private String department_name;
+    private String depart_code;
     private String company_name;
     private String company_code;
     private Long company_id;

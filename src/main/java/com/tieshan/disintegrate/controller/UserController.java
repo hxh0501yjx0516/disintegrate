@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.tieshan.disintegrate.constant.ConStants;
 import com.tieshan.disintegrate.pojo.SysUser;
 import com.tieshan.disintegrate.service.IUserService;
+import com.tieshan.disintegrate.token.TokenService;
 import com.tieshan.disintegrate.util.PubMethod;
 import com.tieshan.disintegrate.util.RestResult;
 import com.tieshan.disintegrate.util.ResultCode;
@@ -29,6 +30,8 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private IUserService userService;
+    @Autowired
+    private TokenService tokenService;
 
     /**
      * 添加用户
@@ -151,7 +154,7 @@ public class UserController {
     public RestResult getUserByid(String id, HttpServletRequest request) {
         RestResult restResult = null;
         try {
-            Map<String,Object>resultMap = userService.getUserByid(id);
+            Map<String, Object> resultMap = userService.getUserByid(id);
             restResult = new RestResult("获取用户信息", resultMap, ResultCode.SUCCESS.code());
         } catch (Exception e) {
             log.info("通过用户主键id获取用户失败---->", e);
@@ -160,5 +163,55 @@ public class UserController {
         }
         return restResult;
 
+    }
+
+    /**
+     * 修改名字
+     *
+     * @param user_name
+     * @return
+     */
+    @PostMapping(value = "/upName")
+    public RestResult updatePassword(String user_name, HttpServletRequest request) {
+        RestResult restResult = null;
+        try {
+            String token = request.getHeader("token");
+            SysUser sysUser = tokenService.getToken(token);
+            int num = userService.upName(sysUser.getId() + "", user_name);
+            if (num > 0) {
+                restResult = new RestResult("修改成功", null, ResultCode.SUCCESS.code());
+            } else {
+                restResult = new RestResult("修改失败", null, ResultCode.ERROR.code());
+            }
+        } catch (Exception e) {
+            log.info("修改密码报错----->", e);
+            return new RestResult("修改失败", null, ResultCode.ERROR.code());
+
+        }
+        return restResult;
+    }
+    /**
+     * 修改名字
+     *
+     * @param head_url
+     * @return
+     */
+    @PostMapping(value = "/upHeadUrl")
+    public RestResult upHeadUrl(String head_url, HttpServletRequest request) {
+        RestResult restResult = null;
+        try {
+            String token = request.getHeader("token");
+            SysUser sysUser = tokenService.getToken(token);
+            int num = userService.upHeadUrl(sysUser.getId() + "", head_url);
+            if (num > 0) {
+                restResult = new RestResult("修改成功", null, ResultCode.SUCCESS.code());
+            } else {
+                restResult = new RestResult("修改失败", null, ResultCode.ERROR.code());
+            }
+        } catch (Exception e) {
+            log.info("修改密码报错----->", e);
+            return new RestResult("修改失败", null, ResultCode.ERROR.code());
+        }
+        return restResult;
     }
 }
