@@ -2,7 +2,11 @@ package com.tieshan.disintegrate.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+
+import javax.persistence.Id;
 
 /**
  * 车辆信息表
@@ -19,6 +23,7 @@ public class CarInfo implements Serializable {
 	/**
 	 * 
 	 */
+	@Id
 	private Long id;
 	/**
 	 * 解体厂id
@@ -52,11 +57,22 @@ public class CarInfo implements Serializable {
 	/**
 	 * 处理日期
 	 */
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	private Date processingDate;
 	/**
-	 * 驾驶证 行驶本等等
+	 * 行驶证
 	 */
-	private String procedures;
+	private Integer drivLicense;
+	// 登记证
+	private Integer registLicense;
+	// 身份证复印件
+	private Integer peopleLicense;
+	// 营业执照复印件
+	private Integer busineseLicense;
+	// 车辆报废表
+	private Integer breakLicense;
+	// 车辆事故证明
+	private Integer exceptionLicense;
 	/**
 	 * 手续获取方式
 	 */

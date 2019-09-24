@@ -6,71 +6,71 @@
 
     <insert id="insertBank" parameterType="com.tieshan.disintegrate.pojo.Bank">
         insert into ts_bank
-            <trim prefix="(" suffixOverrides="," suffix=")">
-                <if test="id != null and id != ''">
-                    id,
-                </if>
-                <if test="disintegratePlantId != null and disintegratePlantId != ''">
-                    disintegrate_plant_id,
-                </if>
-                <if test="bankName != null and bankName != ''">
-                    bank_name,
-                </if>
-                <if test="bankBranch != null and bankBranch != ''">
-                    bank_branch,
-                </if>
-                <if test="account != null and account !=''">
-                    account,
-                </if>
-                <if test="payee != null and payee != ''">
-                    payee,
-                </if>
-                <if test="createTime != null and createTime != ''">
-                    create_time,
-                </if>
-                <if test="operatorId != null and operatorId != ''">
-                    operator_id,
-                </if>
-                <if test="operator != null and operator != ''">
-                    operator,
-                </if>
-                <if test="isDelete != null and isDelete != ''">
-                    is_delete
-                </if>
-            </trim>
-         VALUES
-            <trim prefix="(" suffixOverrides="," suffix=")">
-                <if test="id != null and id != ''">
-                    #{id},
-                </if>
-                <if test="disintegratePlantId != null and disintegratePlantId != ''">
-                    #{disintegratePlantId},
-                </if>
-                <if test="bankName != null and bankName != ''">
-                    #{bankName},
-                </if>
-                <if test="bankBranch != null and bankBranch != ''">
-                    #{bankBranch},
-                </if>
-                <if test="account != null and account !=''">
-                    #{account},
-                </if>
-                <if test="payee != null and payee != ''">
-                    #{payee},
-                </if>
-                <if test="createTime != null and createTime != ''">
-                    #{createTime},
-                </if>
-                <if test="operatorId != null and operatorId != ''">
-                    #{operatorId},
-                </if>
-                <if test="operator != null and operator != ''">
-                    #{operator},
-                </if>
-                <if test="isDelete != null and isDelete != ''">
-                    #{isDelete}
-                </if>
-            </trim>
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="id != null and id != ''">
+                id,
+            </if>
+            <if test="disintegratePlantId != null and disintegratePlantId != ''">
+                disintegrate_plant_id,
+            </if>
+            <if test="bankName != null and bankName != ''">
+                bank_name,
+            </if>
+            <if test="bankBranch != null and bankBranch != ''">
+                bank_branch,
+            </if>
+            <if test="account != null and account !=''">
+                account,
+            </if>
+            <if test="payee != null and payee != ''">
+                payee,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="operatorId != null and operatorId != ''">
+                operator_id,
+            </if>
+            <if test="operator != null and operator != ''">
+                operator,
+            </if>
+            <if test="isDelete != null and isDelete != ''">
+                is_delete
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="id != null and id != ''">
+                #{id},
+            </if>
+            <if test="disintegratePlantId != null and disintegratePlantId != ''">
+                #{disintegratePlantId},
+            </if>
+            <if test="bankName != null and bankName != ''">
+                #{bankName},
+            </if>
+            <if test="bankBranch != null and bankBranch != ''">
+                #{bankBranch},
+            </if>
+            <if test="account != null and account !=''">
+                #{account},
+            </if>
+            <if test="payee != null and payee != ''">
+                #{payee},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="operatorId != null and operatorId != ''">
+                #{operatorId},
+            </if>
+            <if test="operator != null and operator != ''">
+                #{operator},
+            </if>
+            <if test="isDelete != null and isDelete != ''">
+                #{isDelete}
+            </if>
+        </trim>
     </insert>
 
     <insert id="insertCarSource" parameterType="com.tieshan.disintegrate.pojo.CarSource">
@@ -98,7 +98,7 @@
                 user_id,
             </if>
             <if test="bankId != null and bankId != ''">
-                operator_id,
+                bank_id,
             </if>
             <if test="payType != null and payType != ''">
                 pay_type,
@@ -118,14 +118,14 @@
             <if test="createOperatorId != null and createOperatorId != ''">
                 create_operator_id,
             </if>
-            <if test="createTime != null and createTime != ''">
+            <if test="createTime != null">
                 create_time,
             </if>
             <if test="isDelete != null and isDelete != ''">
                 is_delete
             </if>
         </trim>
-         VALUES
+        VALUES
         <trim prefix="(" suffixOverrides="," suffix=")">
             <if test="id != null and id != ''">
                 #{id},
@@ -169,8 +169,8 @@
             <if test="createOperatorId != null and createOperatorId != ''">
                 #{createOperatorId},
             </if>
-            <if test="createTime != null and createTime != ''">
-                #{createTime},
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="isDelete != null and isDelete != ''">
                 #{isDelete}
@@ -178,19 +178,51 @@
         </trim>
     </insert>
 
-    <select id="selectCarSourceList" parameterType="java.lang.String" resultType="java.util.Map">
+    <select id="selectCarSourceList" resultType="java.util.Map">
         SELECT
-            IFNULL(id, '') AS id,
-            IFNULL(create_time, '') AS createTime,
-	        IFNULL(contacts, '') AS contacts,
-	        IFNULL(phone,'') AS phone,
-	        IFNULL(car_location,'') AS carLocation,
-			CONCAT(IFNULL(bank_name,''),',',IFNULL(bank_branch,''),',',IFNULL(account,'')) AS bankMessage
+            IFNULL(s.id, '') AS id,
+            IFNULL(s.create_time, '') AS createTime,
+	        IFNULL(s.contacts, '') AS contacts,
+	        IFNULL(s.phone,'') AS phone,
+	        IFNULL(s.car_location,'') AS carLocation,
+			CONCAT(IFNULL(b.bank_name,''),',',IFNULL(b.bank_branch,''),',',IFNULL(b.account,'')) AS bankMessage
         FROM
-	        ts_car_source LEFT JOIN ts_bank
+	        ts_car_source AS s INNER JOIN ts_bank AS b INNER JOIN ts_car_info AS r
         ON
-	        source_type = #{sourceType};
+            s.id = r.car_source AND s.bank_id = b.id
+        WHERE
+            s.disintegrate_plant_id = #{disintegratePlantId} AND
+            <if test="sourceType != null and sourceType != ''">
+                s.source_type = #{sourceType}
+            </if>
+	        <include refid="queryMsg"></include>;
     </select>
+
+    <select id="selectCarSourceListApp" resultType="java.util.Map">
+        SELECT
+        IFNULL(s.id, '') AS id,
+        IFNULL(s.contacts, '') AS contacts,   /*联系人*/
+        IFNULL(s.phone,'') AS phone,   /*联系人电话*/
+        IFNULL(s.car_location,'') AS carLocation,    /*联系人地址*/
+        IFNULL(s.count,'') AS count,     /*车辆台词*/
+        IFNULL(b.bank_name,'') AS bankName,    /*银行名称*/
+        IFNULL(b.account,'') AS account             /*银行账号*/
+        FROM
+        ts_car_source AS s INNER JOIN ts_bank AS b
+        ON
+        s.bank_id = b.id
+        WHERE
+        s.disintegrate_plant_id = #{disintegratePlantId} AND
+        s.create_operator = #{loginName} AND
+        s.create_operator_id = #{userId}
+    </select>
+
+    <sql id="queryMsg">
+        <if test="findMsg != null and findMsg != ''">
+            AND concat(s.contacts, s.phone, r.car_name, r.car_no, s.car_location)
+            like concat("%",#{findMsg},"%")
+        </if>
+    </sql>
 
 
     <select id="selectProcessingTypeOrProceduresType" parameterType="java.lang.String" resultType="java.lang.String">
@@ -218,7 +250,7 @@
                 contacts,
             </if>
             <if test="contactsPhone != null and contactsPhone !=''">
-                contactsPhone,
+                contacts_phone,
             </if>
             <if test="carNo != null and carNo != ''">
                 car_no,
@@ -226,11 +258,26 @@
             <if test="processingType != null and processingType != ''">
                 processing_type,
             </if>
-            <if test="processingDate != null and processingDate != ''">
+            <if test="processingDate != null">
                 processing_date,
             </if>
-            <if test="procedures != null and procedures != ''">
-                procedures,
+            <if test="drivLicense != null and drivLicense != ''">
+                driv_license,
+            </if>
+            <if test="registLicense != null and registLicense != ''">
+                regist_license,
+            </if>
+            <if test="peopleLicense != null and peopleLicense != ''">
+                people_license,
+            </if>
+            <if test="busineseLicense != null and busineseLicense != ''">
+                businese_license,
+            </if>
+            <if test="breakLicense != null and breakLicense != ''">
+                break_license,
+            </if>
+            <if test="exceptionLicense != null and exceptionLicense != ''">
+                exception_license,
             </if>
             <if test="proceduresType != null and proceduresType != ''">
                 procedures_type,
@@ -238,7 +285,7 @@
             <if test="remarks != null and remarks !=''">
                 remarks,
             </if>
-            <if test="createTime != null and createTime != ''">
+            <if test="createTime != null">
                 create_time,
             </if>
             <if test="operatorId != null and operatorId != ''">
@@ -280,11 +327,26 @@
             <if test="processingType != null and processingType != ''">
                 #{processingType},
             </if>
-            <if test="processingDate != null and processingDate != ''">
-                #{processingDate},
+            <if test="processingDate != null">
+                #{processingDate,jdbcType=TIMESTAMP},
             </if>
-            <if test="procedures != null and procedures != ''">
-                #{procedures},
+            <if test="drivLicense != null and drivLicense != ''">
+                #{drivLicense},
+            </if>
+            <if test="registLicense != null and registLicense != ''">
+                #{registLicense},
+            </if>
+            <if test="peopleLicense != null and peopleLicense != ''">
+                #{peopleLicense},
+            </if>
+            <if test="busineseLicense != null and busineseLicense != ''">
+                #{busineseLicense},
+            </if>
+            <if test="breakLicense != null and breakLicense != ''">
+                #{breakLicense},
+            </if>
+            <if test="exceptionLicense != null and exceptionLicense != ''">
+                #{exceptionLicense},
             </if>
             <if test="proceduresType != null and proceduresType != ''">
                 #{proceduresType},
@@ -292,8 +354,8 @@
             <if test="remarks != null and remarks !=''">
                 #{remarks},
             </if>
-            <if test="createTime != null and createTime != ''">
-                #{createTime},
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="operatorId != null and operatorId != ''">
                 #{operatorId},
@@ -318,12 +380,173 @@
             IFNULL(id,'') AS id,
 	        IFNULL(create_time,'') AS createTime,
 	        IFNULL(contacts,'') AS contacts,
-	        IFNULL(phone,'') AS contactsPhone,
+	        IFNULL(phone,'') AS phone,
             IFNULL(count,'') AS count,
 	        IFNULL(car_location,'') AS carLocation
         FROM
 	        ts_car_source
         WHERE
-	        id = #{id};
+	        id = #{id} AND disintegrate_plant_id = #{disintegratePlantId};
     </select>
+
+    <select id="selectCarInfoList" parameterType="java.lang.Long" resultType="java.util.Map">
+        SELECT
+	        IFNULL( id, '' ) AS id,
+	        IFNULL( car_source, '' ) AS carSource,
+	        IFNULL( contacts, '' ) AS contacts,
+	        IFNULL( contacts_phone, '' ) AS contactsPhone,
+	        IFNULL( car_no, '' ) AS carNo,
+	        IFNULL( car_name, '' ) AS carName,
+	        IFNULL( contacts_address, '' ) AS contactsAddress,
+	        IFNULL( processing_type, '' ) AS processingType,
+	        IFNULL( processing_date, '' ) AS processingDate,
+	        IFNULL( driv_license, '' ) AS drivLicense,
+	        IFNULL( regist_license, '' ) AS registLicense,
+	        IFNULL( people_license, '' ) AS peopleLicense,
+	        IFNULL( businese_license, '' ) AS busineseLicense,
+	        IFNULL( break_license, '' ) AS breakLicense,
+	        IFNULL( exception_license, '' ) AS exceptionLicense,
+	        IFNULL( procedures_type, '' ) AS proceduresType,
+	        IFNULL( remarks, '' ) AS remarks
+        FROM
+	        ts_car_info
+        WHERE
+	        car_source = #{carSource}
+	        AND disintegrate_plant_id = #{disintegratePlantId};
+    </select>
+
+    <select id="selectCarInfoById" parameterType="java.lang.Long" resultType="com.tieshan.disintegrate.pojo.CarInfo">
+        SELECT
+	        IFNULL( id, '' ) AS id,
+	        IFNULL( contacts, '' ) AS contacts,
+	        IFNULL( contacts_phone, '' ) AS contactsPhone,
+	        IFNULL( car_no, '' ) AS carNo,
+	        IFNULL( car_name, '' ) AS carName,
+	        IFNULL( contacts_address, '' ) AS contactsAddress,
+	        IFNULL( processing_type, '' ) AS processingType,
+	        IFNULL( processing_date, '' ) AS processingDate,
+	        IFNULL( driv_license, '' ) AS drivLicense,
+	        IFNULL( regist_license, '' ) AS registLicense,
+	        IFNULL( businese_license, '' ) AS busineseLicense,
+	        IFNULL( people_license, '' ) AS peopleLicense,
+	        IFNULL( break_license, '' ) AS breakLicense,
+	        IFNULL( exception_license, '' ) AS exceptionLicense,
+	        IFNULL( procedures_type, '' ) AS proceduresType,
+	        IFNULL( remarks, '' ) AS remarks
+        FROM
+	        ts_car_info
+        WHERE
+	        id = #{id}
+	        AND disintegrate_plant_id = #{disintegratePlantId};
+    </select>
+
+    <update id="editCar" parameterType="com.tieshan.disintegrate.pojo.CarInfo">
+        UPDATE ts_car_info SET
+                car_source = #{carSource},
+                contacts = #{contacts},
+                contacts_phone = #{contactsPhone},
+                car_no = #{carNo},
+                car_name = #{carName},
+                contacts_address = #{contactsAddress},
+                processing_type = #{processingType},
+                driv_license = #{drivLicense},
+                regist_license = #{registLicense},
+                people_license = #{peopleLicense},
+                businese_license = #{busineseLicense},
+                break_license = #{breakLicense},
+                exception_license = #{exceptionLicense},
+                procedures_type = #{proceduresType},
+                remarks = #{remarks},
+                create_time = #{createTime}
+        WHERE id = #{id};
+    </update>
+
+    <update id="editCarSource" parameterType="com.tieshan.disintegrate.pojo.CarSource">
+        UPDATE ts_car_source
+        <set>
+            <if test="contacts != null and contacts != ''">
+                contacts = #{contacts},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="count != null">
+                count = #{count},
+            </if>
+            <if test="carLocation != null and carLocation != ''">
+                car_location = #{carLocation},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="bankId != null">
+                bank_id = #{bankId},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime}
+            </if>
+        </set>
+        WHERE id = #{id};
+    </update>
+
+    <delete id="deleteCarInfoById" parameterType="java.lang.Long">
+        DELETE FROM ts_car_info WHERE id =#{id} AND disintegrate_plant_id = #{disintegratePlantId};
+    </delete>
+
+    <select id="selectCarSourceById" parameterType="java.lang.Long" resultType="com.tieshan.disintegrate.pojo.CarSource">
+        SELECT
+	        IFNULL( id, '' ) AS id,
+	        IFNULL( contacts, '' ) AS contacts,
+	        IFNULL( count,'') AS count,
+	        IFNULL( phone, '' ) AS phone,
+	        IFNULL( user_id, '' ) AS userId,
+	        IFNULL( bank_id, '' ) AS bankId,
+	        IFNULL( car_location, '' ) AS carLocation
+        FROM
+	        ts_car_source
+        WHERE
+	        id = #{id}
+	        AND disintegrate_plant_id = #{disintegratePlantId};
+
+    </select>
+
+    <select id="selectBankById" parameterType="java.lang.Long" resultType="com.tieshan.disintegrate.pojo.Bank">
+        SELECT
+	        IFNULL( id, '' ) AS id,
+	        IFNULL( bank_name, '' ) AS bankName,
+	        IFNULL( bank_branch, '' ) AS BankBranch,
+	        IFNULL( account, '' ) AS account,
+	        IFNULL( payee, '' ) AS payee,
+	        IFNULL( create_time, '' ) AS createTime
+        FROM
+	        ts_bank
+        WHERE
+	        id = #{bankId};
+    </select>
+
+    <update id="updateBank" parameterType="com.tieshan.disintegrate.pojo.Bank">
+        UPDATE ts_bank
+        <set>
+            <if test="bankName != null and bankName != ''">
+                bank_name = #{bankName},
+            </if>
+            <if test="bankBranch != null and bankBranch != ''">
+                bank_branch = #{bankBranch},
+            </if>
+            <if test="account != null and account != ''">
+                account = #{account},
+            </if>
+            <if test="payee != null and payee != ''">
+                payee = #{payee},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime}
+            </if>
+        </set>
+        WHERE id = #{id};
+    </update>
+
+    <delete id="deleteCarSourceById" parameterType="java.lang.Long">
+        DELETE FROM ts_car_source WHERE id =#{id} AND disintegrate_plant_id = #{disintegratePlantId};
+    </delete>
 </mapper>
