@@ -33,4 +33,6 @@ public interface CarInfoMapper {
     void deleteCarInfoByMap(Map<String, Object> map);
 
     void batchDeleteCarInfoByMap(Map<String, Object> map);
+
+    List<CarInfo> selectListByProcessing(Map<String, Object> map);
 }

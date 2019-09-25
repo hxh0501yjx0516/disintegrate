@@ -1,5 +1,6 @@
 package com.tieshan.disintegrate.controller;
 
+import com.tieshan.disintegrate.pojo.Menu;
 import com.tieshan.disintegrate.pojo.Resource;
 import com.tieshan.disintegrate.pojo.SysUser;
 import com.tieshan.disintegrate.service.IResourceService;
@@ -11,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -57,7 +61,11 @@ public class MenuController {
         try {
             String token = request.getHeader("token");
             SysUser sysUser = tokenService.getToken(token);
-            restResult = new RestResult("获取菜单", resourceService.departMenus(sysUser.getDepart_id() + ""), ResultCode.SUCCESS.code());
+            List<Menu> menuList = resourceService.departMenus(sysUser.getDepart_id() + "");
+            Map<String, Object> resultMap = new HashMap<>();
+            resultMap.put("sysUser", sysUser);
+            resultMap.put("menuList", menuList);
+            restResult = new RestResult("获取菜单", resultMap, ResultCode.SUCCESS.code());
         } catch (Exception e) {
             log.info("获取菜单失败------->", e);
             return new RestResult("获取菜单失败", null, ResultCode.ERROR.code());

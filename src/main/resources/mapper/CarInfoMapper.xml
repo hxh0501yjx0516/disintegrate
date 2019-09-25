@@ -133,6 +133,23 @@
             </if>
         </where>
     </select>
+    <select id="selectListByProcessing" resultMap="carInfoMap">
+        SELECT  i.id, i.disintegrate_plant_id, i.car_source, i.contacts, i.contacts_phone, i.car_no, i.processing_type,
+        i.processing_date, i.procedures_type, i.remarks, i.create_time, i.operator_id, i.operator, i.car_name, i.is_delete
+        FROM ts_car_info i
+        left join ts_car_processing p on i.id=p.car_info_id
+        <where>
+            <if test="disintegratePlantId!=null">
+                AND i.disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
+            </if>
+            <if test="isQuery!=null">
+                AND p.is_query=#{isQuery}
+            </if>
+            <if test="isVerify!=null">
+                AND p.is_verify=#{isVerify}
+            </if>
+        </where>
+    </select>
 
     <insert id="insertCarInfo">
         INSERT INTO ts_car_info(

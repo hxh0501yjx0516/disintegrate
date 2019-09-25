@@ -1,5 +1,7 @@
 package com.tieshan.disintegrate.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.tieshan.disintegrate.dao.*;
 import com.tieshan.disintegrate.exception.CustomException;
 import com.tieshan.disintegrate.pojo.*;
@@ -366,7 +368,24 @@ public class ProceduresService implements IProceduresService {
     }
 
     @Override
-    public void queryQueryResultList(Map<String, Object> params, SysUser user) {
+    public PageInfo<CarInfo> queryQueryResultList(Map<String, Object> params, SysUser user) {
+        params.put("disintegratePlantId", user.getCompany_id());
+        PageHelper.startPage(
+                StringUtils.isEmpty(params.get("page")) ? 1 : Integer.parseInt(String.valueOf(params.get("page"))),
+                StringUtils.isEmpty(params.get("pageSize"))?10:Integer.parseInt(String.valueOf(params.get("pageSize"))));
+        List<CarInfo> carInfos = carInfoMapper.selectListByProcessing(params);
+        PageInfo<CarInfo> pageInfo = new PageInfo<>(carInfos);
+        return pageInfo;
+    }
 
+    @Override
+    public PageInfo<CarInfo> queryVerificationList(Map<String, Object> params, SysUser user) {
+        params.put("disintegratePlantId", user.getCompany_id());
+        PageHelper.startPage(
+                StringUtils.isEmpty(params.get("page")) ? 1 : Integer.parseInt(String.valueOf(params.get("page"))),
+                StringUtils.isEmpty(params.get("pageSize"))?10:Integer.parseInt(String.valueOf(params.get("pageSize"))));
+        List<CarInfo> carInfos = carInfoMapper.selectListByProcessing(params);
+        PageInfo<CarInfo> pageInfo = new PageInfo<>(carInfos);
+        return pageInfo;
     }
 }

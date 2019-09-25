@@ -61,10 +61,14 @@ public class LoginController {
                 }
                 String token = this.tokenService.generateToken(type, sysUser);
                 this.tokenService.save(token, sysUser);
-                resultMap.put("token",token);
-                resultMap.put("login_name",sysUser.getLogin_name());
-                resultMap.put("user_name",sysUser.getUser_name());
-                resultMap.put("department_name",sysUser.getDepartment_name());
+                resultMap.put("token", token);
+                resultMap.put("login_name", sysUser.getLogin_name());
+                resultMap.put("user_name", sysUser.getUser_name());
+                resultMap.put("department_name", sysUser.getDepartment_name());
+                resultMap.put("depart_code", sysUser.getDepart_code());
+                resultMap.put("head_url", sysUser.getHead_url());
+                resultMap.put("phone", sysUser.getPhone());
+                resultMap.put("id", sysUser.getId());
             }
             userService.loginlog(sysUser);
             restResult = new RestResult("登录成功", resultMap, ResultCode.SUCCESS.code());
@@ -102,25 +106,38 @@ public class LoginController {
     /**
      * 修改密码
      *
-     * @param sysUser
+     * @param password
+     * @param oldPassword
      * @return
      */
     @PostMapping(value = "/uppssword")
-    public RestResult updatePassword(@RequestBody SysUser sysUser,HttpServletRequest request) {
+    public RestResult updatePassword(String password, String oldPassword, HttpServletRequest request) {
         RestResult restResult = null;
         try {
             String token = request.getHeader("token");
-            this.tokenService.remove(token);
-            int num = userService.updatePassword(sysUser);
-            if (num > 0) {
-                restResult = new RestResult("修改成功", null, ResultCode.SUCCESS.code());
+            SysUser sysUser = tokenService.getToken(token);
+            int isLive = userService.findUserByPassword(sysUser.getLogin_name(), oldPassword, sysUser.getId() + "");
+            if (isLive > 0) {
+                sysUser.setUser_password(password);
+                int num = userService.updatePassword(sysUser);
+                if (num > 0) {
+                    this.tokenService.remove(token);
+                    restResult = new RestResult("修改成功", null, ResultCode.SUCCESS.code());
+                } else {
+                    restResult = new RestResult("修改失败", null, ResultCode.ERROR.code());
+                }
             } else {
-                restResult = new RestResult("修改失败", null, ResultCode.ERROR.code());
+                restResult = new RestResult("原密码不正确", null, ResultCode.ERROR.code());
+
             }
+
         } catch (Exception e) {
             log.info("修改密码报错----->", e);
         }
         return restResult;
     }
+
+
+
 
 }

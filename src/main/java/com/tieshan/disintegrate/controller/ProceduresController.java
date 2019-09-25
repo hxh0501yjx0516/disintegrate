@@ -155,14 +155,32 @@ public class ProceduresController {
     }
 
     /**
-     * 查询手续查询结果
-     * @param params carProcessingId 手续id
+     * 查询手续查询录列表
+     * @param params page int 页码
+     *               pageSize int  页面大小
+     *               isQuery int
      * @param user
      * @return
      */
     @PostMapping(value = "/queryQueryResultList")
     public RestResult queryQueryResultList(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
-        proceduresService.queryQueryResultList(params, user);
-        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
+        PageInfo<CarInfo> carInfoPageInfo = proceduresService.queryQueryResultList(params, user);
+        return new RestResult("查询成功", carInfoPageInfo, ResultCode.SUCCESS.code());
     }
+
+    /**
+     * 查询核档记录列表
+     * @param params page int 页码
+     *               pageSize int  页面大小
+     *               isVerify int
+     * @param user
+     * @return
+     */
+    @PostMapping(value = "/queryVerificationList")
+    public RestResult queryVerificationList(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
+        PageInfo<CarInfo> carInfoPageInfo = proceduresService.queryVerificationList(params, user);
+        return new RestResult("查询成功", carInfoPageInfo, ResultCode.SUCCESS.code());
+    }
+
+
 }

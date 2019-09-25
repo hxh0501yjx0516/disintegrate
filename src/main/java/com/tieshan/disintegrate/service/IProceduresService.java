@@ -1,5 +1,7 @@
 package com.tieshan.disintegrate.service;
 
+import com.github.pagehelper.PageInfo;
+import com.tieshan.disintegrate.pojo.CarInfo;
 import com.tieshan.disintegrate.pojo.CarProcessing;
 import com.tieshan.disintegrate.pojo.SysUser;
 import com.tieshan.disintegrate.vo.ProceduresVo;
@@ -32,5 +34,7 @@ public interface IProceduresService {
 
     void saveUploadShangWeiDataRecord(Map<String, Object> params, SysUser user);
 
-    void queryQueryResultList(Map<String, Object> params, SysUser user);
+    PageInfo<CarInfo> queryQueryResultList(Map<String, Object> params, SysUser user);
+
+    PageInfo<CarInfo> queryVerificationList(Map<String, Object> params, SysUser user);
 }

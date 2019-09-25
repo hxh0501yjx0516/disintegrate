@@ -88,11 +88,32 @@ public interface IUserService {
      */
     Map<String, Object> getUserByid(String id);
 
-//    /**
-//     * 获取所有的用户对象
-//     * @return
-//     */
-//    List<SysUser> findUserList();
+    /**
+     * 判断密码是否正确
+     *
+     * @param password
+     * @param id
+     * @return
+     */
+    int findUserByPassword(String login_name, String password, String id);
+
+    /**
+     * 修改名字
+     *
+     * @param id
+     * @param user_name
+     * @return
+     */
+    int upName(String id, String user_name);
+
+    /**
+     * 修改头像
+     *
+     * @param id
+     * @param head_url
+     * @return
+     */
+    int upHeadUrl(String id, String head_url);
 
 
 }

@@ -126,6 +126,22 @@ public class UserService implements IUserService {
         return sysUserMapper.getUserByid(id);
     }
 
+    @Override
+    public int findUserByPassword(String login_name, String password, String id) {
+        String old_password = DigestUtils.md5Hex(login_name + password);
+        return sysUserMapper.findUserByPassword(old_password, id);
+    }
+
+    @Override
+    public int upName(String id, String user_name) {
+        return sysUserMapper.upName(id, user_name);
+    }
+
+    @Override
+    public int upHeadUrl(String id, String head_url) {
+        return sysUserMapper.upHeadUrl(id, head_url);
+    }
+
 //    @Override
 //    public List<SysUser> findUserList() {
 //        return sysUserMapper.findUserList();

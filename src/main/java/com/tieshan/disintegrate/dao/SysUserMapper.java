@@ -127,4 +127,32 @@ public interface SysUserMapper {
      * @return
      */
     List<Map<String, Object>> findUserList();
+
+    /**
+     * 更新用户名字
+     *
+     * @param id
+     * @param user_name
+     * @return
+     */
+    int upName(@Param("id") String id, @Param("user_name") String user_name);
+
+    /**
+     * 更新用户名字
+     *
+     * @param id
+     * @param head_url
+     * @return
+     */
+    int upHeadUrl(@Param("id") String id, @Param("head_url") String head_url);
+
+
+    /**
+     * 修改密码
+     *
+     * @param password
+     * @param id
+     * @return
+     */
+    int findUserByPassword(@Param("password") String password, @Param("id") String id);
 }
