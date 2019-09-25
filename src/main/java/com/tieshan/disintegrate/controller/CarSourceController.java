@@ -6,10 +6,12 @@ import com.tieshan.disintegrate.constant.ConStants;
 import com.tieshan.disintegrate.pojo.CarInfo;
 import com.tieshan.disintegrate.pojo.CarSource;
 import com.tieshan.disintegrate.pojo.SysUser;
+import com.tieshan.disintegrate.service.DictionaryService;
 import com.tieshan.disintegrate.service.ICarSourceService;
 import com.tieshan.disintegrate.util.RestResult;
 import com.tieshan.disintegrate.util.ResultCode;
 import lombok.extern.apachecommons.CommonsLog;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +35,9 @@ public class CarSourceController {
 
     @Autowired
     private ICarSourceService carSourceService;
+
+    @Autowired
+    private DictionaryService dictionaryService;
 
     /**
      *  PC： 查询某拆解厂的指定的车源状态或者搜索条件查询车源的信息
@@ -99,12 +104,11 @@ public class CarSourceController {
      *   查询指定车源下的车辆    5    过
      * @param id   车源主键id
      * @param request
-     * @param isVerify  核档状态 1:未核档；2：已核档；3:核档不通过
      * @return
      */
     @GetMapping(value = "selectCarInfoList")
     public RestResult selectCarInfoList(Long id, HttpServletRequest request,
-                                        @RequestParam(value = "isVerify",required = false, defaultValue = "1") Integer isVerify) {
+                                        @RequestParam(value = "isVerify", required = false) Integer isVerify) {
         return new RestResult("查询成功", carSourceService.selectCarInfoList(id, request, isVerify), ResultCode.SUCCESS.code());
     }
 
@@ -248,6 +252,28 @@ public class CarSourceController {
         }
         return new RestResult("更新成功", "", ResultCode.SUCCESS.code());
     }
+
+
+    /**
+     * 查询所有省份简称   过
+     * @return
+     */
+    @GetMapping("/selectProvinceCodeList")
+    public RestResult selectProvinceCodeList(){
+        return new RestResult("查询成功", dictionaryService.selectProvinceCodeList(), ResultCode.SUCCESS.code());
+    }
+
+    /**
+     * 查询所有手续
+     * @return
+     */
+    @GetMapping("/selectProceduresTypeList")
+    public RestResult selectProceduresTypeList(){
+        return new RestResult("查询成功", dictionaryService.selectProceduresTypeList(), ResultCode.SUCCESS.code());
+    }
+
+
+
 
 //    /**
 //     * 删除指定的车源     14

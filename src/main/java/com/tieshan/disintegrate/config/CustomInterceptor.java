@@ -24,12 +24,14 @@ import java.io.OutputStream;
  * @version: 1.0
  * @modified By:
  */
+
 @Component
 public class CustomInterceptor implements HandlerInterceptor {
     @Autowired
     private Environment env;
-    /*@Autowired
-    private RedisUtil redisUtil;*/
+@Autowired
+    private RedisUtil redisUtil;
+
     @Autowired
     private RedisUtils redisUtils;
 

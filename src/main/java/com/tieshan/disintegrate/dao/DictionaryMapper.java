@@ -19,4 +19,8 @@ public interface DictionaryMapper {
      * @return
      */
     List<String> findBankNameList();
+
+    List<String> selectProvinceCodeList();
+
+    List<String> selectProceduresTypeList();
 }

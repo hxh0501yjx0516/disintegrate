@@ -13,6 +13,7 @@ import org.apache.tomcat.util.http.parser.HttpParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -53,7 +54,8 @@ public class CarSourceService implements ICarSourceService {
     public void addCar(CarInfo carInfo, Long carSource, HttpServletRequest request) {
         // 设置车辆id
         IdWorker idWorker = new IdWorker(1, 1, 1);
-        carInfo.setId(idWorker.nextId());
+        long carInfoId = idWorker.nextId();
+        carInfo.setId(carInfoId);
         // 设置车源主键id
         carInfo.setCarSource(carSource);
 
@@ -67,7 +69,17 @@ public class CarSourceService implements ICarSourceService {
         carInfo.setOperatorId(sysUser.getId());
 
         carInfo.setOperator(sysUser.getLogin_name());
+        // 设置车辆编号
+//        carInfo.setCarCode();
         carSourceMapper.addCar(carInfo);
+
+        // 添加车辆入场管理信息
+        CarEnter carEnter = new CarEnter();
+        carEnter.setId(idWorker.nextId());
+        carEnter.setDisintegratePlantId(sysUser.getCompany_id());
+        carEnter.setCarInfoId(carInfoId);
+        carEnter.setIsApproach(1);
+        carSourceMapper.insertCarEnter(carEnter);
     }
 
     /**
@@ -125,13 +137,14 @@ public class CarSourceService implements ICarSourceService {
         // 判断是pc端还是App端
         String[] strArr = token.split("-");
         SysUser sysUser = tokenService.getToken(token);
-        if (strArr[0].equals("APP")){
+//        if (strArr[0].equals("APP")){
             // 查询所有处于当前状态的车辆id
-            List<Long> carInfoIds = carSourceMapper.selectCarInfoIdList(isVerify, sysUser.getCompany_id());
-            carInfoList = carSourceMapper.selectCarInfoListByIds(id, carInfoIds, sysUser.getCompany_id());
-        }else{
-            carInfoList = carSourceMapper.selectCarInfoList(id, sysUser.getCompany_id());
-        }
+//            List<Long> carInfoIds = carSourceMapper.selectCarInfoIdList(sysUser.getCompany_id());
+            carInfoList = carSourceMapper.selectCarInfoListByIds(id, sysUser.getCompany_id());
+//            carInfoList = carSourceMapper.selectCarInfoList(id, sysUser.getCompany_id());
+//        }else{
+//            carInfoList = carSourceMapper.selectCarInfoList(id, sysUser.getCompany_id());
+//        }
         return carInfoList;
     }
 
@@ -339,4 +352,7 @@ public class CarSourceService implements ICarSourceService {
     public List<String> findBankNameList() {
         return dictionaryService.findBankNameList();
     }
+
+
+
 }

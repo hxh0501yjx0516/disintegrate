@@ -101,6 +101,6 @@ public class CarInfo implements Serializable {
 	 * 是否删除。1.删除，2,正常
 	 */
 	private Integer isDelete;
-
-
+	// 车辆编号，格式：TSXXX190900001    添加车辆时加入
+	private String carCode;
 }

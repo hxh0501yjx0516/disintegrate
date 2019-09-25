@@ -17,4 +17,7 @@ public interface DictionaryService {
      */
     List<String> findBankNameList();
 
+    List<String> selectProvinceCodeList();
+
+    List<String> selectProceduresTypeList();
 }

@@ -1,6 +1,7 @@
 package com.tieshan.disintegrate.dao;
 
 import com.tieshan.disintegrate.pojo.Bank;
+import com.tieshan.disintegrate.pojo.CarEnter;
 import com.tieshan.disintegrate.pojo.CarInfo;
 import com.tieshan.disintegrate.pojo.CarSource;
 import org.apache.ibatis.annotations.Mapper;
@@ -62,7 +63,9 @@ public interface CarSourceMapper {
                                                      @Param(value = "userId") Long id,
                                                      @Param(value = "loginName") String login_name);
 
-    List<Long> selectCarInfoIdList(Integer isVerify, Long disintegratePlantId);
+    List<Long> selectCarInfoIdList(Long disintegratePlantId);
 
-    List<Map<String, Object>> selectCarInfoListByIds(Long id, List<Long> carInfoIds, Long disintegratePlantId);
+    List<Map<String, Object>> selectCarInfoListByIds(@Param(value = "id") Long id,@Param(value = "disintegratePlantId") Long disintegratePlantId);
+
+    void insertCarEnter(CarEnter carEnter);
 }

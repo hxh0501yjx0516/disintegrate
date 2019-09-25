@@ -11,5 +11,21 @@
 	    	first_type = "bank";
     </select>
 
+	<select id="selectProvinceCodeList" resultType="java.lang.String">
+		SELECT
+			IFNULL(filed_name,'') AS filedName
+		FROM
+			ts_dictionary
+		WHERE
+			first_type = "province_code";
+	</select>
 
+	<select id="selectProceduresTypeList" resultType="java.lang.String">
+		SELECT
+			IFNULL(filed_name,'') AS filedName
+		FROM
+			ts_dictionary
+		WHERE
+			first_type = "procedures_type";
+	</select>
 </mapper>

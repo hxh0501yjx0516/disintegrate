@@ -20,6 +20,24 @@ public class DictionaryServiceImpl implements DictionaryService {
     @Autowired
     private DictionaryMapper dictionaryMapper;
 
+    /**
+     * 查询所有手续
+     * @return
+     */
+    @Override
+    public List<String> selectProceduresTypeList() {
+        return dictionaryMapper.selectProceduresTypeList();
+    }
+
+    /**
+     * 查询所有省份简称
+     * @return
+     */
+    @Override
+    public List<String> selectProvinceCodeList() {
+        return dictionaryMapper.selectProvinceCodeList();
+    }
+
     @Override
     public List<String> findBankNameList() {
         return dictionaryMapper.findBankNameList();
