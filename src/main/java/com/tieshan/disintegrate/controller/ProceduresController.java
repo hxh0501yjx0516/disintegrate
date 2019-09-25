@@ -156,7 +156,7 @@ public class ProceduresController {
 
     /**
      * 查询手续查询录列表
-     * @param params page int 页码
+     * @param params pageNum int 页码
      *               pageSize int  页面大小
      *               isQuery int
      * @param user
@@ -170,7 +170,7 @@ public class ProceduresController {
 
     /**
      * 查询核档记录列表
-     * @param params page int 页码
+     * @param params pageNum int 页码
      *               pageSize int  页面大小
      *               isVerify int
      * @param user

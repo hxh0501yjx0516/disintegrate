@@ -371,7 +371,7 @@ public class ProceduresService implements IProceduresService {
     public PageInfo<CarInfo> queryQueryResultList(Map<String, Object> params, SysUser user) {
         params.put("disintegratePlantId", user.getCompany_id());
         PageHelper.startPage(
-                StringUtils.isEmpty(params.get("page")) ? 1 : Integer.parseInt(String.valueOf(params.get("page"))),
+                StringUtils.isEmpty(params.get("pageNum")) ? 1 : Integer.parseInt(String.valueOf(params.get("pageNum"))),
                 StringUtils.isEmpty(params.get("pageSize"))?10:Integer.parseInt(String.valueOf(params.get("pageSize"))));
         List<CarInfo> carInfos = carInfoMapper.selectListByProcessing(params);
         PageInfo<CarInfo> pageInfo = new PageInfo<>(carInfos);
@@ -382,7 +382,7 @@ public class ProceduresService implements IProceduresService {
     public PageInfo<CarInfo> queryVerificationList(Map<String, Object> params, SysUser user) {
         params.put("disintegratePlantId", user.getCompany_id());
         PageHelper.startPage(
-                StringUtils.isEmpty(params.get("page")) ? 1 : Integer.parseInt(String.valueOf(params.get("page"))),
+                StringUtils.isEmpty(params.get("pageNum")) ? 1 : Integer.parseInt(String.valueOf(params.get("pageNum"))),
                 StringUtils.isEmpty(params.get("pageSize"))?10:Integer.parseInt(String.valueOf(params.get("pageSize"))));
         List<CarInfo> carInfos = carInfoMapper.selectListByProcessing(params);
         PageInfo<CarInfo> pageInfo = new PageInfo<>(carInfos);
