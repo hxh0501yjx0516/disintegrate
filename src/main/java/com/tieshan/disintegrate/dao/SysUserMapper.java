@@ -1,6 +1,7 @@
 package com.tieshan.disintegrate.dao;
 
 import com.tieshan.disintegrate.pojo.Department_user;
+import com.tieshan.disintegrate.pojo.SysLog;
 import com.tieshan.disintegrate.pojo.SysUser;
 import org.apache.ibatis.annotations.Param;
 
@@ -155,4 +156,37 @@ public interface SysUserMapper {
      * @return
      */
     int findUserByPassword(@Param("password") String password, @Param("id") String id);
+
+    /**
+     * 创建系统日志表
+     *
+     * @param param
+     * @return
+     */
+    int creatSyslog(@Param("param") String param);
+
+    /**
+     * 插入日志信息
+     *
+     * @param param
+     * @return
+     */
+    int syslog(@Param("param") String param, @Param("sysLog") SysLog sysLog);
+
+    /**
+     * 判断表是否存在
+     *
+     * @param param
+     * @return
+     */
+    int existTable(@Param("param") String param);
+
+    /**
+     * 删除表
+     *
+     * @param param
+     * @return
+     */
+
+    int delTable(@Param("param") String param);
 }

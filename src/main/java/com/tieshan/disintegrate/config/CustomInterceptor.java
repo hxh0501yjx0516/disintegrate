@@ -1,10 +1,11 @@
 package com.tieshan.disintegrate.config;
 
 import com.beust.jcommander.internal.Nullable;
-import com.tieshan.disintegrate.util.PubMethod;
-import com.tieshan.disintegrate.util.RedisUtils;
-import com.tieshan.disintegrate.util.RestResult;
-import com.tieshan.disintegrate.util.ResultCode;
+import com.tieshan.disintegrate.dao.SysUserMapper;
+import com.tieshan.disintegrate.pojo.SysLog;
+import com.tieshan.disintegrate.pojo.SysUser;
+import com.tieshan.disintegrate.token.TokenService;
+import com.tieshan.disintegrate.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * @description:
@@ -24,20 +28,22 @@ import java.io.OutputStream;
  * @version: 1.0
  * @modified By:
  */
-
 @Component
 public class CustomInterceptor implements HandlerInterceptor {
     @Autowired
     private Environment env;
-@Autowired
-    private RedisUtil redisUtil;
-
+    @Autowired
+    private SysUserMapper sysUserMapper;
     @Autowired
     private RedisUtils redisUtils;
-
+    @Autowired
+    private TokenService tokenService;
+    @Autowired
+    private SysLog sysLog;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        insertSysLog(request);
         String token = request.getHeader("token");
         if (PubMethod.isEmpty(token)) {
             returnJson(response, "未检出到token", null, ResultCode.TOKEN_NO.code());
@@ -83,4 +89,44 @@ public class CustomInterceptor implements HandlerInterceptor {
     }
 
 
+    /**
+     * 全局操作日志
+     *
+     * @param request
+     */
+    private void insertSysLog(HttpServletRequest request) {
+        try {
+            String token = request.getHeader("token");
+            SysUser sysUser = tokenService.getToken(token);
+            IdWorker idWorker = new IdWorker(1, 1, 1);
+            sysLog.setId(idWorker.nextId());
+            sysLog.setDepart_name(sysUser.getDepartment_name());
+            sysLog.setDisintegrate_plant_id(sysUser.getCompany_id());
+            sysLog.setOperator(sysUser.getLogin_name());
+            sysLog.setOperator_id(sysUser.getId());
+            sysLog.setMethod_url(request.getRequestURL().toString());
+            String param = getMonth(0);
+            int num = sysUserMapper.existTable(param);
+            if (num < 1) {
+                sysUserMapper.creatSyslog(param);//创建表
+                String delMonth = getMonth(-2);
+                int delnum = sysUserMapper.existTable(delMonth);
+                if (delnum > 0) {
+                    sysUserMapper.delTable(getMonth(-2));//删除两个越前的历史表
+                }
+            }
+            sysUserMapper.syslog(param, sysLog);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private String getMonth(int month) {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, month);
+        SimpleDateFormat sb = new SimpleDateFormat("yyyyMM");
+        String retrunDate = sb.format(cal.getTime());
+        return retrunDate;
+    }
 }
