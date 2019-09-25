@@ -7,9 +7,12 @@ server:
 spring:
   datasource:
     druid:
-      url: jdbc:mysql://60.205.223.142:3306/disintegrate?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
-      username: root
-      password: q1w2e3r4!
+#      url: jdbc:mysql://60.205.223.142:3306/disintegrate?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+#      username: root
+#      password: q1w2e3r4!
+      url: jdbc:mysql://rm-2zett6o4nsw6hywwuko.mysql.rds.aliyuncs.com:3306/ts_disintegrate?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+      username: jietichang_user
+      password: jtc@2019
       type: com.alibaba.druid.pool.DruidDataSource
       driver-class-name: com.mysql.jdbc.Driver
       initial-size: 10
@@ -59,6 +62,6 @@ logging:
 
 testJob: 0/9 * * * * ?
 
-pc_token: 1800
-app_token: 86400
+pc_token: 864000
+app_token: 864000
 
