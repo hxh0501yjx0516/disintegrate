@@ -169,10 +169,10 @@
             WHERE
                 id = #{id} and user_password=#{password}
     </select>
-    <update id="upName">
+    <update id="upHeadUrl">
     UPDATE user set head_url=#{head_url} where  id=#{id}
    </update>
-    <update id="upHeadUrl">
+    <update id="upName">
     UPDATE user set user_name=#{user_name} where  id=#{id}
    </update>
 </mapper>

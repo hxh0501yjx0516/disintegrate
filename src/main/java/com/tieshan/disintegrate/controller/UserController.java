@@ -184,7 +184,7 @@ public class UserController {
                 restResult = new RestResult("修改失败", null, ResultCode.ERROR.code());
             }
         } catch (Exception e) {
-            log.info("修改头像报错----->", e);
+            log.info("修改名字报错----->", e);
             return new RestResult("修改失败", null, ResultCode.ERROR.code());
 
         }

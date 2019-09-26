@@ -75,7 +75,7 @@ public class LoginController {
 
         } catch (Exception e) {
             log.info("登录接口报错----->" + e);
-            return new RestResult("登录失败", resultMap, ResultCode.ERROR.code());
+            return new RestResult("用户名或密码错误", resultMap, ResultCode.ERROR.code());
 
         }
         return restResult;
