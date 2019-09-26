@@ -1,6 +1,9 @@
 package com.tieshan.disintegrate.service;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
 import com.tieshan.disintegrate.pojo.SysUser;
+import com.tieshan.disintegrate.vo.CarBackVo;
 
 import java.util.Map;
 
@@ -15,4 +18,6 @@ public interface ICarBackService {
     void savePrintCarBackRecord(Map<String, Object> params, SysUser user);
 
     void saveReceiveCarRecord(Map<String, Object> params, SysUser user);
+
+    PageInfo<CarBackVo> queryCarBackVoList(Map<String, Object> params, SysUser user);
 }

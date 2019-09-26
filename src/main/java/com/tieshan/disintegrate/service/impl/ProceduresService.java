@@ -7,6 +7,8 @@ import com.tieshan.disintegrate.exception.CustomException;
 import com.tieshan.disintegrate.pojo.*;
 import com.tieshan.disintegrate.service.IProceduresService;
 import com.tieshan.disintegrate.util.IdWorker;
+import com.tieshan.disintegrate.vo.AppCarBaseVo;
+import com.tieshan.disintegrate.vo.CarCustomerInfoVo;
 import com.tieshan.disintegrate.vo.ProceduresVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,10 +108,9 @@ public class ProceduresService implements IProceduresService {
     }
 
     @Override
-    public ProceduresVo query(Long id, SysUser user) {
+    public ProceduresVo query(Map<String, Object> params, SysUser user) {
         Map<String, Object> map = new HashMap<>();
         map.put("disintegratePlantId", user.getCompany_id());
-        map.put("id", id);
         CarIdentity carIdentity = carIdentityMapper.selectOneByMap(map);
         ProceduresVo proceduresVo = new ProceduresVo();
         BeanUtils.copyProperties(carIdentity, proceduresVo);
@@ -367,25 +368,32 @@ public class ProceduresService implements IProceduresService {
         carProcessingMapper.updateCarProcessing(carProcessing);
     }
 
-    @Override
+/*    @Override
     public PageInfo<CarInfo> queryQueryResultList(Map<String, Object> params, SysUser user) {
         params.put("disintegratePlantId", user.getCompany_id());
         PageHelper.startPage(
                 StringUtils.isEmpty(params.get("pageNum")) ? 1 : Integer.parseInt(String.valueOf(params.get("pageNum"))),
-                StringUtils.isEmpty(params.get("pageSize"))?10:Integer.parseInt(String.valueOf(params.get("pageSize"))));
+                StringUtils.isEmpty(params.get("pageSize")) ? 10 : Integer.parseInt(String.valueOf(params.get("pageSize"))));
         List<CarInfo> carInfos = carInfoMapper.selectListByProcessing(params);
         PageInfo<CarInfo> pageInfo = new PageInfo<>(carInfos);
+        return pageInfo;
+    }*/
+
+    @Override
+    public PageInfo<AppCarBaseVo> queryAppVerificationList(Map<String, Object> params, SysUser user) {
+        params.put("disintegratePlantId", user.getCompany_id());
+        PageHelper.startPage(
+                StringUtils.isEmpty(params.get("pageNum")) ? 1 : Integer.parseInt(String.valueOf(params.get("pageNum"))),
+                StringUtils.isEmpty(params.get("pageSize")) ? 10 : Integer.parseInt(String.valueOf(params.get("pageSize"))));
+        List<AppCarBaseVo> carInfos = carInfoMapper.selectAppList(params);
+        PageInfo<AppCarBaseVo> pageInfo = new PageInfo<>(carInfos);
         return pageInfo;
     }
 
     @Override
-    public PageInfo<CarInfo> queryVerificationList(Map<String, Object> params, SysUser user) {
+    public CarCustomerInfoVo queryCarCustomerInfo(Map<String, Object> params, SysUser user) {
         params.put("disintegratePlantId", user.getCompany_id());
-        PageHelper.startPage(
-                StringUtils.isEmpty(params.get("pageNum")) ? 1 : Integer.parseInt(String.valueOf(params.get("pageNum"))),
-                StringUtils.isEmpty(params.get("pageSize"))?10:Integer.parseInt(String.valueOf(params.get("pageSize"))));
-        List<CarInfo> carInfos = carInfoMapper.selectListByProcessing(params);
-        PageInfo<CarInfo> pageInfo = new PageInfo<>(carInfos);
-        return pageInfo;
+        return carInfoMapper.selectCarCustomerInfo(params);
     }
+
 }
