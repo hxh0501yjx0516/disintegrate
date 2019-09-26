@@ -167,7 +167,7 @@
             FROM
             user
             WHERE
-                id = #{id} and user_password#{password}
+                id = #{id} and user_password=#{password}
     </select>
     <update id="upName">
     UPDATE user set head_url=#{head_url} where  id=#{id}
