@@ -166,6 +166,28 @@ public class UserController {
     }
 
     /**
+     * 通过token获取用户信息
+     *
+     * @param request
+     * @return
+     */
+    @GetMapping(value = "/getUserInfo")
+    public RestResult getUserInfo(HttpServletRequest request) {
+        RestResult restResult = null;
+        try {
+            String token = request.getHeader("token");
+            SysUser sysUser = tokenService.getToken(token);
+            restResult = new RestResult("获取用户信息", sysUser, ResultCode.SUCCESS.code());
+        } catch (Exception e) {
+            log.info("获取用户信息失败---->", e);
+            return new RestResult("获取用户信息失败", null, ResultCode.ERROR.code());
+
+        }
+        return restResult;
+
+    }
+
+    /**
      * 修改名字
      *
      * @param user_name
@@ -190,6 +212,7 @@ public class UserController {
         }
         return restResult;
     }
+
     /**
      * 修改名字
      *
