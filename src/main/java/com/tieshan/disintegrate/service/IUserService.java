@@ -3,6 +3,7 @@ package com.tieshan.disintegrate.service;
 
 import com.tieshan.disintegrate.pojo.SysUser;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -86,7 +87,7 @@ public interface IUserService {
      * @param id
      * @return
      */
-    Map<String, Object> getUserByid(String id);
+    SysUser getUserByid(String id);
 
     /**
      * 判断密码是否正确
@@ -100,11 +101,11 @@ public interface IUserService {
     /**
      * 修改名字
      *
-     * @param id
+     * @param request
      * @param user_name
      * @return
      */
-    int upName(String id, String user_name);
+    int upName(String user_name, HttpServletRequest request) ;
 
     /**
      * 修改头像
@@ -113,7 +114,7 @@ public interface IUserService {
      * @param head_url
      * @return
      */
-    int upHeadUrl(String id, String head_url);
+    int upHeadUrl(String id, String head_url, HttpServletRequest request);
 
 
 }

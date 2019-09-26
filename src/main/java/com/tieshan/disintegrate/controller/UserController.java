@@ -100,7 +100,10 @@ public class UserController {
     public RestResult updateUser(@RequestBody SysUser sysUser, HttpServletRequest request) {
         try {
             int num = userService.updateUser(sysUser);
+
             if (num > 0) {
+//                String token = request.getHeader("token");
+//                this.tokenService.save(token, sysUser);
                 return new RestResult("更新成功", null, ResultCode.SUCCESS.code());
 
             } else {
@@ -154,8 +157,12 @@ public class UserController {
     public RestResult getUserByid(String id, HttpServletRequest request) {
         RestResult restResult = null;
         try {
-            Map<String, Object> resultMap = userService.getUserByid(id);
-            restResult = new RestResult("获取用户信息", resultMap, ResultCode.SUCCESS.code());
+            SysUser sysUser = userService.getUserByid(id);
+            if (!PubMethod.isEmpty(sysUser)) {
+                restResult = new RestResult("获取用户信息", sysUser, ResultCode.SUCCESS.code());
+            } else {
+                restResult = new RestResult("获取用户失败", null, ResultCode.ERROR.code());
+            }
         } catch (Exception e) {
             log.info("通过用户主键id获取用户失败---->", e);
             return new RestResult("获取失败", null, ResultCode.ERROR.code());
@@ -197,10 +204,12 @@ public class UserController {
     public RestResult updatePassword(String user_name, HttpServletRequest request) {
         RestResult restResult = null;
         try {
-            String token = request.getHeader("token");
-            SysUser sysUser = tokenService.getToken(token);
-            int num = userService.upName(sysUser.getId() + "", user_name);
+            int num = userService.upName(user_name, request);
             if (num > 0) {
+                String token = request.getHeader("token");
+                SysUser sysUser = tokenService.getToken(token);
+                sysUser.setUser_name(user_name);
+                tokenService.save(token, sysUser);
                 restResult = new RestResult("修改成功", null, ResultCode.SUCCESS.code());
             } else {
                 restResult = new RestResult("修改失败", null, ResultCode.ERROR.code());
@@ -225,8 +234,10 @@ public class UserController {
         try {
             String token = request.getHeader("token");
             SysUser sysUser = tokenService.getToken(token);
-            int num = userService.upHeadUrl(sysUser.getId() + "", head_url);
+            int num = userService.upHeadUrl(sysUser.getId() + "", head_url, request);
             if (num > 0) {
+                sysUser.setHead_url(head_url);
+                tokenService.save(token, sysUser);
                 restResult = new RestResult("修改成功", null, ResultCode.SUCCESS.code());
             } else {
                 restResult = new RestResult("修改失败", null, ResultCode.ERROR.code());
