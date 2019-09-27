@@ -356,6 +356,36 @@ public class CarSourceService implements ICarSourceService {
     }
 
     /**
+     * 查询所有位置信息
+     * @param id
+     * @param request
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> selectLocationListByPid(Long id, HttpServletRequest request) {
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        return carSourceMapper.selectLocationListByPid(id, sysUser.getCompany_id());
+    }
+
+    /**
+     * 查询某解体厂下的所有车辆
+     * @param page
+     * @param pageSize
+     * @param findMsg
+     * @param request
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> selectCarInfoListByDisintegratePlantId(Integer page, Integer pageSize, String findMsg, HttpServletRequest request) {
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        // 设置分页信息
+        PageHelper.startPage(page, pageSize);
+        return carSourceMapper.selectCarInfoListByDisintegratePlantId(sysUser.getCompany_id(), findMsg);
+    }
+
+    /**
      * 初检完成
      * @param carSurvey
      * @param request
@@ -491,15 +521,14 @@ public class CarSourceService implements ICarSourceService {
      * APP 查询所有指定车源下的车辆
      * @param id
      * @param request
-     * @param isVerify
+     * @param state
      * @param findMsg
      * @param page
      * @param pageSize
      * @return
      */
     @Override
-    public List<Map<String, Object>> selectCarInfoListApp(Long id, HttpServletRequest request, Integer isVerify, Integer isAppointLogoutTime,
-                                         Integer isApproach, Integer isGetSalvage, Integer isPremiumCompletion, String findMsg, Integer page, Integer pageSize) {
+    public List<Map<String, Object>> selectCarInfoListApp(Long id, HttpServletRequest request, String state, String findMsg, Integer page, Integer pageSize) {
         // 定义一个查询结果的结果集对象
         List<Map<String, Object>> resultMapList = new ArrayList<>();
 
@@ -508,8 +537,9 @@ public class CarSourceService implements ICarSourceService {
         // 获取token
         String token = request.getHeader("token");
         SysUser sysUser = tokenService.getToken(token);
+        List<Map<String, Object>> mapList = null;
         // 查询所有指定车源下的车辆
-        List<Map<String, Object>> mapList = carSourceMapper.selectCarInfoListApp(id, sysUser.getCompany_id(), isVerify, isAppointLogoutTime, isApproach, isGetSalvage, isPremiumCompletion, findMsg);
+        mapList = carSourceMapper.selectCarInfoListApp(id, sysUser.getCompany_id(), state, findMsg);
         // 遍历maps集合
         for (Map<String, Object> map : mapList) {
             // 定义一个map集合对象
@@ -564,20 +594,6 @@ public class CarSourceService implements ICarSourceService {
             }else if (map.get("isPremiumCompletion").toString().equals("2")){
                 mapCarInfo.put("status", "报废完成");
             }
-
-            /*if (map.get("isApproach").toString().equals("1")){
-                mapCarInfo.put("status", "未入场");
-            }else if (map.get("isVerify").toString().equals("1")){
-                mapCarInfo.put("status", "未核档");
-            }else if (map.get("isVerify").toString().equals("3")) {
-                mapCarInfo.put("status", "核档未通过");
-            }else if (map.get("isGetSalvage").toString().equals("1")){
-                mapCarInfo.put("status", "未领取残值");
-            }else if (map.get("isAppointLogoutTime").toString().equals("1")){
-                mapCarInfo.put("status", "待报废");
-            }else if (map.get("isAppointLogoutTime").toString().equals("2")){
-                mapCarInfo.put("status", "报废成功");
-            }*/
             // 一辆车的信息
             resultMapList.add(mapCarInfo);
             System.err.println(mapCarInfo);

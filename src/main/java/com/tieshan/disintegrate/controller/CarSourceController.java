@@ -49,19 +49,20 @@ public class CarSourceController {
      * @return
      */
     @GetMapping("/selectCarSourceList")
-    public PageInfo<Map<String, Object>> selectCarSourceList(@RequestParam(value = "sourceType",required = false, defaultValue = "1") String sourceType,
+    public RestResult selectCarSourceList(@RequestParam(value = "sourceType",required = false, defaultValue = "1") String sourceType,
                                                              @RequestParam(value = "findMsg", required = false) String findMsg,
                                                              @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
                                                              @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
                                                              HttpServletRequest request) {
-        PageInfo pageInfo = null;
+        PageInfo pageInfo = null;/*PageInfo<Map<String, Object>>*/
         try{
             List<Map<String, Object>> mapList = carSourceService.selectCarSourceList(sourceType, findMsg, page, pageSize, request);
             pageInfo = new PageInfo<>(mapList);
         }catch (Exception e){
             log.info("查询失败", e);
+            return new RestResult("查询失败", null, ResultCode.ERROR.code());
         }
-        return pageInfo;
+        return new RestResult("查询成功", pageInfo, ResultCode.SUCCESS.code());
     }
 
 
@@ -344,30 +345,27 @@ public class CarSourceController {
      * APP 查询所有指定车源下的车辆
      * @param id
      * @param request
-     * @param isVerify
+     * @param state    1-待入场状态    2-待核档状态    3-待商委注销状态     4-待领取残值状态     5-待报废状态     6-报废成功
      * @param findMsg
      * @param page
      * @param pageSize
      * @return
      */
     @GetMapping("/selectCarInfoListApp")
-    public PageInfo selectCarInfoListApp(Long id, HttpServletRequest request,
-                                         @RequestParam(value = "isVerify", required = false) Integer isVerify,
-                                         @RequestParam(value = "isAppointLogoutTime", required = false) Integer isAppointLogoutTime,
-                                         @RequestParam(value = "isApproach", required = false) Integer isApproach,
-                                         @RequestParam(value = "isGetSalvage", required = false) Integer isGetSalvage,
-                                         @RequestParam(value = "isPremiumCompletion", required = false) Integer isPremiumCompletion,
+    public RestResult selectCarInfoListApp(Long id, HttpServletRequest request,
+                                         @RequestParam(value = "state", required = false) String state,
                                          @RequestParam(value = "findMsg", required = false) String findMsg,
                                          @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
                                          @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize){
         PageInfo pageInfo = null;
         try{
-            List<Map<String, Object>> resultList = carSourceService.selectCarInfoListApp(id, request, isVerify, isAppointLogoutTime, isApproach, isGetSalvage, isPremiumCompletion, findMsg, page, pageSize);
+            List<Map<String, Object>> resultList = carSourceService.selectCarInfoListApp(id, request, state, findMsg, page, pageSize);
             pageInfo = new PageInfo<>(resultList);
         }catch (Exception e){
             log.info("查询失败",e);
+            return new RestResult("查询失败", null, ResultCode.ERROR.code());
         }
-        return pageInfo;
+        return new RestResult("查询成功", pageInfo, ResultCode.SUCCESS.code());
     }
 
 
@@ -433,7 +431,7 @@ public class CarSourceController {
      * @return
      */
     @GetMapping(value = "/selectCarInfoByIsInitialSurvey")
-    public PageInfo selectCarInfoByIsInitialSurvey(@RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
+    public RestResult selectCarInfoByIsInitialSurvey(@RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
                                               @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
                                               @RequestParam(value = "findMsg", required = false) String findMsg,
                                               HttpServletRequest request){
@@ -443,8 +441,9 @@ public class CarSourceController {
             pageInfo = new PageInfo<>(mapList);
         }catch (Exception e){
             log.info("查询失败", e);
+            return new RestResult("查询失败", null, ResultCode.ERROR.code());
         }
-        return pageInfo;
+        return new RestResult("查询成功", pageInfo, ResultCode.SUCCESS.code());
     }
 
     /**
@@ -517,6 +516,53 @@ public class CarSourceController {
         }
         return new RestResult("修改成功", null, ResultCode.SUCCESS.code());
     }
+
+    /**.
+     * 查询该解体厂下的所有车辆     过
+     * @param page
+     * @param pageSize
+     * @param findMsg
+     * @param request
+     * @return
+     */
+    @GetMapping("/selectCarInfoListByDisintegratePlantId")
+    public RestResult selectCarInfoListByDisintegratePlantId(@RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
+                                            @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
+                                            @RequestParam(value = "findMsg", required = false) String findMsg,
+                                            HttpServletRequest request){
+        PageInfo pageInfo = null;
+        try{
+            List<Map<String, Object>> mapList = carSourceService.selectCarInfoListByDisintegratePlantId(page, pageSize, findMsg, request);
+            pageInfo = new PageInfo<>(mapList);
+        }catch (Exception e){
+            log.info("查询失败", e);
+            return new RestResult("查询失败", null, ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", pageInfo, ResultCode.SUCCESS.code());
+    }
+
+    /**
+     * 查询所有的位置信息
+     * @param id
+     * @param request
+     * @return
+     */
+    @GetMapping("/selectLocationListByPid")
+    public RestResult selectLocationListByPid(@RequestParam(value = "id", required = false, defaultValue = "0") Long id, HttpServletRequest request){
+        List<Map<String, Object>> list = null;
+        try{
+            list = carSourceService.selectLocationListByPid(id, request);
+        }catch (Exception e){
+            log.info("查询失败", e);
+            return new RestResult("查询失败", null, ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", list, ResultCode.SUCCESS.code());
+    }
+
+    /*@PostMapping("/editCarInfoLocation")
+    public RestResult editCarInfoLocation(CarInfo carInfo){
+
+    }*/
 
 //    /**
 //     * 删除指定的车源     14

@@ -769,24 +769,28 @@
             <if test="findMsg != null and findMsg != ''">
                 AND CONCAT(i.car_code,i.car_no,d.vin) LIKE CONCAT('%',#{findMsg},'%')
             </if>
-            <if test="isApproach != null">
-                AND e.is_approach = #{isApproach}
+            <if test='states == "1"'>
+                AND e.is_approach = 1
             </if>
-            <if test="isVerify != null">
+            <if test='states == "2"'>
                 AND e.is_approach = 2
-                AND p.is_verify = #{isVerify}
+                AND p.is_verify = 1
             </if>
-            <if test="isAppointLogoutTime != null">
+            <if test='states == "3"'>
                 AND p.is_verify = 2
-                AND p.is_appoint_logout_time = #{isAppointLogoutTime}
+                AND p.is_appoint_logout_time = 1
             </if>
-            <if test="isGetSalvage != null">
+            <if test='states == "4"'>
                 AND p.is_appoint_logout_time = 2
-                AND s.is_get_salvage = #{isGetSalvage}
+                AND s.is_get_salvage = 1
             </if>
-            <if test="isPremiumCompletion != null">
+            <if test='states == "5"'>
                 AND s.is_get_salvage = 2
-                AND p.is_premium_completion = #{isPremiumCompletion}
+                AND p.is_premium_completion = 1
+            </if>
+            <if test='states == "6"'>
+                AND s.is_get_salvage = 2
+                AND p.is_premium_completion = 2
             </if>
     </select>
 
@@ -1048,6 +1052,35 @@
         	car_info_id = #{carInfoId}
         	AND disintegrate_plant_id = #{disintegratePlantId}
     </update>
+
+    <select id="selectCarInfoListByDisintegratePlantId" resultType="java.util.Map">
+        SELECT
+            IFNULL(i.id,'') AS id,
+            IFNULL(i.car_no,'') AS carNo,
+            IFNULL(i.car_name,'') AS carName,
+            IFNULL(i.car_code,'') AS carCode,
+            IFNULL(e.approach_time,'') AS approachTime
+        FROM
+        	ts_car_info AS i
+        	LEFT JOIN ts_car_enter AS e ON i.id = e.car_info_id
+        WHERE
+        	i.disintegrate_plant_id = #{disintegratePlantId}
+        	<if test="findMsg != null and findMsg != ''">
+                AND CONCAT(i.car_no,i.car_name,i.car_code) LIKE CONCAT("%",#{findMsg},"%")
+            </if>
+    </select>
+
+    <select id="selectLocationListByPid" resultType="java.util.Map">
+        SELECT
+        	IFNULL( id, '' ) AS id,
+        	IFNULL( car_location, '' ) AS carLocation
+        FROM
+        	ts_car_location
+        WHERE
+        	disintegrate_plant_id = #{disintegratePlantId}
+        AND
+        	pid = #{pid}
+    </select>
 
     <delete id="deleteCarSourceById" parameterType="java.lang.Long">
         DELETE FROM ts_car_source WHERE id =#{id} AND disintegrate_plant_id = #{disintegratePlantId};

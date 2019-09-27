@@ -48,8 +48,7 @@ public interface ICarSourceService {
 
     void deleteCarSource(Long id, HttpServletRequest request);
 
-    List<Map<String, Object>> selectCarInfoListApp(Long id, HttpServletRequest request, Integer isVerify, Integer isAppointLogoutTime,
-                                  Integer isApproach, Integer isGetSalvage, Integer isPremiumCompletion, String findMsg, Integer page, Integer pageSize);
+    List<Map<String, Object>> selectCarInfoListApp(Long id, HttpServletRequest request, String state, String findMsg, Integer page, Integer pageSize);
 
     void insertCarSurveyPart(String carNo, String selfWeight, String cardColor, HttpServletRequest request);
 
@@ -64,6 +63,10 @@ public interface ICarSourceService {
     void editCarSurvey(CarSurvey carSurvey, HttpServletRequest request);
 
     void editCarSurveyComplete(CarSurvey carSurvey, HttpServletRequest request);
+
+    List<Map<String, Object>> selectCarInfoListByDisintegratePlantId(Integer page, Integer pageSize, String findMsg, HttpServletRequest request);
+
+    List<Map<String, Object>> selectLocationListByPid(Long id, HttpServletRequest request);
 
 //    List<Map<String, Object>> selectCarSourceListApp(HttpServletRequest request);
 

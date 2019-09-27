@@ -1,12 +1,9 @@
 package com.tieshan.disintegrate.dao;
 
-import com.github.pagehelper.PageInfo;
 import com.tieshan.disintegrate.pojo.*;
-import javafx.scene.chart.ValueAxis;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -71,11 +68,7 @@ public interface CarSourceMapper {
 
     List<Map<String, Object>> selectCarInfoListApp(@Param(value = "id") Long id,
                                                    @Param(value = "disintegratePlantId") Long disintegratePlantId,
-                                                   @Param(value = "isVerify") Integer isVerify,
-                                                   @Param(value = "isAppointLogoutTime") Integer isAppointLogoutTime,
-                                                   @Param(value = "isApproach") Integer isApproach,
-                                                   @Param(value = "isGetSalvage") Integer isGetSalvage,
-                                                   @Param(value = "isPremiumCompletion") Integer isPremiumCompletion,
+                                                   @Param(value = "states") String state,
                                                    @Param(value = "findMsg") String findMsg);
 
     Long selectCarInfoByCarNo(String carNo);
@@ -104,6 +97,12 @@ public interface CarSourceMapper {
     void updateCarEnterIsApproach(CarEnter carEnter);
 
     void updateCarEnterIsInitialSurvey(CarEnter carEnter);
+
+    List<Map<String, Object>> selectCarInfoListByDisintegratePlantId(@Param(value = "disintegratePlantId") Long disintegratePlantId,
+                                                                     @Param(value = "findMsg") String findMsg);
+
+    List<Map<String, Object>> selectLocationListByPid(@Param(value = "pid") Long pid,
+                                         @Param(value = "disintegratePlantId") Long disintegratePlantId);
 
 //    int selectCarInfoCountByCarSourceId(Long id);
 }
