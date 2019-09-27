@@ -178,6 +178,7 @@ public class CarsQueryController {
      * @description App端根据车辆预处理-暂存与完成按钮接口
      * @method post
      * @url http://localhost:8002/doCarsQuery/addPrePic
+     * @json_param {"carInfoId":"24","status":"2","data":[{"first_type": "pre_pic","two_type": "left45","filed_name": "左前45度","fileUrl": "www.asdasdasd"},{"first_type": "pre_pic","two_type": "right45","filed_name": "右后45度","fileUrl": "www.ggggggg"},{"first_type": "pre_pic","two_type": "check","filed_name": "检字","fileUrl": "www.hhhhhhhhhhh"},{"first_type": "pre_pic","two_type": "vin","filed_name": "车架号","fileUrl": "www.rrrrrr"},{"first_type": "pre_pic","two_type": "mingpai","filed_name": "车辆铭牌","fileUrl": "www.gaaaaeeed"},{"first_type": "pre_pic","two_type": "engine","filed_name": "发动机号","fileUrl": "www.kkkkkkkkk"}]}
      * @return_param msg string 描述信息
      * @return_param data int 插入图片的记录数
      * @return_param ret_code int 状态码 0 成功 1 失败
@@ -313,6 +314,7 @@ public class CarsQueryController {
      * @description pp端插入车辆预拓号-暂存与完成按钮接口
      * @method post
      * @url http://localhost:8002/doCarsQuery/addTuoPic
+     * @json_param {"carInfoId":"24","status":"1","data":[{"first_type": "tuo_pic","two_type": "tuopic","filed_name": "拓号图2","fileUrl": "www.yyyyyyyyyyyyy"}]}
      * @return_param msg string 描述信息
      * @return_param data int 插入图片的记录数
      * @return_param ret_code int 状态码 0 成功 1 失败
@@ -384,25 +386,25 @@ public class CarsQueryController {
      * @url http://localhost:8002/doCarsQuery/findSurveyById
      * @return_param msg string 描述信息
      * @return_param data 返回数据集合
-     * @return_param motor_count 马达数量
-     * @return_param battery_count 电池数量
-     * @return_param cistern_count 水箱数量
-     * @return_param alloy_rim_count 铝圈数量
-     * @return_param remark 备注
-     * @return_param chair_count 座椅数量
-     * @return_param car_name 车型
-     * @return_param approach_time 入场时间
-     * @return_param engine 发动机号码
-     * @return_param door_count 车门数量
-     * @return_param tyre_count 轮胎数量
-     * @return_param catalytic_converter_count 三元催化器数量
-     * @return_param car_no 车牌号
-     * @return_param car_degree '新旧程度 1:正常 ,2:火灾 , 3:碰撞 ,4:水淹'
-     * @return_param displacement 汽车排量
-     * @return_param vin 车架号
-     * @return_param conditioner_count 空调数量
-     * @return_param condition_pump_count 空调泵数量
-     * @return_param electrical_machinery_count 电机数量
+     * @return_param motor_count int 马达数量
+     * @return_param battery_count int 电池数量
+     * @return_param cistern_count int 水箱数量
+     * @return_param alloy_rim_count int 铝圈数量
+     * @return_param remark string 备注
+     * @return_param chair_count int 座椅数量
+     * @return_param car_name string 车型
+     * @return_param approach_time Date 入场时间
+     * @return_param engine string 发动机号码
+     * @return_param door_count int 车门数量
+     * @return_param tyre_count int 轮胎数量
+     * @return_param catalytic_converter_count int 三元催化器数量
+     * @return_param car_no string 车牌号
+     * @return_param car_degree int '新旧程度 1:正常 ,2:火灾 , 3:碰撞 ,4:水淹'
+     * @return_param displacement string 汽车排量
+     * @return_param vin string 车架号
+     * @return_param conditioner_count int 空调数量
+     * @return_param condition_pump_count int 空调泵数量
+     * @return_param electrical_machinery_count int 电机数量
      * @return_param ret_code int 状态码 0 成功 1 失败
      * @remark 基于条件查询该车辆初检信息
      * @number 1
