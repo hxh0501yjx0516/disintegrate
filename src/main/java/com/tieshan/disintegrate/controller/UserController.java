@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.transform.Result;
 import java.util.List;
 import java.util.Map;
 
@@ -74,17 +75,18 @@ public class UserController {
      * @return
      */
     @GetMapping(value = "/getUser")
-    public PageInfo<Map<String, Object>> getUser(@RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) int page,
+    public RestResult getUser(@RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) int page,
                                                  @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) int pageSize) {
-        PageInfo<Map<String, Object>> pageInfo = null;
+        RestResult restResult = null;
         try {
             List<Map<String, Object>> mapList = userService.getUser(page, pageSize);
-            pageInfo = new PageInfo<>(mapList);
+            PageInfo<Map<String, Object>> pageInfo = new PageInfo<>(mapList);
+            restResult = new RestResult("获取用户列表",pageInfo, ResultCode.SUCCESS.code());
         } catch (Exception e) {
             log.info("获取员工列表失败------->", e);
         }
 
-        return pageInfo;
+        return restResult;
 
 
     }
