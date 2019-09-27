@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tieshan.disintegrate.dao.AppVersionMapper">
+    <select id="getAppVersion" resultType="java.util.Map">
+             SELECT
+                IFNULL(version_info,'') AS version_info,
+              IFNULL(version_number,'') AS version_number,
+                IFNULL(version_type,'') AS version_type,
+              IFNULL(app_url,'') AS app_url,
+              IFNULL(version_describe	,'') AS version_describe
+            FROM
+                ts_app_version
+            WHERE
+                version_number &gt;  100
+                AND app_type =1
+                ORDER BY id desc
+                LIMIT 1
+    </select>
+</mapper>
