@@ -20,4 +20,6 @@ public interface DictionaryService {
     List<String> selectProvinceCodeList();
 
     List<String> selectProceduresTypeList();
+
+    List<String> selectLicensePlateColorList();
 }

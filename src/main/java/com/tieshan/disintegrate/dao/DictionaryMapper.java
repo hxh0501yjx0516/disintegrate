@@ -23,4 +23,6 @@ public interface DictionaryMapper {
     List<String> selectProvinceCodeList();
 
     List<String> selectProceduresTypeList();
+
+    List<String> selectLicensePlateColorList();
 }

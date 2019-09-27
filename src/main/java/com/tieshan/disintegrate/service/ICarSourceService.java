@@ -1,7 +1,9 @@
 package com.tieshan.disintegrate.service;
 
+import com.github.pagehelper.PageInfo;
 import com.tieshan.disintegrate.pojo.CarInfo;
 import com.tieshan.disintegrate.pojo.CarSource;
+import com.tieshan.disintegrate.pojo.CarSurvey;
 import com.tieshan.disintegrate.pojo.SysUser;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -32,7 +34,7 @@ public interface ICarSourceService {
 
     CarSource selectCarSource(Long id, HttpServletRequest request);
 
-    List<Map<String, Object>> selectCarInfoList(Long id, HttpServletRequest request, Integer isVerify);
+    List<Map<String, Object>> selectCarInfoList(Long id, HttpServletRequest request);
 
     CarInfo selectCarInfoById(Long id, HttpServletRequest request);
 
@@ -45,6 +47,21 @@ public interface ICarSourceService {
     void editCarSource(CarSource carSource);
 
     void deleteCarSource(Long id, HttpServletRequest request);
+
+    List<Map<String, Object>> selectCarInfoListApp(Long id, HttpServletRequest request, Integer isVerify, Integer isAppointLogoutTime,
+                                  Integer isApproach, Integer isGetSalvage, Integer isPremiumCompletion, String findMsg, Integer page, Integer pageSize);
+
+    void insertCarSurveyPart(String carNo, String selfWeight, String cardColor, HttpServletRequest request);
+
+    Map<String, Object> selectCarInfoReason(Long id, HttpServletRequest request);
+
+    List<Map<String, Object>> selectCarInfoByIsApproach(Integer page, Integer pageSize, String findMsg, HttpServletRequest request);
+
+    Map<String, Object> selectCarInfoByIdAndCarEnter(Long id, HttpServletRequest request);
+
+    CarSurvey selectCarSurveyByCarInfoId(Long id, HttpServletRequest request);
+
+    void editCarSurvey(CarSurvey carSurvey, HttpServletRequest request);
 
 //    List<Map<String, Object>> selectCarSourceListApp(HttpServletRequest request);
 

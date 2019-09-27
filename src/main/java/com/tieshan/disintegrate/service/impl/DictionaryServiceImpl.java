@@ -21,6 +21,15 @@ public class DictionaryServiceImpl implements DictionaryService {
     private DictionaryMapper dictionaryMapper;
 
     /**
+     * 查询车牌颜色
+     * @return
+     */
+    @Override
+    public List<String> selectLicensePlateColorList() {
+        return dictionaryMapper.selectLicensePlateColorList();
+    }
+
+    /**
      * 查询所有手续
      * @return
      */

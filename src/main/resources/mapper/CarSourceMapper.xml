@@ -723,25 +723,292 @@
         WHERE id = #{id};
     </update>
 
-    <select id="selectCarInfoListByIds" resultType="java.util.Map">
+    <select id="selectCarInfoListApp" resultType="java.util.Map">
         SELECT
-        	IFNULL(i.id,'') AS id,
-        	IFNULL(i.car_code,'') AS carCode,
-        	IFNULL(i.car_no,'') AS carNo,
-        	IFNULL(d.vin,'') AS vin,
-        	IFNULL(e.approach_time,'') AS approachTime,
-        	IFNULL(p.is_verify,'') AS isVerify
+            IFNULL(i.id,'') AS id,
+            IFNULL(i.car_code,'') AS carCode,
+            IFNULL(i.car_no,'') AS carNo,
+            IFNULL(d.vin,'') AS vin,
+            IFNULL(e.approach_time,'') AS approachTime,
+            IFNULL(e.is_approach,'') AS isApproach,
+            IFNULL(e.is_initial_survey,'') AS isInitialSurvey,
+            IFNULL(e.is_pretreatment,'') AS isPretreatment,
+            IFNULL(e.is_copy_number,'') AS isCopyNumber,
+            IFNULL(p.is_register,'') AS isRegister,
+            IFNULL(p.is_query,'') AS isQuery,
+            IFNULL(p.is_verify,'') AS isVerify,
+            IFNULL(p.is_data_upload,'') AS isDataUpload,
+            IFNULL(p.is_dismantle,'') AS isDismantle,
+            IFNULL(p.is_pic_upload,'') AS isPicUpload,
+            IFNULL(p.is_appoint_logout_time,'') AS isAppointLogoutTime,
+            IFNULL(s.is_get_salvage,'') AS isGetSalvage,
+            IFNULL(p.is_premium_completion,'') AS isPremiumCompletion
         FROM
         	ts_car_info AS i
-        	INNER JOIN ts_car_processing AS p ON i.id = p.car_info_id
-        	INNER JOIN ts_car_identity AS d ON i.id = d.car_info_id
-        	INNER JOIN ts_car_enter AS e ON i.id = e.car_info_id
-        WHERE i.disintegrate_plant_id = #{disintegratePlantId}
+            LEFT JOIN ts_car_identity AS d ON i.id = d.car_info_id
+            LEFT JOIN ts_car_enter AS e ON i.id = e.car_info_id
+            LEFT JOIN ts_car_processing AS p ON i.id = p.car_info_id
+            LEFT JOIN ts_car_salvage AS s ON i.id = s.car_info_id
+        WHERE i.disintegrate_plant_id = #{disintegratePlantId} 
         	AND i.car_source = #{id}
-        	AND e.is_approach = 2;
+            <if test="findMsg != null and findMsg != ''">
+                AND CONCAT(i.car_code,i.car_no,d.vin) LIKE CONCAT('%',#{findMsg},'%')
+            </if>
+            <if test="isApproach != null">
+                AND e.is_approach = #{isApproach}
+            </if>
+            <if test="isVerify != null">
+                AND e.is_approach = 2
+                AND p.is_verify = #{isVerify}
+            </if>
+            <if test="isAppointLogoutTime != null">
+                AND p.is_verify = 2
+                AND p.is_appoint_logout_time = #{isAppointLogoutTime}
+            </if>
+            <if test="isGetSalvage != null">
+                AND p.is_appoint_logout_time = 2
+                AND s.is_get_salvage = #{isGetSalvage}
+            </if>
+            <if test="isPremiumCompletion != null">
+                AND s.is_get_salvage = 2
+                AND p.is_premium_completion = #{isPremiumCompletion}
+            </if>
     </select>
+
+    <select id="selectCarInfoByCarNo" parameterType="java.lang.String" resultType="java.lang.Long">
+        SELECT id FROM ts_car_info WHERE car_no = #{carNo};
+    </select>
+
+    <insert id="insertCarSurveyPart">
+        INSERT INTO ts_car_survey
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="disintegratePlantId != null">
+                disintegrate_plant_id,
+            </if>
+            <if test="carInfoId != null">
+                car_info_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="selfWeight != null">
+                self_weight,
+            </if>
+            <if test="createOperator != null and createOperator != ''">
+                create_operator,
+            </if>
+            <if test="createOperatorId != null">
+                create_operator_id,
+            </if>
+            <if test="cardColor != null and cardColor != ''">
+                card_color
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="disintegratePlantId != null">
+                #{disintegratePlantId},
+            </if>
+            <if test="carInfoId != null">
+                #{carInfoId},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="selfWeight != null">
+                #{selfWeight},
+            </if>
+            <if test="createOperator != null and createOperator != ''">
+                #{createOperator},
+            </if>
+            <if test="createOperatorId != null">
+                #{createOperatorId},
+            </if>
+            <if test="cardColor != null and cardColor != ''">
+                #{cardColor}
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertCarPic">
+        INSERT INTO ts_car_pic
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="disintegratePlantId != null">
+                disintegrate_plant_id,
+            </if>
+            <if test="fileName != null and fileName != ''">
+                file_name,
+            </if>
+            <if test="fileUrl != null and fileUrl != ''">
+                file_url,
+            </if>
+            <if test="firstType != null and firstType != ''">
+                first_type,
+            </if>
+            <if test="twoType != null and twoType != ''">
+                two_type,
+            </if>
+            <if test="carInfoId != null">
+                car_info_id,
+            </if>
+            <if test="operatorId != null">
+                operator_id,
+            </if>
+            <if test="operator != null and operator != ''">
+                operator,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="isDelete != null">
+                is_delete,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="disintegratePlantId != null">
+                #{disintegratePlantId},
+            </if>
+            <if test="fileName != null and fileName != ''">
+                #{fileName},
+            </if>
+            <if test="fileUrl != null and fileUrl != ''">
+                #{fileUrl},
+            </if>
+            <if test="firstType != null and firstType != ''">
+                #{firstType},
+            </if>
+            <if test="twoType != null and twoType != ''">
+                #{twoType},
+            </if>
+            <if test="carInfoId != null">
+                #{carInfoId},
+            </if>
+            <if test="operatorId != null">
+                #{operatorId},
+            </if>
+            <if test="operator != null and operator != ''">
+                #{operator},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectCarInfoReason" resultType="java.util.Map">
+        SELECT
+        	i.id,
+        	i.car_no,
+        	i.car_code,
+        	i.car_name,
+        	p.verify_result,
+        	p.verify_time
+        FROM
+        	ts_car_info i
+        	LEFT JOIN ts_car_processing p ON i.id = p.car_info_id
+        WHERE
+        	i.id = #{id}
+        	AND i.disintegrate_plant_id = #{disintegratePlantId}
+        	AND p.is_verify = 3
+
+    </select>
+
+    <select id="selectCarInfoByIsApproach" parameterType="java.lang.Long" resultType="java.util.Map">
+        SELECT
+        	i.id AS id,
+        	i.car_no AS carNo,
+        	i.car_name AS carName,
+        	i.car_code AS carCode,
+        	e.approach_time AS approachTime
+        FROM
+        	ts_car_info i
+        	LEFT JOIN ts_car_enter e ON i.id = e.car_info_id
+        WHERE
+        	i.disintegrate_plant_id = #{disintegratePlantId}
+        	AND e.is_approach = 1
+        <if test="findMsg != null and findMsg != ''">
+            AND CONCAT(i.car_no,i.car_name,i.car_code) LIKE CONCAT("%",#{findMsg},"%")
+        </if>
+    </select>
+
+    <select id="selectCarInfoByIdAndCarEnter" resultType="java.util.Map">
+        SELECT
+        	i.id AS id,
+        	i.car_no AS carNo,
+        	i.car_name AS carName,
+        	i.car_code AS carCode,
+        	e.approach_time AS approachTime
+        FROM
+        	ts_car_info i
+        	LEFT JOIN ts_car_enter e ON i.id = e.car_info_id
+        WHERE
+        	i.disintegrate_plant_id = #{disintegratePlantId}
+        	AND i.id = #{id};
+    </select>
+
+    <select id="selectCarSurveyByCarInfoId" resultType="com.tieshan.disintegrate.pojo.CarSurvey">
+        SELECT
+        	IFNULL( id, '' ) AS id,
+        	IFNULL( car_info_id, '' ) AS carInfoId,
+        	IFNULL( plate_count, '' ) AS plateCount,
+        	IFNULL( car_degree, '' ) AS carDegree,
+        	IFNULL( condition_pump_count, '' ) AS conditionPumpCount,
+        	IFNULL( battery_count, '' ) AS batteryCount,
+        	IFNULL( motor_count, '' ) AS motorCount,
+        	IFNULL( door_count, '' ) AS doorCount,
+        	IFNULL( alloy_rim_count, '' ) AS alloyRimCount,
+        	IFNULL( cistern_count, '' ) AS cisternCount,
+        	IFNULL( electrical_machinery_count, '' ) AS electricalMachineryCount,
+        	IFNULL( tyre_count, '' ) AS tyreCount,
+        	IFNULL( chair_count, '' ) AS chairCount,
+        	IFNULL( conditioner_count, '' ) AS conditionerCount,
+        	IFNULL( catalytic_converter_count, '' ) AS catalyticConverterCount,
+        	IFNULL( remark, '' ) AS remark
+        FROM
+        	ts_car_survey
+        WHERE
+        	car_info_id = #{id}
+        	AND disintegrate_plant_id = #{disintegratePlantId};
+    </select>
+
+    <update id="editCarSurvey" parameterType="com.tieshan.disintegrate.pojo.CarSurvey">
+        UPDATE ts_car_survey SET
+        	plate_count = #{plateCount},
+        	car_degree = #{carDegree},
+        	condition_pump_count = #{conditionPumpCount},
+        	battery_count = #{batteryCount},
+        	motor_count = #{motorCount},
+        	door_count = #{doorCount},
+        	alloy_rim_count = #{alloyRimCount},
+        	cistern_count = #{cisternCount},
+        	electrical_machinery_count = #{electricalMachineryCount},
+        	tyre_count = #{tyreCount},
+        	chair_count = #{chairCount},
+        	conditioner_count = #{conditionerCount},
+        	catalytic_converter_count = #{catalyticConverterCount},
+        	remark = #{remark}
+        WHERE
+        	id = #{id};
+    </update>
 
     <delete id="deleteCarSourceById" parameterType="java.lang.Long">
         DELETE FROM ts_car_source WHERE id =#{id} AND disintegrate_plant_id = #{disintegratePlantId};
     </delete>
+
 </mapper>

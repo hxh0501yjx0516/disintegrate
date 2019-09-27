@@ -13,6 +13,7 @@ import org.apache.tomcat.util.http.parser.HttpParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -131,7 +132,7 @@ public class CarSourceService implements ICarSourceService {
      * @return
      */
     @Override
-    public List<Map<String, Object>> selectCarInfoList(Long id, HttpServletRequest request, Integer isVerify) {
+    public List<Map<String, Object>> selectCarInfoList(Long id, HttpServletRequest request) {
         List<Map<String, Object>> carInfoList = null;
         String token = request.getHeader("token");
         // 判断是pc端还是App端
@@ -139,11 +140,9 @@ public class CarSourceService implements ICarSourceService {
         SysUser sysUser = tokenService.getToken(token);
 //        if (strArr[0].equals("APP")){
             // 查询所有处于当前状态的车辆id
-//            List<Long> carInfoIds = carSourceMapper.selectCarInfoIdList(sysUser.getCompany_id());
-            carInfoList = carSourceMapper.selectCarInfoListByIds(id, sysUser.getCompany_id());
-//            carInfoList = carSourceMapper.selectCarInfoList(id, sysUser.getCompany_id());
+//            carInfoList = carSourceMapper.selectCarInfoListByIds(id, sysUser.getCompany_id());
 //        }else{
-//            carInfoList = carSourceMapper.selectCarInfoList(id, sysUser.getCompany_id());
+            carInfoList = carSourceMapper.selectCarInfoList(id, sysUser.getCompany_id());
 //        }
         return carInfoList;
     }
@@ -353,6 +352,188 @@ public class CarSourceService implements ICarSourceService {
         return dictionaryService.findBankNameList();
     }
 
+    /**
+     * 修改车辆初检的信息
+     * @param carSurvey
+     */
+    @Override
+    public void editCarSurvey(CarSurvey carSurvey,HttpServletRequest request) {
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        carSurvey.setCreateTime(new Date());
+        carSurvey.setCreateOperator(sysUser.getLogin_name());
+        carSurvey.setCreateOperatorId(sysUser.getId());
+        carSourceMapper.editCarSurvey(carSurvey);
+    }
 
+    /**
+     * 通过车辆id查询该车辆的初检信息
+     * @param id
+     * @param request
+     * @return
+     */
+    @Override
+    public CarSurvey selectCarSurveyByCarInfoId(Long id, HttpServletRequest request) {
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        return carSourceMapper.selectCarSurveyByCarInfoId(id, sysUser.getCompany_id());
+    }
 
+    /**
+     * 通过id查询车辆信息和部分车辆入场信息
+     * @param id
+     * @param request
+     * @return
+     */
+    @Override
+    public Map<String, Object> selectCarInfoByIdAndCarEnter(Long id, HttpServletRequest request) {
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        return carSourceMapper.selectCarInfoByIdAndCarEnter(id, sysUser.getCompany_id());
+    }
+
+    /**
+     * 分页查询所有未入场的车辆信息(包括搜索条件)
+     * @param page
+     * @param pageSize
+     * @param findMsg
+     * @param request
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> selectCarInfoByIsApproach(Integer page, Integer pageSize, String findMsg, HttpServletRequest request) {
+        PageHelper.startPage(page, pageSize);
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        return carSourceMapper.selectCarInfoByIsApproach(sysUser.getCompany_id(), findMsg);
+    }
+
+    /**
+     *  查询车辆核档不通过的原因
+     * @param id
+     * @param request
+     * @return
+     */
+    @Override
+    public Map<String, Object> selectCarInfoReason(Long id, HttpServletRequest request) {
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        return carSourceMapper.selectCarInfoReason(id, sysUser.getCompany_id());
+    }
+
+    /**
+     * 添加部分初检信息和车牌图片
+     *
+     * @param carNo
+     * @param selfWeight
+     * @param cardColor
+     */
+    @Override
+    public void insertCarSurveyPart(String carNo, String selfWeight, String cardColor, HttpServletRequest request) {
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        // 通过车牌号查询车辆id
+        Long carInfoId = carSourceMapper.selectCarInfoByCarNo(carNo);
+        IdWorker idWorker = new IdWorker(1, 1, 1);
+        carSourceMapper.insertCarSurveyPart(idWorker.nextId(),carInfoId, selfWeight, cardColor, new Date(), sysUser.getCompany_id(), sysUser.getId(), sysUser.getLogin_name());
+    }
+
+    /**
+     * APP 查询所有指定车源下的车辆
+     * @param id
+     * @param request
+     * @param isVerify
+     * @param findMsg
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> selectCarInfoListApp(Long id, HttpServletRequest request, Integer isVerify, Integer isAppointLogoutTime,
+                                         Integer isApproach, Integer isGetSalvage, Integer isPremiumCompletion, String findMsg, Integer page, Integer pageSize) {
+        // 定义一个查询结果的结果集对象
+        List<Map<String, Object>> resultMapList = new ArrayList<>();
+
+        // 设置分页信息
+        PageHelper.startPage(page, pageSize);
+        // 获取token
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        // 查询所有指定车源下的车辆
+        List<Map<String, Object>> mapList = carSourceMapper.selectCarInfoListApp(id, sysUser.getCompany_id(), isVerify, isAppointLogoutTime, isApproach, isGetSalvage, isPremiumCompletion, findMsg);
+        // 遍历maps集合
+        for (Map<String, Object> map : mapList) {
+            // 定义一个map集合对象
+            Map<String, Object> mapCarInfo= new HashMap<>();
+            System.out.println(map);
+//            Set<String> keySet = map.keySet();
+//            for (String key : keySet) {
+//                String value = map.get(key).toString();
+//                System.out.println(key+"::::::"+value);
+////                mapCarInfo.put(key, value);
+//            }
+//            mapCarInfo.putAll(map);
+//            Iterator<String> iterator = keySet.iterator();
+//                if (iterator.hasNext()){
+//                    String key = iterator.next();
+//                    Object value = map.get(key);
+//                }
+            mapCarInfo.put("id", map.get("id").toString());
+            mapCarInfo.put("carNo", map.get("carNo").toString());
+            mapCarInfo.put("carCode", map.get("carCode").toString());
+            mapCarInfo.put("vin", map.get("vin").toString());
+            mapCarInfo.put("approachTime", map.get("approachTime").toString());
+            // 判断车辆当前的状态
+            if (map.get("isApproach").toString().equals("1")){
+                mapCarInfo.put("status", "待入场");
+            }else if (map.get("isApproach").toString().equals("2") && map.get("isInitialSurvey").toString().equals("1")){
+                mapCarInfo.put("status", "待初检");
+            }else if (map.get("isInitialSurvey").toString().equals("2") && map.get("isPretreatment").toString().equals("1")){
+                mapCarInfo.put("status", "待预处理");
+            }else if (map.get("isPretreatment").toString().equals("2") && map.get("isCopyNumber").toString().equals("1")){
+                mapCarInfo.put("status", "待拓号");
+            }else if (map.get("isCopyNumber").toString().equals("2") && map.get("isRegister").toString().equals("1")){
+                mapCarInfo.put("status", "待登记");
+            }else if (map.get("isRegister").toString().equals("2") && map.get("isQuery").toString().equals("1")){
+                mapCarInfo.put("status", "待查询");
+            }else if (map.get("isQuery").toString().equals("2") && map.get("isVerify").toString().equals("1")){
+                mapCarInfo.put("status", "待核档");
+            }else if (map.get("isQuery").toString().equals("2") && map.get("isVerify").toString().equals("3")){
+                mapCarInfo.put("status", "核档未通过");
+            }else if (map.get("isVerify").toString().equals("2") && map.get("isDataUpload").toString().equals("1")){
+                mapCarInfo.put("status", "待上传商委");
+            }else if (map.get("isDataUpload").toString().equals("2") && map.get("isDismantle").toString().equals("1")){
+                mapCarInfo.put("status", "待拆解");
+            }else if (map.get("isDismantle").toString().equals("2") && map.get("isPicUpload").toString().equals("1")){
+                mapCarInfo.put("status", "待上传商委图片");
+            }else if (map.get("isPicUpload").toString().equals("2") && map.get("isAppointLogoutTime").toString().equals("1")){
+                mapCarInfo.put("status", "待商委注销");
+            }else if (map.get("isAppointLogoutTime").toString().equals("2") && map.get("isGetSalvage").toString().equals("1")){
+                mapCarInfo.put("status", "待领取残值");
+            }else if (map.get("isGetSalvage").toString().equals("2") && map.get("isPremiumCompletion").toString().equals("1")){
+                mapCarInfo.put("status", "待报废");
+            }else if (map.get("isPremiumCompletion").toString().equals("2")){
+                mapCarInfo.put("status", "报废完成");
+            }
+
+            /*if (map.get("isApproach").toString().equals("1")){
+                mapCarInfo.put("status", "未入场");
+            }else if (map.get("isVerify").toString().equals("1")){
+                mapCarInfo.put("status", "未核档");
+            }else if (map.get("isVerify").toString().equals("3")) {
+                mapCarInfo.put("status", "核档未通过");
+            }else if (map.get("isGetSalvage").toString().equals("1")){
+                mapCarInfo.put("status", "未领取残值");
+            }else if (map.get("isAppointLogoutTime").toString().equals("1")){
+                mapCarInfo.put("status", "待报废");
+            }else if (map.get("isAppointLogoutTime").toString().equals("2")){
+                mapCarInfo.put("status", "报废成功");
+            }*/
+            // 一辆车的信息
+            resultMapList.add(mapCarInfo);
+            System.err.println(mapCarInfo);
+        }
+        System.out.println(resultMapList);
+        return resultMapList;
+    }
 }

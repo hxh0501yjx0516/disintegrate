@@ -268,5 +268,6 @@ public class CarProcessing implements Serializable {
 	 * 是否删除。1.删除，2,正常
 	 */
 	private Integer isDelete;
-
+	// 报废的状态：1.待报废，2.报废完成
+	private Integer isPremiumCompletion;
 }

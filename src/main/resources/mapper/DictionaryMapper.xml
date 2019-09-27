@@ -28,4 +28,13 @@
 		WHERE
 			first_type = "procedures_type";
 	</select>
+
+	<select id="selectLicensePlateColorList" resultType="java.lang.String">
+		SELECT
+			IFNULL(filed_name,'') AS filedName
+		FROM
+			ts_dictionary
+		WHERE
+			first_type = "license_plate_color";
+	</select>
 </mapper>

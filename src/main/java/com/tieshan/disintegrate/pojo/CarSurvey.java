@@ -89,10 +89,6 @@ public class CarSurvey implements Serializable {
 	 */
 	private Date createTime;
 	/**
-	 * 电机数量
-	 */
-	private Integer electricalCount;
-	/**
 	 * 自重
 	 */
 	private String selfWeight;
@@ -112,5 +108,6 @@ public class CarSurvey implements Serializable {
 	 * 创建人id
 	 */
 	private Long createOperatorId;
-
+	// 车牌颜色
+	private String cardColor;
 }

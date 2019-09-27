@@ -1,22 +1,23 @@
 package com.tieshan.disintegrate.controller;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
-import com.tieshan.disintegrate.annotation.LoginUser;
+import com.sun.org.apache.regexp.internal.RE;
 import com.tieshan.disintegrate.constant.ConStants;
 import com.tieshan.disintegrate.pojo.CarInfo;
 import com.tieshan.disintegrate.pojo.CarSource;
-import com.tieshan.disintegrate.pojo.SysUser;
+import com.tieshan.disintegrate.pojo.CarSurvey;
 import com.tieshan.disintegrate.service.DictionaryService;
 import com.tieshan.disintegrate.service.ICarSourceService;
 import com.tieshan.disintegrate.util.RestResult;
 import com.tieshan.disintegrate.util.ResultCode;
 import lombok.extern.apachecommons.CommonsLog;
-import org.checkerframework.checker.units.qual.A;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.transform.Result;
 import java.util.List;
 import java.util.Map;
 
@@ -53,8 +54,13 @@ public class CarSourceController {
                                                              @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
                                                              @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
                                                              HttpServletRequest request) {
-        List<Map<String, Object>> mapList = carSourceService.selectCarSourceList(sourceType, findMsg, page, pageSize, request);
-        PageInfo<Map<String, Object>> pageInfo = new PageInfo<>(mapList);
+        PageInfo pageInfo = null;
+        try{
+            List<Map<String, Object>> mapList = carSourceService.selectCarSourceList(sourceType, findMsg, page, pageSize, request);
+            pageInfo = new PageInfo<>(mapList);
+        }catch (Exception e){
+            log.info("查询失败", e);
+        }
         return pageInfo;
     }
 
@@ -76,7 +82,14 @@ public class CarSourceController {
      */
     @GetMapping(value = "/findUserNameList")
     public RestResult findUserNameList() {
-        return new RestResult("查询成功", carSourceService.findUserNameList(), ResultCode.SUCCESS.code());
+        List<Map<String, Object>> list = null;
+        try{
+            list = carSourceService.findUserNameList();
+        }catch (Exception e){
+            log.info("查询失败", e);
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", list, ResultCode.SUCCESS.code());
     }
 
     /**
@@ -86,7 +99,14 @@ public class CarSourceController {
      */
     @GetMapping(value = "/findBankNameList")
     public RestResult findBankNameList() {
-        return new RestResult("查询成功", carSourceService.findBankNameList(), ResultCode.SUCCESS.code());
+        List<String> list = null;
+        try{
+            list = carSourceService.findBankNameList();
+        }catch (Exception e){
+            log.info("查询失败", e);
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", list, ResultCode.SUCCESS.code());
     }
 
     /**
@@ -97,7 +117,14 @@ public class CarSourceController {
      */
     @GetMapping(value = "selectCarSource")
     public RestResult selectCarSource(Long id, HttpServletRequest request) {
-        return new RestResult("查询成功", carSourceService.selectCarSource(id, request), ResultCode.SUCCESS.code());
+        CarSource carSource = null;
+        try{
+            carSource = carSourceService.selectCarSource(id, request);
+        }catch (Exception e){
+            log.info("查询失败", e);
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", carSource, ResultCode.SUCCESS.code());
     }
 
     /**
@@ -107,9 +134,15 @@ public class CarSourceController {
      * @return
      */
     @GetMapping(value = "selectCarInfoList")
-    public RestResult selectCarInfoList(Long id, HttpServletRequest request,
-                                        @RequestParam(value = "isVerify", required = false) Integer isVerify) {
-        return new RestResult("查询成功", carSourceService.selectCarInfoList(id, request, isVerify), ResultCode.SUCCESS.code());
+    public RestResult selectCarInfoList(Long id, HttpServletRequest request) {
+        List<Map<String, Object>> list = null;
+        try{
+            list = carSourceService.selectCarInfoList(id, request);
+        }catch (Exception e){
+            log.info("查询失败", e);
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", list, ResultCode.SUCCESS.code());
     }
 
 
@@ -156,7 +189,14 @@ public class CarSourceController {
      */
     @GetMapping(value = "/selectProcessingTypeAndProceduresType")
     public RestResult selectProcessingTypeAndProceduresType() {
-        return new RestResult("查询成功", carSourceService.selectProcessingTypeAndProceduresType(), ResultCode.SUCCESS.code());
+        Map<String, List<String>> map = null;
+        try{
+            map = carSourceService.selectProcessingTypeAndProceduresType();
+        }catch (Exception e){
+            log.info("查询失败", e);
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", map, ResultCode.SUCCESS.code());
     }
 
     /**
@@ -187,7 +227,14 @@ public class CarSourceController {
      */
     @GetMapping(value = "selectCarInfoById")
     public RestResult selectCarInfoById(Long id, HttpServletRequest request) {
-        return new RestResult("查询成功", carSourceService.selectCarInfoById(id, request), ResultCode.SUCCESS.code());
+        CarInfo carInfo = null;
+        try{
+            carInfo = carSourceService.selectCarInfoById(id, request);
+        }catch (Exception e){
+            log.info("查询失败", e);
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", carInfo, ResultCode.SUCCESS.code());
     }
 
 
@@ -234,7 +281,14 @@ public class CarSourceController {
      */
     @GetMapping(value = "/selectCarSourceById")
     public RestResult selectCarSourceById(Long id, HttpServletRequest request){
-        return new RestResult("查询成功", carSourceService.selectCarSourceById(id, request), ResultCode.SUCCESS.code());
+        CarSource carSource = null;
+        try{
+            carSource = carSourceService.selectCarSourceById(id, request);
+        }catch (Exception e){
+            log.info("查询失败", e);
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", carSource, ResultCode.SUCCESS.code());
     }
 
     /**
@@ -260,20 +314,191 @@ public class CarSourceController {
      */
     @GetMapping("/selectProvinceCodeList")
     public RestResult selectProvinceCodeList(){
-        return new RestResult("查询成功", dictionaryService.selectProvinceCodeList(), ResultCode.SUCCESS.code());
+        List<String> list = null;
+        try{
+            list = dictionaryService.selectProvinceCodeList();
+        }catch (Exception e){
+            log.info("查询失败", e);
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", list, ResultCode.SUCCESS.code());
     }
 
     /**
-     * 查询所有手续
+     * 查询所有手续APP  过
      * @return
      */
     @GetMapping("/selectProceduresTypeList")
     public RestResult selectProceduresTypeList(){
-        return new RestResult("查询成功", dictionaryService.selectProceduresTypeList(), ResultCode.SUCCESS.code());
+        List<String> list = null;
+        try{
+            list = dictionaryService.selectProceduresTypeList();
+        }catch (Exception e){
+            log.info("查询失败", e);
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", list, ResultCode.SUCCESS.code());
+    }
+
+    /**
+     * APP 查询所有指定车源下的车辆
+     * @param id
+     * @param request
+     * @param isVerify
+     * @param findMsg
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @GetMapping("/selectCarInfoListApp")
+    public PageInfo selectCarInfoListApp(Long id, HttpServletRequest request,
+                                         @RequestParam(value = "isVerify", required = false) Integer isVerify,
+                                         @RequestParam(value = "isAppointLogoutTime", required = false) Integer isAppointLogoutTime,
+                                         @RequestParam(value = "isApproach", required = false) Integer isApproach,
+                                         @RequestParam(value = "isGetSalvage", required = false) Integer isGetSalvage,
+                                         @RequestParam(value = "isPremiumCompletion", required = false) Integer isPremiumCompletion,
+                                         @RequestParam(value = "findMsg", required = false) String findMsg,
+                                         @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
+                                         @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize){
+        PageInfo pageInfo = null;
+        try{
+            List<Map<String, Object>> resultList = carSourceService.selectCarInfoListApp(id, request, isVerify, isAppointLogoutTime, isApproach, isGetSalvage, isPremiumCompletion, findMsg, page, pageSize);
+            pageInfo = new PageInfo<>(resultList);
+        }catch (Exception e){
+            log.info("查询失败",e);
+        }
+        return pageInfo;
     }
 
 
+    /**
+     * 查询车辆核档不通过的原因     过   但是还没有在showdoc中保存，因为原型图还没有
+     * @param id
+     * @param request
+     * @return
+     */
+    @GetMapping(value = "/selectCarInfoReason")
+    public RestResult selectCarInfoReason(Long id, HttpServletRequest request){
+        Map<String, Object> map = null;
+        try{
+            map = carSourceService.selectCarInfoReason(id, request);
+        }catch (Exception e){
+            log.info("查询失败", e);
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", map, ResultCode.SUCCESS.code());
+    }
 
+    /**
+     * 查询车牌颜色    过
+     * @return
+     */
+    @GetMapping(value = "/selectLicensePlateColorList")
+    public RestResult selectLicensePlateColorList(){
+        List<String> list = null;
+        try{
+             list = dictionaryService.selectLicensePlateColorList();
+        }catch (Exception e){
+            log.info("查询失败", e);
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", list, ResultCode.SUCCESS.code());
+    }
+
+    /**
+     * 添加部分初检车俩信息
+     *
+     * @param carNo
+     * @param selfWeight
+     * @param cardColor
+     * @return
+     */
+    @PostMapping(value = "/insertCarSurveyPart")
+    public RestResult insertCarSurveyPart(String carNo, String selfWeight, String cardColor, HttpServletRequest request){
+        try{
+            carSourceService.insertCarSurveyPart(carNo, selfWeight, cardColor, request);
+        }catch(Exception e){
+            log.info("添加失败", e);
+            return new RestResult("添加失败", " ", ResultCode.ERROR.code());
+        }
+        return  new RestResult("添加成功", "", ResultCode.SUCCESS.code());
+    }
+
+    /**
+     * 分页查询所有未入场的车辆信息(包括搜索条件)
+     * @param page
+     * @param pageSize
+     * @param findMsg
+     * @param request
+     * @return
+     */
+    @GetMapping(value = "/selectCarInfoByIsApproach")
+    public PageInfo selectCarInfoByIsApproach(@RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
+                                              @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
+                                              @RequestParam(value = "findMsg", required = false) String findMsg,
+                                              HttpServletRequest request){
+        PageInfo pageInfo = null;
+        try{
+            List<Map<String, Object>> mapList = carSourceService.selectCarInfoByIsApproach(page, pageSize, findMsg, request);
+            pageInfo = new PageInfo<>(mapList);
+        }catch (Exception e){
+            log.info("查询失败", e);
+        }
+        return pageInfo;
+    }
+
+    /**
+     * 通过id查询车辆信息和部分车辆入场信息(基本信息)
+     * @param id
+     * @param request
+     * @return
+     */
+        @GetMapping("selectCarInfoByIdAndCarEnter")
+    public RestResult selectCarInfoByIdAndCarEnter(Long id, HttpServletRequest request){
+        Map<String, Object> map = null;
+        try{
+            map = carSourceService.selectCarInfoByIdAndCarEnter(id, request);
+        }catch (Exception e){
+            log.info("查询失败", e);
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", map, ResultCode.SUCCESS.code());
+    }
+
+    /**
+     * 通过车辆id查询该初检车辆的信息
+     * @param id   车辆的id
+     * @param request
+     * @return
+     */
+    @GetMapping(value = "/selectCarSurveyByCarInfoId")
+    public RestResult selectCarSurveyByCarInfoId(Long id, HttpServletRequest request) {
+        CarSurvey carSurvey = null;
+        try {
+            carSurvey = carSourceService.selectCarSurveyByCarInfoId(id, request);
+        } catch (Exception e) {
+            log.info("查询失败", e);
+            return new RestResult("查询失败", null, ResultCode.ERROR.code());
+        }
+        return  new RestResult("查询成功", carSurvey, ResultCode.SUCCESS.code());
+    }
+
+    /**
+     *
+     *
+     * @param carSurvey
+     * @return
+     */
+    @PostMapping(value = "/editCarSurvey")
+    public RestResult editCarSurvey(CarSurvey carSurvey, HttpServletRequest request){
+        try{
+            carSourceService.editCarSurvey(carSurvey, request);
+        }catch (Exception e){
+            log.info("添加失败", e);
+            return new RestResult("添加失败", null, ResultCode.ERROR.code());
+        }
+        return new RestResult("添加成功", null, ResultCode.SUCCESS.code());
+    }
 
 //    /**
 //     * 删除指定的车源     14
