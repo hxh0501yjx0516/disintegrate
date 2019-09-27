@@ -41,19 +41,21 @@ public class DepartmentController {
      * @return
      */
     @GetMapping(value = "/allDepartment")
-    public PageInfo<Department> allDepartment(HttpServletRequest request,
-                                              @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) int page,
+    public RestResult allDepartment(HttpServletRequest request,
+                                    @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) int page,
 
 
-                                              @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) int pageSize) {
+                                    @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) int pageSize) {
+        RestResult restResult = null;
         PageInfo<Department> pageInfo = null;
         try {
             List<Department> departmentList = departmentService.allDepartment(page, pageSize);
             pageInfo = new PageInfo<>(departmentList);
+            restResult = new RestResult("", pageInfo, ResultCode.SUCCESS.code());
         } catch (Exception e) {
             log.info("获取部门列表失败------->", e);
         }
-        return pageInfo;
+        return restResult;
 
     }
 
