@@ -120,7 +120,7 @@ public interface SysUserMapper {
      * @param id
      * @return
      */
-    Map<String, Object> getUserByid(@Param("id") String id);
+    SysUser getUserByid(@Param("id") String id);
 
     /**
      * 获取所有的用户

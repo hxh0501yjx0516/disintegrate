@@ -1,9 +1,9 @@
 package com.tieshan.disintegrate.service;
 
 import com.github.pagehelper.PageInfo;
-import com.tieshan.disintegrate.pojo.CarInfo;
-import com.tieshan.disintegrate.pojo.CarProcessing;
 import com.tieshan.disintegrate.pojo.SysUser;
+import com.tieshan.disintegrate.vo.AppCarBaseVo;
+import com.tieshan.disintegrate.vo.CarCustomerInfoVo;
 import com.tieshan.disintegrate.vo.ProceduresVo;
 
 import java.util.Map;
@@ -20,7 +20,7 @@ public interface IProceduresService {
 
     void update(ProceduresVo proceduresVo, SysUser user);
 
-    ProceduresVo query(Long id, SysUser user);
+    ProceduresVo query(Map<String, Object> params, SysUser user);
 
     void recordQueryResult(Map<String, Object> params, SysUser user);
 
@@ -34,7 +34,10 @@ public interface IProceduresService {
 
     void saveUploadShangWeiDataRecord(Map<String, Object> params, SysUser user);
 
-    PageInfo<CarInfo> queryQueryResultList(Map<String, Object> params, SysUser user);
+   // PageInfo<CarInfo> queryQueryResultList(Map<String, Object> params, SysUser user);
 
-    PageInfo<CarInfo> queryVerificationList(Map<String, Object> params, SysUser user);
+    PageInfo<AppCarBaseVo> queryAppVerificationList(Map<String, Object> params, SysUser user);
+
+    CarCustomerInfoVo queryCarCustomerInfo(Map<String, Object> params, SysUser user);
+
 }

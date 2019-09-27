@@ -1,8 +1,9 @@
 package com.tieshan.disintegrate.dao;
 
 import com.tieshan.disintegrate.pojo.CarInfo;
+import com.tieshan.disintegrate.vo.AppCarBaseVo;
+import com.tieshan.disintegrate.vo.CarCustomerInfoVo;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -34,5 +35,7 @@ public interface CarInfoMapper {
 
     void batchDeleteCarInfoByMap(Map<String, Object> map);
 
-    List<CarInfo> selectListByProcessing(Map<String, Object> map);
+    List<AppCarBaseVo> selectAppList(Map<String, Object> map);
+
+    CarCustomerInfoVo selectCarCustomerInfo(Map<String, Object> map);
 }

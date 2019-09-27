@@ -25,6 +25,18 @@
         <result property="isDelete" column="is_delete"/>  <!-- 是否删除。1.删除，2,正常 -->
     </resultMap>
 
+    <resultMap type="com.tieshan.disintegrate.vo.CarBackVo" id="carBackVoMap">
+        <result property="carInfoId" column="car_info_id"/>  <!-- 车辆主键id -->
+        <result property="carCode" column="car_code"/>  <!-- 车辆编号 -->
+        <result property="carNo" column="car_no"/>  <!-- 车牌号 -->
+        <result property="carName" column="car_name"/>  <!-- 车型 -->
+        <result property="contacts" column="contacts"/>  <!-- 交车人 -->
+        <result property="contactsPhone" column="contacts_phone"/>  <!-- 交车人手机号 -->
+        <result property="contactsAddress" column="contacts_address"/>  <!-- 交车人地址 -->
+        <result property="vin" column="vin"/>  <!-- vin -->
+        <result property="isPrintCarOrder" column="is_print_car_order"/>  <!-- 1：未打印退车单；2：已打印退车单； -->
+    </resultMap>
+
     <select id="selectOneByMap" resultMap="carBackMap">
         SELECT  id, disintegrate_plant_id, car_info_id, is_print_car_order, print_car_order_time, print_car_order_user_id,
         is_get_procedure, get_procedure_time, get_procedure_user_id, is_get_car, get_car_time, get_car_user,
@@ -154,6 +166,20 @@
             <if test="isDelete!=null">
                 AND is_delete=#{isDelete}  <!-- 是否删除。1.删除，2,正常 -->
             </if>
+        </where>
+    </select>
+    <select id="selectVoListByMap" resultMap="carBackVoMap">
+        SELECT i.id car_info_id,i.car_no,i.car_code, i.car_name,i.contacts,i.contacts_phone,i.contacts_address,e.vin,b.is_print_car_order
+        FROM ts_car_info i
+        left join ts_car_identity e on i.id=e.car_info_id
+        left join ts_car_back b on i.id=b.car_info_id
+        <where>
+            AND disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
+            <if test="searchInfo!=null and searchInfo!=''">
+                and concat(i.contacts,i.contacts_phone,i.car_name,i.car_no,i.car_code)
+                like concat("%",#{searchInfo},"%")
+            </if>
+
         </where>
     </select>
 

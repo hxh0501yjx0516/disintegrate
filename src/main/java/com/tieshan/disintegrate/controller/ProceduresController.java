@@ -2,13 +2,12 @@ package com.tieshan.disintegrate.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.tieshan.disintegrate.annotation.LoginUser;
-import com.tieshan.disintegrate.pojo.CarIdentity;
-import com.tieshan.disintegrate.pojo.CarInfo;
 import com.tieshan.disintegrate.pojo.SysUser;
 import com.tieshan.disintegrate.service.IProceduresService;
-import com.tieshan.disintegrate.util.IdWorker;
 import com.tieshan.disintegrate.util.RestResult;
 import com.tieshan.disintegrate.util.ResultCode;
+import com.tieshan.disintegrate.vo.AppCarBaseVo;
+import com.tieshan.disintegrate.vo.CarCustomerInfoVo;
 import com.tieshan.disintegrate.vo.ProceduresVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -59,13 +56,13 @@ public class ProceduresController {
 
     /**
      * 查询手续
-     * @param id
+     * @param params carInfoId
      * @param user
      * @return
      */
     @PostMapping(value = "/queryProcedures")
-    public RestResult queryProcedures(@RequestBody Long id, @LoginUser SysUser user) {
-        ProceduresVo proceduresVo = proceduresService.query(id, user);
+    public RestResult queryProcedures(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
+        ProceduresVo proceduresVo = proceduresService.query(params, user);
         return new RestResult("修改成功", proceduresVo, ResultCode.SUCCESS.code());
     }
 
@@ -89,6 +86,7 @@ public class ProceduresController {
      * @param params carProcessingId 手续id
      *               verificationResultId  档案核验结果id
      *               state          状态 1:未完成(暂存);2完成;3:不通过;
+     *               result         结果
      *               remark         备注
      * @param user
      * @return
@@ -162,25 +160,36 @@ public class ProceduresController {
      * @param user
      * @return
      */
-    @PostMapping(value = "/queryQueryResultList")
+    /*@PostMapping(value = "/queryQueryResultList")
     public RestResult queryQueryResultList(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         PageInfo<CarInfo> carInfoPageInfo = proceduresService.queryQueryResultList(params, user);
         return new RestResult("查询成功", carInfoPageInfo, ResultCode.SUCCESS.code());
-    }
+    }*/
 
     /**
-     * 查询核档记录列表
+     * app-查询核档记录列表
      * @param params pageNum int 页码
      *               pageSize int  页面大小
      *               isVerify int
      * @param user
      * @return
      */
-    @PostMapping(value = "/queryVerificationList")
-    public RestResult queryVerificationList(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
-        PageInfo<CarInfo> carInfoPageInfo = proceduresService.queryVerificationList(params, user);
+    @PostMapping(value = "/queryAppVerificationList")
+    public RestResult queryAppVerificationList(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
+        PageInfo<AppCarBaseVo> carInfoPageInfo = proceduresService.queryAppVerificationList(params, user);
         return new RestResult("查询成功", carInfoPageInfo, ResultCode.SUCCESS.code());
     }
 
+    /**
+     * app-查询核档记录
+     * @param params carInfoId
+     * @param user
+     * @return
+     */
+    @PostMapping(value = "/queryAppVerification")
+    public RestResult queryAppVerification(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
+        CarCustomerInfoVo carCustomerInfoVo = proceduresService.queryCarCustomerInfo(params, user);
+        return new RestResult("查询成功", carCustomerInfoVo, ResultCode.SUCCESS.code());
+    }
 
 }

@@ -137,21 +137,28 @@
     <delete id="delDepartment_user">
     delete  from department_user where  user_id=#{id}
    </delete>
-    <select id="getUserByid" resultType="java.util.Map">
-       SELECT
-                IFNULL(u.id,'') AS id,
-                IFNULL(u.login_name,'') AS login_name,
-                IFNULL(u.user_name,'') AS user_name,
-                IFNULL(u.head_url,'') AS head_url,
-                IFNULL(d.department_name,'') AS  department_name,
-                IFNULL(du.department_id,'')  AS department_id,
-                IFNULL(u.operator,'') AS operator,
-                IFNULL(u.create_time,'') AS  create_time
+    <select id="getUserByid" resultType="com.tieshan.disintegrate.pojo.SysUser">
 
-            FROM
-                user u LEFT JOIN department_user du ON u.id = du.user_id
-                LEFT JOIN department d ON d.id = du.department_id
-                            where u.id=#{id}
+         SELECT
+             IFNULL(u.login_name,'') AS login_name,
+             IFNULL(u.user_name,'') AS user_name,
+             IFNULL(u.head_url,'') AS head_url,
+             IFNULL(u.user_password,'') AS user_password,
+             IFNULL(u.phone,'') AS phone,
+             IFNULL(d.id,'') AS depart_id,
+             IFNULL(u.id,'') AS id,
+             IFNULL(d.department_name,'') AS department_name,
+             IFNULL(d.depart_code,'') AS depart_code,
+             IFNULL(c.company_name,'') AS company_name,
+             IFNULL(c.company_code,'') AS  company_code,
+             IFNULL(c.id,'') AS  company_id
+        FROM
+            user u
+            LEFT JOIN department_user du ON u.id = du.user_id
+            LEFT JOIN department d ON d.id = du.department_id
+            LEFT JOIN company c ON c.company_code = d.company_code
+            where
+           u.id =#{id}
     </select>
 
     <select id="findUserList" resultType="java.util.Map">

@@ -8,6 +8,7 @@ import com.tieshan.disintegrate.dao.UserDao;
 import com.tieshan.disintegrate.pojo.Department_user;
 import com.tieshan.disintegrate.pojo.SysUser;
 import com.tieshan.disintegrate.service.IUserService;
+import com.tieshan.disintegrate.token.TokenService;
 import com.tieshan.disintegrate.util.IdWorker;
 import com.tieshan.disintegrate.util.PubMethod;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.ShardedJedis;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -37,6 +39,8 @@ public class UserService implements IUserService {
 
     @Autowired
     private Department_user department_user;
+    @Autowired
+    private TokenService tokenService;
 
     @Override
     public List<Map<String, Object>> getUser(int page, int pageSize) {
@@ -122,7 +126,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Map<String, Object> getUserByid(String id) {
+    public SysUser getUserByid(String id) {
         return sysUserMapper.getUserByid(id);
     }
 
@@ -133,13 +137,24 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public int upName(String id, String user_name) {
-        return sysUserMapper.upName(id, user_name);
+    @Transactional
+    public int upName(String user_name, HttpServletRequest request) {
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        int num = sysUserMapper.upName(sysUser.getId() + "", user_name);
+        SysUser user = sysUserMapper.getUserByid(sysUser.getId() + "");
+        tokenService.save(token, user);//跟新token
+        return num;
     }
 
     @Override
-    public int upHeadUrl(String id, String head_url) {
-        return sysUserMapper.upHeadUrl(id, head_url);
+    public int upHeadUrl(String id, String head_url, HttpServletRequest request) {
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        int num = sysUserMapper.upHeadUrl(sysUser.getId() + "", head_url);
+        SysUser user = sysUserMapper.getUserByid(sysUser.getId() + "");
+        tokenService.save(token, user);//跟新token
+        return num;
     }
 
 //    @Override

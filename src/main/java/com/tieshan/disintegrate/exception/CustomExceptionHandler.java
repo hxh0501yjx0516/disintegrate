@@ -54,6 +54,6 @@ public class CustomExceptionHandler {
     @ExceptionHandler(Exception.class)
     public RestResult handleException(Exception e){
         logger.error(e.getMessage(), e);
-        return RestResult.error();
+        return RestResult.error("未知异常");
     }
 }
