@@ -220,7 +220,7 @@ public class CarSourceController {
     }
 
     /**
-     *  通过主键id查询车辆信息   9   显示查询成功，但是没有数据     过
+     *  通过主键id查询车辆信息   9   显示查询成功，但是没有数据     过         APP端的原型图还没有出来，所有showdoc需要加一个接口
      * @param id
      * @param request
      * @return
@@ -406,7 +406,7 @@ public class CarSourceController {
     }
 
     /**
-     * 添加部分初检车俩信息
+     * 添加部分初检车俩信息    过
      *
      * @param carNo
      * @param selfWeight
@@ -425,21 +425,21 @@ public class CarSourceController {
     }
 
     /**
-     * 分页查询所有未入场的车辆信息(包括搜索条件)
+     * 分页查询所有未初检的车辆信息(包括搜索条件)   过
      * @param page
      * @param pageSize
      * @param findMsg
      * @param request
      * @return
      */
-    @GetMapping(value = "/selectCarInfoByIsApproach")
-    public PageInfo selectCarInfoByIsApproach(@RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
+    @GetMapping(value = "/selectCarInfoByIsInitialSurvey")
+    public PageInfo selectCarInfoByIsInitialSurvey(@RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
                                               @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
                                               @RequestParam(value = "findMsg", required = false) String findMsg,
                                               HttpServletRequest request){
         PageInfo pageInfo = null;
         try{
-            List<Map<String, Object>> mapList = carSourceService.selectCarInfoByIsApproach(page, pageSize, findMsg, request);
+            List<Map<String, Object>> mapList = carSourceService.selectCarInfoByIsInitialSurvey(page, pageSize, findMsg, request);
             pageInfo = new PageInfo<>(mapList);
         }catch (Exception e){
             log.info("查询失败", e);
@@ -448,7 +448,7 @@ public class CarSourceController {
     }
 
     /**
-     * 通过id查询车辆信息和部分车辆入场信息(基本信息)
+     * 通过id查询车辆信息和部分车辆入场信息(基本信息)   过
      * @param id
      * @param request
      * @return
@@ -466,7 +466,7 @@ public class CarSourceController {
     }
 
     /**
-     * 通过车辆id查询该初检车辆的信息
+     * 通过车辆id查询该初检车辆的信息      过
      * @param id   车辆的id
      * @param request
      * @return
@@ -484,7 +484,7 @@ public class CarSourceController {
     }
 
     /**
-     *
+     *   车辆初检的暂存   过
      *
      * @param carSurvey
      * @return
@@ -494,10 +494,28 @@ public class CarSourceController {
         try{
             carSourceService.editCarSurvey(carSurvey, request);
         }catch (Exception e){
-            log.info("添加失败", e);
-            return new RestResult("添加失败", null, ResultCode.ERROR.code());
+            log.info("修改失败", e);
+            return new RestResult("修改失败", null, ResultCode.ERROR.code());
         }
-        return new RestResult("添加成功", null, ResultCode.SUCCESS.code());
+        return new RestResult("修改成功", null, ResultCode.SUCCESS.code());
+    }
+
+
+    /**
+     * 初检完成    过
+     * @param carSurvey
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "/editCarSurveyComplete")
+    public RestResult editCarSurveyComplete(CarSurvey carSurvey, HttpServletRequest request){
+        try{
+            carSourceService.editCarSurveyComplete(carSurvey, request);
+        }catch (Exception e){
+            log.info("修改失败", e);
+            return new RestResult("修改失败", null, ResultCode.ERROR.code());
+        }
+        return new RestResult("修改成功", null, ResultCode.SUCCESS.code());
     }
 
 //    /**

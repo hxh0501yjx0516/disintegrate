@@ -180,6 +180,7 @@
 
     <select id="selectCarSourceList" resultType="java.util.Map">
         SELECT
+            COUNT(s.id) AS count,
             IFNULL(s.id, '') AS id,
             IFNULL(s.create_time, '') AS createTime,
 	        IFNULL(s.contacts, '') AS contacts,
@@ -187,19 +188,21 @@
 	        IFNULL(s.car_location,'') AS carLocation,
 			CONCAT(IFNULL(b.bank_name,''),',',IFNULL(b.bank_branch,''),',',IFNULL(b.account,'')) AS bankMessage
         FROM
-	        ts_car_source AS s INNER JOIN ts_bank AS b INNER JOIN ts_car_info AS r
-        ON
-            s.id = r.car_source AND s.bank_id = b.id
+            ts_car_source AS s
+            LEFT JOIN ts_bank AS b ON s.bank_id = b.id
+            LEFT JOIN ts_car_info AS r ON s.id = r.car_source
         WHERE
             s.disintegrate_plant_id = #{disintegratePlantId} AND
             <if test="sourceType != null and sourceType != ''">
                 s.source_type = #{sourceType}
             </if>
-	        <include refid="queryMsg"></include>;
+	        <include refid="queryMsg"></include>
     </select>
 
     <select id="selectCarSourceListApp" resultType="java.util.Map">
         SELECT
+        COUNT(s.id) AS carSourceCount,
+		COUNT(i.id) AS carInfoCount,
         IFNULL(s.id, '') AS id,
         IFNULL(s.contacts, '') AS contacts,   /*联系人*/
         IFNULL(s.phone,'') AS phone,   /*联系人电话*/
@@ -208,14 +211,26 @@
         IFNULL(b.bank_name,'') AS bankName,    /*银行名称*/
         IFNULL(b.account,'') AS account             /*银行账号*/
         FROM
-        ts_car_source AS s INNER JOIN ts_bank AS b
-        ON
-        s.bank_id = b.id
+        ts_car_source AS s
+        LEFT JOIN ts_bank AS b ON s.bank_id = b.id
+        LEFT JOIN ts_car_info AS i ON s.id = i.car_source
         WHERE
         s.disintegrate_plant_id = #{disintegratePlantId} AND
         s.create_operator = #{loginName} AND
         s.create_operator_id = #{userId}
     </select>
+
+    <!--<select id="selectCarInfoCountByCarSourceId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        SELECT
+        	count( i.id ) AS carInfoCountByCarSourceId
+        FROM
+        	ts_car_source AS s
+        	LEFT JOIN ts_car_info AS i ON s.id = i.car_source
+        WHERE
+        	s.disintegrate_plant_id = #{disintegratePlantId}
+        	AND s.create_operator = #{loginName} AND
+            s.create_operator_id = #{userId}
+    </select>-->
 
     <sql id="queryMsg">
         <if test="findMsg != null and findMsg != ''">
@@ -929,7 +944,7 @@
 
     </select>
 
-    <select id="selectCarInfoByIsApproach" parameterType="java.lang.Long" resultType="java.util.Map">
+    <select id="selectCarInfoByIsInitialSurvey" parameterType="java.lang.Long" resultType="java.util.Map">
         SELECT
         	i.id AS id,
         	i.car_no AS carNo,
@@ -941,7 +956,8 @@
         	LEFT JOIN ts_car_enter e ON i.id = e.car_info_id
         WHERE
         	i.disintegrate_plant_id = #{disintegratePlantId}
-        	AND e.is_approach = 1
+        	AND e.is_approach = 2
+        	AND e.is_initial_survey = 1
         <if test="findMsg != null and findMsg != ''">
             AND CONCAT(i.car_no,i.car_name,i.car_code) LIKE CONCAT("%",#{findMsg},"%")
         </if>
@@ -965,6 +981,7 @@
     <select id="selectCarSurveyByCarInfoId" resultType="com.tieshan.disintegrate.pojo.CarSurvey">
         SELECT
         	IFNULL( id, '' ) AS id,
+        	IFNULL( disintegrate_plant_id, '' ) AS disintegratePlantId,
         	IFNULL( car_info_id, '' ) AS carInfoId,
         	IFNULL( plate_count, '' ) AS plateCount,
         	IFNULL( car_degree, '' ) AS carDegree,
@@ -1002,9 +1019,34 @@
         	chair_count = #{chairCount},
         	conditioner_count = #{conditionerCount},
         	catalytic_converter_count = #{catalyticConverterCount},
-        	remark = #{remark}
+        	remark = #{remark},
+        	create_time = #{createTime},
+        	create_operator = #{createOperator},
+        	create_operator_id = #{createOperatorId}
         WHERE
         	id = #{id};
+    </update>
+
+    <update id="updateCarEnterIsApproach" parameterType="com.tieshan.disintegrate.pojo.CarEnter">
+        UPDATE ts_car_enter SET
+        	is_approach = #{isApproach},
+        	approach_time = #{approachTime},
+        	approach_user_id = #{approachUserId},
+        	is_initial_survey = #{isInitialSurvey}
+        WHERE
+        	car_info_id = #{carInfoId}
+        	AND disintegrate_plant_id = #{disintegratePlantId}
+    </update>
+
+    <update id="updateCarEnterIsInitialSurvey" parameterType="com.tieshan.disintegrate.pojo.CarEnter">
+        UPDATE ts_car_enter SET
+        	is_initial_survey = #{isInitialSurvey},
+	        initial_survey_time = #{initialSurveyTime},
+	        initial_survey_user_id = #{initialSurveyUserId},
+	        is_pretreatment = #{isPretreatment}
+        WHERE
+        	car_info_id = #{carInfoId}
+        	AND disintegrate_plant_id = #{disintegratePlantId}
     </update>
 
     <delete id="deleteCarSourceById" parameterType="java.lang.Long">

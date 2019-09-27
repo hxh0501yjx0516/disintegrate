@@ -1,7 +1,6 @@
 package com.tieshan.disintegrate.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.tieshan.disintegrate.dao.CarSourceMapper;
 import com.tieshan.disintegrate.dao.SysUserMapper;
 import com.tieshan.disintegrate.pojo.*;
@@ -9,12 +8,9 @@ import com.tieshan.disintegrate.service.DictionaryService;
 import com.tieshan.disintegrate.service.ICarSourceService;
 import com.tieshan.disintegrate.token.TokenService;
 import com.tieshan.disintegrate.util.IdWorker;
-import org.apache.tomcat.util.http.parser.HttpParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -52,6 +48,7 @@ public class CarSourceService implements ICarSourceService {
      * @param request
      */
     @Override
+    @Transactional
     public void addCar(CarInfo carInfo, Long carSource, HttpServletRequest request) {
         // 设置车辆id
         IdWorker idWorker = new IdWorker(1, 1, 1);
@@ -119,6 +116,7 @@ public class CarSourceService implements ICarSourceService {
      * @param carInfo
      */
     @Override
+    @Transactional
     public void editCar(CarInfo carInfo) {
         carInfo.setCreateTime(new Date());
         carSourceMapper.editCar(carInfo);
@@ -182,8 +180,12 @@ public class CarSourceService implements ICarSourceService {
         if (token.split("-")[0].equals("PC")) {
             carSourceList = carSourceMapper.selectCarSourceList(sysUser.getCompany_id(), sourceType, findMsg);
         }else{
-            carSourceList = carSourceMapper.selectCarSourceListApp(sysUser.getCompany_id(), sysUser.getId(), sysUser.getLogin_name());
-        }
+            carSourceList = carSourceMapper.selectCarSourceListApp(sysUser.getCompany_id(), sysUser.getId(), sysUser.getLogin_name());/*
+            for (Map<String, Object> map : carSourceList) {
+                int carInfoCountByCarSourceId = carSourceMapper.selectCarInfoCountByCarSourceId(Long.parseLong(map.get("id").toString()));
+                map.put("carInfoCountByCarSourceId", carInfoCountByCarSourceId);
+            }*/
+                    }
         return carSourceList;
     }
 
@@ -193,6 +195,7 @@ public class CarSourceService implements ICarSourceService {
      * @param carSource
      */
     @Override
+    @Transactional
     public void editCarSource(CarSource carSource) {
         carSource.setCreateTime(new Date());
         carSourceMapper.editCarSource(carSource);
@@ -353,10 +356,37 @@ public class CarSourceService implements ICarSourceService {
     }
 
     /**
+     * 初检完成
+     * @param carSurvey
+     * @param request
+     */
+    @Override
+    @Transactional
+    public void editCarSurveyComplete(CarSurvey carSurvey, HttpServletRequest request) {
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        carSurvey.setCreateTime(new Date());
+        carSurvey.setCreateOperator(sysUser.getLogin_name());
+        carSurvey.setCreateOperatorId(sysUser.getId());
+        // 更新车车辆初检信息
+        carSourceMapper.editCarSurvey(carSurvey);
+        // 修改初检的状态和预处理的状态
+        CarEnter carEnter = new CarEnter();
+        carEnter.setCarInfoId(carSurvey.getCarInfoId());
+        carEnter.setDisintegratePlantId(carSurvey.getDisintegratePlantId());
+        carEnter.setIsInitialSurvey(2);
+        carEnter.setInitialSurveyTime(new Date());
+        carEnter.setInitialSurveyUserId(sysUser.getId());
+        carEnter.setIsPretreatment(1);
+        carSourceMapper.updateCarEnterIsInitialSurvey(carEnter);
+    }
+
+    /**
      * 修改车辆初检的信息
      * @param carSurvey
      */
     @Override
+    @Transactional
     public void editCarSurvey(CarSurvey carSurvey,HttpServletRequest request) {
         String token = request.getHeader("token");
         SysUser sysUser = tokenService.getToken(token);
@@ -393,7 +423,7 @@ public class CarSourceService implements ICarSourceService {
     }
 
     /**
-     * 分页查询所有未入场的车辆信息(包括搜索条件)
+     * 分页查询所有未初检的车辆信息(包括搜索条件)
      * @param page
      * @param pageSize
      * @param findMsg
@@ -401,11 +431,11 @@ public class CarSourceService implements ICarSourceService {
      * @return
      */
     @Override
-    public List<Map<String, Object>> selectCarInfoByIsApproach(Integer page, Integer pageSize, String findMsg, HttpServletRequest request) {
+    public List<Map<String, Object>> selectCarInfoByIsInitialSurvey(Integer page, Integer pageSize, String findMsg, HttpServletRequest request) {
         PageHelper.startPage(page, pageSize);
         String token = request.getHeader("token");
         SysUser sysUser = tokenService.getToken(token);
-        return carSourceMapper.selectCarInfoByIsApproach(sysUser.getCompany_id(), findMsg);
+        return carSourceMapper.selectCarInfoByIsInitialSurvey(sysUser.getCompany_id(), findMsg);
     }
 
     /**
@@ -429,13 +459,32 @@ public class CarSourceService implements ICarSourceService {
      * @param cardColor
      */
     @Override
+    @Transactional
     public void insertCarSurveyPart(String carNo, String selfWeight, String cardColor, HttpServletRequest request) {
         String token = request.getHeader("token");
         SysUser sysUser = tokenService.getToken(token);
         // 通过车牌号查询车辆id
         Long carInfoId = carSourceMapper.selectCarInfoByCarNo(carNo);
         IdWorker idWorker = new IdWorker(1, 1, 1);
-        carSourceMapper.insertCarSurveyPart(idWorker.nextId(),carInfoId, selfWeight, cardColor, new Date(), sysUser.getCompany_id(), sysUser.getId(), sysUser.getLogin_name());
+        CarSurvey carSurvey = new CarSurvey();
+        carSurvey.setId(idWorker.nextId());
+        carSurvey.setDisintegratePlantId(sysUser.getCompany_id());
+        carSurvey.setCarInfoId(carInfoId);
+        carSurvey.setSelfWeight(selfWeight);
+        carSurvey.setCreateOperatorId(sysUser.getId());
+        carSurvey.setCreateOperator(sysUser.getLogin_name());
+        carSurvey.setCardColor(cardColor);
+        carSurvey.setCreateTime(new Date());
+        carSourceMapper.insertCarSurveyPart(carSurvey);
+        // 修改车辆入场的状态
+        CarEnter carEnter = new CarEnter();
+        carEnter.setIsApproach(2);
+        carEnter.setCarInfoId(carInfoId);
+        carEnter.setApproachTime(new Date());
+        carEnter.setApproachUserId(sysUser.getId());
+        carEnter.setDisintegratePlantId(sysUser.getCompany_id());
+        carEnter.setIsInitialSurvey(1);
+        carSourceMapper.updateCarEnterIsApproach(carEnter);
     }
 
     /**

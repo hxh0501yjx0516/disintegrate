@@ -55,13 +55,15 @@ public interface ICarSourceService {
 
     Map<String, Object> selectCarInfoReason(Long id, HttpServletRequest request);
 
-    List<Map<String, Object>> selectCarInfoByIsApproach(Integer page, Integer pageSize, String findMsg, HttpServletRequest request);
+    List<Map<String, Object>> selectCarInfoByIsInitialSurvey(Integer page, Integer pageSize, String findMsg, HttpServletRequest request);
 
     Map<String, Object> selectCarInfoByIdAndCarEnter(Long id, HttpServletRequest request);
 
     CarSurvey selectCarSurveyByCarInfoId(Long id, HttpServletRequest request);
 
     void editCarSurvey(CarSurvey carSurvey, HttpServletRequest request);
+
+    void editCarSurveyComplete(CarSurvey carSurvey, HttpServletRequest request);
 
 //    List<Map<String, Object>> selectCarSourceListApp(HttpServletRequest request);
 

@@ -81,14 +81,7 @@ public interface CarSourceMapper {
     Long selectCarInfoByCarNo(String carNo);
 
 
-    void insertCarSurveyPart(@Param(value = "id") Long id,
-                         @Param(value = "carInfoId") Long carInfoId,
-                         @Param(value = "selfWeight") String selfWeight,
-                         @Param(value = "cardColor") String cardColor,
-                         @Param(value = "createTime") Date createTime,
-                         @Param(value = "disintegratePlantId") Long disintegratePlantId,
-                         @Param(value = "createOperatorId") Long createOperatorId,
-                         @Param(value = "createOperator") String createOperator);
+    void insertCarSurveyPart(CarSurvey carSurvey);
 
     void insertCarPic(@Param(value = "id") Long id,
                       @Param(value = "carInfoId") Long carInfoId,
@@ -97,7 +90,7 @@ public interface CarSourceMapper {
     Map<String, Object> selectCarInfoReason(@Param(value = "id") Long id,
                                             @Param(value = "disintegratePlantId") Long disintegratePlantId);
 
-    List<Map<String, Object>> selectCarInfoByIsApproach(@Param(value = "disintegratePlantId") Long disintegratePlantId,
+    List<Map<String, Object>> selectCarInfoByIsInitialSurvey(@Param(value = "disintegratePlantId") Long disintegratePlantId,
                                                         @Param(value = "findMsg") String findMsg);
 
     Map<String, Object> selectCarInfoByIdAndCarEnter(@Param(value = "id") Long id,
@@ -107,4 +100,10 @@ public interface CarSourceMapper {
                                          @Param(value = "disintegratePlantId") Long disintegratePlantId);
 
     void editCarSurvey(CarSurvey carSurvey);
+
+    void updateCarEnterIsApproach(CarEnter carEnter);
+
+    void updateCarEnterIsInitialSurvey(CarEnter carEnter);
+
+//    int selectCarInfoCountByCarSourceId(Long id);
 }
