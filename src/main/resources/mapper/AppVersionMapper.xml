@@ -12,8 +12,8 @@
             FROM
                 ts_app_version
             WHERE
-                version_number &gt;  100
-                AND app_type =1
+                version_number &gt; #{version_number}
+                AND app_type =#{app_type}
                 ORDER BY id desc
                 LIMIT 1
     </select>
