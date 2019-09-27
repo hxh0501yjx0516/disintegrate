@@ -1,16 +1,20 @@
 package com.tieshan.disintegrate.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.tieshan.disintegrate.annotation.LoginUser;
 import com.tieshan.disintegrate.constant.ConStants;
+import com.tieshan.disintegrate.vo.CaiPrePicVo;
+import com.tieshan.disintegrate.vo.CarPicData;
 import com.tieshan.disintegrate.pojo.CarsQuery;
+import com.tieshan.disintegrate.pojo.SysUser;
 import com.tieshan.disintegrate.service.CarsQueryService;
+import com.tieshan.disintegrate.util.RestResult;
+import com.tieshan.disintegrate.util.ResultCode;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * @description:车辆查询页面展示
@@ -28,15 +32,16 @@ public class CarsQueryController {
 
     /**
      * showdoc
+     *
+     * @param findMsg  可选 string 查询条件(姓名 / 电话 / 车型 / 车牌号 / 车辆编号 / 车架号 / 发动机号)
+     * @param page     可选 int 当前的页码值
+     * @param pageSize 可选 int 页面大小
+     * @return {"pageNum": 1,"pageSize": 10,"size": 2,"startRow": 1,"endRow": 2,"total": 2,"pages": 1,"list": [{"id": 22,"carNo": "A5W44C","cardColor": "蓝色","carName": "车型","carKind": "车辆性质","natureUsege": "使用性质","carProperties": "'车辆性质","regTime": "2019-09-16T16:00:00.000+0000","issueTime": "2019-09-16T16:00:00.000+0000","owner": "张三","phone": "13345678910","contacts": "zhangsanfeng","contactsPhone": "13888888888","vin": "VIN码","engine": "发动机号码"}],"prePage": 0,"nextPage": 0,"isFirstPage": true,"isLastPage": true,"hasPreviousPage": false,"hasNextPage": false,"navigatePages": 8,"navigatepageNums": [1],"navigateFirstPage": 1,"navigateLastPage": 1,"lastPage": 1,"firstPage": 1}
      * @catalog 解体厂-PC/车辆查询/车辆列表
      * @title 车辆列表
      * @description 车辆列表首页查询接口
      * @method get
      * @url http://localhost:8002/doCarsQuery/doFindPageObjects
-     * @param findMsg 可选 string 查询条件(姓名 / 电话 / 车型 / 车牌号 / 车辆编号 / 车架号 / 发动机号)
-     * @param page 可选 int 当前的页码值
-     * @param pageSize 可选 int 页面大小
-     * @return {"pageNum": 1,"pageSize": 10,"size": 2,"startRow": 1,"endRow": 2,"total": 2,"pages": 1,"list": [{"id": 22,"carNo": "A5W44C","cardColor": "蓝色","carName": "车型","carKind": "车辆性质","natureUsege": "使用性质","carProperties": "'车辆性质","regTime": "2019-09-16T16:00:00.000+0000","issueTime": "2019-09-16T16:00:00.000+0000","owner": "张三","phone": "13345678910","contacts": "zhangsanfeng","contactsPhone": "13888888888","vin": "VIN码","engine": "发动机号码"}],"prePage": 0,"nextPage": 0,"isFirstPage": true,"isLastPage": true,"hasPreviousPage": false,"hasNextPage": false,"navigatePages": 8,"navigatepageNums": [1],"navigateFirstPage": 1,"navigateLastPage": 1,"lastPage": 1,"firstPage": 1}
      * @return_param id Long 车辆编号
      * @return_param carNo string 车牌号
      * @return_param cardColor string 车牌颜色
@@ -64,7 +69,7 @@ public class CarsQueryController {
     ) {
         PageInfo<CarsQuery> pageInfo = null;
         try {
-            List<CarsQuery> list = carsQueryService.findPageObjects(findMsg, page,pageSize);
+            List<CarsQuery> list = carsQueryService.findPageObjects(findMsg, page, pageSize);
             pageInfo = new PageInfo<>(list);
         } catch (Exception e) {
             log.info("获取车辆信息列表失败", e);
@@ -72,5 +77,407 @@ public class CarsQueryController {
 
         return pageInfo;
     }
+
+    /**
+     * showdoc
+     *
+     * @param findMsg 可选 string 查询条件(车牌号 / 车型 / 车辆编号)
+     * @return {"msg": "查询车辆预处理车辆信息成功","data": [{"car_name": "川崎Z1000R","car_info_id": 24,"approach_time": "2019-09-23 19:59:19","car_no": "京A5W44C","car_code": "TSCAR190900001"},{"car_name": "本田CBR1000RR","car_info_id": 25,"approach_time": "2019-09-23 19:59:19","car_no": "川A5W44C","car_code": "TSCAR190900001"}],"ret_code": "0"}
+     * @catalog 拆解厂-APP/手续部-工作台/车辆预处理
+     * @title 车辆预处理首页查询接口
+     * @description App端查询车辆预处理车辆信息
+     * @method get
+     * @url http://localhost:8002/doCarsQuery/findPretreatmentCars
+     * @return_param msg string 描述信息
+     * @return_param car_name string 车型
+     * @return_param car_info_id Long 车辆Id
+     * @return_param approach_time date 入场时间
+     * @return_param car_no string 车牌
+     * @return_param car_code string 车辆编号
+     * @return_param ret_code int 状态码 0 成功 1 失败
+     * @remark 基于条件查询车辆信息
+     * @number 1
+     */
+
+    @GetMapping("/doCarsQuery/findPretreatmentCars")
+    public RestResult findPretreatmentCars(@RequestParam(value = "findMsg", required = false) String findMsg, @LoginUser SysUser user) {
+        RestResult restResult = new RestResult("查询车辆预处理车辆信息成功", carsQueryService.findPretreatmentCars(findMsg, user.getCompany_id()), ResultCode.SUCCESS.code());
+        return restResult;
+    }
+
+    /**
+     * showdoc
+     *
+     * @param carInfoId 必选 Long 车辆Id，从之前返回数据中带过来
+     * @return {"msg": "查询车辆预处理数据成功","data": [{"id": 1177398571025174528,"file_name": "左前45度","first_type": "pre_pic","two_type": "left45","file_url": "www.asdasdasd"},{"id": 1177398571025174529,"file_name": "右后45度","first_type": "pre_pic","two_type": "right45","file_url": "www.ggggggg"},{"id": 1177398571025174530,"file_name": "检字","first_type": "pre_pic","two_type": "check","file_url": "www.hhhhhhhhhhh"},{"id": 1177398571025174531,"file_name": "车架号","first_type": "pre_pic","two_type": "vin","file_url": "www.rrrrrr"},{"id": 1177398571025174532,"file_name": "车辆铭牌","first_type": "pre_pic","two_type": "mingpai","file_url": "www.gaaaaeeed"},{"id": null,"file_name": "发动机号","first_type": "pre_pic","two_type": "engine","file_url": "https://ts-disintegrate.oss-cn-beijing.aliyuncs.com/fadongjihao.png"}],"ret_code": "0"}
+     * @catalog 拆解厂-APP/手续部-工作台/车辆预处理
+     * @title 车辆预处理图片接口
+     * @description App端查询车辆预处理车辆图片
+     * @method get
+     * @url http://localhost:8002/doCarsQuery/doFindCars
+     * @return_param msg string 描述信息
+     * @return_param id long 图片Id
+     * @return_param file_name string 照片名称
+     * @return_param first_type string 照片的一级类型
+     * @return_param two_type string 照片的二级类型
+     * @return_param file_url string 照片链接
+     * @return_param ret_code int 状态码 0 成功 1 失败
+     * @remark App端根据carInfoId查询车辆预处理照片
+     * @number 1
+     */
+    @GetMapping("/doCarsQuery/doFindCars")
+    public RestResult doFindCars(@RequestParam(value = "carInfoId", required = true) Long carInfoId, @LoginUser SysUser user) {
+
+        List<CaiPrePicVo> list = carsQueryService.doFindCars(carInfoId, user.getCompany_id());
+        RestResult restResult = null;
+        if (null == list || list.size() == 0) {
+            restResult = new RestResult("未查询到车辆预处理数据", null, ResultCode.ERROR.code());
+        }
+        restResult = new RestResult("查询车辆预处理数据成功", list, ResultCode.SUCCESS.code());
+        return restResult;
+    }
+
+    /**
+     * showdoc
+     *
+     * @param
+     * @return {"msg": "查询车辆预处理拍照名称成功","data": [{"first_type": "pre_pic","two_type": "left45","filed_name": "左前45度"},{"first_type": "pre_pic","two_type": "right45","filed_name": "右后45度"},{"first_type": "pre_pic","two_type": "check","filed_name": "检字"},{"first_type": "pre_pic","two_type": "vin","filed_name": "车架号"},{"first_type": "pre_pic","two_type": "mingpai","filed_name": "车辆铭牌"},{"first_type": "pre_pic","two_type": "engine","filed_name": "发动机号"}],"ret_code": "0"}
+     * @catalog 拆解厂-APP/手续部-工作台/车辆预处理
+     * @title 车辆预处理拍照名称接口
+     * @description App端查询车辆预处理拍照名称
+     * @method get
+     * @url http://localhost:8002/doCarsQuery/findPrePicNameCars
+     * @return_param msg string 描述信息
+     * @return_param first_type string 图片一级类型
+     * @return_param two_type string 图片二级类型
+     * @return_param filed_name string 图片名称
+     * @return_param ret_code int 状态码 0 成功 1 失败
+     * @remark App端查询车辆预处理拍照名称
+     * @number 1
+     */
+    @GetMapping("/doCarsQuery/findPrePicNameCars")
+    public RestResult findPrePicNameCars() {
+
+        RestResult restResult = new RestResult("查询车辆预处理拍照名称成功", carsQueryService.findPrePicNameCars(), ResultCode.SUCCESS.code());
+        return restResult;
+    }
+
+    /**
+     * showdoc
+     *
+     * @param carInfoId  必选 Long 车辆Id，从之前返回数据中带过来
+     * @param status     必选 int 暂存与完成状态码，1 暂存 2 完成
+     * @param data       必选 图片信息 List<String,Object>
+     * @param first_type 必选 string 图片一级类型
+     * @param two_type   必选 string 图片二级类型
+     * @param filed_name 必选 string 图片名称
+     * @param fileUrl    必选 string 图片路径
+     * @return {"msg": "暂存图片成功","data": "1","ret_code": "0"}
+     * @catalog 拆解厂-APP/手续部-工作台/车辆预处理
+     * @title 车辆预处理-暂存与完成按钮接口
+     * @description App端根据车辆预处理-暂存与完成按钮接口
+     * @method post
+     * @url http://localhost:8002/doCarsQuery/addPrePic
+     * @return_param msg string 描述信息
+     * @return_param data int 插入图片的记录数
+     * @return_param ret_code int 状态码 0 成功 1 失败
+     * @remark App端根据车辆预处理-暂存与完成按钮接口
+     * @number 1
+     */
+    @PostMapping("/doCarsQuery/addPrePic")
+    public RestResult addPrePic(@RequestBody CarPicData carPicData, @LoginUser SysUser user) {
+
+        RestResult restResult = null;
+        try {
+            carsQueryService.addPrePic(carPicData, user);
+            if (carPicData.getStatus() == 1) {
+                restResult = new RestResult("暂存图片成功", "1", ResultCode.SUCCESS.code());
+            }
+            if (carPicData.getStatus() == 2) {
+                restResult = new RestResult("预处理完成", "1", ResultCode.SUCCESS.code());
+            }
+        } catch (Exception e) {
+            log.info("插入图片失败", e);
+            return new RestResult("插入图片失败", null, ResultCode.ERROR.code());
+        }
+        return restResult;
+
+    }
+
+    /**
+     * showdoc
+     *
+     * @param findMsg 可选 string 查询条件(车牌号 / 车型 / 车辆编号)
+     * @return {"msg": "查询预拓号车辆信息成功","data": [{"car_name": "川崎Z1000R","car_info_id": 24,"approach_time": "2019-09-23 19:59:19","car_no": "京A5W44C","car_code": "TSCAR190900001"},{"car_name": "本田CBR1000RR","car_info_id": 25,"approach_time": "2019-09-23 19:59:19","car_no": "川A5W44C","car_code": "TSCAR190900001"}],"ret_code": "0"}
+     * @catalog 拆解厂-APP/手续部-工作台/等待拓号
+     * @title 预拓号首页车辆信息查询接口
+     * @description App端查询车辆预拓号车辆信息
+     * @method get
+     * @url http://localhost:8002/doCarsQuery/findCopyNumberCars
+     * @return_param msg string 描述信息
+     * @return_param car_name string 车型
+     * @return_param car_info_id Long 车辆Id
+     * @return_param approach_time date 入场时间
+     * @return_param car_no string 车牌
+     * @return_param car_code string 车辆编号
+     * @return_param ret_code int 状态码 0 成功 1 失败
+     * @remark 基于条件查询车辆信息
+     * @number 1
+     */
+    @GetMapping("/doCarsQuery/findCopyNumberCars")
+    public RestResult findCopyNumberCars(@RequestParam(value = "findMsg", required = false) String findMsg, @LoginUser SysUser user) {
+
+        List<Map<String, Object>> list = carsQueryService.findCopyNumberCars(findMsg, user.getCompany_id());
+        RestResult restResult = null;
+        if (null == list || list.size() == 0) {
+            restResult = new RestResult("未查询到预拓号车辆信息", null, ResultCode.ERROR.code());
+        } else {
+            restResult = new RestResult("查询预拓号车辆信息成功", list, ResultCode.SUCCESS.code());
+        }
+        return restResult;
+
+    }
+
+    /**
+     * showdoc
+     *
+     * @param carInfoId 必选 Long 车辆Id，从之前返回数据中带过来
+     * @return {"msg": "查询车辆拓号数据成功","data": [{"file_url": "www.yyyyyyyyyyyyy","first_type": "tuo_pic","two_type": "tuopic","file_name": "拓号图1","id": 1177207692306026496}],"ret_code": "0"}
+     * @catalog 拆解厂-APP/手续部-工作台/等待拓号
+     * @title 车辆拓号图片接口
+     * @description App端根据carInfoId查询车辆拓号数据
+     * @method get
+     * @url http://localhost:8002/doCarsQuery/findCpTuoPic
+     * @return_param msg string 描述信息
+     * @return_param id long 图片Id
+     * @return_param file_name string 照片名称
+     * @return_param first_type string 照片的一级类型
+     * @return_param two_type string 照片的二级类型
+     * @return_param file_url string 照片链接
+     * @return_param ret_code int 状态码 0 成功 1 失败
+     * @remark App端根据carInfoId查询车辆拓号数据
+     * @number 1
+     */
+    @GetMapping("/doCarsQuery/findCpTuoPic")
+    public RestResult findCpTuoPic(@RequestParam(value = "carInfoId", required = false) Long carInfoId, @LoginUser SysUser user) {
+        List<Map<String, Object>> list = carsQueryService.findCpTuoPic(carInfoId, user.getCompany_id());
+        RestResult restResult = null;
+        if (null == list || list.size() == 0) {
+            restResult = new RestResult("未查询到车辆拓号数据", null, ResultCode.ERROR.code());
+        } else {
+            restResult = new RestResult("查询车辆拓号数据成功", list, ResultCode.SUCCESS.code());
+        }
+        return restResult;
+    }
+
+
+    /**
+     * showdoc
+     *
+     * @param
+     * @return {"msg": "查询车辆预拓号拍照名称成功","data": [{"first_type": "tuo_pic","two_type": "tuopic","filed_name": "拓号"}],"ret_code": "0"}
+     * @catalog 拆解厂-APP/手续部-工作台/等待拓号
+     * @title 车辆预拓号拍照名称接口
+     * @description App端查询车辆预拓号拍照名称
+     * @method get
+     * @url http://localhost:8002/doCarsQuery/findCpPicNameCars
+     * @return_param msg string 描述信息
+     * @return_param first_type string 图片一级类型
+     * @return_param two_type string 图片二级类型
+     * @return_param filed_name string 图片名称
+     * @return_param ret_code int 状态码 0 成功 1 失败
+     * @remark App端查询车辆预处理拍照名称
+     * @number 1
+     */
+    @GetMapping("/doCarsQuery/findCpPicNameCars")
+    public RestResult findCpPicNameCars() {
+
+        RestResult restResult = new RestResult("查询车辆预拓号拍照名称成功", carsQueryService.findCpPicNameCars(), ResultCode.SUCCESS.code());
+        return restResult;
+    }
+
+
+    /**
+     * showdoc
+     *
+     * @param carInfoId  必选 Long 车辆Id，从之前返回数据中带过来
+     * @param status     必选 int 暂存与完成状态码，1 暂存 2 完成
+     * @param data       必选 图片信息 List<String,Object>
+     * @param first_type 必选 string 图片一级类型
+     * @param two_type   必选 string 图片二级类型
+     * @param filed_name 必选 string 图片名称
+     * @param fileUrl    必选 string 图片路径
+     * @return {"msg": "暂存图片成功","data": "1","ret_code": "0"}
+     * @catalog 拆解厂-APP/手续部-工作台/等待拓号
+     * @title 车辆预处理-暂存与完成按钮接口
+     * @description pp端插入车辆预拓号-暂存与完成按钮接口
+     * @method post
+     * @url http://localhost:8002/doCarsQuery/addTuoPic
+     * @return_param msg string 描述信息
+     * @return_param data int 插入图片的记录数
+     * @return_param ret_code int 状态码 0 成功 1 失败
+     * @remark App端插入车辆预拓号-暂存与完成按钮接口
+     * @number 1
+     */
+    @PostMapping("/doCarsQuery/addTuoPic")
+    public RestResult addTuoPic(@RequestBody CarPicData carPicData, @LoginUser SysUser user) {
+
+        RestResult restResult = null;
+        try {
+            carsQueryService.addTuoPic(carPicData, user);
+            if (carPicData.getStatus() == 1) {
+                restResult = new RestResult("暂存图片成功", "1", ResultCode.SUCCESS.code());
+            }
+            if (carPicData.getStatus() == 2) {
+                restResult = new RestResult("拓号完成", "1", ResultCode.SUCCESS.code());
+            }
+        } catch (Exception e) {
+            log.info("插入图片失败", e);
+            return new RestResult("插入图片失败", null, ResultCode.ERROR.code());
+        }
+        return restResult;
+    }
+
+    /**
+     * showdoc
+     *
+     * @param findMsg 可选 string 查询条件(车牌号 / 车型 / 车辆编号)
+     * @return {"msg": "查询预拆解车辆信息成功","data": [{"car_name": "川崎Z1000R","car_info_id": 24,"approach_time": "2019-09-23 19:59:19","car_no": "京A5W44C","car_code": "TSCAR190900001"},{"car_name": "本田CBR1000RR","car_info_id": 25,"approach_time": "2019-09-23 19:59:19","car_no": "川A5W44C","car_code": "TSCAR190900001"}],"ret_code": "0"}
+     * @catalog 拆解厂-APP/手续部-工作台/车辆拆解
+     * @title 预拆解首页车辆信息查询接口
+     * @description App端查询预拆解车辆信息
+     * @method get
+     * @url http://localhost:8002/doCarsQuery/findDismantleCars
+     * @return_param msg string 描述信息
+     * @return_param car_name string 车型
+     * @return_param car_info_id Long 车辆Id
+     * @return_param approach_time date 入场时间
+     * @return_param car_no string 车牌
+     * @return_param car_code string 车辆编号
+     * @return_param ret_code int 状态码 0 成功 1 失败
+     * @remark 基于条件查询车辆信息
+     * @number 1
+     */
+    @GetMapping("/doCarsQuery/findDismantleCars")
+    public RestResult findDismantleCars(@RequestParam(value = "findMsg", required = false) String findMsg, @LoginUser SysUser user) {
+
+        List<Map<String, Object>> list = carsQueryService.findDismantleCars(findMsg, user.getCompany_id());
+        RestResult restResult = null;
+        if (null == list || list.size() == 0) {
+            restResult = new RestResult("未查询到预拆解车辆信息", null, ResultCode.ERROR.code());
+        } else {
+            restResult = new RestResult("查询预拆解车辆信息成功", list, ResultCode.SUCCESS.code());
+        }
+        return restResult;
+
+    }
+
+    /**
+     * showdoc
+     *
+     * @param carInfoId 必选 Long 车辆Id，从之前返回数据中带过来
+     * @return {"msg": "查询该车辆初检信息成功","data": [{"motor_count": 3,"battery_count": 2,"cistern_count": 3,"alloy_rim_count": 1,"remark": "aerer","chair_count": 1,"car_name": "川崎Z1000R","approach_time": "2019-09-23 19:59:19","engine": "发动机号码","door_count": 1,"tyre_count": 1,"catalytic_converter_count": 2,"car_no": "京A5W44C","car_degree": 12,"car_code": "TSCAR190900001","displacement": "汽车排量","vin": "VIN码","conditioner_count": 2,"condition_pump_count": 1,"electrical_machinery_count": 4}],"ret_code": "0"}
+     * @catalog 拆解厂-APP/手续部-工作台/车辆拆解
+     * @title App端根据carInfoId查询车辆初检信息
+     * @description App端根据carInfoId查询车辆初检信息
+     * @method get
+     * @url http://localhost:8002/doCarsQuery/findSurveyById
+     * @return_param msg string 描述信息
+     * @return_param data 返回数据集合
+     * @return_param motor_count 马达数量
+     * @return_param battery_count 电池数量
+     * @return_param cistern_count 水箱数量
+     * @return_param alloy_rim_count 铝圈数量
+     * @return_param remark 备注
+     * @return_param chair_count 座椅数量
+     * @return_param car_name 车型
+     * @return_param approach_time 入场时间
+     * @return_param engine 发动机号码
+     * @return_param door_count 车门数量
+     * @return_param tyre_count 轮胎数量
+     * @return_param catalytic_converter_count 三元催化器数量
+     * @return_param car_no 车牌号
+     * @return_param car_degree '新旧程度 1:正常 ,2:火灾 , 3:碰撞 ,4:水淹'
+     * @return_param displacement 汽车排量
+     * @return_param vin 车架号
+     * @return_param conditioner_count 空调数量
+     * @return_param condition_pump_count 空调泵数量
+     * @return_param electrical_machinery_count 电机数量
+     * @return_param ret_code int 状态码 0 成功 1 失败
+     * @remark 基于条件查询该车辆初检信息
+     * @number 1
+     */
+    @GetMapping("/doCarsQuery/findSurveyById")
+    public RestResult findSurveyById(@RequestParam(value = "carInfoId", required = false) Long carInfoId, @LoginUser SysUser user) {
+
+        List<Map<String, Object>> list = carsQueryService.findSurveyById(carInfoId, user.getCompany_id());
+        RestResult restResult = null;
+        if (null == list || list.size() == 0) {
+            restResult = new RestResult("未查询到该车辆初检信息", null, ResultCode.ERROR.code());
+        } else {
+            restResult = new RestResult("查询该车辆初检信息成功", list, ResultCode.SUCCESS.code());
+        }
+        return restResult;
+    }
+    /**
+     * showdoc
+     *
+     * @param carInfoId 必选 Long 车辆Id，从之前返回数据中带过来
+     * @return {"msg": "查询车辆初检信息图片成功","data": [{"file_url": "www.yyyyyyyyyyyyy","first_type": "pre_pic","two_type": "left45","file_name": "左前45度","id": 1177207692306026496}],"ret_code": "0"}
+     * @catalog 拆解厂-APP/手续部-工作台/车辆拆解
+     * @title 查询车辆初检信息图片接口
+     * @description App端根据carInfoId查询车辆初检信息图片
+     * @method get
+     * @url http://localhost:8002/doCarsQuery/findPrePicById"
+     * @return_param msg string 描述信息
+     * @return_param id long 图片Id
+     * @return_param file_name string 照片名称
+     * @return_param first_type string 照片的一级类型
+     * @return_param two_type string 照片的二级类型
+     * @return_param file_url string 照片链接
+     * @return_param ret_code int 状态码 0 成功 1 失败
+     * @remark App端根据carInfoId查询车辆初检数据
+     * @number 1
+     */
+    @GetMapping("/doCarsQuery/findPrePicById")
+    public RestResult findPrePicById(@RequestParam(value = "carInfoId", required = false) Long carInfoId, @LoginUser SysUser user) {
+
+        List<CaiPrePicVo> list = carsQueryService.findPrePicById(carInfoId, user.getCompany_id());
+        RestResult restResult = null;
+        if (null == list || list.size() == 0) {
+            restResult = new RestResult("未查询到车辆初检信息图片", null, ResultCode.ERROR.code());
+        } else {
+            restResult = new RestResult("查询车辆初检信息图片成功", list, ResultCode.SUCCESS.code());
+        }
+        return restResult;
+    }
+
+    /**
+     * showdoc
+     *
+     * @param carInfoId 必选 Long 车辆Id，从之前返回数据中带过来
+     * @param dismantleWay 必选 车辆初检拆解方式 1:粗拆 ,2:点拆 , 3:包拆 ,4:精拆'
+     * @return {"msg": "设置车辆初检拆解方式成功","data": 1,"ret_code": "0"}
+     * @catalog 拆解厂-APP/手续部-工作台/车辆拆解
+     * @title App端设置车辆初检拆解方式接口
+     * @description 设置车辆初检拆解方式
+     * @method get
+     * @url http://localhost:8002/doCarsQuery/dismantleWay
+     * @return_param msg string 描述信息
+     * @return_param data int 插入成功结果
+     * @return_param ret_code int 状态码 0 成功 1 失败
+     * @remark App端车辆初检拆解方式
+     * @number 1
+     */
+
+    @GetMapping("/doCarsQuery/dismantleWay")
+    public RestResult dismantleWay(@RequestParam(value = "carInfoId", required = false) Long carInfoId,
+                                   @RequestParam(value = "dismantleWay", required = false) Integer status,
+                                   @LoginUser SysUser user) {
+
+        RestResult restResult = new RestResult("设置车辆初检拆解方式成功", carsQueryService.dismantleWay(carInfoId, status, user.getCompany_id()), ResultCode.SUCCESS.code());
+        return restResult;
+    }
+
 
 }

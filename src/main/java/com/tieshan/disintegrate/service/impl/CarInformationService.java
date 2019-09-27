@@ -7,6 +7,7 @@ import com.tieshan.disintegrate.util.PubMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -81,21 +82,26 @@ public class CarInformationService implements ICarInformationService {
     }
 
     @Override
-    public List<Object> findSourceAll(Long carInfoId) {
-        List<Object> list = new LinkedList<>();
+    public List<Map<String, Object>> findSourceAll(Long carInfoId) {
+        List<Map<String, Object>> resultList = new LinkedList<>();
+        Map<String, Object> resultMap = new HashMap<>();
         if (!PubMethod.isEmpty(carInformationSourceDao.findCarSourceById(carInfoId))) {
-            list.add(carInformationSourceDao.findCarSourceById(carInfoId));
+//            list.add(carInformationSourceDao.findCarSourceById(carInfoId));
+            resultMap.put("carInfo", carInformationSourceDao.findCarSourceById(carInfoId));
         } else {
-            list.add(null);
+            resultList.add(null);
             //throw new CustomException("没有查询到车源信息");
         }
         if (!PubMethod.isEmpty(carInformationSourceDao.findCarSourceLogById(carInfoId))) {
-            list.add(carInformationSourceDao.findCarSourceLogById(carInfoId));
+//            list.add(carInformationSourceDao.findCarSourceLogById(carInfoId));
+            resultMap.put("carLog", carInformationSourceDao.findCarSourceById(carInfoId));
+
         } else {
-            list.add(null);
+            resultList.add(null);
             //throw new CustomException("没有查询到车源日志信息");
         }
-        return list;
+        resultList.add(resultMap);
+        return resultList;
     }
 
     @Override

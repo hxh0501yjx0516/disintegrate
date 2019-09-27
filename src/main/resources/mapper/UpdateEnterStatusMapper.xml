@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tieshan.disintegrate.dao.CarsQueryDao">
+
+    <update id="updatePretreatment">
+        update ts_car_enter
+        set pretreatment_time=now(),pretreatment_user_id=#{operatorId},is_pretreatment=2,is_copy_number=1
+        where car_info_id=#{carInfoId}
+        and disintegrate_plant_id=#{disId}
+
+    </update>
+    <update id="updateTuoStatus">
+        update ts_car_enter
+        set pretreatment_time=now(),pretreatment_user_id=#{operatorId},is_copy_number=2
+        where car_info_id=#{carInfoId}
+        and disintegrate_plant_id=#{disId}
+
+    </update>
+    
+</mapper>

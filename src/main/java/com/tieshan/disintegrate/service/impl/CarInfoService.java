@@ -51,7 +51,7 @@ public class CarInfoService implements ICarInfoService {
     public PageInfo<CarInfo> queryPage(Map<String, Object> params) {
         PageHelper.startPage(
                 StringUtils.isEmpty(params.get("page")) ? 1 : Integer.parseInt(String.valueOf(params.get("page"))),
-                StringUtils.isEmpty(params.get("pageSize"))?10:Integer.parseInt(String.valueOf(params.get("pageSize"))));
+                StringUtils.isEmpty(params.get("pageSize")) ? 10 : Integer.parseInt(String.valueOf(params.get("pageSize"))));
         Map<String, Object> map = new HashMap<>();
         List<CarInfo> carInfos = carInfoMapper.selectListByMap(map);
         PageInfo<CarInfo> pageInfo = new PageInfo<>(carInfos);
