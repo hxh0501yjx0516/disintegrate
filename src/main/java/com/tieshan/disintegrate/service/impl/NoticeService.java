@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,7 +26,7 @@ public class NoticeService implements INoticeService {
     private TokenService tokenService;
 
     @Override
-    public Map<String, Object> getTop(HttpServletRequest request) {
+    public List<Map<String, Object>> getTop(HttpServletRequest request) {
         String token = request.getHeader("token");
         SysUser sysUser = tokenService.getToken(token);
         return noticeMapper.getTop(sysUser.getCompany_id() + "");

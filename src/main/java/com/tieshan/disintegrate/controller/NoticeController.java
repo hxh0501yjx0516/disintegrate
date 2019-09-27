@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,8 +37,8 @@ public class NoticeController {
     public RestResult getTop(HttpServletRequest request) {
         RestResult restResult = null;
         try {
-            Map<String, Object> topurlMap = noticeService.getTop(request);
-            restResult = new RestResult("获取成功", topurlMap, ResultCode.SUCCESS.code());
+            List<Map<String, Object>> mapList = noticeService.getTop(request);
+            restResult = new RestResult("获取成功", mapList, ResultCode.SUCCESS.code());
         } catch (Exception e) {
             log.info("获取失败------->", e);
             return new RestResult("获取失败", null, ResultCode.ERROR.code());

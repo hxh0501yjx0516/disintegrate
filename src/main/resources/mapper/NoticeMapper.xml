@@ -9,8 +9,8 @@
                     ts_top_pic
                 WHERE
                     company_id = #{company_id}
+                    and pic_type='1'
                 ORDER BY
                     id DESC
-                    LIMIT 1
     </select>
 </mapper>

@@ -2,6 +2,7 @@ package com.tieshan.disintegrate.dao;
 
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,5 +13,5 @@ import java.util.Map;
  * @modified By:
  */
 public interface NoticeMapper {
-    Map<String, Object> getTop(@Param("company_id") String company_id);
+    List<Map<String, Object>> getTop(@Param("company_id") String company_id);
 }

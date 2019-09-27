@@ -1,6 +1,7 @@
 package com.tieshan.disintegrate.service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,6 +12,6 @@ import java.util.Map;
  * @modified By:
  */
 public interface INoticeService {
-    Map<String, Object> getTop(HttpServletRequest request);
+    List<Map<String, Object>> getTop(HttpServletRequest request);
 
 }
