@@ -10,7 +10,7 @@
         <result property="fileUrl" column="file_url"/>  <!-- 图片地址 -->
         <result property="firstType" column="first_type"/>  <!-- 一级类型（来之字典） -->
         <result property="twoType" column="two_type"/>  <!-- 二级类型（来之字典) -->
-        <result property="carNo" column="car_no"/>  <!-- carinfo的主键id -->
+        <result property="carInfoId" column="car_info_id"/>  <!-- carinfo的主键id -->
         <result property="operatorId" column="operator_id"/>  <!-- 操作人id -->
         <result property="operator" column="operator"/>  <!-- 操作人 -->
         <result property="createTime" column="create_time"/>  <!--  -->
@@ -38,8 +38,8 @@
             <if test="twoType!=null and twoType!=''">
                 AND two_type=#{twoType}  <!-- 二级类型（来之字典) -->
             </if>
-            <if test="carNo!=null">
-                AND car_no=#{carNo}  <!-- carinfo的主键id -->
+            <if test="carInfoId!=null">
+                AND car_info_id=#{carInfoId}  <!-- carinfo的主键id -->
             </if>
             <if test="operatorId!=null">
                 AND operator_id=#{operatorId}  <!-- 操作人id -->
@@ -77,8 +77,8 @@
             <if test="twoType!=null and twoType!=''">
                 AND two_type=#{twoType}  <!-- 二级类型（来之字典) -->
             </if>
-            <if test="carNo!=null">
-                AND car_no=#{carNo}  <!-- carinfo的主键id -->
+            <if test="carInfoId!=null">
+                AND car_info_id=#{carInfoId}  <!-- carinfo的主键id -->
             </if>
             <if test="operatorId!=null">
                 AND operator_id=#{operatorId}  <!-- 操作人id -->
@@ -116,8 +116,8 @@
             <if test="twoType!=null and twoType!=''">
                 two_type,  <!-- 二级类型（来之字典) -->
             </if>
-            <if test="carNo!=null">
-                car_no,  <!-- carinfo的主键id -->
+            <if test="carInfoId!=null">
+                car_info_id,  <!-- carinfo的主键id -->
             </if>
             <if test="operatorId!=null">
                 operator_id,  <!-- 操作人id -->
@@ -152,8 +152,8 @@
             <if test="twoType!=null and twoType!=''">
                 #{twoType},  <!-- 二级类型（来之字典) -->
             </if>
-            <if test="carNo!=null">
-                #{carNo},  <!-- carinfo的主键id -->
+            <if test="carInfoId!=null">
+                #{carInfoId},  <!-- carinfo的主键id -->
             </if>
             <if test="operatorId!=null">
                 #{operatorId},  <!-- 操作人id -->
@@ -192,8 +192,8 @@
                 <if test="item.twoType!=null and item.twoType!=''">
                     two_type,  <!-- 二级类型（来之字典) -->
                 </if>
-                <if test="item.carNo!=null">
-                    car_no,  <!-- carinfo的主键id -->
+                <if test="item.carInfoId!=null">
+                    car_info_id,  <!-- carinfo的主键id -->
                 </if>
                 <if test="item.operatorId!=null">
                     operator_id,  <!-- 操作人id -->
@@ -228,8 +228,8 @@
                 <if test="item.twoType!=null and item.twoType!=''">
                     #{item.twoType},  <!-- 二级类型（来之字典) -->
                 </if>
-                <if test="item.carNo!=null">
-                    #{item.carNo},  <!-- carinfo的主键id -->
+                <if test="item.carInfoId!=null">
+                    #{item.carInfoId},  <!-- carinfo的主键id -->
                 </if>
                 <if test="item.operatorId!=null">
                     #{item.operatorId},  <!-- 操作人id -->
@@ -269,8 +269,8 @@
             <if test="twoType!=null and twoType!=''">
                 two_type=#{twoType},  <!-- 二级类型（来之字典) -->
             </if>
-            <if test="carNo!=null">
-                car_no=#{carNo},  <!-- carinfo的主键id -->
+            <if test="carInfoId!=null">
+                car_no=#{carInfoId},  <!-- carinfo的主键id -->
             </if>
             <if test="operatorId!=null">
                 operator_id=#{operatorId},  <!-- 操作人id -->
@@ -310,7 +310,7 @@
                     two_type=#{item.twoType},  <!-- 二级类型（来之字典) -->
                 </if>
                 <if test="item.carNo!=null">
-                    car_no=#{item.carNo},  <!-- carinfo的主键id -->
+                    car_info_id=#{item.carInfoId},  <!-- carinfo的主键id -->
                 </if>
                 <if test="item.operatorId!=null">
                     operator_id=#{item.operatorId},  <!-- 操作人id -->
@@ -339,5 +339,13 @@
         <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
             #{item}
         </foreach>
+    </delete>
+    <delete id="batchDeleteCarPic">
+        DELETE FROM ts_car_pic
+        WHERE disintegrate_plant_id=#{disintegratePlantId} and car_info_id=#{carInfoId} and first_type='pre_pic'
+    </delete>
+    <delete id="batchDeleteTuoPic">
+        DELETE FROM ts_car_pic
+        WHERE disintegrate_plant_id=#{disintegratePlantId} and car_info_id=#{carInfoId} and first_type='tuo_pic'
     </delete>
 </mapper>

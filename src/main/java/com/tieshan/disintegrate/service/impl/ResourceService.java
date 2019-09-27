@@ -79,10 +79,24 @@ public class ResourceService implements IResourceService {
     @Override
     public List<Menu> departMenus(String depart_id) {
 
-        List<Menu> resourceList = resourceMapper.departTree(depart_id);
-        List<Menu> list = allResource(resourceList);
 
-        return list;
+        List<Menu> bodyList = resourceMapper.departTree(depart_id);
+        Menu m = bodyList.remove(0);
+        List<Menu> rootList = new ArrayList<>();
+        rootList.add(m);
+        if (bodyList != null && !bodyList.isEmpty()) {
+            //声明一个map，用来过滤已操作过的数据
+            Map<String, Object> map = Maps.newHashMapWithExpectedSize(bodyList.size());
+            rootList.forEach(menu -> getChild(menu, bodyList, map));
+            return rootList;
+        }
+        return null;
+
+
+//        List<Menu> resourceList = resourceMapper.departTree(depart_id);
+//        List<Menu> list = allResource(resourceList);
+//
+//        return list;
     }
 
     private List<Menu> allResource(List<Menu> resourceList) {

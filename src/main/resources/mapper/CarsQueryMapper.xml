@@ -26,13 +26,107 @@
         from ts_car_identity iden,ts_car_info info
         <include refid="queryWhereMsg"/>
     </select>
+    <!-- App端查询预处理数据 -->
+    <select id="findPretreatmentCars" resultType="map">
+        select ent.car_info_id,info.car_code,info.car_no,info.car_name,ent.approach_time
+        from ts_car_info info,ts_car_enter ent
+        <include refid="queryWhereSurvey"/>
+    </select>
+    <!--App端根据carInfoId查询车辆预处理信息-->
+    <select id="doFindCars" resultType="com.tieshan.disintegrate.vo.CaiPrePicVo">
+        select pic.id,dic.first_type,dic.two_type,dic.filed_name file_name,pic.file_url
+        from ts_dictionary dic
+        left join ts_car_pic pic
+        on dic.first_type=pic.first_type and dic.two_type=pic.two_type and pic.car_info_id=#{carInfoId} and pic.disintegrate_plant_id=#{companyId}
+        where dic.first_type='pre_pic'
+    </select>
+    <!-- App端查询预处理图片名称，从字典表 -->
+    <select id="findPrePicNameCars" resultType="map">
+        select first_type,two_type,filed_name from ts_dictionary where first_type='pre_pic'
+    </select>
+    <!-- App端查询车辆拓号数据 -->
+    <select id="findCopyNumberCars" resultType="map">
+        select ent.car_info_id,info.car_code,info.car_no,info.car_name,ent.approach_time
+        from ts_car_info info,ts_car_enter ent
+        <include refid="queryWherePretreatment"/>
+    </select>
+    <!-- App端根据carInfoId查询车辆拓号数据 -->
+    <select id="findCpTuoPic" resultType="map">
+        select pic.id,pic.file_name,pic.file_url,pic.first_type,pic.two_type from ts_car_pic pic
+        where car_info_id=#{carInfoId}
+        and pic.disintegrate_plant_id=#{companyId} and pic.first_type='tuo_pic'
+    </select>
+    <!-- App端查询拓号图片名称，从字典表 -->
+    <select id="findCpPicNameCars" resultType="map">
+        select first_type,two_type,filed_name from ts_dictionary where first_type='tuo_pic'
+    </select>
+    <!-- App端查询车辆预拆解数据 -->
+    <select id="findDismantleCars" resultType="map">
+        select ent.car_info_id,info.car_code,info.car_no,info.car_name,ent.approach_time
+        from ts_car_info info,ts_car_enter ent
+        <include refid="queryWhereDismantle"/>
+    </select>
+    <!-- App端查询车辆初检数据 -->
+    <select id="findSurveyById" resultType="map">
+      select info.car_code,info.car_no,info.car_name,ent.approach_time,iden.displacement,iden.vin,iden.engine,sur.car_degree,
+      sur.condition_pump_count,sur.battery_count,sur.motor_count,sur.door_count,sur.alloy_rim_count,sur.cistern_count,
+      sur.electrical_machinery_count,sur.tyre_count,sur.chair_count,sur.conditioner_count,sur.catalytic_converter_count,sur.remark
+      from ts_car_survey AS sur
+      join ts_car_info AS info on sur.car_info_id=info.id
+      join ts_car_enter AS ent on ent.car_info_id=info.id
+      join ts_car_identity AS iden on iden.car_info_id=info.id
+      where sur.car_info_id=#{carInfoId} and sur.disintegrate_plant_id=#{companyId}
+    </select>
+    <select id="findPrePicById" resultType="com.tieshan.disintegrate.vo.CaiPrePicVo">
+        select * from ts_car_pic where car_info_id=#{carInfoId} and disintegrate_plant_id=#{companyId} and first_type ='pre_pic'
+    </select>
+    <!-- App端选择拆解方式 -->
+    <update id="updateSurveyWay">
 
+        update ts_car_survey set dismantling_way=#{status} where car_info_id=#{carInfoId} and disintegrate_plant_id=#{companyId}
+    </update>
+    <update id="updateEnterWay">
+
+        update ts_car_enter set dismantle_way=#{status} where car_info_id=#{carInfoId} and disintegrate_plant_id=#{companyId}
+    </update>
+
+
+    <sql id="queryWhereDismantle">
+        <where>
+            ent.car_info_id=info.id and ent.is_copy_number=2 and
+            ent.disintegrate_plant_id=#{dpId}
+            <if test="findMsg!=null and findMsg!=''">
+                and concat(info.car_no,info.car_name,info.car_code)
+                like concat("%",#{findMsg},"%")
+            </if>
+        </where>
+    </sql>
+    <sql id="queryWhereSurvey">
+        <where>
+            ent.car_info_id=info.id and ent.is_initial_survey=2 and ent.is_pretreatment=1 and
+            ent.disintegrate_plant_id=#{dpId}
+            <if test="findMsg!=null and findMsg!=''">
+                and concat(info.car_no,info.car_name,info.car_code)
+                like concat("%",#{findMsg},"%")
+            </if>
+        </where>
+    </sql>
     <sql id="queryWhereMsg">
         <where>
             iden.car_info_id=info.id
             <if test="findMsg!=null and findMsg!=''">
-            and concat(iden.owner,iden.phone,info.car_name,info.car_no,info.id,iden.vin,iden.engine)
-            like concat("%",#{findMsg},"%")
+                and concat(iden.owner,iden.phone,info.car_name,info.car_no,info.id,iden.vin,iden.engine)
+                like concat("%",#{findMsg},"%")
+            </if>
+        </where>
+    </sql>
+    <sql id="queryWherePretreatment">
+        <where>
+            ent.car_info_id=info.id and ent.is_pretreatment=2 and ent.is_copy_number=1 and
+            ent.disintegrate_plant_id=#{dpId}
+            <if test="findMsg!=null and findMsg!=''">
+                and concat(info.car_no,info.car_name,info.car_code)
+                like concat("%",#{findMsg},"%")
             </if>
         </where>
     </sql>

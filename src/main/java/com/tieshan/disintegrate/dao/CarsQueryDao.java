@@ -1,7 +1,11 @@
 package com.tieshan.disintegrate.dao;
 
+import com.tieshan.disintegrate.pojo.CarPic;
+import com.tieshan.disintegrate.pojo.CarSurvey;
 import com.tieshan.disintegrate.pojo.CarsQuery;
+import com.tieshan.disintegrate.vo.CaiPrePicVo;
 import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 import java.util.Map;
 
@@ -13,13 +17,59 @@ import java.util.Map;
  * @modified By:
  */
 public interface CarsQueryDao {
-
     /**
      * 基于条件分页查询车辆信息
      * @param findMsg    查询条件(姓名/电话/车型/车牌号/车辆编号/车架号/发动机号)
      */
     List<CarsQuery> findPageObjects(@Param("findMsg") String findMsg);
-
-
-
+    /***
+     * App端查询车辆预处理车辆信息
+     */
+    List<Map<String, Object>>findPretreatmentCars(@Param("findMsg") String findMsg,@Param("dpId")Long dpId);
+    /** App端根据carInfoId查询车辆预处理信息*/
+    List<CaiPrePicVo> doFindCars(Long carInfoId, Long companyId);
+    /***
+     * App端查询车辆预处理拍照名称
+     */
+    List<Map<String, Object>>findPrePicNameCars();
+    /***
+     * App端查询更改入场预处理状态
+     */
+    void updatePretreatment(@Param("operatorId")Long operatorId,@Param("carInfoId")Long carInfoId,@Param("disId")Long disId);
+    /***
+     * App端查询预拓号车辆信息
+     */
+    List<Map<String, Object>>findCopyNumberCars(@Param("findMsg") String findMsg,@Param("dpId")Long dpId);
+    /**
+     * App端根据carInfoId查询车辆拓号数据
+     */
+    List<Map<String, Object>> findCpTuoPic(Long carInfoId, Long companyId);
+    /***
+     * App端查询车辆预拓号拍照名称
+     */
+    List<Map<String, Object>>findCpPicNameCars();
+    /***
+     * App端查询更改入场拓号状态
+     */
+    void updateTuoStatus(@Param("operatorId")Long operatorId,@Param("carInfoId")Long carInfoId,@Param("disId")Long disId);
+    /***
+     * App端查询预拆解车辆信息
+     */
+    List<Map<String, Object>> findDismantleCars(String findMsg, Long dpId);
+    /***
+     * App端根据carInfoId查询车辆初检信息
+     */
+    List<Map<String,Object>> findSurveyById(@Param("carInfoId")Long carInfoId, @Param("companyId")Long companyId);
+    /***
+     * App端根据carInfoId查询车辆初检数据
+     */
+    List<CaiPrePicVo> findPrePicById(@Param("carInfoId")Long carInfoId,@Param("companyId")Long companyId);
+    /***
+     * App端车辆初检拆解方式1
+     */
+    int updateSurveyWay(@Param("carInfoId")Long carInfoId,@Param("status")Integer status,@Param("companyId")Long companyId);
+    /***
+     * App端车辆初检拆解方式2
+     */
+    int updateEnterWay(@Param("carInfoId")Long carInfoId,@Param("status")Integer status,@Param("companyId")Long companyId);
 }
