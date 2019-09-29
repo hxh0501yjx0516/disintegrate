@@ -2,15 +2,13 @@ package com.tieshan.disintegrate.service.impl;
 
 import com.tieshan.disintegrate.dao.*;
 import com.tieshan.disintegrate.exception.CustomException;
+import com.tieshan.disintegrate.service.CarsQueryService;
 import com.tieshan.disintegrate.service.ICarInformationService;
 import com.tieshan.disintegrate.util.PubMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @description: 车辆信息查询
@@ -32,121 +30,56 @@ public class CarInformationService implements ICarInformationService {
     private CarInformationBreakDao carInformationBreakDao;
     @Autowired
     private CarInformationSalvageDao carInformationSalvageDao;
+    @Autowired
+    private CarsQueryService carsQueryService;
 
     @Override
-    public List<Map<String, Object>> findCarById(Long carInfoId) {
-        return carInformationDao.findCarById(carInfoId);
+    public List<Map<String, Object>> findCarById(Long carInfoId, Long companyId) {
+        return carInformationDao.findCarById(carInfoId, companyId);
     }
 
     @Override
-    public List<Object> findAll(Long carInfoId) {
-        List<Object> list = new LinkedList<>();
-        if (!PubMethod.isEmpty(carInformationDao.findCarInfoById(carInfoId))) {
-            list.add(carInformationDao.findCarInfoById(carInfoId));
-        } else {
-            list.add(null);
-            //throw new CustomException("没有查询到车辆信息");
-        }
-        if (!PubMethod.isEmpty(carInformationDao.findCarPrePicById(carInfoId))) {
-            list.add(carInformationDao.findCarPrePicById(carInfoId));
-        } else {
-            list.add(null);
-            //throw new CustomException("没有查询到预处理图片");
-        }
-        if (!PubMethod.isEmpty(carInformationDao.findCarTuoPicById(carInfoId))) {
-            list.add(carInformationDao.findCarTuoPicById(carInfoId));
-        } else {
-            list.add(null);
-            //throw new CustomException("没有查询到拓号图片");
-        }
-        return list;
-    }
-
-
-    @Override
-    public List<Object> findProcedureAll(Long carInfoId) {
-        List<Object> list = new LinkedList<>();
-        if (!PubMethod.isEmpty(carInformationIdentityDao.findCarIdentityById(carInfoId))) {
-            list.add(carInformationIdentityDao.findCarIdentityById(carInfoId));
-        } else {
-            list.add(null);
-            //throw new CustomException("没有查询到手续信息");
-        }
-        if (!PubMethod.isEmpty(carInformationIdentityDao.findProcedureById(carInfoId))) {
-            list.add(carInformationIdentityDao.findProcedureById(carInfoId));
-        } else {
-            list.add(null);
-            //throw new CustomException("没有查询到手续处理周期信息");
-        }
-        return list;
+    public Map<String, Object> findAll(Long carInfoId, Long companyId) {
+        Map<String, Object> resultMap = new HashMap<>(3);
+        resultMap.put("carInfo", carInformationDao.findCarInfoById(carInfoId, companyId));
+        resultMap.put("carPrePic", carsQueryService.doFindCars(carInfoId, companyId));
+        resultMap.put("carTuoPic", carInformationDao.findCarTuoPicById(carInfoId, companyId));
+        return resultMap;
     }
 
     @Override
-    public List<Map<String, Object>> findSourceAll(Long carInfoId) {
-        List<Map<String, Object>> resultList = new LinkedList<>();
-        Map<String, Object> resultMap = new HashMap<>();
-        if (!PubMethod.isEmpty(carInformationSourceDao.findCarSourceById(carInfoId))) {
-//            list.add(carInformationSourceDao.findCarSourceById(carInfoId));
-            resultMap.put("carInfo", carInformationSourceDao.findCarSourceById(carInfoId));
-        } else {
-            resultList.add(null);
-            //throw new CustomException("没有查询到车源信息");
-        }
-        if (!PubMethod.isEmpty(carInformationSourceDao.findCarSourceLogById(carInfoId))) {
-//            list.add(carInformationSourceDao.findCarSourceLogById(carInfoId));
-            resultMap.put("carLog", carInformationSourceDao.findCarSourceById(carInfoId));
-
-        } else {
-            resultList.add(null);
-            //throw new CustomException("没有查询到车源日志信息");
-        }
-        resultList.add(resultMap);
-        return resultList;
+    public Map<String, Object> findProcedureAll(Long carInfoId, Long companyId) {
+        Map<String, Object> resultMap = new HashMap<>(2);
+        resultMap.put("carProcedureInfo", carInformationIdentityDao.findCarIdentityById(carInfoId, companyId));
+        resultMap.put("carProcedureLog", carInformationIdentityDao.findProcedureById(carInfoId, companyId));
+        return resultMap;
     }
 
     @Override
-    public List<Object> findBreakAll(Long carInfoId) {
-        List<Object> list = new LinkedList<>();
-        if (!PubMethod.isEmpty(carInformationBreakDao.findCarBreakById(carInfoId))) {
-            list.add(carInformationBreakDao.findCarBreakById(carInfoId));
-        } else {
-            list.add(null);
-            //throw new CustomException("没有查询到拆解信息");
-        }
-        if (!PubMethod.isEmpty(carInformationBreakDao.findCarBreakPicById(carInfoId))) {
-            list.add(carInformationBreakDao.findCarBreakPicById(carInfoId));
-        } else {
-            list.add(null);
-            //throw new CustomException("没有查询到拆解图片");
-        }
-        if (!PubMethod.isEmpty(carInformationBreakDao.findCarBreakLogById(carInfoId))) {
-            list.add(carInformationBreakDao.findCarBreakLogById(carInfoId));
-        } else {
-            list.add(null);
-            //throw new CustomException("没有查询到拆解日志");
-        }
-        return list;
-
+    public Map<String, Object> findSourceAll(Long carInfoId, Long companyId) {
+        Map<String, Object> resultMap = new HashMap<>(2);
+        resultMap.put("carSource", carInformationSourceDao.findCarSourceById(carInfoId, companyId));
+        resultMap.put("carSourceLog", carInformationSourceDao.findCarSourceLogById(carInfoId, companyId));
+        return resultMap;
     }
 
     @Override
-    public List<Object> findSalvageAll(Long carInfoId) {
-        List<Object> list = new LinkedList<>();
-        if (!PubMethod.isEmpty(carInformationSalvageDao.findCarBreakById(carInfoId))) {
-            list.add(carInformationSalvageDao.findCarBreakById(carInfoId));
-        } else {
-            list.isEmpty();
-            list.add(null);
-            //throw new CustomException("没有查询到残值信息");
-        }
-        if (!PubMethod.isEmpty(carInformationSalvageDao.findCarBreakLogById(carInfoId))) {
-            list.add(carInformationSalvageDao.findCarBreakLogById(carInfoId));
-        } else {
-            list.isEmpty();
-            list.add(null);
-            //throw new CustomException("没有查询到残值日志信息");
-        }
-        return list;
+    public Map<String, Object> findBreakAll(Long carInfoId, Long companyId) {
+
+        Map<String, Object> resultMap = new HashMap<>(3);
+        resultMap.put("carBreakInfo", carInformationBreakDao.findCarBreakById(carInfoId, companyId));
+        resultMap.put("carBreakPic", carInformationBreakDao.findCarBreakPicById(carInfoId, companyId));
+        resultMap.put("carBreakLog", carInformationBreakDao.findCarBreakLogById(carInfoId, companyId));
+        return resultMap;
+    }
+
+    @Override
+    public Map<String, Object> findSalvageAll(Long carInfoId,Long companyId) {
+
+        Map<String, Object> resultMap = new HashMap<>(2);
+        resultMap.put("carSalvageInfo",carInformationSalvageDao.findCarBreakById(carInfoId,companyId));
+        resultMap.put("carSalvageInfoLog",carInformationSalvageDao.findCarBreakLogById(carInfoId,companyId));
+        return resultMap;
     }
 
 }

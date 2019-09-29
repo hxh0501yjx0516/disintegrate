@@ -22,8 +22,8 @@ public interface CarInformationBreakDao {
      * @param: carInfoId car_info的主键(车辆编号ID)
      * @return: List
      */
-    @Select("select dismantle_way,dismantle_time,dismantle_user_id from ts_car_enter where car_info_id=#{carInfoId}")
-    List<Map<String,Object>> findCarBreakById(@Param("carInfoId") Long carInfoId);
+    @Select("select dismantle_way,dismantle_time,dismantle_user_id from ts_car_enter where car_info_id=#{carInfoId} and disintegrate_plant_id=#{companyId}")
+    List<Map<String,Object>> findCarBreakById(@Param("carInfoId") Long carInfoId,@Param("companyId")Long companyId);
 
     /**
      *@Description: 拆解照片查询
@@ -31,14 +31,14 @@ public interface CarInformationBreakDao {
      * @return: List
      */
     @Select("select pic.file_name,pic.file_url,pic.create_time,pic.operator from ts_car_pic pic " +
-            "where pic.car_info_id=#{carInfoId} and pic.first_type='break_pic'")
-    List<Map<String,Object>> findCarBreakPicById(@Param("carInfoId") Long carInfoId);
+            "where pic.car_info_id=#{carInfoId} and pic.first_type='break_pic' and disintegrate_plant_id=#{companyId}")
+    List<Map<String,Object>> findCarBreakPicById(@Param("carInfoId") Long carInfoId,@Param("companyId")Long companyId);
 
     /**
      *@Description: 拆解处理日志查询
      * @param: carInfoId car_info的主键(车辆编号ID)
      * @return: List
      */
-    @Select("select create_time,operator,remark from ts_car_procedure_log where car_info_id=#{carInfoId} and type=6")
-    List<Map<String,Object>> findCarBreakLogById(@Param("carInfoId") Long carInfoId);
+    @Select("select create_time,operator,remark from ts_car_procedure_log where car_info_id=#{carInfoId} and type=6 and disintegrate_plant_id=#{companyId}")
+    List<Map<String,Object>> findCarBreakLogById(@Param("carInfoId") Long carInfoId,@Param("companyId")Long companyId);
 }

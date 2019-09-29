@@ -33,10 +33,10 @@ public class CarsQueryServiceImpl implements CarsQueryService {
     private CarPicMapper carPicMapper;
 
     @Override
-    public List<CarsQuery> findPageObjects(String findMsg, Integer page, Integer pageSize) {
+    public List<CarsQuery> findPageObjects(String findMsg, Integer page, Integer pageSize,Long companyId) {
         PageHelper.startPage(page, pageSize);
         PageHelper.orderBy("reg_time desc");
-        return carsQueryDao.findPageObjects(findMsg);
+        return carsQueryDao.findPageObjects(findMsg,companyId);
     }
 
     @Override

@@ -27,7 +27,8 @@ public interface CarsQueryService {
     List<CarsQuery> findPageObjects(
             String findMsg,
             Integer page,
-            Integer pageSize);
+            Integer pageSize,
+            Long companyId);
 
     /***
      * App端查询车辆预处理车辆信息
