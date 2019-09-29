@@ -19,7 +19,15 @@ public interface IDepartmentService {
      * @param pageSize
      * @return
      */
-    List<Department> allDepartment(int page, int pageSize);
+    List<Department> allDepartment(int page, int pageSize, String company_code);
+
+    /**
+     * 获取所有部门
+     *
+     * @param company_code
+     * @return
+     */
+    List<Department> getAllDepart(String company_code);
 
     /**
      * 校验部门是否存在

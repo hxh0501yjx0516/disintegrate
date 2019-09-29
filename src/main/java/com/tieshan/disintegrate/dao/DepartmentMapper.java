@@ -15,7 +15,7 @@ import java.util.Map;
  * @modified By:
  */
 public interface DepartmentMapper {
-    List<Department> allDepartment();
+    List<Department> allDepartment(@Param("company_code") String company_code);
 
     Department getDepart(@Param("department_name") String department_name);
 

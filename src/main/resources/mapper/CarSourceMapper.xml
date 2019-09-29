@@ -180,7 +180,6 @@
 
     <select id="selectCarSourceList" resultType="java.util.Map">
         SELECT
-            COUNT(s.id) AS count,
             IFNULL(s.id, '') AS id,
             IFNULL(s.create_time, '') AS createTime,
 	        IFNULL(s.contacts, '') AS contacts,
@@ -190,19 +189,17 @@
         FROM
             ts_car_source AS s
             LEFT JOIN ts_bank AS b ON s.bank_id = b.id
-            LEFT JOIN ts_car_info AS r ON s.id = r.car_source
+            LEFT JOIN ts_car_info AS i ON s.id = i.car_source
         WHERE
-            s.disintegrate_plant_id = #{disintegratePlantId} AND
+            s.disintegrate_plant_id = #{disintegratePlantId}
             <if test="sourceType != null and sourceType != ''">
-                s.source_type = #{sourceType}
+                AND  s.source_type = #{sourceType}
             </if>
 	        <include refid="queryMsg"></include>
     </select>
 
     <select id="selectCarSourceListApp" resultType="java.util.Map">
         SELECT
-        COUNT(s.id) AS carSourceCount,
-		COUNT(i.id) AS carInfoCount,
         IFNULL(s.id, '') AS id,
         IFNULL(s.contacts, '') AS contacts,   /*联系人*/
         IFNULL(s.phone,'') AS phone,   /*联系人电话*/
@@ -218,6 +215,7 @@
         s.disintegrate_plant_id = #{disintegratePlantId} AND
         s.create_operator = #{loginName} AND
         s.create_operator_id = #{userId}
+        <include refid="queryMsg"></include>
     </select>
 
     <!--<select id="selectCarInfoCountByCarSourceId" parameterType="java.lang.Long" resultType="java.lang.Integer">
@@ -234,7 +232,7 @@
 
     <sql id="queryMsg">
         <if test="findMsg != null and findMsg != ''">
-            AND concat(s.contacts, s.phone, r.car_name, r.car_no, s.car_location)
+            AND concat(s.contacts, s.phone, i.car_name, i.car_no, s.car_location)
             like concat("%",#{findMsg},"%")
         </if>
     </sql>
@@ -246,7 +244,7 @@
 		FROM
 			ts_dictionary
 		WHERE
-			first_type = #{firstName};
+			first_type = #{firstName}
 	</select>
 
     <insert id="addCar" parameterType="com.tieshan.disintegrate.pojo.CarInfo">
@@ -704,7 +702,6 @@
 
     <select id="selectBankById" parameterType="java.lang.Long" resultType="com.tieshan.disintegrate.pojo.Bank">
         SELECT
-	        IFNULL( id, '' ) AS id,
 	        IFNULL( bank_name, '' ) AS bankName,
 	        IFNULL( bank_branch, '' ) AS BankBranch,
 	        IFNULL( account, '' ) AS account,
@@ -1081,6 +1078,16 @@
         AND
         	pid = #{pid}
     </select>
+
+    <update id="editCarInfoLocation" parameterType="com.tieshan.disintegrate.pojo.CarInfo">
+        UPDATE ts_car_info
+        SET car_location_area = #{carLocationArea},
+        car_location_row = #{carLocationRow},
+        car_location_column = #{carLocationColumn},
+        car_location_number = #{carLocationNumber}
+        WHERE
+	    id = #{id}
+    </update>
 
     <delete id="deleteCarSourceById" parameterType="java.lang.Long">
         DELETE FROM ts_car_source WHERE id =#{id} AND disintegrate_plant_id = #{disintegratePlantId};

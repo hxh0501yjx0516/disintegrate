@@ -25,10 +25,15 @@ public class DepartmentService implements IDepartmentService {
     private DepartmentMapper departmentMapper;
 
     @Override
-    public List<Department> allDepartment(int page, int pageSize) {
+    public List<Department> allDepartment(int page, int pageSize, String company_code) {
         PageHelper.startPage(page, pageSize);
         PageHelper.orderBy("seq desc");
-        return departmentMapper.allDepartment();
+        return departmentMapper.allDepartment(company_code);
+    }
+
+    @Override
+    public List<Department> getAllDepart(String company_code) {
+        return departmentMapper.allDepartment(company_code);
     }
 
     @Override

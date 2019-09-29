@@ -103,4 +103,18 @@ public class CarInfo implements Serializable {
 	private Integer isDelete;
 	// 车辆编号，格式：TSXXX190900001    添加车辆时加入
 	private String carCode;
+	// 车辆编码，前缀：TSXXX
+	private String codeFront;
+	// 车辆编码：中间日期：1909
+	private String codeIn;
+	// 车辆编码：后面的数字，1，查询的时候不够补0
+	private Integer codeAfter;
+	// 车辆所在的区
+	private String carLocationArea;
+	// 车辆所在区的排
+	private String carLocationRow;
+	// 车辆所在排的列
+	private String carLocationColumn;
+	// 车辆所在列的号
+	private String carLocationNumber;
 }

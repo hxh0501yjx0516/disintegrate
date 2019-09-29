@@ -174,33 +174,57 @@ public class CarSourceService implements ICarSourceService {
         // 获得token中的信息
         String token = request.getHeader("token");
         SysUser sysUser = tokenService.getToken(token);
+        System.out.println(sysUser);
         PageHelper.startPage(page, pageSize);
         PageHelper.orderBy("id desc");
         // 查询指定状态的车源
         if (token.split("-")[0].equals("PC")) {
             carSourceList = carSourceMapper.selectCarSourceList(sysUser.getCompany_id(), sourceType, findMsg);
         }else{
-            carSourceList = carSourceMapper.selectCarSourceListApp(sysUser.getCompany_id(), sysUser.getId(), sysUser.getLogin_name());/*
+            carSourceList = carSourceMapper.selectCarSourceListApp(sysUser.getCompany_id(), sysUser.getId(), sysUser.getLogin_name(), findMsg);
+            /*int carInfoCount = 0;
             for (Map<String, Object> map : carSourceList) {
-                int carInfoCountByCarSourceId = carSourceMapper.selectCarInfoCountByCarSourceId(Long.parseLong(map.get("id").toString()));
-                map.put("carInfoCountByCarSourceId", carInfoCountByCarSourceId);
+                carInfoCount += Integer.parseInt(map.get("count").toString());
+                map.put("carInfoCount", carInfoCount);
             }*/
-                    }
+        }
         return carSourceList;
     }
 
     /**
      * 修改车源信息
      *
-     * @param carSource
+     * @param params
      */
     @Override
     @Transactional
-    public void editCarSource(CarSource carSource) {
+    public void editCarSource(Map<String, Object> params) {
+        // 设置车源的信息
+        CarSource carSource = new CarSource();
+        // 设置车源的id
+        carSource.setId(Long.parseLong(params.get("id").toString()));
+        // 设置车源的联系人
+        carSource.setContacts(params.get("contacts").toString());
+        // 设置车源的联系人电话
+        carSource.setPhone(params.get("phone").toString());
+        // 设置车源的车辆台次
+        carSource.setCount(Integer.parseInt(params.get("count").toString()));
+        // 设置车源的位置
+        carSource.setCarLocation(params.get("carLocation").toString());
+        // 设置车源的业务员id
+        carSource.setUserId(Long.parseLong(params.get("userId").toString()));
+        carSource.setBankId(Long.parseLong(params.get("bankId").toString()));
+        // 设置更新时间
         carSource.setCreateTime(new Date());
         carSourceMapper.editCarSource(carSource);
         Bank bank = carSource.getBank();
+        // 设置银行的id
         bank.setId(carSource.getBankId());
+        // 设置银行的名称
+        bank.setBankName(params.get("bankName").toString());
+        bank.setBankBranch(params.get("bankBranch").toString());
+        bank.setAccount(params.get("account").toString());
+        bank.setPayee(params.get("payee").toString());
         bank.setCreateTime(new Date());
         carSourceMapper.updateBank(bank);
     }
@@ -290,14 +314,27 @@ public class CarSourceService implements ICarSourceService {
     /**
      * 增加车源
      *
-     * @param carSource
+     * @param params
      */
     @Override
     @Transactional
-    public void addCarSource(CarSource carSource, HttpServletRequest request) {
+    public void addCarSource(Map<String, Object> params, HttpServletRequest request) {
+        CarSource carSource = new CarSource();
         // 生成id
         IdWorker idWorker = new IdWorker(1, 1, 1);
         carSource.setId(idWorker.nextId());
+        // 设置车源联系人
+        carSource.setContacts(params.get("contacts").toString());
+        // 设置车源联系人电话
+        carSource.setPhone(params.get("phone").toString());
+        // 设置车源的车辆台次
+        carSource.setCount(Integer.parseInt(params.get("count").toString()));
+        // 设置车源位置
+        carSource.setCarLocation(params.get("carLocation").toString());
+        // 设置车源的入场状态
+//        carSource.setSourceType("1");
+        // 生成车辆编码
+        //
 
         // 获得token
         String token = request.getHeader("token");
@@ -306,6 +343,8 @@ public class CarSourceService implements ICarSourceService {
         SysUser sysUser = tokenService.getToken(token);
         if (split[0].equals("PC")) {
             carSource.setCreateSource("1");
+//             PC端会设置车源的业务员id
+            carSource.setUserId(Long.parseLong(params.get("userId").toString()));
         } else {
             carSource.setCreateSource("2");
             carSource.setUserId(sysUser.getId());
@@ -327,6 +366,15 @@ public class CarSourceService implements ICarSourceService {
         // 保存银行的信息
         Bank bank = carSource.getBank();
         // 设置银行的信息
+        // 设置银行的名称
+        bank.setBankName(params.get("bankName").toString());
+        // 设置银行的支行名称
+        bank.setBankBranch(params.get("bankBranch").toString());
+        // 设置银行的账户
+        bank.setAccount(params.get("account").toString());
+        // 设置银行的账户名称
+        bank.setPayee(params.get("payee").toString());
+
         bank.setDisintegratePlantId(sysUser.getCompany_id());
         bank.setOperator(sysUser.getLogin_name());
         bank.setOperatorId(sysUser.getId());
@@ -353,6 +401,15 @@ public class CarSourceService implements ICarSourceService {
     @Override
     public List<String> findBankNameList() {
         return dictionaryService.findBankNameList();
+    }
+
+    /**
+     * 更新车辆信息，添加车辆的存放位置
+     * @param carInfo
+     */
+    @Override
+    public void editCarInfoLocation(CarInfo carInfo) {
+        carSourceMapper.editCarInfoLocation(carInfo);
     }
 
     /**

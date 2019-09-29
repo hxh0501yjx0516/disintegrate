@@ -58,7 +58,8 @@ public interface CarSourceMapper {
 
     List<Map<String, Object>> selectCarSourceListApp(@Param(value = "disintegratePlantId") Long disintegratePlantId,
                                                      @Param(value = "userId") Long id,
-                                                     @Param(value = "loginName") String login_name);
+                                                     @Param(value = "loginName") String login_name,
+                                                     @Param(value = "findMsg") String findMsg);
 
     List<Long> selectCarInfoIdList(Long disintegratePlantId);
 
@@ -103,6 +104,8 @@ public interface CarSourceMapper {
 
     List<Map<String, Object>> selectLocationListByPid(@Param(value = "pid") Long pid,
                                          @Param(value = "disintegratePlantId") Long disintegratePlantId);
+
+    void editCarInfoLocation(CarInfo carInfo);
 
 //    int selectCarInfoCountByCarSourceId(Long id);
 }
