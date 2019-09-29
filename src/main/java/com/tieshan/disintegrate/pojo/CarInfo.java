@@ -103,4 +103,12 @@ public class CarInfo implements Serializable {
 	private Integer isDelete;
 	// 车辆编号，格式：TSXXX190900001    添加车辆时加入
 	private String carCode;
+	// 车辆所在的区
+	private String carLocationArea;
+	// 车辆所在区的排
+	private String carLocationRow;
+	// 车辆所在排的列
+	private String carLocationColumn;
+	// 车辆所在列的号
+	private String carLocationNumber;
 }

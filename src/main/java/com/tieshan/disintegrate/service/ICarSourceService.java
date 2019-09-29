@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public interface ICarSourceService {
 
-    void addCarSource(CarSource carSource, HttpServletRequest request);
+    void addCarSource(Map<String, Object> params, HttpServletRequest request);
 
     List<Map<String, Object>>  findUserNameList();
 
@@ -44,7 +44,7 @@ public interface ICarSourceService {
 
     CarSource selectCarSourceById(Long id, HttpServletRequest request);
 
-    void editCarSource(CarSource carSource);
+    void editCarSource(Map<String, Object> params);
 
     void deleteCarSource(Long id, HttpServletRequest request);
 
@@ -67,6 +67,8 @@ public interface ICarSourceService {
     List<Map<String, Object>> selectCarInfoListByDisintegratePlantId(Integer page, Integer pageSize, String findMsg, HttpServletRequest request);
 
     List<Map<String, Object>> selectLocationListByPid(Long id, HttpServletRequest request);
+
+    void editCarInfoLocation(CarInfo carInfo);
 
 //    List<Map<String, Object>> selectCarSourceListApp(HttpServletRequest request);
 

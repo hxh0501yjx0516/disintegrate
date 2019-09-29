@@ -1,8 +1,6 @@
 package com.tieshan.disintegrate.controller;
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
-import com.sun.org.apache.regexp.internal.RE;
 import com.tieshan.disintegrate.constant.ConStants;
 import com.tieshan.disintegrate.pojo.CarInfo;
 import com.tieshan.disintegrate.pojo.CarSource;
@@ -12,9 +10,7 @@ import com.tieshan.disintegrate.service.ICarSourceService;
 import com.tieshan.disintegrate.util.RestResult;
 import com.tieshan.disintegrate.util.ResultCode;
 import lombok.extern.apachecommons.CommonsLog;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,10 +46,10 @@ public class CarSourceController {
      */
     @GetMapping("/selectCarSourceList")
     public RestResult selectCarSourceList(@RequestParam(value = "sourceType",required = false, defaultValue = "1") String sourceType,
-                                                             @RequestParam(value = "findMsg", required = false) String findMsg,
-                                                             @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
-                                                             @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
-                                                             HttpServletRequest request) {
+                                          @RequestParam(value = "findMsg", required = false) String findMsg,
+                                          @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
+                                          @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
+                                          HttpServletRequest request) {
         PageInfo pageInfo = null;/*PageInfo<Map<String, Object>>*/
         try{
             List<Map<String, Object>> mapList = carSourceService.selectCarSourceList(sourceType, findMsg, page, pageSize, request);
@@ -150,14 +146,14 @@ public class CarSourceController {
     /**
      * PC：增加车源     6    对象中的对象接受不到前端传过来的数据     过
      *
-     * @param carSource
+     * @param params
      * @param request
      * @return
      */
     @PostMapping(value = "/addCarSource")
-    public RestResult addCarSource(@RequestBody CarSource carSource, HttpServletRequest request) {
+    public RestResult addCarSource(@RequestBody Map<String, Object> params, HttpServletRequest request) {
         try {
-            carSourceService.addCarSource(carSource, request);
+            carSourceService.addCarSource(params, request);
         } catch (Exception e) {
             log.info("添加车源失败", e);
             return new RestResult("添加车源失败", null, ResultCode.ERROR.code());
@@ -294,13 +290,13 @@ public class CarSourceController {
 
     /**
      * 更新车源的信息  13      过
-     * @param carSource
+     * @param params
      * @return
      */
     @PostMapping(value = "/editCarSource")
-    public RestResult editCarSource(@RequestBody CarSource carSource){
+    public RestResult editCarSource(@RequestBody Map<String, Object> params){
         try{
-            carSourceService.editCarSource(carSource);
+            carSourceService.editCarSource(params);
         }catch(Exception e){
             log.info("更新车源信息失败", e);
             return new RestResult("更新失败", "", ResultCode.ERROR.code());
@@ -559,10 +555,21 @@ public class CarSourceController {
         return new RestResult("查询成功", list, ResultCode.SUCCESS.code());
     }
 
-    /*@PostMapping("/editCarInfoLocation")
+    /**
+     * 更新车辆的信息，添加车辆的存放位置
+     * @param carInfo
+     * @return
+     */
+    @PostMapping("/editCarInfoLocation")
     public RestResult editCarInfoLocation(CarInfo carInfo){
-
-    }*/
+        try{
+            carSourceService.editCarInfoLocation(carInfo);
+        }catch (Exception e){
+            log.info("添加车辆存放位置失败", e);
+            return new RestResult("添加车辆存放位置失败", null, ResultCode.ERROR.code());
+        }
+        return new RestResult("添加车辆存放位置成功", null, ResultCode.SUCCESS.code());
+    }
 
 //    /**
 //     * 删除指定的车源     14
