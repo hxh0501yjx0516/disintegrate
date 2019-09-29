@@ -13,6 +13,7 @@
             IFNULL(seq,'') as seq
         FROM
             department
+            where  company_code=#{company_code}
 
 </select>
     <select id="getDepart" resultType="com.tieshan.disintegrate.pojo.Department">
