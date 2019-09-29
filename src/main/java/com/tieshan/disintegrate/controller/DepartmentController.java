@@ -47,11 +47,11 @@ public class DepartmentController {
 
                                     @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) int pageSize) {
         RestResult restResult = null;
-        PageInfo<Department> pageInfo = null;
+//        PageInfo<Department> pageInfo = null;
         try {
             List<Department> departmentList = departmentService.allDepartment(page, pageSize);
-            pageInfo = new PageInfo<>(departmentList);
-            restResult = new RestResult("", pageInfo, ResultCode.SUCCESS.code());
+//            pageInfo = new PageInfo<>(departmentList);
+            restResult = new RestResult("", departmentList, ResultCode.SUCCESS.code());
         } catch (Exception e) {
             log.info("获取部门列表失败------->", e);
         }
