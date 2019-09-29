@@ -333,8 +333,6 @@ public class CarSourceService implements ICarSourceService {
         carSource.setCarLocation(params.get("carLocation").toString());
         // 设置车源的入场状态
 //        carSource.setSourceType("1");
-        // 生成车辆编码
-        //
 
         // 获得token
         String token = request.getHeader("token");

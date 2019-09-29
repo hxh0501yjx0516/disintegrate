@@ -195,7 +195,7 @@
             <if test="sourceType != null and sourceType != ''">
                 AND  s.source_type = #{sourceType}
             </if>
-	        <include refid="queryMsg"></include>
+	        <include refid="queryMsg2"></include>
     </select>
 
     <select id="selectCarSourceListApp" resultType="java.util.Map">
@@ -215,7 +215,7 @@
         s.disintegrate_plant_id = #{disintegratePlantId} AND
         s.create_operator = #{loginName} AND
         s.create_operator_id = #{userId}
-        <include refid="queryMsg"></include>
+        <include refid="queryMsg2"></include>
     </select>
 
     <!--<select id="selectCarInfoCountByCarSourceId" parameterType="java.lang.Long" resultType="java.lang.Integer">
@@ -230,10 +230,17 @@
             s.create_operator_id = #{userId}
     </select>-->
 
+    <sql id="queryMsg2">
+        <if test="findMsg != null and findMsg != ''">
+            AND concat(s.contacts, s.phone, s.car_location)
+            LIKE concat("%",#{findMsg},"%")
+        </if>
+    </sql>
+
     <sql id="queryMsg">
         <if test="findMsg != null and findMsg != ''">
             AND concat(s.contacts, s.phone, i.car_name, i.car_no, s.car_location)
-            like concat("%",#{findMsg},"%")
+            LIKE concat("%",#{findMsg},"%")
         </if>
     </sql>
 
