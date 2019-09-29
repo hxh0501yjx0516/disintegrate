@@ -32,7 +32,7 @@ public class RedisUtil {
         ShardedJedis shardedJedis = ShardedJedisUtils.getShardedJedis(1);
         String keys = key.substring(0, key.lastIndexOf("-")) + "*";
         del(keys);
-        shardedJedis.del(key);
+//        shardedJedis.del(key);
         shardedJedis.set(key, value, "NX", "EX", seconds);
         shardedJedis.close();
     }
@@ -40,6 +40,7 @@ public class RedisUtil {
     public static boolean get(String key) {
         ShardedJedis shardedJedis = ShardedJedisUtils.getShardedJedis(1);
         boolean isLive = shardedJedis.exists(key);
+        shardedJedis.close();
         return isLive;
     }
 
@@ -48,12 +49,12 @@ public class RedisUtil {
         String tokens = shardedJedis.get(key);
         JSONObject jsonObject = JSONObject.parseObject(tokens);
         SysUser sysUser = JSONObject.toJavaObject(jsonObject, SysUser.class);
-
+        shardedJedis.close();
         return sysUser;
     }
 
-    public static void close() {
-        ShardedJedis shardedJedis = ShardedJedisUtils.getShardedJedis(1);
+    public static void close(ShardedJedis shardedJedis) {
+//        ShardedJedis shardedJedis = ShardedJedisUtils.getShardedJedis(1);
         shardedJedis.close();
     }
 
@@ -67,24 +68,27 @@ public class RedisUtil {
             shardedJedis.del(key);
         }
 
-
     }
 
     public static void remove(String delkey) {
         ShardedJedis shardedJedis = ShardedJedisUtils.getShardedJedis(1);
         long num = shardedJedis.del(delkey);
+        shardedJedis.close();
     }
 
     public static Set<String> getByPrefix(String key) {
         Set<String> setResult = new HashSet<>();
+        ShardedJedis shardedJedis = null;
         try {
-            ShardedJedis shardedJedis = ShardedJedisUtils.getShardedJedis(1);
+            shardedJedis = ShardedJedisUtils.getShardedJedis(1);
             Iterator<Jedis> jedisIterator = shardedJedis.getAllShards().iterator();
             while (jedisIterator.hasNext()) {
                 setResult = jedisIterator.next().keys(key);
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            shardedJedis.close();
         }
         return setResult;
     }
