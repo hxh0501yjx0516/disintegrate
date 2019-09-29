@@ -189,7 +189,7 @@
         FROM
             ts_car_source AS s
             LEFT JOIN ts_bank AS b ON s.bank_id = b.id
-            LEFT JOIN ts_car_info AS r ON s.id = r.car_source
+            LEFT JOIN ts_car_info AS i ON s.id = i.car_source
         WHERE
             s.disintegrate_plant_id = #{disintegratePlantId}
             <if test="sourceType != null and sourceType != ''">
@@ -232,7 +232,7 @@
 
     <sql id="queryMsg">
         <if test="findMsg != null and findMsg != ''">
-            AND concat(s.contacts, s.phone, r.car_name, r.car_no, s.car_location)
+            AND concat(s.contacts, s.phone, i.car_name, i.car_no, s.car_location)
             like concat("%",#{findMsg},"%")
         </if>
     </sql>
@@ -244,7 +244,7 @@
 		FROM
 			ts_dictionary
 		WHERE
-			first_type = #{firstName};
+			first_type = #{firstName}
 	</select>
 
     <insert id="addCar" parameterType="com.tieshan.disintegrate.pojo.CarInfo">

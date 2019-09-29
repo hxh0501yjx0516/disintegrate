@@ -56,7 +56,7 @@ public class CarSourceController {
             pageInfo = new PageInfo<>(mapList);
         }catch (Exception e){
             log.info("查询失败", e);
-            return new RestResult("查询失败", null, ResultCode.ERROR.code());
+            return new RestResult("查询失败", pageInfo, ResultCode.ERROR.code());
         }
         return new RestResult("查询成功", pageInfo, ResultCode.SUCCESS.code());
     }
