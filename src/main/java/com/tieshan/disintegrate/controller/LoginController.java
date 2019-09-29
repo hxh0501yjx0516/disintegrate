@@ -55,7 +55,7 @@ public class LoginController {
 ////                String userAgent = request.getHeader("user-agent");
 ////                UserAgent userAgent1 = UserAgent.parseUserAgentString(userAgent);
                 if ("1".equals(type)) {
-                    type = "app-";
+                    type = "APP-";
                 } else {
                     type = "PC-";
                 }
