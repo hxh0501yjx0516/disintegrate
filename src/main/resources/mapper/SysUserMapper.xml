@@ -126,9 +126,10 @@
 
         where id=#{user.id}
     </update>
-    <update id="delUser">
-    UPDATE user set user_status='2' where  id=#{id}
-   </update>
+    <delete id="delUser">
+
+           delete  from user where  id=#{id}
+   </delete>
     <update id="updateDepartment_user">
        UPDATE department_user
         SET department_id = #{user.depart_id}
