@@ -26,8 +26,8 @@ public class DepartmentService implements IDepartmentService {
 
     @Override
     public List<Department> allDepartment(int page, int pageSize) {
-        PageHelper.startPage(page, pageSize);
-        PageHelper.orderBy("seq desc");
+//        PageHelper.startPage(page, pageSize);
+//        PageHelper.orderBy("seq desc");
         return departmentMapper.allDepartment();
     }
 

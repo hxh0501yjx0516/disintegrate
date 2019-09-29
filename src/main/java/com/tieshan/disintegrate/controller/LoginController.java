@@ -41,7 +41,7 @@ public class LoginController {
      * @return
      */
     @PostMapping(value = "/login")
-    public RestResult submitLogin(String username, String password, HttpServletRequest request) {
+    public RestResult submitLogin(String username, String password, String type, HttpServletRequest request) {
         if (PubMethod.isEmpty(username) || PubMethod.isEmpty(password)) {
             return new RestResult("用户名或密码不能为空", null, ResultCode.ERROR.code());
         }
@@ -51,11 +51,11 @@ public class LoginController {
         try {
             SysUser sysUser = userService.login(username, password);
             if (sysUser != null) {
-                String type = null;
-                String userAgent = request.getHeader("user-agent");
-                UserAgent userAgent1 = UserAgent.parseUserAgentString(userAgent);
-                if (userAgent1.getOperatingSystem().isMobileDevice()) {
-                    type = "MOBILE-";
+//                String type = null;
+////                String userAgent = request.getHeader("user-agent");
+////                UserAgent userAgent1 = UserAgent.parseUserAgentString(userAgent);
+                if ("1".equals(type)) {
+                    type = "APP-";
                 } else {
                     type = "PC-";
                 }
@@ -136,8 +136,6 @@ public class LoginController {
         }
         return restResult;
     }
-
-
 
 
 }
