@@ -1,5 +1,6 @@
 package com.tieshan.disintegrate.controller;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.tieshan.disintegrate.constant.ConStants;
 import com.tieshan.disintegrate.pojo.Department;
@@ -40,6 +41,27 @@ public class DepartmentController {
      * @param request
      * @return
      */
+    @GetMapping(value = "/getAllDepart")
+    public RestResult getAllDepart(HttpServletRequest request) {
+        RestResult restResult = null;
+        try {
+            String token = request.getHeader("token");
+            SysUser sysUser = tokenService.getToken(token);
+            List<Department> departmentList = departmentService.getAllDepart(sysUser.getCompany_code());
+            restResult = new RestResult("", departmentList, ResultCode.SUCCESS.code());
+        } catch (Exception e) {
+            log.info("获取部门列表失败------->", e);
+        }
+        return restResult;
+
+    }
+
+    /**
+     * @param request
+     * @param page
+     * @param pageSize
+     * @return
+     */
     @GetMapping(value = "/allDepartment")
     public RestResult allDepartment(HttpServletRequest request,
                                     @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) int page,
@@ -47,11 +69,13 @@ public class DepartmentController {
 
                                     @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) int pageSize) {
         RestResult restResult = null;
-//        PageInfo<Department> pageInfo = null;
+        PageInfo<Department> pageInfo = null;
         try {
-            List<Department> departmentList = departmentService.allDepartment(page, pageSize);
-//            pageInfo = new PageInfo<>(departmentList);
-            restResult = new RestResult("", departmentList, ResultCode.SUCCESS.code());
+            String token = request.getHeader("token");
+            SysUser sysUser = tokenService.getToken(token);
+            List<Department> departmentList = departmentService.allDepartment(page, pageSize, sysUser.getCompany_code());
+            pageInfo = new PageInfo<>(departmentList);
+            restResult = new RestResult("", pageInfo, ResultCode.SUCCESS.code());
         } catch (Exception e) {
             log.info("获取部门列表失败------->", e);
         }
