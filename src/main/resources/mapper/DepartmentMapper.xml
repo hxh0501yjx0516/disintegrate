@@ -36,7 +36,8 @@
         where id=#{depart.id}
     </update>
     <delete id="delDepart">
-    UPDATE department SET department_status = '2' where  id=#{id}
+
+       delete  from department where  id=#{id}
    </delete>
    <insert id="addDepart">
         INSERT INTO department ( id, department_name,  department_describe,company_code ,operator, create_time)

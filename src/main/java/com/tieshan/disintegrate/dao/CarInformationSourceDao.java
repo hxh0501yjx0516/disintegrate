@@ -23,15 +23,16 @@ public interface CarInformationSourceDao {
      * @return: List
      */
     @Select("select contacts,contacts_phone,car_no,car_name,processing_type,processing_date,procedures_type,driv_license,regist_license," +
-            "people_license,businese_license,break_license,exception_license,remarks,contacts_address from ts_car_info where id=#{carInfoId}")
-    List<Map<String,Object>> findCarSourceById(@Param("carInfoId") Long carInfoId);
+            "people_license,businese_license,break_license,exception_license,remarks,contacts_address from ts_car_info where id=#{carInfoId} " +
+            "and disintegrate_plant_id=#{companyId}")
+    List<Map<String,Object>> findCarSourceById(@Param("carInfoId") Long carInfoId,@Param("companyId")Long companyId);
 
     /**
      *@Description: 车源信息处理日志查询
      * @param: carInfoId car_info的主键(车辆编号ID)
      * @return: List
      */
-    @Select("select create_time,operator,remark from ts_car_procedure_log where car_info_id=#{carInfoId} and type=4")
-    List<Map<String,Object>> findCarSourceLogById(@Param("carInfoId") Long carInfoId);
+    @Select("select create_time,operator,remark from ts_car_procedure_log where car_info_id=#{carInfoId} and type=4 and disintegrate_plant_id=#{companyId}")
+    List<Map<String,Object>> findCarSourceLogById(@Param("carInfoId") Long carInfoId,@Param("companyId")Long companyId);
 
 }

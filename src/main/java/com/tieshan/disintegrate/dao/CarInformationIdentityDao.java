@@ -24,15 +24,15 @@ public interface CarInformationIdentityDao {
      */
     @Select("select iden.*,info.contacts,info.contacts_phone,info.contacts_address,info.driv_license,info.regist_license " +
             "from ts_car_identity iden,ts_car_info info " +
-            "where iden.car_info_id=info.id and info.id=#{carInfoId}")
-    List<Map<String,Object>> findCarIdentityById(@Param("carInfoId") Long carInfoId);
+            "where iden.car_info_id=info.id and info.id=#{carInfoId} and iden.disintegrate_plant_id=#{companyId}")
+    List<Map<String,Object>> findCarIdentityById(@Param("carInfoId") Long carInfoId,@Param("companyId")Long companyId);
 
     /**
      *@Description: 手续处理周期查询
      * @param: carInfoId car_info的主键(车辆编号ID)
      * @return: List
      */
-    @Select("select create_time,operator,remark from ts_car_procedure_log where car_info_id=#{carInfoId} and type in(2,3,4)")
-    List<Map<String,Object>> findProcedureById(@Param("carInfoId") Long carInfoId);
+    @Select("select create_time,operator,remark from ts_car_procedure_log where car_info_id=#{carInfoId} and type in(2,3,4) and disintegrate_plant_id=#{companyId}")
+    List<Map<String,Object>> findProcedureById(@Param("carInfoId") Long carInfoId,@Param("companyId")Long companyId);
 
 }

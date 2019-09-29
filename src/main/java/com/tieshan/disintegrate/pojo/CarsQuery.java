@@ -21,7 +21,7 @@ public class CarsQuery{
     /**
      * 车辆编号-->car_info.id
      * */
-    private Long id;
+    private Long carInfoId;
     /**
      * 车牌号-->car_info.车牌号
      * */

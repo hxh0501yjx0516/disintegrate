@@ -36,13 +36,16 @@ public class CarsQueryController {
      * @param findMsg  可选 string 查询条件(姓名 / 电话 / 车型 / 车牌号 / 车辆编号 / 车架号 / 发动机号)
      * @param page     可选 int 当前的页码值
      * @param pageSize 可选 int 页面大小
-     * @return {"pageNum": 1,"pageSize": 10,"size": 2,"startRow": 1,"endRow": 2,"total": 2,"pages": 1,"list": [{"id": 22,"carNo": "A5W44C","cardColor": "蓝色","carName": "车型","carKind": "车辆性质","natureUsege": "使用性质","carProperties": "'车辆性质","regTime": "2019-09-16T16:00:00.000+0000","issueTime": "2019-09-16T16:00:00.000+0000","owner": "张三","phone": "13345678910","contacts": "zhangsanfeng","contactsPhone": "13888888888","vin": "VIN码","engine": "发动机号码"}],"prePage": 0,"nextPage": 0,"isFirstPage": true,"isLastPage": true,"hasPreviousPage": false,"hasNextPage": false,"navigatePages": 8,"navigatepageNums": [1],"navigateFirstPage": 1,"navigateLastPage": 1,"lastPage": 1,"firstPage": 1}
+     * @return {"msg": "查询车辆列表信息成功","data": {"pageNum": 1,"pageSize": 10,"size": 3,"startRow": 1,"endRow": 3,"total": 3,"pages": 1,"list": [{"carInfoId": 1176367626889334784,"carNo": "晋A88888","cardColor": "蓝色","carName": "8888","carKind": "车辆性质","natureUsege": "使用性质自用","carProperties": "'车辆性质","regTime": "2019-09-29 00:00:00","issueTime": "2019-09-29 00:00:00","owner": "任磊","phone": "13888888888","contacts": "李五","contactsPhone": "13355558888","vin": "55555555555","engine": "6666"}],"prePage": 0,"nextPage": 0,"isFirstPage": true,"isLastPage": true,"hasPreviousPage": false,"hasNextPage": false,"navigatePages": 8,"navigatepageNums": [1],"navigateFirstPage": 1,"navigateLastPage": 1,"firstPage": 1,"lastPage": 1},"ret_code": "0"}
      * @catalog 解体厂-PC/车辆查询/车辆列表
      * @title 车辆列表
      * @description 车辆列表首页查询接口
      * @method get
      * @url http://localhost:8002/doCarsQuery/doFindPageObjects
-     * @return_param id Long 车辆编号
+     * @return_param msg string 描述信息
+     * @return_param data List 数据
+     * @return_param ret_code int 状态码 0 成功 1 失败
+     * @return_param carInfoId Long 车辆编号
      * @return_param carNo string 车牌号
      * @return_param cardColor string 车牌颜色
      * @return_param carName string 品牌型号
@@ -62,20 +65,17 @@ public class CarsQueryController {
      */
 
     @GetMapping("/doCarsQuery/doFindPageObjects")
-    public PageInfo<CarsQuery> doFindPageObjects(
+    public RestResult doFindPageObjects(
             @RequestParam(value = "findMsg", required = false) String findMsg,
             @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
-            @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize
+            @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
+            @LoginUser SysUser user
     ) {
         PageInfo<CarsQuery> pageInfo = null;
-        try {
-            List<CarsQuery> list = carsQueryService.findPageObjects(findMsg, page, pageSize);
+        List<CarsQuery> list = carsQueryService.findPageObjects(findMsg, page, pageSize, user.getCompany_id());
             pageInfo = new PageInfo<>(list);
-        } catch (Exception e) {
-            log.info("获取车辆信息列表失败", e);
-        }
-
-        return pageInfo;
+        RestResult restResult = new RestResult("查询车辆列表信息成功", pageInfo, ResultCode.SUCCESS.code());
+        return restResult;
     }
 
     /**
