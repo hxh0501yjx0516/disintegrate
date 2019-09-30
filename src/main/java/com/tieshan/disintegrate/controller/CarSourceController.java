@@ -201,7 +201,7 @@ public class CarSourceController {
      *
      *
      * @param carInfo
-     * @param carSource      车源主键id
+     * @param
      * @param request
      * @return          , @RequestParam(value = "carSource") Long carSource
      */
@@ -341,7 +341,7 @@ public class CarSourceController {
      * APP 查询所有指定车源下的车辆
      * @param id
      * @param request
-     * @param state    1-待入场状态    2-待核档状态    3-待商委注销状态     4-待领取残值状态     5-待报废状态     6-报废成功
+     * @param state    1-待入场状态    2-待核档状态    3-待商委注销状态     4-待领取残值状态     5-待报废状态     6-报废成功     7-核档未通过
      * @param findMsg
      * @param page
      * @param pageSize
@@ -359,7 +359,28 @@ public class CarSourceController {
             pageInfo = new PageInfo<>(resultList);
         }catch (Exception e){
             log.info("查询失败",e);
-            return new RestResult("查询失败", null, ResultCode.ERROR.code());
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", pageInfo, ResultCode.SUCCESS.code());
+    }
+
+    /**
+     * 查询某拆解厂下某业务员下核档完成的所有车辆（搜索的是车牌号，车型，vin，车辆编号）    过
+     * @param request
+     * @return
+     */
+    @GetMapping(value = "/selectCarInfoListByIsVerify")
+    public RestResult selectCarInfoListByIsVerify(HttpServletRequest request,
+                                                  @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
+                                                  @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
+                                                  @RequestParam(value = "findMsg", required = false) String findMsg){
+        PageInfo pageInfo = null;
+        try{
+            List<Map<String, Object>> resultList = carSourceService.selectCarInfoListByIsVerify(request, findMsg);
+            pageInfo = new PageInfo<>(resultList);
+        }catch (Exception e){
+            log.info("查询失败",e);
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
         }
         return new RestResult("查询成功", pageInfo, ResultCode.SUCCESS.code());
     }

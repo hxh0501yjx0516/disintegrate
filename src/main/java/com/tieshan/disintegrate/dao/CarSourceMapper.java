@@ -58,7 +58,7 @@ public interface CarSourceMapper {
 
     List<Map<String, Object>> selectCarSourceListApp(@Param(value = "disintegratePlantId") Long disintegratePlantId,
                                                      @Param(value = "userId") Long id,
-                                                     @Param(value = "loginName") String login_name,
+                                                     @Param(value = "loginName") String loginName,
                                                      @Param(value = "findMsg") String findMsg);
 
     List<Long> selectCarInfoIdList(Long disintegratePlantId);
@@ -108,6 +108,11 @@ public interface CarSourceMapper {
     void editCarInfoLocation(CarInfo carInfo);
 
     Map<String, Object> selectCodeAfter(Long disintegratePlantId, String codeFront, String codeIn);
+
+    List<Map<String, Object>> selectCarInfoListByIsVerify(@Param(value = "userId") Long userId,
+                                                          @Param(value = "loginName") String loginName,
+                                                          @Param(value = "disintegratePlantId") Long disintegratePlantId,
+                                                          @Param(value = "findMsg") String findMsg);
 
 //    int selectCarInfoCountByCarSourceId(Long id);
 }

@@ -782,11 +782,13 @@
             IFNULL(p.is_premium_completion,'') AS isPremiumCompletion
         FROM
         	ts_car_info AS i
+
             LEFT JOIN ts_car_identity AS d ON i.id = d.car_info_id
             LEFT JOIN ts_car_enter AS e ON i.id = e.car_info_id
             LEFT JOIN ts_car_processing AS p ON i.id = p.car_info_id
             LEFT JOIN ts_car_salvage AS s ON i.id = s.car_info_id
-        WHERE i.disintegrate_plant_id = #{disintegratePlantId} 
+        WHERE i.disintegrate_plant_id = #{disintegratePlantId}
+
         	AND i.car_source = #{id}
             <if test="findMsg != null and findMsg != ''">
                 AND CONCAT(i.car_code,i.car_no,d.vin) LIKE CONCAT('%',#{findMsg},'%')
@@ -814,6 +816,31 @@
                 AND s.is_get_salvage = 2
                 AND p.is_premium_completion = 2
             </if>
+            <if test='states == "7"'>
+                AND e.is_approach = 2
+                AND p.is_verify = 3
+            </if>
+    </select>
+
+    <select id="selectCarInfoListByIsVerify" resultType="java.util.Map">
+        SELECT
+            IFNULL(i.id,'') AS id,
+            IFNULL(i.car_code,'') AS carCode,
+            IFNULL(i.car_no,'') AS carNo,
+            IFNULL(d.vin,'') AS vin,
+            IFNULL(e.approach_time,'') AS approachTime
+        FROM
+        	ts_car_info AS i
+						Left JOIN ts_car_source AS o ON i.car_source = o.id
+            LEFT JOIN ts_car_identity AS d ON i.id = d.car_info_id
+            LEFT JOIN ts_car_enter AS e ON i.id = e.car_info_id
+            LEFT JOIN ts_car_processing AS p ON i.id = p.car_info_id
+        WHERE i.disintegrate_plant_id = #{disintegratePlantId}
+				AND create_operator = #{loginName}  AND create_operator_id = #{userId}
+				AND p.is_query = 2 AND p.is_verify = 2
+        <if test="findMsg != null and findMsg != ''">
+            AND CONCAT(i.car_no,i.car_name,i.car_code,d.vin) LIKE CONCAT("%",#{findMsg},"%")
+        </if>
     </select>
 
     <select id="selectCarInfoByCarNo" parameterType="java.lang.String" resultType="java.lang.Long">

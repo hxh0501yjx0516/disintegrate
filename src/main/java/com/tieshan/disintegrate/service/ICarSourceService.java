@@ -1,12 +1,8 @@
 package com.tieshan.disintegrate.service;
 
-import com.github.pagehelper.PageInfo;
 import com.tieshan.disintegrate.pojo.CarInfo;
 import com.tieshan.disintegrate.pojo.CarSource;
 import com.tieshan.disintegrate.pojo.CarSurvey;
-import com.tieshan.disintegrate.pojo.SysUser;
-
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +65,8 @@ public interface ICarSourceService {
     List<Map<String, Object>> selectLocationListByPid(Long id, HttpServletRequest request);
 
     void editCarInfoLocation(CarInfo carInfo);
+
+    List<Map<String, Object>> selectCarInfoListByIsVerify(HttpServletRequest request, String findMsg);
 
 //    List<Map<String, Object>> selectCarSourceListApp(HttpServletRequest request);
 

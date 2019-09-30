@@ -46,7 +46,7 @@ public class CarSourceService implements ICarSourceService {
      * 添加车辆      时间转换
      *
      * @param carInfo
-     * @param carSource      车源主键id
+     * @param
      * @param request
      */
     @Override
@@ -84,7 +84,8 @@ public class CarSourceService implements ICarSourceService {
         }
         carInfo.setCodeFront(codeFront);
         carInfo.setCodeIn(codeIn);
-        carInfo.setCodeAfter(codeAfter);*/
+        carInfo.setCodeAfter(codeAfter);
+        carInfo.setCarCode(codeFront + codeIn +codeAfter);*/
         carSourceMapper.addCar(carInfo);
 
         // 添加车辆入场管理信息
@@ -426,6 +427,22 @@ public class CarSourceService implements ICarSourceService {
     }
 
     /**
+     * 查询某拆解厂下某业务员下核档完成的所有车辆（搜索的是车牌号，车型，vin，车辆编号）
+     * @param request
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> selectCarInfoListByIsVerify(HttpServletRequest request, String findMsg) {
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        List<Map<String, Object>> mapList = carSourceMapper.selectCarInfoListByIsVerify(sysUser.getId(), sysUser.getLogin_name(), sysUser.getCompany_id(), findMsg);
+        for (Map<String, Object> map : mapList) {
+            map.put("status", "已核档");
+        }
+        return mapList;
+    }
+
+    /**
      * 更新车辆信息，添加车辆的存放位置
      * @param carInfo
      */
@@ -619,6 +636,7 @@ public class CarSourceService implements ICarSourceService {
         List<Map<String, Object>> mapList = null;
         // 查询所有指定车源下的车辆
         mapList = carSourceMapper.selectCarInfoListApp(id, sysUser.getCompany_id(), state, findMsg);
+        System.out.println(mapList);
         // 遍历maps集合
         for (Map<String, Object> map : mapList) {
             // 定义一个map集合对象
