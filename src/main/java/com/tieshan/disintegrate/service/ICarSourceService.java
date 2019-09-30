@@ -30,7 +30,7 @@ public interface ICarSourceService {
 
     Map<String, List<String>> selectProcessingTypeAndProceduresType();
 
-    void addCar(CarInfo carInfo,Long carSource, HttpServletRequest request);
+    void addCar(CarInfo carInfo, HttpServletRequest request);
 
     CarSource selectCarSource(Long id, HttpServletRequest request);
 

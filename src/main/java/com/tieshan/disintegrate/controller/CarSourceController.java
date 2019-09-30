@@ -203,12 +203,12 @@ public class CarSourceController {
      * @param carInfo
      * @param carSource      车源主键id
      * @param request
-     * @return
+     * @return          , @RequestParam(value = "carSource") Long carSource
      */
     @PostMapping(value = "/addCar")
-    public RestResult addCar(@RequestBody CarInfo carInfo, @RequestParam(value = "carSource") Long carSource, HttpServletRequest request) {
+    public RestResult addCar(@RequestBody CarInfo carInfo, HttpServletRequest request) {
         try {
-            carSourceService.addCar(carInfo, carSource, request);
+            carSourceService.addCar(carInfo, request);
         } catch (Exception e) {
             log.info("添加车辆失败", e);
             return new RestResult("添加失败", null, ResultCode.ERROR.code());

@@ -1,5 +1,6 @@
 package com.tieshan.disintegrate.service.impl;
 
+import com.alibaba.druid.util.StringUtils;
 import com.github.pagehelper.PageHelper;
 import com.tieshan.disintegrate.dao.CarSourceMapper;
 import com.tieshan.disintegrate.dao.SysUserMapper;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -49,13 +51,13 @@ public class CarSourceService implements ICarSourceService {
      */
     @Override
     @Transactional
-    public void addCar(CarInfo carInfo, Long carSource, HttpServletRequest request) {
+    public void addCar(CarInfo carInfo, HttpServletRequest request) {
         // 设置车辆id
         IdWorker idWorker = new IdWorker(1, 1, 1);
         long carInfoId = idWorker.nextId();
         carInfo.setId(carInfoId);
         // 设置车源主键id
-        carInfo.setCarSource(carSource);
+        carInfo.setCarSource(carInfo.getCarSource());
 
         // 获取token信息
         String token = request.getHeader("token");
@@ -68,7 +70,21 @@ public class CarSourceService implements ICarSourceService {
 
         carInfo.setOperator(sysUser.getLogin_name());
         // 设置车辆编号
-//        carInfo.setCarCode();
+        // 获得车辆编号的前缀
+        /*String codeFront = sysUser.getCompany_code();
+        String codeIn = getMonth();
+//        int codeAfter = 0;
+        Map<String, Object> map = carSourceMapper.selectCodeAfter(sysUser.getCompany_id(),codeFront, codeIn);
+        int codeAfter = 0;
+        if (map.get("codeIn").toString().equals(codeIn)){
+            codeAfter = Integer.parseInt(map.get("codeAfter").toString());
+            codeAfter += 1;
+        }else {
+            codeAfter = 1;
+        }
+        carInfo.setCodeFront(codeFront);
+        carInfo.setCodeIn(codeIn);
+        carInfo.setCodeAfter(codeAfter);*/
         carSourceMapper.addCar(carInfo);
 
         // 添加车辆入场管理信息
@@ -78,6 +94,14 @@ public class CarSourceService implements ICarSourceService {
         carEnter.setCarInfoId(carInfoId);
         carEnter.setIsApproach(1);
         carSourceMapper.insertCarEnter(carEnter);
+    }
+
+    private String getMonth() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH,1);
+        SimpleDateFormat format = new SimpleDateFormat("yyMM");
+        String returnDate = format.format(calendar.getTime());
+        return returnDate;
     }
 
     /**

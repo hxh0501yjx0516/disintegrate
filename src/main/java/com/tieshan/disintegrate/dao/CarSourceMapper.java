@@ -107,5 +107,7 @@ public interface CarSourceMapper {
 
     void editCarInfoLocation(CarInfo carInfo);
 
+    Map<String, Object> selectCodeAfter(Long disintegratePlantId, String codeFront, String codeIn);
+
 //    int selectCarInfoCountByCarSourceId(Long id);
 }

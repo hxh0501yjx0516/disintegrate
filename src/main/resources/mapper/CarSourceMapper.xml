@@ -324,7 +324,16 @@
                 contacts_address,
             </if>
             <if test="carCode != null and carCode != ''">
-                car_code
+                car_code,
+            </if>
+            <if test="codeFront != null and codeFront != ''">
+                code_front,
+            </if>
+            <if test="codeIn != null and codeIn != ''">
+                code_in,
+            </if>
+            <if test="codeAfter != null and codeAfter != ''">
+                code_after
             </if>
         </trim>
         VALUES
@@ -397,6 +406,15 @@
             </if>
             <if test="carCode != null and carCode != ''">
                 #{carCode}
+            </if>
+            <if test="codeFront != null and codeFront != ''">
+                #{codeFront},
+            </if>
+            <if test="codeIn != null and codeIn != ''">
+                #{codeIn},
+            </if>
+            <if test="codeAfter != null and codeAfter != ''">
+                #{codeAfter}
             </if>
         </trim>
     </insert>
@@ -1095,6 +1113,10 @@
         WHERE
 	    id = #{id}
     </update>
+
+    <select id="selectCodeAfter" resultType="java.util.Map">
+        SELECT code_in AS codeIn, code_after AS codeAfter FROM ts_car_info WHERE code_front = #{codeFront} AND code_in = #{codeIn} AND disintegrate_plant_id = #{disintegratePlantId} ORDER BY create_time DESC LIMIT 1;
+    </select>
 
     <delete id="deleteCarSourceById" parameterType="java.lang.Long">
         DELETE FROM ts_car_source WHERE id =#{id} AND disintegrate_plant_id = #{disintegratePlantId};
