@@ -30,23 +30,30 @@ public interface CarSourceMapper {
 
     void insertBank(Bank bank);
 
-    List<Map<String,Object>> selectCarSourceList(Long disintegratePlantId, String sourceType, String findMsg);
+    List<Map<String,Object>> selectCarSourceList(@Param(value = "disintegratePlantId") Long disintegratePlantId,
+                                                 @Param(value = "sourceType") String sourceType,
+                                                 @Param(value = "findMsg") String findMsg);
 
     List<String> selectProcessingTypeOrProceduresType(String firstName);
 
     void addCar(CarInfo carInfo);
 
-    CarSource selectCarSource(Long id, Long disintegratePlantId);
+    CarSource selectCarSource(@Param(value = "id") Long id,
+                              @Param(value = "disintegratePlantId") Long disintegratePlantId);
 
-    List<Map<String, Object>> selectCarInfoList(@Param(value = "carSource") Long carSource,@Param(value = "disintegratePlantId") Long disintegratePlantId);
+    List<Map<String, Object>> selectCarInfoList(@Param(value = "carSource") Long carSource,
+                                                @Param(value = "disintegratePlantId") Long disintegratePlantId);
 
-    CarInfo selectCarInfoById(Long id, Long disintegratePlantId);
+    CarInfo selectCarInfoById(@Param(value = "id") Long id,
+                              @Param(value = "disintegratePlantId") Long disintegratePlantId);
 
     void editCar(CarInfo carInfo);
 
-    void deleteCarInfoById(Long id, Long disintegratePlantId);
+    void deleteCarInfoById(@Param(value = "id") Long id,
+                           @Param(value = "disintegratePlantId") Long disintegratePlantId);
 
-    CarSource selectCarSourceById(Long id, Long disintegratePlantId);
+    CarSource selectCarSourceById(@Param(value = "id") Long id,
+                                  @Param(value = "disintegratePlantId") Long disintegratePlantId);
 
     void editCarSource(CarSource carSource);
 
@@ -54,7 +61,8 @@ public interface CarSourceMapper {
 
     void updateBank(Bank bank);
 
-    void deleteCarSourceById(Long id, Long disintegratePlantId);
+    void deleteCarSourceById(@Param(value = "id") Long id,
+                             @Param(value = "disintegratePlantId") Long disintegratePlantId);
 
     List<Map<String, Object>> selectCarSourceListApp(@Param(value = "disintegratePlantId") Long disintegratePlantId,
                                                      @Param(value = "userId") Long id,
@@ -107,7 +115,9 @@ public interface CarSourceMapper {
 
     void editCarInfoLocation(CarInfo carInfo);
 
-    Map<String, Object> selectCodeAfter(Long disintegratePlantId, String codeFront, String codeIn);
+    Map<String, Object> selectCarCode(@Param(value = "disintegratePlantId") Long disintegratePlantId,
+                         @Param(value = "codeFront") String codeFront,
+                         @Param(value = "codeIn") String codeIn);
 
     List<Map<String, Object>> selectCarInfoListByIsVerify(@Param(value = "userId") Long userId,
                                                           @Param(value = "loginName") String loginName,

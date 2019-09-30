@@ -529,9 +529,9 @@ public class CarSourceController {
             carSourceService.editCarSurveyComplete(carSurvey, request);
         }catch (Exception e){
             log.info("修改失败", e);
-            return new RestResult("修改失败", null, ResultCode.ERROR.code());
+            return new RestResult("修改失败", "", ResultCode.ERROR.code());
         }
-        return new RestResult("修改成功", null, ResultCode.SUCCESS.code());
+        return new RestResult("修改成功", "", ResultCode.SUCCESS.code());
     }
 
     /**.

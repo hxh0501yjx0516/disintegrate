@@ -255,7 +255,7 @@
 	</select>
 
     <insert id="addCar" parameterType="com.tieshan.disintegrate.pojo.CarInfo">
-        insert into ts_car_info
+        INSERT INTO ts_car_info
         <trim prefix="(" suffixOverrides="," suffix=")">
             <if test="id != null">
                 id,
@@ -332,7 +332,7 @@
             <if test="codeIn != null and codeIn != ''">
                 code_in,
             </if>
-            <if test="codeAfter != null and codeAfter != ''">
+            <if test="codeAfter != null">
                 code_after
             </if>
         </trim>
@@ -405,7 +405,7 @@
                 #{contactsAddress},
             </if>
             <if test="carCode != null and carCode != ''">
-                #{carCode}
+                #{carCode},
             </if>
             <if test="codeFront != null and codeFront != ''">
                 #{codeFront},
@@ -413,7 +413,7 @@
             <if test="codeIn != null and codeIn != ''">
                 #{codeIn},
             </if>
-            <if test="codeAfter != null and codeAfter != ''">
+            <if test="codeAfter != null">
                 #{codeAfter}
             </if>
         </trim>
@@ -788,10 +788,9 @@
             LEFT JOIN ts_car_processing AS p ON i.id = p.car_info_id
             LEFT JOIN ts_car_salvage AS s ON i.id = s.car_info_id
         WHERE i.disintegrate_plant_id = #{disintegratePlantId}
-
         	AND i.car_source = #{id}
             <if test="findMsg != null and findMsg != ''">
-                AND CONCAT(i.car_code,i.car_no,d.vin) LIKE CONCAT('%',#{findMsg},'%')
+                AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%',#{findMsg},'%')
             </if>
             <if test='states == "1"'>
                 AND e.is_approach = 1
@@ -839,7 +838,7 @@
 				AND create_operator = #{loginName}  AND create_operator_id = #{userId}
 				AND p.is_query = 2 AND p.is_verify = 2
         <if test="findMsg != null and findMsg != ''">
-            AND CONCAT(i.car_no,i.car_name,i.car_code,d.vin) LIKE CONCAT("%",#{findMsg},"%")
+            AND CONCAT(i.car_no,i.car_name,i.car_code) LIKE CONCAT("%",#{findMsg},"%")
         </if>
     </select>
 
@@ -1141,8 +1140,15 @@
 	    id = #{id}
     </update>
 
-    <select id="selectCodeAfter" resultType="java.util.Map">
-        SELECT code_in AS codeIn, code_after AS codeAfter FROM ts_car_info WHERE code_front = #{codeFront} AND code_in = #{codeIn} AND disintegrate_plant_id = #{disintegratePlantId} ORDER BY create_time DESC LIMIT 1;
+    <select id="selectCarCode" resultType="java.util.Map">
+        SELECT
+            MAX( code_after ) AS codeAfterMax
+        FROM
+            ts_car_info
+        WHERE
+            code_front = #{codeFront}
+            AND code_in = #{codeIn}
+            AND disintegrate_plant_id = #{disintegratePlantId}
     </select>
 
     <delete id="deleteCarSourceById" parameterType="java.lang.Long">
