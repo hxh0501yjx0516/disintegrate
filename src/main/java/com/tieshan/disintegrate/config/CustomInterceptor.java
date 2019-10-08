@@ -40,6 +40,8 @@ public class CustomInterceptor implements HandlerInterceptor {
     private TokenService tokenService;
     @Autowired
     private SysLog sysLog;
+    static    IdWorker idWorker = new IdWorker(1, 1, 1);
+
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -98,7 +100,6 @@ public class CustomInterceptor implements HandlerInterceptor {
         try {
             String token = request.getHeader("token");
             SysUser sysUser = tokenService.getToken(token);
-            IdWorker idWorker = new IdWorker(1, 1, 1);
             sysLog.setId(idWorker.nextId());
             sysLog.setDepart_name(sysUser.getDepartment_name());
             sysLog.setDisintegrate_plant_id(sysUser.getCompany_id());
