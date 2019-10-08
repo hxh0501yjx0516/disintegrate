@@ -213,7 +213,7 @@ public class CarSourceController {
             int num = carSourceService.selectCarInfoNumByCarNo(carInfo.getCarNo(), request);
             if (num == 1){
 //                restResult = new RestResult("是否保存该车辆信息", "", ResultCode.SUCCESS.code());
-                return new RestResult("该车牌号已存在，不能重复保存", "", ResultCode.SUCCESS.code());
+                return new RestResult("该车牌号已存在，不能重复保存", "", ResultCode.ERROR.code());
             }else {
                 carSourceService.addCar(carInfo, request);
             }
@@ -453,7 +453,7 @@ public class CarSourceController {
             if (num == 1){
                 int count = carSourceService.selectCarInfoCountByCarNo(carNo, request);
                 if (count == 1){     // 已入场
-                    restResult = new RestResult("该车辆已入场！", "", ResultCode.SUCCESS.code());
+                    restResult = new RestResult("该车辆已入场！", "", ResultCode.ERROR.code());
                 }else {     // 未入场
                     int num1 = carSourceService.insertCarSurveyPart(carNo, selfWeight, cardColor, request);
                     if (num1 == 1) {
@@ -463,7 +463,7 @@ public class CarSourceController {
                     }
                 }
             }else {
-                restResult = new RestResult("该车牌号不存在，请先添加该车辆的相关信息！", "", ResultCode.SUCCESS.code());
+                restResult = new RestResult("该车牌号不存在，请先添加该车辆的相关信息！", "", ResultCode.ERROR.code());
             }
         } catch (Exception e) {
             log.info("添加失败", e);
