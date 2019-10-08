@@ -21,4 +21,5 @@ public class SysLog implements java.io.Serializable {
     private String operator;
     private String method_url;
     private String create_time;
+    private String ip_addr;
 }

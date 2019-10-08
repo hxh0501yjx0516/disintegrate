@@ -842,8 +842,8 @@
         </if>
     </select>
 
-    <select id="selectCarInfoByCarNo" parameterType="java.lang.String" resultType="java.lang.Long">
-        SELECT id FROM ts_car_info WHERE car_no = #{carNo};
+    <select id="selectCarInfoByCarNo" resultType="java.util.Map">
+        SELECT IFNULL(e.id,'') AS id, IFNULL(e.car_info_id,'') AS carInfoId FROM ts_car_info AS i LEFT JOIN ts_car_enter AS e ON i.id = e.car_info_id WHERE car_no = #{carNo} AND i.disintegrate_plant_id = #{disintegratePlantId}
     </select>
 
     <insert id="insertCarSurveyPart">
@@ -1027,7 +1027,7 @@
         	LEFT JOIN ts_car_enter e ON i.id = e.car_info_id
         WHERE
         	i.disintegrate_plant_id = #{disintegratePlantId}
-        	AND i.id = #{id};
+        	AND i.id = #{id}
     </select>
 
     <select id="selectCarSurveyByCarInfoId" resultType="com.tieshan.disintegrate.pojo.CarSurvey">
@@ -1048,6 +1048,7 @@
         	IFNULL( chair_count, '' ) AS chairCount,
         	IFNULL( conditioner_count, '' ) AS conditionerCount,
         	IFNULL( catalytic_converter_count, '' ) AS catalyticConverterCount,
+            IFNULL( is_alloy_rim, '' ) AS isAlloyRim,
         	IFNULL( remark, '' ) AS remark
         FROM
         	ts_car_survey
@@ -1074,7 +1075,8 @@
         	remark = #{remark},
         	create_time = #{createTime},
         	create_operator = #{createOperator},
-        	create_operator_id = #{createOperatorId}
+        	create_operator_id = #{createOperatorId},
+        	is_alloy_rim = #{isAlloyRim}
         WHERE
         	id = #{id};
     </update>
@@ -1086,7 +1088,7 @@
         	approach_user_id = #{approachUserId},
         	is_initial_survey = #{isInitialSurvey}
         WHERE
-        	car_info_id = #{carInfoId}
+        	id = #{id}
         	AND disintegrate_plant_id = #{disintegratePlantId}
     </update>
 
@@ -1149,6 +1151,16 @@
             code_front = #{codeFront}
             AND code_in = #{codeIn}
             AND disintegrate_plant_id = #{disintegratePlantId}
+    </select>
+
+    <select id="selectCarInfoCountByCarNo" resultType="java.lang.Integer">
+        SELECT
+        	COUNT(id)
+        FROM
+        	ts_car_enter
+        WHERE
+        	car_info_id = ( SELECT id FROM ts_car_info WHERE car_no = #{carNo} AND disintegrate_plant_id = #{disintegratePlantId})
+        	AND is_approach = 2
     </select>
 
     <delete id="deleteCarSourceById" parameterType="java.lang.Long">
