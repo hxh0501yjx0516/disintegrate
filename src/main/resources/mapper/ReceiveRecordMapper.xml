@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tieshan.disintegrate.dao.ReceiveRecordMapper">
+
+    <resultMap type="com.tieshan.disintegrate.pojo.ReceiveRecord" id="receiveRecordMap">
+        <result property="id" column="id"/>  <!--  -->
+        <result property="disintegratePlantId" column="disintegrate_plant_id"/>  <!-- 解体厂id -->
+        <result property="carInfoId" column="car_info_id"/>  <!-- 车辆信息主键id -->
+        <result property="type" column="type"/>  <!-- 1：手续领取记录 -->
+        <result property="result" column="result"/>  <!-- 领取方式 -->
+        <result property="remark" column="remark"/>  <!-- 备注 -->
+        <result property="receiveTime" column="receive_time"/>  <!-- 领取时间 -->
+        <result property="operatorId" column="operator_id"/>  <!-- 操作人id -->
+        <result property="operator" column="operator"/>  <!-- 操作人 -->
+        <result property="receiver" column="receiver"/>  <!-- 领取人 -->
+        <result property="isDelete" column="is_delete"/>  <!-- 是否删除。1.删除，2,正常 -->
+    </resultMap>
+
+    <select id="selectOneByMap" resultMap="receiveRecordMap">
+        SELECT  id, disintegrate_plant_id, car_info_id, type, result, remark, receive_time, operator_id, operator, receiver, is_delete
+        FROM ts_receive_record
+        <where>
+            <if test="id!=null">
+                AND id=#{id}  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                AND disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                AND car_info_id=#{carInfoId}  <!-- 车辆信息主键id -->
+            </if>
+            <if test="type!=null">
+                AND type=#{type}  <!-- 1：手续领取记录 -->
+            </if>
+            <if test="result!=null and result!=''">
+                AND result=#{result}  <!-- 领取方式 -->
+            </if>
+            <if test="remark!=null and remark!=''">
+                AND remark=#{remark}  <!-- 备注 -->
+            </if>
+            <if test="receiveTime!=null">
+                AND receive_time=#{receiveTime}  <!-- 领取时间 -->
+            </if>
+            <if test="operatorId!=null">
+                AND operator_id=#{operatorId}  <!-- 操作人id -->
+            </if>
+            <if test="operator!=null and operator!=''">
+                AND operator=#{operator}  <!-- 操作人 -->
+            </if>
+            <if test="receiver!=null and receiver!=''">
+                AND receiver=#{receiver}  <!-- 领取人 -->
+            </if>
+            <if test="isDelete!=null">
+                AND is_delete=#{isDelete}  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </where>
+    </select>
+
+    <select id="selectListByMap" resultMap="receiveRecordMap">
+        SELECT  id, disintegrate_plant_id, car_info_id, type, result, remark, receive_time, operator_id, operator, receiver, is_delete
+        FROM ts_receive_record
+        <where>
+            <if test="id!=null">
+                AND id=#{id}  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                AND disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                AND car_info_id=#{carInfoId}  <!-- 车辆信息主键id -->
+            </if>
+            <if test="type!=null">
+                AND type=#{type}  <!-- 1：手续领取记录 -->
+            </if>
+            <if test="result!=null and result!=''">
+                AND result=#{result}  <!-- 领取方式 -->
+            </if>
+            <if test="remark!=null and remark!=''">
+                AND remark=#{remark}  <!-- 备注 -->
+            </if>
+            <if test="receiveTime!=null">
+                AND receive_time=#{receiveTime}  <!-- 领取时间 -->
+            </if>
+            <if test="operatorId!=null">
+                AND operator_id=#{operatorId}  <!-- 操作人id -->
+            </if>
+            <if test="operator!=null and operator!=''">
+                AND operator=#{operator}  <!-- 操作人 -->
+            </if>
+            <if test="receiver!=null and receiver!=''">
+                AND receiver=#{receiver}  <!-- 领取人 -->
+            </if>
+            <if test="isDelete!=null">
+                AND is_delete=#{isDelete}  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertReceiveRecord">
+        INSERT INTO ts_receive_record(
+        <trim suffixOverrides=",">
+            <if test="id!=null">
+                id,  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                disintegrate_plant_id,  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                car_info_id,  <!-- 车辆信息主键id -->
+            </if>
+            <if test="type!=null">
+                type,  <!-- 1：手续领取记录 -->
+            </if>
+            <if test="result!=null and result!=''">
+                result,  <!-- 领取方式 -->
+            </if>
+            <if test="remark!=null and remark!=''">
+                remark,  <!-- 备注 -->
+            </if>
+            <if test="receiveTime!=null">
+                receive_time,  <!-- 领取时间 -->
+            </if>
+            <if test="operatorId!=null">
+                operator_id,  <!-- 操作人id -->
+            </if>
+            <if test="operator!=null and operator!=''">
+                operator,  <!-- 操作人 -->
+            </if>
+            <if test="receiver!=null and receiver!=''">
+                receiver,  <!-- 领取人 -->
+            </if>
+            <if test="isDelete!=null">
+                is_delete,  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </trim>
+        )VALUES(
+        <trim suffixOverrides=",">
+            <if test="id!=null">
+                #{id},  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                #{disintegratePlantId},  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                #{carInfoId},  <!-- 车辆信息主键id -->
+            </if>
+            <if test="type!=null">
+                #{type},  <!-- 1：手续领取记录 -->
+            </if>
+            <if test="result!=null and result!=''">
+                #{result},  <!-- 领取方式 -->
+            </if>
+            <if test="remark!=null and remark!=''">
+                #{remark},  <!-- 备注 -->
+            </if>
+            <if test="receiveTime!=null">
+                #{receiveTime},  <!-- 领取时间 -->
+            </if>
+            <if test="operatorId!=null">
+                #{operatorId},  <!-- 操作人id -->
+            </if>
+            <if test="operator!=null and operator!=''">
+                #{operator},  <!-- 操作人 -->
+            </if>
+            <if test="receiver!=null and receiver!=''">
+                #{receiver},  <!-- 领取人 -->
+            </if>
+            <if test="isDelete!=null">
+                #{isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </trim>
+        )
+    </insert>
+    <insert id="insertBatchReceiveRecord">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            INSERT INTO ts_receive_record (
+            <trim suffixOverrides=",">
+                <if test="item.id!=null">
+                    id,  <!--  -->
+                </if>
+                <if test="item.disintegratePlantId!=null">
+                    disintegrate_plant_id,  <!-- 解体厂id -->
+                </if>
+                <if test="item.carInfoId!=null">
+                    car_info_id,  <!-- 车辆信息主键id -->
+                </if>
+                <if test="item.type!=null">
+                    type,  <!-- 1：手续领取记录 -->
+                </if>
+                <if test="item.result!=null and item.result!=''">
+                    result,  <!-- 领取方式 -->
+                </if>
+                <if test="item.remark!=null and item.remark!=''">
+                    remark,  <!-- 备注 -->
+                </if>
+                <if test="item.receiveTime!=null">
+                    receive_time,  <!-- 领取时间 -->
+                </if>
+                <if test="item.operatorId!=null">
+                    operator_id,  <!-- 操作人id -->
+                </if>
+                <if test="item.operator!=null and item.operator!=''">
+                    operator,  <!-- 操作人 -->
+                </if>
+                <if test="item.receiver!=null and item.receiver!=''">
+                    receiver,  <!-- 领取人 -->
+                </if>
+                <if test="item.isDelete!=null">
+                    is_delete,  <!-- 是否删除。1.删除，2,正常 -->
+                </if>
+            </trim>
+            )VALUES(
+            <trim suffixOverrides=",">
+                <if test="item.id!=null">
+                    #{item.id},  <!--  -->
+                </if>
+                <if test="item.disintegratePlantId!=null">
+                    #{item.disintegratePlantId},  <!-- 解体厂id -->
+                </if>
+                <if test="item.carInfoId!=null">
+                    #{item.carInfoId},  <!-- 车辆信息主键id -->
+                </if>
+                <if test="item.type!=null">
+                    #{item.type},  <!-- 1：手续领取记录 -->
+                </if>
+                <if test="item.result!=null and item.result!=''">
+                    #{item.result},  <!-- 领取方式 -->
+                </if>
+                <if test="item.remark!=null and item.remark!=''">
+                    #{item.remark},  <!-- 备注 -->
+                </if>
+                <if test="item.receiveTime!=null">
+                    #{item.receiveTime},  <!-- 领取时间 -->
+                </if>
+                <if test="item.operatorId!=null">
+                    #{item.operatorId},  <!-- 操作人id -->
+                </if>
+                <if test="item.operator!=null and item.operator!=''">
+                    #{item.operator},  <!-- 操作人 -->
+                </if>
+                <if test="item.receiver!=null and item.receiver!=''">
+                    #{item.receiver},  <!-- 领取人 -->
+                </if>
+                <if test="item.isDelete!=null">
+                    #{item.isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+                </if>
+            </trim>
+            )
+        </foreach>
+    </insert>
+    <update id="updateReceiveRecord">
+        UPDATE ts_receive_record
+        <trim prefix="set" suffixOverrides=",">
+            <if test="id!=null">
+                id=#{id},  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                disintegrate_plant_id=#{disintegratePlantId},  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                car_info_id=#{carInfoId},  <!-- 车辆信息主键id -->
+            </if>
+            <if test="type!=null">
+                type=#{type},  <!-- 1：手续领取记录 -->
+            </if>
+            <if test="result!=null and result!=''">
+                result=#{result},  <!-- 领取方式 -->
+            </if>
+            <if test="remark!=null and remark!=''">
+                remark=#{remark},  <!-- 备注 -->
+            </if>
+            <if test="receiveTime!=null">
+                receive_time=#{receiveTime},  <!-- 领取时间 -->
+            </if>
+            <if test="operatorId!=null">
+                operator_id=#{operatorId},  <!-- 操作人id -->
+            </if>
+            <if test="operator!=null and operator!=''">
+                operator=#{operator},  <!-- 操作人 -->
+            </if>
+            <if test="receiver!=null and receiver!=''">
+                receiver=#{receiver},  <!-- 领取人 -->
+            </if>
+            <if test="isDelete!=null">
+                is_delete=#{isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+        </trim>
+        WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
+    </update>
+    <update id="updateBatchReceiveRecord">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update ts_receive_record
+            <trim prefix="set" suffixOverrides=",">
+                <if test="item.id!=null">
+                    id=#{item.id},  <!--  -->
+                </if>
+                <if test="item.disintegratePlantId!=null">
+                    disintegrate_plant_id=#{item.disintegratePlantId},  <!-- 解体厂id -->
+                </if>
+                <if test="item.carInfoId!=null">
+                    car_info_id=#{item.carInfoId},  <!-- 车辆信息主键id -->
+                </if>
+                <if test="item.type!=null">
+                    type=#{item.type},  <!-- 1：手续领取记录 -->
+                </if>
+                <if test="item.result!=null and item.result!=''">
+                    result=#{item.result},  <!-- 领取方式 -->
+                </if>
+                <if test="item.remark!=null and item.remark!=''">
+                    remark=#{item.remark},  <!-- 备注 -->
+                </if>
+                <if test="item.receiveTime!=null">
+                    receive_time=#{item.receiveTime},  <!-- 领取时间 -->
+                </if>
+                <if test="item.operatorId!=null">
+                    operator_id=#{item.operatorId},  <!-- 操作人id -->
+                </if>
+                <if test="item.operator!=null and item.operator!=''">
+                    operator=#{item.operator},  <!-- 操作人 -->
+                </if>
+                <if test="item.receiver!=null and item.receiver!=''">
+                    receiver=#{item.receiver},  <!-- 领取人 -->
+                </if>
+                <if test="item.isDelete!=null">
+                    is_delete=#{item.isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+                </if>
+            </trim>
+            WHERE id=#{item.id} AND disintegrate_plant_id=#{item.disintegratePlantId}
+        </foreach>
+    </update>
+
+
+    <delete id="deleteReceiveRecordByMap">
+        DELETE FROM ts_receive_record WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
+    </delete>
+
+    <delete id="batchDeleteReceiveRecordByMap">
+        DELETE FROM ts_receive_record
+        WHERE disintegrate_plant_id=#{disintegratePlantId} and id in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>
