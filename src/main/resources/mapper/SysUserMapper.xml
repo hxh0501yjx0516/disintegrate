@@ -83,7 +83,7 @@
     </insert>
     <insert id="creatSyslog">
         CREATE TABLE ts_system_log_${param} (
-          `id` bigint(36) NOT NULL AUTO_INCREMENT,
+          `id` bigint(36) NOT NULL,
           `disintegrate_plant_id` bigint(36) DEFAULT NULL COMMENT '解体厂id',
           `operator_id` bigint(36) DEFAULT NULL COMMENT '操作人id',
           `depart_name` varchar(64) DEFAULT NULL COMMENT '部门',
