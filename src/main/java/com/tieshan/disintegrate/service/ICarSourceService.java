@@ -68,7 +68,7 @@ public interface ICarSourceService {
 
     List<Map<String, Object>> selectCarInfoListByIsVerify(HttpServletRequest request, String findMsg);
 
-    int selectCarInfoByCarNo(String carNo, HttpServletRequest request);
+    int selectCarInfoNumByCarNo(String carNo, HttpServletRequest request);
 
     int selectCarInfoCountByCarNo(String carNo, HttpServletRequest request);
 

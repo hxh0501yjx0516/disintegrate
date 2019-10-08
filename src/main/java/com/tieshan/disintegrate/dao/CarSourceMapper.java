@@ -128,5 +128,8 @@ public interface CarSourceMapper {
     int selectCarInfoCountByCarNo(@Param(value = "carNo") String carNo,
                                        @Param(value = "disintegratePlantId") Long disintegratePlantId);
 
+    int selectCarInfoNumByCarNo(@Param(value = "carNo") String carNo,
+                                @Param(value = "disintegratePlantId") Long disintegratePlantId);
+
 //    int selectCarInfoCountByCarSourceId(Long id);
 }

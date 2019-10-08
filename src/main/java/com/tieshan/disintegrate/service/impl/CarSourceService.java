@@ -465,15 +465,11 @@ public class CarSourceService implements ICarSourceService {
      * @return
      */
     @Override
-    public int selectCarInfoByCarNo(String carNo, HttpServletRequest request) {
+    public int selectCarInfoNumByCarNo(String carNo, HttpServletRequest request) {
         String token = request.getHeader("token");
         SysUser sysUser = tokenService.getToken(token);
-        Map<String, Object> map = carSourceMapper.selectCarInfoByCarNo(carNo, sysUser.getCompany_id());
-        if (PubMethod.isEmpty(map)){
-            return 1;
-        }else {
-            return 2;
-        }
+        int count = carSourceMapper.selectCarInfoNumByCarNo(carNo, sysUser.getCompany_id());
+        return count;
     }
 
     /**

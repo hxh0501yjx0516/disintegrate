@@ -1153,6 +1153,12 @@
             AND disintegrate_plant_id = #{disintegratePlantId}
     </select>
 
+    <select id="selectCarInfoNumByCarNo" resultType="java.lang.Integer">
+        SELECT
+        	COUNT(id)
+        FROM ts_car_info WHERE car_no = #{carNo} AND disintegrate_plant_id = #{disintegratePlantId}
+    </select>
+
     <select id="selectCarInfoCountByCarNo" resultType="java.lang.Integer">
         SELECT
         	COUNT(id)
