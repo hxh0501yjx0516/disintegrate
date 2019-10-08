@@ -80,7 +80,8 @@ public interface CarSourceMapper {
                                                    @Param(value = "states") String state,
                                                    @Param(value = "findMsg") String findMsg);
 
-    Long selectCarInfoByCarNo(String carNo);
+    Map<String, Object> selectCarInfoByCarNo(@Param(value = "carNo") String carNo,
+                                             @Param(value = "disintegratePlantId") Long disintegratePlantId);
 
 
     void insertCarSurveyPart(CarSurvey carSurvey);
@@ -123,6 +124,9 @@ public interface CarSourceMapper {
                                                           @Param(value = "loginName") String loginName,
                                                           @Param(value = "disintegratePlantId") Long disintegratePlantId,
                                                           @Param(value = "findMsg") String findMsg);
+
+    int selectCarInfoCountByCarNo(@Param(value = "carNo") String carNo,
+                                       @Param(value = "disintegratePlantId") Long disintegratePlantId);
 
 //    int selectCarInfoCountByCarSourceId(Long id);
 }
