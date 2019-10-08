@@ -76,10 +76,10 @@
     </delete>
     <insert id="syslog">
         INSERT INTO ts_system_log_${param} ( id, disintegrate_plant_id, operator_id,
-         depart_name,operator,method_url,create_time)
+         depart_name,operator,method_url,create_time,ip_addr)
         VALUES
 	    (#{sysLog.id},#{sysLog.disintegrate_plant_id},#{sysLog.operator_id},#{sysLog.depart_name},
-	    #{sysLog.operator},#{sysLog.method_url},now())
+	    #{sysLog.operator},#{sysLog.method_url},now(),#{sysLog.ip_addr})
     </insert>
     <insert id="creatSyslog">
         CREATE TABLE ts_system_log_${param} (
@@ -89,6 +89,7 @@
           `depart_name` varchar(64) DEFAULT NULL COMMENT '部门',
           `operator` varchar(64) DEFAULT NULL COMMENT '操作人',
           `method_url` varchar(255) DEFAULT NULL COMMENT '操作的请求',
+          `ip_addr` varchar(255) DEFAULT NULL COMMENT '访问者ip',
           `create_time` datetime DEFAULT NULL COMMENT '操作的时间',
           `is_delete` int(1) DEFAULT '2' COMMENT '是否删除。1.删除，2,正常',
           PRIMARY KEY (`id`) USING BTREE
