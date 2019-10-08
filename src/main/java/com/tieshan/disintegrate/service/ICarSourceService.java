@@ -46,7 +46,7 @@ public interface ICarSourceService {
 
     List<Map<String, Object>> selectCarInfoListApp(Long id, HttpServletRequest request, String state, String findMsg, Integer page, Integer pageSize);
 
-    void insertCarSurveyPart(String carNo, String selfWeight, String cardColor, HttpServletRequest request);
+    int  insertCarSurveyPart(String carNo, String selfWeight, String cardColor, HttpServletRequest request);
 
     Map<String, Object> selectCarInfoReason(Long id, HttpServletRequest request);
 
@@ -67,6 +67,10 @@ public interface ICarSourceService {
     void editCarInfoLocation(CarInfo carInfo);
 
     List<Map<String, Object>> selectCarInfoListByIsVerify(HttpServletRequest request, String findMsg);
+
+    int selectCarInfoByCarNo(String carNo, HttpServletRequest request);
+
+    int selectCarInfoCountByCarNo(String carNo, HttpServletRequest request);
 
 //    List<Map<String, Object>> selectCarSourceListApp(HttpServletRequest request);
 

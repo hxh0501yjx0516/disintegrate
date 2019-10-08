@@ -110,4 +110,6 @@ public class CarSurvey implements Serializable {
 	private Long createOperatorId;
 	// 车牌颜色
 	private String cardColor;
+	// 是否是铝圈：1。是，2.不是
+	private Integer isAlloyRim;
 }
