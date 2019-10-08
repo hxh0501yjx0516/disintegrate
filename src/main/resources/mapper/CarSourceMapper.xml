@@ -1048,6 +1048,7 @@
         	IFNULL( chair_count, '' ) AS chairCount,
         	IFNULL( conditioner_count, '' ) AS conditionerCount,
         	IFNULL( catalytic_converter_count, '' ) AS catalyticConverterCount,
+            IFNULL( is_alloy_rim, '' ) AS isAlloyRim,
         	IFNULL( remark, '' ) AS remark
         FROM
         	ts_car_survey
@@ -1074,7 +1075,8 @@
         	remark = #{remark},
         	create_time = #{createTime},
         	create_operator = #{createOperator},
-        	create_operator_id = #{createOperatorId}
+        	create_operator_id = #{createOperatorId},
+        	is_alloy_rim = #{isAlloyRim}
         WHERE
         	id = #{id};
     </update>
