@@ -136,7 +136,7 @@ public class CarsQueryController {
         List<CaiPrePicVo> list = carsQueryService.doFindCars(carInfoId, user.getCompany_id());
         RestResult restResult = null;
         if (null == list || list.size() == 0) {
-            restResult = new RestResult("未查询到车辆预处理数据", null, ResultCode.ERROR.code());
+            restResult = new RestResult("未查询到车辆预处理数据", null, ResultCode.SUCCESS.code());
         }
         restResult = new RestResult("查询车辆预处理数据成功", list, ResultCode.SUCCESS.code());
         return restResult;
@@ -272,7 +272,7 @@ public class CarsQueryController {
         List<Map<String, Object>> list = carsQueryService.findCpTuoPic(carInfoId, user.getCompany_id());
         RestResult restResult = null;
         if (null == list || list.size() == 0) {
-            restResult = new RestResult("未查询到车辆拓号数据", null, ResultCode.ERROR.code());
+            restResult = new RestResult("未查询到车辆拓号数据", null, ResultCode.SUCCESS.code());
         } else {
             restResult = new RestResult("查询车辆拓号数据成功", list, ResultCode.SUCCESS.code());
         }
@@ -378,7 +378,7 @@ public class CarsQueryController {
         pageInfo = new PageInfo<>(mapList);
         RestResult restResult = null;
         if (null == mapList || mapList.size() == 0) {
-            restResult = new RestResult("未查询到预拆解车辆信息", null, ResultCode.ERROR.code());
+            restResult = new RestResult("未查询到预拆解车辆信息", null, ResultCode.SUCCESS.code());
         } else {
             restResult = new RestResult("查询预拆解车辆信息成功", pageInfo, ResultCode.SUCCESS.code());
         }
@@ -427,7 +427,7 @@ public class CarsQueryController {
         List<Map<String, Object>> list = carsQueryService.findSurveyById(carInfoId, user.getCompany_id());
         RestResult restResult = null;
         if (null == list || list.size() == 0) {
-            restResult = new RestResult("未查询到该车辆初检信息", null, ResultCode.ERROR.code());
+            restResult = new RestResult("未查询到该车辆初检信息", null, ResultCode.SUCCESS.code());
         } else {
             restResult = new RestResult("查询该车辆初检信息成功", list, ResultCode.SUCCESS.code());
         }
@@ -459,7 +459,7 @@ public class CarsQueryController {
         List<CaiPrePicVo> list = carsQueryService.findPrePicById(carInfoId, user.getCompany_id());
         RestResult restResult = null;
         if (null == list || list.size() == 0) {
-            restResult = new RestResult("未查询到车辆初检信息图片", null, ResultCode.ERROR.code());
+            restResult = new RestResult("未查询到车辆初检信息图片", null, ResultCode.SUCCESS.code());
         } else {
             restResult = new RestResult("查询车辆初检信息图片成功", list, ResultCode.SUCCESS.code());
         }

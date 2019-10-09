@@ -104,4 +104,28 @@ public class FinancialController {
         return restResult;
     }
 
+    /**财务管理-残值领取-残值领取成功数据入库*/
+    @GetMapping("/doCarsQuery/insertSalvageById")
+    public RestResult insertSalvageById(
+            @RequestParam(value = "carInfoId") Long carInfoId,
+            @RequestParam(value = "getWay") Integer getWay,
+            @RequestParam(value = "remark") String remark,
+            @LoginUser SysUser user){
+        int rows = iFinancialService.insertSalvageById(carInfoId,getWay,remark,user);
+        RestResult restResult = new RestResult("残值领取完毕！", rows, ResultCode.SUCCESS.code());
+        return restResult;
+    }
+
+    /**财务管理-残值领取-残值领取单数据*/
+    @GetMapping("/doCarsQuery/findDataSheet")
+    public RestResult findDataSheet(
+            @RequestParam(value = "carInfoId") Long carInfoId,
+            @LoginUser SysUser user){
+        List<Map<String,Object>> mapList = iFinancialService.findDataSheet(carInfoId,user);
+        RestResult restResult = new RestResult("查询成功", mapList, ResultCode.SUCCESS.code());
+        return restResult;
+    }
+
+
+
 }

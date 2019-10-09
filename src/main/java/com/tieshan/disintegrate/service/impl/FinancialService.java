@@ -55,4 +55,15 @@ public class FinancialService implements IFinancialService {
     public List<Map<String, Object>> findCarSalvageById(Long carInfoId,SysUser user) {
         return financialDao.findCarSalvageById(carInfoId,user.getCompany_id());
     }
+
+    @Override
+    public int insertSalvageById(Long carInfoId, Integer getWay, String remark, SysUser user) {
+        int rows = financialDao.insertSalvageById(carInfoId,getWay,remark,user.getUser_name(),user.getCompany_id());
+        return rows;
+    }
+
+    @Override
+    public List<Map<String, Object>> findDataSheet(Long carInfoId, SysUser user) {
+        return financialDao.findDataSheet(carInfoId,user.getCompany_id());
+    }
 }

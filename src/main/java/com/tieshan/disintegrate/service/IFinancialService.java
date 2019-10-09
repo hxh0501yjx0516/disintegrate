@@ -26,4 +26,10 @@ public interface IFinancialService {
 
     /**财务管理-残值领取-点击领取界面回显数据*/
     List<Map<String,Object>> findCarSalvageById(Long carInfoId,SysUser user);
+
+    /**财务管理-残值领取-残值领取成功数据入库*/
+    int insertSalvageById(Long carInfoId,Integer getWay,String remark,SysUser user);
+
+    /**财务管理-残值领取-残值领取单数据*/
+    List<Map<String,Object>> findDataSheet(Long carInfoId,SysUser user);
 }
