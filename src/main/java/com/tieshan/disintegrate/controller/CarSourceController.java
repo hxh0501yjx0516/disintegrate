@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.acl.LastOwnerException;
 import java.util.List;
 import java.util.Map;
 
@@ -636,15 +637,24 @@ public class CarSourceController {
         return new RestResult("添加车辆存放位置成功", null, ResultCode.SUCCESS.code());
     }
 
-    @GetMapping("/selectCarInfoIsApproachList")
-    public RestResult selectCarInfoIsApproachList(HttpServletRequest request,
+    /**
+     * PC:分页查询改拆解厂下的车辆集合
+     * @param request
+     * @param page
+     * @param pageSize
+     * @param findMsg
+     * @param status
+     * @return
+     */
+    @GetMapping("/selectCarInfoCompanyList")
+    public RestResult selectCarInfoCompanyList(HttpServletRequest request,
                                                   @RequestParam(value = "page",required = false, defaultValue = ConStants.PAGE) Integer page,
                                                   @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
                                                   @RequestParam(value = "findMsg", required = false) String findMsg,
                                                   @RequestParam(value = "status", required = false) String status){
         PageInfo pageInfo = null;
         try{
-            List<Map<String, Object>> mapList = carSourceService.selectCarInfoIsApproachList(request, page, pageSize, findMsg, status);
+            List<Map<String, Object>> mapList = carSourceService.selectCarInfoCompanyList(request, page, pageSize, findMsg, status);
             pageInfo = new PageInfo(mapList);
         }catch (Exception e){
             log.info("查询失败", e);
@@ -652,6 +662,58 @@ public class CarSourceController {
         }
         return new RestResult("查询成功", pageInfo, ResultCode.SUCCESS.code());
     }
+
+    /**
+     * 保存该车辆的拆解方式
+     * @param dismantleWay
+     * @param request
+     * @return
+     */
+    @PostMapping("/updateDismantleWay")
+    public RestResult updateDismantleWay(@RequestParam(value = "id") Long carInfoId,
+                                         @RequestParam(value = "dismantleWay") Integer dismantleWay,
+                                         HttpServletRequest request){
+        RestResult restResult = null;
+        try{
+            int num = carSourceService.updateDismantleWay(carInfoId, dismantleWay, request);
+            if (num == 1){
+                restResult = new RestResult("保存成功", "", ResultCode.SUCCESS.code());
+            }else{
+                restResult = new RestResult("保存失败", "", ResultCode.ERROR.code());
+            }
+        }catch (Exception e){
+            log.info("保存失败", e);
+            return new RestResult("保存失败", "", ResultCode.ERROR.code());
+        }
+        return restResult;
+    }
+
+    /**
+     * 首页的查询
+     *      state: 1-待初检，2-待打印软牌，3-待预处理，4-待拓号，5-待确定拆解方式，6-待登记，7-待查询，8-待核档，9-待拆解，10-待上传商委数据，11-待打印回收证明，12-待录入注销时间，13-待录入商委注销时间，14-待处理手续异常，15-待残值发放
+     * @param page
+     * @param pageSize
+     * @param state
+     * @param request
+     * @return
+     */
+    @GetMapping("/selectHomePage")
+    public RestResult selectHomePage(@RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
+                                     @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
+                                     @RequestParam(value = "state", required = false) String state,
+                                     HttpServletRequest request){
+        PageInfo pageInfo = null;
+        try{
+            List<Map<String, Object>> mapList = carSourceService.selectHomePage(page, pageSize, state, request);
+            pageInfo = new PageInfo(mapList);
+        }catch (Exception e){
+            log.info("查询失败", e);
+            return new RestResult("查询失败", pageInfo, ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", pageInfo, ResultCode.SUCCESS.code());
+    }
+
+
 
 //    /**
 //     * 查询车牌号是否存在，若以存在

@@ -72,7 +72,11 @@ public interface ICarSourceService {
 
     int selectCarInfoCountByCarNo(String carNo, HttpServletRequest request);
 
-    List<Map<String, Object>> selectCarInfoIsApproachList(HttpServletRequest request, Integer page, Integer pageSize, String findMsg, String status);
+    List<Map<String, Object>> selectCarInfoCompanyList(HttpServletRequest request, Integer page, Integer pageSize, String findMsg, String status);
+
+    int updateDismantleWay(Long carInfoId, Integer dismantleWay, HttpServletRequest request);
+
+    List<Map<String, Object>> selectHomePage(Integer page, Integer pageSize, String state, HttpServletRequest request);
 
 //    List<Map<String, Object>> selectCarSourceListApp(HttpServletRequest request);
 

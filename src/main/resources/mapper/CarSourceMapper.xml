@@ -1053,7 +1053,7 @@
         	ts_car_survey
         WHERE
         	car_info_id = #{id}
-        	AND disintegrate_plant_id = #{disintegratePlantId};
+        	AND disintegrate_plant_id = #{disintegratePlantId}
     </select>
 
     <update id="editCarSurvey" parameterType="com.tieshan.disintegrate.pojo.CarSurvey">
@@ -1112,8 +1112,10 @@
         FROM
         	ts_car_info AS i
         	LEFT JOIN ts_car_enter AS e ON i.id = e.car_info_id
+        	LEFT JOIN ts_car_survey AS s ON i.id = s.car_info_id
         WHERE
         	i.disintegrate_plant_id = #{disintegratePlantId}
+        	AND s.dismantling_way != 5
         	<if test="findMsg != null and findMsg != ''">
                 AND CONCAT(i.car_no,i.car_name,i.car_code) LIKE CONCAT("%",#{findMsg},"%")
             </if>
@@ -1131,8 +1133,9 @@
         	pid = #{pid}
     </select>
 
-    <select id="selectCarInfoIsApproachList" resultType="java.util.Map">
+    <select id="selectCarInfoCompanyList" resultType="java.util.Map">
         SELECT
+        IFNULL( i.id, '' ) AS id,
         IFNULL( i.car_code, '' ) AS carCode,
         IFNULL( e.approach_time, '' ) AS approachTime,
         IFNULL( i.car_no, '' ) AS carNo,
@@ -1145,12 +1148,13 @@
         IFNULL( e.soft_print, '' ) AS softPrint,
         IFNULL( e.is_pretreatment, '' ) AS isPretreatment,
         IFNULL( e.is_copy_number, '' ) AS isCopyNumber,
-        IFNULL( e.dismantle_way, '' ) AS dismantleWay,
-        IFNULL( e.car_location, '' ) AS carLocation
+        IFNULL( s.dismantling_way, '' ) AS dismantleWay,
+        IFNULL( CONCAT(i.car_location_area,i.car_location_row, i.car_location_column, i.car_location_number), '' ) AS carLocation
         FROM
         ts_car_info AS i
         LEFT JOIN ts_car_enter AS e ON i.id = e.car_info_id
         LEFT JOIN ts_car_identity AS d ON i.id = d.car_info_id
+        LEFT JOIN ts_car_survey AS s ON i.id = s.car_info_id
         WHERE
         i.disintegrate_plant_id = #{disintegratePlantId}
         <if test='status == "1"'>    /*待入场*/
@@ -1209,8 +1213,91 @@
         	AND is_approach = 2
     </select>
 
+    <update id="updateDismantleWay">
+        UPDATE ts_car_survey SET dismantling_way = #{dismantlingWay} WHERE car_info_id = #{carInfoId} AND disintegrate_plant_id = #{disintegratePlantId}
+    </update>
+
+    <select id="selectHomePage" resultType="java.util.Map">
+        SELECT
+        	IFNULL( i.car_no, '' ) AS carNo,
+        	IFNULL( i.car_name, '' ) AS carName,
+        	IFNULL( i.car_code, '' ) AS carCode,
+        	IFNULL( i.id, '' ) AS id,
+        	IFNULL( i.contacts, '' ) AS contacts,
+        	IFNULL( i.contacts_phone, '' ) AS contactsPhone,
+        	IFNULL( e.approach_time, '' ) AS approachTime
+        FROM
+        	ts_car_info AS i
+        	LEFT JOIN ts_car_enter AS e ON i.id = e.car_info_id
+        	LEFT JOIN ts_car_processing AS p ON i.id = p.car_info_id
+        	LEFT JOIN ts_car_salvage AS s ON i.id = s.car_info_id
+            LEFT JOIN ts_car_survey AS u ON i.id = u.car_info_id
+            LEFT JOIN ts_car_procedure_log AS g ON i.id = g.car_info_id
+        WHERE
+        	i.disintegrate_plant_id = #{disintegratePlantId}
+        <if test='state == "1"'>   /*待初检*/      /*一样*/
+            AND	e.is_approach = 2
+            AND e.is_initial_survey = 1
+        </if>
+        <if test='state == "2"'>    /*待打印软牌*/
+            AND e.is_initial_survey = 2
+            AND e.soft_print = 1
+        </if>
+        <if test='state == "3"'>    /*待预处理*/
+            AND e.soft_print = 2
+            AND e.is_pretreatment = 1
+        </if>
+        <if test='state == "4"'>    /*待拓号*/         /*一样*/
+            AND e.is_pretreatment = 2
+            AND e.is_copy_number = 1
+        </if>
+        <if test='state == "5"'>    /*待确定拆解方式*/
+            AND u.dismantling_way = 5
+        </if>
+        <if test='state == "6"'>    /*待登记*/         /*一样*/
+            AND e.is_copy_number = 2
+            AND p.is_register = 1
+        </if>
+        <if test='state == "7"'>    /*待查询*/         /*一样*/
+            AND p.is_register = 2
+            AND p.is_query = 1
+        </if>
+
+        <if test='state == "8"'>    /*待核档*/         /*一样*/
+            AND p.is_query = 2
+            AND p.is_verify = 1
+        </if>
+        <if test='state == "9"'>    /*待拆解*/
+            AND p.is_verify = 2
+            AND p.is_dismantle = 1
+        </if>
+        <if test='state == "10"'>    /*待上传商委数据*/
+            AND p.is_dismantle = 2
+            AND p.is_data_upload = 1
+        </if>
+        <if test='state == "11"'>    /*待打印回收证明*/
+            AND p.is_data_upload = 2
+            AND p.is_print_recycle = 1
+        </if>
+        <if test='state == "12"'>    /*待录入注销时间*/
+            AND p.is_print_recycle = 2
+            AND p.is_logout = 1
+        </if>
+        <if test='state == "13"'>    /*待录入商委注销时间*/
+            AND p.is_logout = 2
+            AND p.is_appoint_logout_time = 1
+        </if>
+        <if test='state == "14"'>    /*待处理手续异常*/
+            AND (p.is_query = 3 OR p.is_verify = 3) AND (g.type = 1 OR g.type = 2) AND g.state = 1
+        </if>
+        <if test='state == "15"'>    /*待残值发放*/       /*一样*/
+            AND p.is_appoint_logout_time = 2
+            AND s.is_get_salvage = 1
+        </if>
+    </select>
+
     <delete id="deleteCarSourceById" parameterType="java.lang.Long">
-        DELETE FROM ts_car_source WHERE id =#{id} AND disintegrate_plant_id = #{disintegratePlantId};
+        DELETE FROM ts_car_source WHERE id =#{id} AND disintegrate_plant_id = #{disintegratePlantId}
     </delete>
 
 </mapper>

@@ -445,6 +445,37 @@ public class CarSourceService implements ICarSourceService {
     }
 
     /**
+     * 首页的查询
+     * @param page
+     * @param pageSize
+     * @param state
+     * @param request
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> selectHomePage(Integer page, Integer pageSize, String state, HttpServletRequest request) {
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        PageHelper.startPage(page, pageSize);
+        PageHelper.orderBy("e.approach_time DESC");
+        return carSourceMapper.selectHomePage(state, sysUser.getCompany_id());
+    }
+
+    /**
+     * 保存该车辆的拆解方式
+     * @param carInfoId
+     * @param dismantleWay
+     * @param request
+     * @return
+     */
+    @Override
+    public int updateDismantleWay(Long carInfoId, Integer dismantleWay, HttpServletRequest request) {
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        return carSourceMapper.updateDismantleWay(carInfoId, dismantleWay, sysUser.getCompany_id());
+    }
+
+    /**
      * 查询某拆解厂下的所有的车俩
      *
      * @param request
@@ -455,12 +486,12 @@ public class CarSourceService implements ICarSourceService {
      * @return
      */
     @Override
-    public List<Map<String, Object>> selectCarInfoIsApproachList(HttpServletRequest request, Integer page, Integer pageSize, String findMsg, String status) {
+    public List<Map<String, Object>> selectCarInfoCompanyList(HttpServletRequest request, Integer page, Integer pageSize, String findMsg, String status) {
         String token = request.getHeader("token");
         SysUser sysUser = tokenService.getToken(token);
         PageHelper.startPage(page, pageSize);
         PageHelper.orderBy("e.approach_time DESC");
-        return carSourceMapper.selectCarInfoIsApproachList(findMsg, status, sysUser.getCompany_id());
+        return carSourceMapper.selectCarInfoCompanyList(findMsg, status, sysUser.getCompany_id());
     }
 
     /**
