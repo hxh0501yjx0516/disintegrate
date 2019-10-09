@@ -40,7 +40,9 @@ public class CarsQueryServiceImpl implements CarsQueryService {
     }
 
     @Override
-    public List<Map<String, Object>> findPretreatmentCars(String findMsg, Long dpId) {
+    public List<Map<String, Object>> findPretreatmentCars(String findMsg, Integer page, Integer pageSize,Long dpId) {
+        PageHelper.startPage(page, pageSize);
+        PageHelper.orderBy("approach_time desc");
         return carsQueryDao.findPretreatmentCars(findMsg, dpId);
     }
 
@@ -70,7 +72,9 @@ public class CarsQueryServiceImpl implements CarsQueryService {
         }
     }
     @Override
-    public List<Map<String, Object>> findCopyNumberCars(String findMsg, Long dpId) {
+    public List<Map<String, Object>> findCopyNumberCars(String findMsg, Integer page, Integer pageSize,Long dpId) {
+        PageHelper.startPage(page, pageSize);
+        PageHelper.orderBy("approach_time desc");
         return carsQueryDao.findCopyNumberCars(findMsg, dpId);
     }
     @Override
@@ -123,9 +127,6 @@ public class CarsQueryServiceImpl implements CarsQueryService {
             carPic.setDisintegratePlantId(user.getCompany_id());
             carPic.setOperator(user.getUser_name());
             carPic.setOperatorId(user.getId());
-//            carPic.setDisintegratePlantId(3333L);
-//            carPic.setOperator("任磊");
-//            carPic.setOperatorId(8888L);
             //自定义
             carPic.setCreateTime(new Date());
             carPic.setIsDelete(2);
@@ -144,7 +145,9 @@ public class CarsQueryServiceImpl implements CarsQueryService {
         carPicMapper.insertBatchCarPic(mapList);
     }
     @Override
-    public List<Map<String, Object>> findDismantleCars(String findMsg, Long dpId) {
+    public List<Map<String, Object>> findDismantleCars(String findMsg,Integer page, Integer pageSize, Long dpId) {
+        PageHelper.startPage(page, pageSize);
+        PageHelper.orderBy("approach_time desc");
         return carsQueryDao.findDismantleCars(findMsg, dpId);
     }
     @Override

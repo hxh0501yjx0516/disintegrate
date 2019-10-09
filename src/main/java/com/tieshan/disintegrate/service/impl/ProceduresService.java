@@ -7,20 +7,22 @@ import com.tieshan.disintegrate.exception.CustomException;
 import com.tieshan.disintegrate.pojo.*;
 import com.tieshan.disintegrate.service.IProceduresService;
 import com.tieshan.disintegrate.util.IdWorker;
-import com.tieshan.disintegrate.vo.AppCarBaseVo;
-import com.tieshan.disintegrate.vo.CarCustomerInfoVo;
-import com.tieshan.disintegrate.vo.CarProcedureIssueVo;
-import com.tieshan.disintegrate.vo.ProceduresVo;
+import com.tieshan.disintegrate.vo.*;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 /**
  * @author ：ren lei
@@ -43,6 +45,8 @@ public class ProceduresService implements IProceduresService {
     private ServiceDealMapper serviceDealMapper;
     @Autowired
     private CarBackMapper carBackMapper;
+    @Autowired
+    private CarPicMapper carPicMapper;
 
     @Override
     @Transactional
@@ -123,6 +127,7 @@ public class ProceduresService implements IProceduresService {
      *               carProcedureLogId
      *               state
      *               remark
+     *               recordNumber
      * @param user
      */
     @Override
@@ -170,6 +175,7 @@ public class ProceduresService implements IProceduresService {
         carProcessing.setIsQuery(state);
         carProcessing.setQueryTime(new Date());
         carProcessing.setQueryUserId(user.getId());
+        carProcessing.setRecordNumber(params.get("recordNumber").toString());
         carProcessingMapper.updateCarProcessing(carProcessing);
     }
 
@@ -359,13 +365,69 @@ public class ProceduresService implements IProceduresService {
     @Override
     public void saveUploadShangWeiDataRecord(Map<String, Object> params, SysUser user) {
         params.put("disintegratePlantId", user.getCompany_id());
-        CarProcessing carProcessing = carProcessingMapper.selectOneByMap(params);
-        if (carProcessing == null) {
+        CarProcessing sourceCarProcessing = carProcessingMapper.selectOneByMap(params);
+        if (sourceCarProcessing == null) {
             throw new CustomException("车辆信息不存在！");
         }
+        CarProcessing carProcessing = new CarProcessing();
+        carProcessing.setId(sourceCarProcessing.getId());
         carProcessing.setIsDataUpload(2);
         carProcessing.setDataUploadUserId(user.getId());
         carProcessing.setDataUploadTime(new Date());
+        carProcessingMapper.updateCarProcessing(carProcessing);
+    }
+
+    @Override
+    public void savePrintRecycleRecord(Map<String, Object> params, SysUser user) {
+        params.put("disintegratePlantId", user.getCompany_id());
+        CarProcessing sourceCarProcessing = carProcessingMapper.selectOneByMap(params);
+        if (sourceCarProcessing == null) {
+            throw new CustomException("车辆信息不存在！");
+        }
+        CarProcessing carProcessing = new CarProcessing();
+        carProcessing.setId(sourceCarProcessing.getId());
+        carProcessing.setIsPrintRecycle(2);
+        carProcessing.setPrintRecycleUserId(user.getId());
+        carProcessing.setPrintRecycleTime(new Date());
+        carProcessingMapper.updateCarProcessing(carProcessing);
+    }
+
+    @Override
+    public void saveLogoutTimeRecord(Map<String, Object> params, SysUser user) {
+        params.put("disintegratePlantId", user.getCompany_id());
+        CarProcessing sourceCarProcessing = carProcessingMapper.selectOneByMap(params);
+        if (sourceCarProcessing == null) {
+            throw new CustomException("车辆信息不存在！");
+        }
+        CarProcessing carProcessing = new CarProcessing();
+        carProcessing.setId(sourceCarProcessing.getId());
+        carProcessing.setIsLogout(2);
+        carProcessing.setLogoutUserId(user.getId());
+        try {
+            carProcessing.setLogoutTime(DateUtils.parseDate(params.get("logoutTime").toString(),"yyyy-MM-dd"));
+        } catch (ParseException e) {
+            throw new CustomException("注销时间不能为空");
+        }
+        carProcessingMapper.updateCarProcessing(carProcessing);
+    }
+
+    @Override
+    public void saveAppointLogoutTimeRecord(Map<String, Object> params, SysUser user) {
+        params.put("disintegratePlantId", user.getCompany_id());
+        CarProcessing sourceCarProcessing = carProcessingMapper.selectOneByMap(params);
+        if (sourceCarProcessing == null) {
+            throw new CustomException("车辆信息不存在！");
+        }
+        CarProcessing carProcessing = new CarProcessing();
+        carProcessing.setId(sourceCarProcessing.getId());
+        carProcessing.setIsAppointLogoutTime(2);
+        carProcessing.setIsAppointUserid(user.getId());
+
+        try {
+            carProcessing.setIsAppointTime(DateUtils.parseDate(params.get("appointTime").toString(),"yyyy-MM-dd"));
+        } catch (ParseException e) {
+            throw new CustomException("商委注销时间不能为空");
+        }
         carProcessingMapper.updateCarProcessing(carProcessing);
     }
 
@@ -409,8 +471,67 @@ public class ProceduresService implements IProceduresService {
     }
 
     @Override
-    public void provideProcedureIssue(Map<String, Object> params, SysUser user) {
-
+    public PageInfo<CarCustomerListVo> queryCarCustomerList(Map<String, Object> params, SysUser user) {
+        params.put("disintegratePlantId", user.getCompany_id());
+        PageHelper.startPage(
+                StringUtils.isEmpty(params.get("pageNum")) ? 1 : Integer.parseInt(String.valueOf(params.get("pageNum"))),
+                StringUtils.isEmpty(params.get("pageSize")) ? 10 : Integer.parseInt(String.valueOf(params.get("pageSize"))));
+        PageHelper.orderBy("create_time desc");
+        List<CarCustomerListVo> carCustomerListVos = carProcedureLogMapper.selectCustomerVoList(params);
+        PageInfo<CarCustomerListVo> pageInfo = new PageInfo<>(carCustomerListVos);
+        return pageInfo;
     }
+
+    @Override
+    public PageInfo<CarProcedureListVo> queryProcedureVoList(Map<String, Object> params, SysUser user) {
+        params.put("disintegratePlantId", user.getCompany_id());
+        PageHelper.startPage(
+                StringUtils.isEmpty(params.get("pageNum")) ? 1 : Integer.parseInt(String.valueOf(params.get("pageNum"))),
+                StringUtils.isEmpty(params.get("pageSize")) ? 10 : Integer.parseInt(String.valueOf(params.get("pageSize"))));
+        PageHelper.orderBy("create_time desc");
+        List<CarProcedureListVo> carProcedureListVos = carInfoMapper.selectProcedureVoList(params);
+        PageInfo<CarProcedureListVo> pageInfo = new PageInfo<>(carProcedureListVos);
+        return pageInfo;
+    }
+
+    @Override
+    public ShangWeiDataVo queryShangWeiData(Map<String, Object> params, SysUser user) throws ExecutionException, InterruptedException {
+        params.put("disintegratePlantId", user.getCompany_id());
+        Callable a = ()->{
+            Map<String, Object> map1 = params;
+            return carIdentityMapper.selectShangWeiDataByMap(map1);
+        };
+        Callable b = ()->{
+            Map<String, Object> map2 = params;
+            map2.put("firstType","pre_pic");
+            return carPicMapper.selectListByMap(map2);
+        };
+        Callable c= ()->{
+            Map<String, Object> map3 = params;
+            map3.put("firstType","tuo_pic");
+            return carPicMapper.selectListByMap(map3);
+        };
+        Callable d = ()->{
+            Map<String, Object> map4 = params;
+            map4.put("firstType","break_pic");
+            return carPicMapper.selectListByMap(map4);
+        };
+        FutureTask<ShangWeiDataVo> fa = new FutureTask(a);
+        FutureTask<List<CarPic>> fb = new FutureTask(b);
+        FutureTask<List<CarPic>> fc = new FutureTask(c);
+        FutureTask<List<CarPic>> fd = new FutureTask(d);
+
+        new Thread(fa).start();
+        new Thread(fb).start();
+        new Thread(fc).start();
+        new Thread(fd).start();
+
+        ShangWeiDataVo shangWeiDataVo = fa.get();
+        shangWeiDataVo.setPrePics(fb.get());
+        shangWeiDataVo.setTuoPic(fc.get());
+        shangWeiDataVo.setBreakPics(fd.get());
+        return shangWeiDataVo;
+    }
+
 
 }

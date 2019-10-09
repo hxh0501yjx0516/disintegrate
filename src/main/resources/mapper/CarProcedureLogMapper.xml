@@ -180,6 +180,21 @@
         FROM ts_car_procedure_log
         where type=3 and procedure_log_id=#{procedureLogId}
     </select>
+    <select id="selectCustomerVoList" resultType="com.tieshan.disintegrate.vo.CarCustomerListVo">
+        SELECT i.id carInfoId,i.car_code carCode, i.car_no carNo,i.car_name carName,i.contacts,
+            i.contacts_phone contactsPhone,p.is_query isQuery,p.is_verify isVerify,
+            case when p.is_query=3 then p.query_time else p.verify_time end exceptionTime,
+            case when p.is_query=3 then p.query_result else p.verify_result end exceptionResult,
+	        l.create_time handleTime,l.remark,i.create_time
+        FROM ts_car_info i
+        left join ts_car_processing p on i.id=p.car_info_id
+        left join (select * from ts_car_procedure_log l GROUP BY l.car_info_id order by l.create_time LIMIT 1)l on l.car_info_id=i.id
+        where i.disintegrate_plant_id=#{disintegratePlantId} AND (p.is_query=3 or p.is_verify=3)
+        <if test="searchInfo!=null and searchInfo!=''">
+            and concat(i.contacts,i.contacts_phone,i.car_name,i.car_no,i.car_code)
+            like concat("%",#{searchInfo},"%")
+        </if>
+    </select>
     <insert id="insertCarProcedureLog">
         INSERT INTO ts_car_procedure_log(
         <trim suffixOverrides=",">

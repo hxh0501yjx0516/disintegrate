@@ -100,8 +100,14 @@ public class CarsQueryController {
      */
 
     @GetMapping("/doCarsQuery/findPretreatmentCars")
-    public RestResult findPretreatmentCars(@RequestParam(value = "findMsg", required = false) String findMsg, @LoginUser SysUser user) {
-        RestResult restResult = new RestResult("查询车辆预处理车辆信息成功", carsQueryService.findPretreatmentCars(findMsg, user.getCompany_id()), ResultCode.SUCCESS.code());
+    public RestResult findPretreatmentCars(@RequestParam(value = "findMsg", required = false) String findMsg,
+                                           @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
+                                           @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
+                                           @LoginUser SysUser user) {
+        PageInfo pageInfo = null;
+        List<Map<String, Object>> mapList = carsQueryService.findPretreatmentCars(findMsg,page,pageSize,user.getCompany_id());
+        pageInfo = new PageInfo<>(mapList);
+        RestResult restResult = new RestResult("查询车辆预处理车辆信息成功", pageInfo, ResultCode.SUCCESS.code());
         return restResult;
     }
 
@@ -226,14 +232,18 @@ public class CarsQueryController {
      * @number 1
      */
     @GetMapping("/doCarsQuery/findCopyNumberCars")
-    public RestResult findCopyNumberCars(@RequestParam(value = "findMsg", required = false) String findMsg, @LoginUser SysUser user) {
-
-        List<Map<String, Object>> list = carsQueryService.findCopyNumberCars(findMsg, user.getCompany_id());
+    public RestResult findCopyNumberCars(@RequestParam(value = "findMsg", required = false) String findMsg,
+                                         @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
+                                         @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
+                                         @LoginUser SysUser user) {
+        PageInfo pageInfo = null;
+        List<Map<String, Object>> mapList = carsQueryService.findCopyNumberCars(findMsg,page,pageSize,user.getCompany_id());
+        pageInfo = new PageInfo<>(mapList);
         RestResult restResult = null;
-        if (null == list || list.size() == 0) {
+        if (null == mapList || mapList.size() == 0) {
             restResult = new RestResult("未查询到预拓号车辆信息", null, ResultCode.ERROR.code());
         } else {
-            restResult = new RestResult("查询预拓号车辆信息成功", list, ResultCode.SUCCESS.code());
+            restResult = new RestResult("查询预拓号车辆信息成功", pageInfo, ResultCode.SUCCESS.code());
         }
         return restResult;
 
@@ -361,14 +371,19 @@ public class CarsQueryController {
      * @number 1
      */
     @GetMapping("/doCarsQuery/findDismantleCars")
-    public RestResult findDismantleCars(@RequestParam(value = "findMsg", required = false) String findMsg, @LoginUser SysUser user) {
+    public RestResult findDismantleCars(@RequestParam(value = "findMsg", required = false) String findMsg,
+                                        @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
+                                        @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
+                                        @LoginUser SysUser user) {
 
-        List<Map<String, Object>> list = carsQueryService.findDismantleCars(findMsg, user.getCompany_id());
+        PageInfo pageInfo = null;
+        List<Map<String, Object>> mapList = carsQueryService.findDismantleCars(findMsg,page,pageSize,user.getCompany_id());
+        pageInfo = new PageInfo<>(mapList);
         RestResult restResult = null;
-        if (null == list || list.size() == 0) {
+        if (null == mapList || mapList.size() == 0) {
             restResult = new RestResult("未查询到预拆解车辆信息", null, ResultCode.ERROR.code());
         } else {
-            restResult = new RestResult("查询预拆解车辆信息成功", list, ResultCode.SUCCESS.code());
+            restResult = new RestResult("查询预拆解车辆信息成功", pageInfo, ResultCode.SUCCESS.code());
         }
         return restResult;
 
@@ -458,7 +473,7 @@ public class CarsQueryController {
      * showdoc
      *
      * @param carInfoId 必选 Long 车辆Id，从之前返回数据中带过来
-     * @param dismantleWay 必选 车辆初检拆解方式 1:粗拆 ,2:点拆 , 3:包拆 ,4:精拆'
+     * @param dismantleWay 必选 车辆初检拆解方式 1:粗拆 ,2:点拆 , 3:包拆 ,4:精拆，5:默认'
      * @return {"msg": "设置车辆初检拆解方式成功","data": 1,"ret_code": "0"}
      * @catalog 拆解厂-APP/手续部-工作台/车辆拆解
      * @title App端设置车辆初检拆解方式接口

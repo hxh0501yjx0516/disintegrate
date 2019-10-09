@@ -297,16 +297,4 @@ public class CarInformationController {
         return  restResult;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
 }

@@ -33,7 +33,10 @@ public interface CarsQueryService {
     /***
      * App端查询车辆预处理车辆信息
      */
-    List<Map<String, Object>> findPretreatmentCars(String findMsg, Long dpId);
+    List<Map<String, Object>> findPretreatmentCars(String findMsg,
+                                                   Integer page,
+                                                   Integer pageSize,
+                                                   Long dpId);
     /**
      * App端根据carInfoId查询车辆预处理信息
      */
@@ -49,7 +52,10 @@ public interface CarsQueryService {
     /***
      * App端查询预拓号车辆信息
      */
-    List<Map<String, Object>> findCopyNumberCars(String findMsg, Long dpId);
+    List<Map<String, Object>> findCopyNumberCars(String findMsg,
+                                                 Integer page,
+                                                 Integer pageSize,
+                                                 Long dpId);
     /***
      * App端查询车辆预拓号拍照名称
      */
@@ -65,7 +71,10 @@ public interface CarsQueryService {
     /***
      * App端查询预拆解车辆信息
      */
-    List<Map<String, Object>> findDismantleCars(String findMsg, Long dpId);
+    List<Map<String, Object>> findDismantleCars(String findMsg,
+                                                Integer page,
+                                                Integer pageSize,
+                                                Long dpId);
     /***
      * App端根据carInfoId查询车辆初检信息
      */

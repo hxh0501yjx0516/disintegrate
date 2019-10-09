@@ -242,6 +242,15 @@
             </if>
         </where>
     </select>
+    <select id="selectShangWeiDataByMap" resultType="com.tieshan.disintegrate.vo.ShangWeiDataVo">
+        SELECT ie.ascription,i.id carInfoId,ie.owner,ie.phone,ie.id_card idCard,ie.owner_address ownerAddress,ie.owner_zipcode ownerZipcode,
+            ie.car_properties carProperties,ie.car_kind carKind,i.car_name carName,ie.car_type carType,ie.nature_usege natureUsege,
+            i.car_no carNo,ie.displacement,ie.fuel_type fuelType,ie.reg_time regTime,ie.vin,ie.engine,ie.car_weight carWeight,
+            ie.issue_size issueSize,ie.carrying_capacity carryingCapacity,ie.remarks,ie.record_no recordNo
+        FROM ts_car_info i
+        left join ts_car_identity ie on i.id=ie.car_info_id
+        where i.disintegrate_plant_id=#{disintegratePlantId} and i.id=#{carInfoId}
+    </select>
 
     <insert id="insertCarIdentity">
         INSERT INTO ts_car_identity(
