@@ -66,11 +66,13 @@ public interface ICarSourceService {
 
     void editCarInfoLocation(CarInfo carInfo);
 
-    List<Map<String, Object>> selectCarInfoListByIsVerify(HttpServletRequest request, String findMsg);
+    List<Map<String, Object>> selectCarInfoListByIsVerify(Integer page, Integer pageSize, HttpServletRequest request, String findMsg);
 
     int selectCarInfoNumByCarNo(String carNo, HttpServletRequest request);
 
     int selectCarInfoCountByCarNo(String carNo, HttpServletRequest request);
+
+    List<Map<String, Object>> selectCarInfoIsApproachList(HttpServletRequest request, Integer page, Integer pageSize, String findMsg, String status);
 
 //    List<Map<String, Object>> selectCarSourceListApp(HttpServletRequest request);
 

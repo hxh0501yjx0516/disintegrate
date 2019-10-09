@@ -204,7 +204,7 @@
         IFNULL(s.contacts, '') AS contacts,   /*联系人*/
         IFNULL(s.phone,'') AS phone,   /*联系人电话*/
         IFNULL(s.car_location,'') AS carLocation,    /*联系人地址*/
-        IFNULL(s.count,'') AS count,     /*车辆台词*/
+        IFNULL(s.count,'') AS count,     /*车辆台次*/
         IFNULL(b.bank_name,'') AS bankName,    /*银行名称*/
         IFNULL(b.account,'') AS account             /*银行账号*/
         FROM
@@ -782,7 +782,6 @@
             IFNULL(p.is_premium_completion,'') AS isPremiumCompletion
         FROM
         	ts_car_info AS i
-
             LEFT JOIN ts_car_identity AS d ON i.id = d.car_info_id
             LEFT JOIN ts_car_enter AS e ON i.id = e.car_info_id
             LEFT JOIN ts_car_processing AS p ON i.id = p.car_info_id
@@ -1078,7 +1077,7 @@
         	create_operator_id = #{createOperatorId},
         	is_alloy_rim = #{isAlloyRim}
         WHERE
-        	id = #{id};
+        	id = #{id} AND disintegrate_plant_id = #{disintegratePlantId}
     </update>
 
     <update id="updateCarEnterIsApproach" parameterType="com.tieshan.disintegrate.pojo.CarEnter">
@@ -1094,10 +1093,10 @@
 
     <update id="updateCarEnterIsInitialSurvey" parameterType="com.tieshan.disintegrate.pojo.CarEnter">
         UPDATE ts_car_enter SET
-        	is_initial_survey = #{isInitialSurvey},
+        	is_initial_survey = 2,
 	        initial_survey_time = #{initialSurveyTime},
 	        initial_survey_user_id = #{initialSurveyUserId},
-	        is_pretreatment = #{isPretreatment}
+	        is_pretreatment = 1
         WHERE
         	car_info_id = #{carInfoId}
         	AND disintegrate_plant_id = #{disintegratePlantId}
@@ -1130,6 +1129,47 @@
         	disintegrate_plant_id = #{disintegratePlantId}
         AND
         	pid = #{pid}
+    </select>
+
+    <select id="selectCarInfoIsApproachList" resultType="java.util.Map">
+        SELECT
+        IFNULL( i.car_code, '' ) AS carCode,
+        IFNULL( e.approach_time, '' ) AS approachTime,
+        IFNULL( i.car_no, '' ) AS carNo,
+        IFNULL( i.car_name, '' ) AS carName,
+        IFNULL( i.contacts, '' ) AS contacts,
+        IFNULL( i.contacts_phone, '' ) AS contactsPhone,
+        IFNULL( d.vin, '' ) AS vin,
+        IFNULL( e.is_approach, '' ) AS isApproach,
+        IFNULL( e.is_initial_survey, '' ) AS isInitialSurvey,
+        IFNULL( e.soft_print, '' ) AS softPrint,
+        IFNULL( e.is_pretreatment, '' ) AS isPretreatment,
+        IFNULL( e.is_copy_number, '' ) AS isCopyNumber,
+        IFNULL( e.dismantle_way, '' ) AS dismantleWay,
+        IFNULL( e.car_location, '' ) AS carLocation
+        FROM
+        ts_car_info AS i
+        LEFT JOIN ts_car_enter AS e ON i.id = e.car_info_id
+        LEFT JOIN ts_car_identity AS d ON i.id = d.car_info_id
+        WHERE
+        i.disintegrate_plant_id = #{disintegratePlantId}
+        <if test='status == "1"'>    /*待入场*/
+            AND e.is_approach = 1
+        </if>
+        <if test='status == "2"'>    /*待初检*/
+            AND e.is_approach = 2
+            AND e.is_initial_survey = 1
+        </if>
+        <if test='status == "3"'>    /*待预处理*/
+            AND e.is_initial_survey = 2
+            AND e.is_pretreatment = 1
+        </if>
+        <if test='status == "4"'>    /*拆解方式未确定*/
+            AND e.dismantle_way = 5
+        </if>
+        <if test="findMsg != null and findMsg != ''">
+            AND CONCAT(i.contacts,i.contacts_phone,i.car_no,i.car_name) LIKE CONCAT('%',#{findMsg},'%')
+        </if>
     </select>
 
     <update id="editCarInfoLocation" parameterType="com.tieshan.disintegrate.pojo.CarInfo">

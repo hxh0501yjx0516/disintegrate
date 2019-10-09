@@ -1,5 +1,7 @@
 package com.tieshan.disintegrate.controller;
 
+import com.github.pagehelper.Constant;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.tieshan.disintegrate.constant.ConStants;
 import com.tieshan.disintegrate.pojo.CarInfo;
@@ -9,6 +11,7 @@ import com.tieshan.disintegrate.service.DictionaryService;
 import com.tieshan.disintegrate.service.ICarSourceService;
 import com.tieshan.disintegrate.util.RestResult;
 import com.tieshan.disintegrate.util.ResultCode;
+import javafx.scene.chart.ValueAxis;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -379,7 +382,7 @@ public class CarSourceController {
     }
 
     /**
-     * 查询某拆解厂下某业务员下核档完成的所有车辆（搜索的是车牌号，车型，vin，车辆编号）    过
+     * 查询某拆解厂下某业务员下核档完成的所有车辆    过
      *
      * @param request
      * @return
@@ -391,7 +394,7 @@ public class CarSourceController {
                                                   @RequestParam(value = "findMsg", required = false) String findMsg) {
         PageInfo pageInfo = null;
         try {
-            List<Map<String, Object>> resultList = carSourceService.selectCarInfoListByIsVerify(request, findMsg);
+            List<Map<String, Object>> resultList = carSourceService.selectCarInfoListByIsVerify(page, pageSize, request, findMsg);
             pageInfo = new PageInfo<>(resultList);
         } catch (Exception e) {
             log.info("查询失败", e);
@@ -542,7 +545,7 @@ public class CarSourceController {
      * @return
      */
     @PostMapping(value = "/editCarSurvey")
-    public RestResult editCarSurvey(CarSurvey carSurvey, HttpServletRequest request) {
+    public RestResult editCarSurvey(@RequestBody CarSurvey carSurvey, HttpServletRequest request) {
         try {
             carSourceService.editCarSurvey(carSurvey, request);
         } catch (Exception e) {
@@ -561,7 +564,7 @@ public class CarSourceController {
      * @return
      */
     @PostMapping(value = "/editCarSurveyComplete")
-    public RestResult editCarSurveyComplete(CarSurvey carSurvey, HttpServletRequest request) {
+    public RestResult editCarSurveyComplete(@RequestBody CarSurvey carSurvey, HttpServletRequest request) {
         try {
             carSourceService.editCarSurveyComplete(carSurvey, request);
         } catch (Exception e) {
@@ -631,6 +634,23 @@ public class CarSourceController {
             return new RestResult("添加车辆存放位置失败", null, ResultCode.ERROR.code());
         }
         return new RestResult("添加车辆存放位置成功", null, ResultCode.SUCCESS.code());
+    }
+
+    @GetMapping("/selectCarInfoIsApproachList")
+    public RestResult selectCarInfoIsApproachList(HttpServletRequest request,
+                                                  @RequestParam(value = "page",required = false, defaultValue = ConStants.PAGE) Integer page,
+                                                  @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
+                                                  @RequestParam(value = "findMsg", required = false) String findMsg,
+                                                  @RequestParam(value = "status", required = false) String status){
+        PageInfo pageInfo = null;
+        try{
+            List<Map<String, Object>> mapList = carSourceService.selectCarInfoIsApproachList(request, page, pageSize, findMsg, status);
+            pageInfo = new PageInfo(mapList);
+        }catch (Exception e){
+            log.info("查询失败", e);
+            return new RestResult("查询失败", pageInfo,ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", pageInfo, ResultCode.SUCCESS.code());
     }
 
 //    /**

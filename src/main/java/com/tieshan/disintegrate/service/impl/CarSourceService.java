@@ -219,7 +219,7 @@ public class CarSourceService implements ICarSourceService {
         SysUser sysUser = tokenService.getToken(token);
         System.out.println(sysUser);
         PageHelper.startPage(page, pageSize);
-        PageHelper.orderBy("id desc");
+        PageHelper.orderBy("s.create_time DESC");
         // 查询指定状态的车源
         if (token.split("-")[0].equals("PC")) {
             carSourceList = carSourceMapper.selectCarSourceList(sysUser.getCompany_id(), sourceType, findMsg);
@@ -445,6 +445,25 @@ public class CarSourceService implements ICarSourceService {
     }
 
     /**
+     * 查询某拆解厂下的所有的车俩
+     *
+     * @param request
+     * @param page
+     * @param pageSize
+     * @param findMsg
+     * @param status
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> selectCarInfoIsApproachList(HttpServletRequest request, Integer page, Integer pageSize, String findMsg, String status) {
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        PageHelper.startPage(page, pageSize);
+        PageHelper.orderBy("e.approach_time DESC");
+        return carSourceMapper.selectCarInfoIsApproachList(findMsg, status, sysUser.getCompany_id());
+    }
+
+    /**
      * 判断该车牌号的入场状态，若已入场，则提示"该车辆已入场，不能重复入场！"，若未入场，则提示"是否确定入场"
      * @param carNo
      * @param request
@@ -479,9 +498,11 @@ public class CarSourceService implements ICarSourceService {
      * @return
      */
     @Override
-    public List<Map<String, Object>> selectCarInfoListByIsVerify(HttpServletRequest request, String findMsg) {
+    public List<Map<String, Object>> selectCarInfoListByIsVerify(Integer page, Integer pageSize, HttpServletRequest request, String findMsg) {
         String token = request.getHeader("token");
         SysUser sysUser = tokenService.getToken(token);
+        PageHelper.startPage(page, pageSize);
+        PageHelper.orderBy("p.verify_time DESC");
         List<Map<String, Object>> mapList = carSourceMapper.selectCarInfoListByIsVerify(sysUser.getId(), sysUser.getLogin_name(), sysUser.getCompany_id(), findMsg);
         for (Map<String, Object> map : mapList) {
             map.put("status", "已核档");
@@ -545,16 +566,15 @@ public class CarSourceService implements ICarSourceService {
         carSurvey.setCreateTime(new Date());
         carSurvey.setCreateOperator(sysUser.getLogin_name());
         carSurvey.setCreateOperatorId(sysUser.getId());
+        carSurvey.setDisintegratePlantId(sysUser.getCompany_id());
         // 更新车车辆初检信息
         carSourceMapper.editCarSurvey(carSurvey);
         // 修改初检的状态和预处理的状态
         CarEnter carEnter = new CarEnter();
         carEnter.setCarInfoId(carSurvey.getCarInfoId());
         carEnter.setDisintegratePlantId(carSurvey.getDisintegratePlantId());
-        carEnter.setIsInitialSurvey(2);
         carEnter.setInitialSurveyTime(new Date());
         carEnter.setInitialSurveyUserId(sysUser.getId());
-        carEnter.setIsPretreatment(1);
         carSourceMapper.updateCarEnterIsInitialSurvey(carEnter);
     }
 
@@ -571,6 +591,7 @@ public class CarSourceService implements ICarSourceService {
         carSurvey.setCreateTime(new Date());
         carSurvey.setCreateOperator(sysUser.getLogin_name());
         carSurvey.setCreateOperatorId(sysUser.getId());
+        carSurvey.setDisintegratePlantId(sysUser.getCompany_id());
         carSourceMapper.editCarSurvey(carSurvey);
     }
 
@@ -614,6 +635,7 @@ public class CarSourceService implements ICarSourceService {
     @Override
     public List<Map<String, Object>> selectCarInfoByIsInitialSurvey(Integer page, Integer pageSize, String findMsg, HttpServletRequest request) {
         PageHelper.startPage(page, pageSize);
+        PageHelper.orderBy("e.approach_time DESC");
         String token = request.getHeader("token");
         SysUser sysUser = tokenService.getToken(token);
         return carSourceMapper.selectCarInfoByIsInitialSurvey(sysUser.getCompany_id(), findMsg);
@@ -695,6 +717,7 @@ public class CarSourceService implements ICarSourceService {
 
         // 设置分页信息
         PageHelper.startPage(page, pageSize);
+        PageHelper.orderBy("i.create_time DESC");
         // 获取token
         String token = request.getHeader("token");
         SysUser sysUser = tokenService.getToken(token);
