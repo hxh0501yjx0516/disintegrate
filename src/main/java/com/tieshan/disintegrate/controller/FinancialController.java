@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @description:财务管理模块控制类
@@ -37,7 +38,7 @@ public class FinancialController {
      * @return {"msg": "查询车辆残值信息成功","data": {"pageNum": 1,"pageSize": 10,"size": 1,"startRow": 1,"endRow": 1,"total": 1,"pages": 1,"list": [{"carCode": "TSXXX190902236","carNo": "京A01949","carName": "红旗001","contacts": "王大人","contactsPhone": "13888888888","owner": "宁峰","phone": "13345678910","salvage": "2000"}],"prePage": 0,"nextPage": 0,"isFirstPage": true,"isLastPage": true,"hasPreviousPage": false,"hasNextPage": false,"navigatePages": 8,"navigatepageNums": [1],"navigateFirstPage": 1,"navigateLastPage": 1,"lastPage": 1,"firstPage": 1},"ret_code": "0"}
      * @catalog 解体厂-PC/财务管理/价格导入
      * @title 基于条件分页查询车辆残值信息
-     * @description 财务管理-价格导入模块查询接口
+     * @description 财务管理-价格导入-查询列表接口
      * @method get
      * @url http://localhost:8002/doCarsQuery/findCarInfoAndSalvage
      * @return_param msg string 描述信息
@@ -55,7 +56,7 @@ public class FinancialController {
      * @number 1
      */
 
-    /**财务管理价格导入模块查询接口*/
+    /**财务管理-价格导入-查询列表接口*/
     @GetMapping("/doCarsQuery/findCarInfoAndSalvage")
     public RestResult findCarInfoAndSalvage(
             @RequestParam(value = "findMsg", required = false) String findMsg,
@@ -68,4 +69,39 @@ public class FinancialController {
         RestResult restResult = new RestResult("查询车辆残值信息成功", pageInfo, ResultCode.SUCCESS.code());
         return restResult;
     }
+    /**财务管理-价格导入-手动修改残值接口*/
+    @GetMapping("/doCarsQuery/updateCarSalvage")
+    public RestResult updateCarSalvage(
+            @RequestParam(value = "carInfoId") Long carInfoId,
+            @RequestParam(value = "salvage", required = false) String salvage,
+            @LoginUser SysUser user){
+        int rows = iFinancialService.updateCarSalvage(carInfoId,salvage,user);
+        RestResult restResult = new RestResult("修改残值成功", rows, ResultCode.SUCCESS.code());
+        return restResult;
+    }
+
+
+    /**财务管理-残值领取-查询列表接口*/
+    @GetMapping("/doCarsQuery/findCarInfoGetSalvage")
+    public RestResult findCarInfoGetSalvage(
+            @RequestParam(value = "findMsg", required = false) String findMsg,
+            @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
+            @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
+            @LoginUser SysUser user){
+        PageInfo pageInfo = null;
+        List<Map<String,Object>> mapList = iFinancialService.findCarInfoGetSalvage(findMsg,page,pageSize,user);
+        pageInfo = new PageInfo<>(mapList);
+            RestResult restResult = new RestResult("查询领取残值信息成功", pageInfo, ResultCode.SUCCESS.code());
+        return restResult;
+    }
+    /**财务管理-残值领取-点击领取界面回显数据接口*/
+    @GetMapping("/doCarsQuery/findCarSalvageById")
+    public RestResult findCarSalvageById(
+            @RequestParam(value = "carInfoId") Long carInfoId,
+            @LoginUser SysUser user){
+        List<Map<String,Object>> mapList = iFinancialService.findCarSalvageById(carInfoId,user);
+        RestResult restResult = new RestResult("查询成功", mapList, ResultCode.SUCCESS.code());
+        return restResult;
+    }
+
 }
