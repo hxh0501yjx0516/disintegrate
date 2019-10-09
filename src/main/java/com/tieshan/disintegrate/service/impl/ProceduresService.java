@@ -9,6 +9,7 @@ import com.tieshan.disintegrate.service.IProceduresService;
 import com.tieshan.disintegrate.util.IdWorker;
 import com.tieshan.disintegrate.vo.AppCarBaseVo;
 import com.tieshan.disintegrate.vo.CarCustomerInfoVo;
+import com.tieshan.disintegrate.vo.CarProcedureIssueVo;
 import com.tieshan.disintegrate.vo.ProceduresVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -394,6 +395,22 @@ public class ProceduresService implements IProceduresService {
     public CarCustomerInfoVo queryCarCustomerInfo(Map<String, Object> params, SysUser user) {
         params.put("disintegratePlantId", user.getCompany_id());
         return carInfoMapper.selectCarCustomerInfo(params);
+    }
+
+    @Override
+    public PageInfo<CarProcedureIssueVo> queryProcedureIssueVoList(Map<String, Object> params, SysUser user) {
+        params.put("disintegratePlantId", user.getCompany_id());
+        PageHelper.startPage(
+                StringUtils.isEmpty(params.get("pageNum")) ? 1 : Integer.parseInt(String.valueOf(params.get("pageNum"))),
+                StringUtils.isEmpty(params.get("pageSize")) ? 10 : Integer.parseInt(String.valueOf(params.get("pageSize"))));
+        List<CarProcedureIssueVo> carProcedureIssueVos = carInfoMapper.selectProcedureIssueVoList(params);
+        PageInfo<CarProcedureIssueVo> pageInfo = new PageInfo<>(carProcedureIssueVos);
+        return pageInfo;
+    }
+
+    @Override
+    public void provideProcedureIssue(Map<String, Object> params, SysUser user) {
+
     }
 
 }

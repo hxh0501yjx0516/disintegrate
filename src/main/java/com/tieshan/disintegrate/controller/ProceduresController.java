@@ -4,10 +4,12 @@ import com.github.pagehelper.PageInfo;
 import com.tieshan.disintegrate.annotation.LoginUser;
 import com.tieshan.disintegrate.pojo.SysUser;
 import com.tieshan.disintegrate.service.IProceduresService;
+import com.tieshan.disintegrate.service.IReceiveRecordService;
 import com.tieshan.disintegrate.util.RestResult;
 import com.tieshan.disintegrate.util.ResultCode;
 import com.tieshan.disintegrate.vo.AppCarBaseVo;
 import com.tieshan.disintegrate.vo.CarCustomerInfoVo;
+import com.tieshan.disintegrate.vo.CarProcedureIssueVo;
 import com.tieshan.disintegrate.vo.ProceduresVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +31,8 @@ public class ProceduresController {
 
     @Autowired
     private IProceduresService proceduresService;
+    @Autowired
+    private IReceiveRecordService receiveRecordService;
 
     /**
      * 添加手续
@@ -168,9 +172,9 @@ public class ProceduresController {
 
     /**
      * app-查询核档记录列表
-     * @param params pageNum int 页码
-     *               pageSize int  页面大小
-     *               isVerify int
+     * @param params pageNum int    页码
+     *               pageSize int   页面大小
+     *               isVerify int   1:未核档；2：已核档；3:核档不通过
      * @param user
      * @return
      */
@@ -191,5 +195,48 @@ public class ProceduresController {
         CarCustomerInfoVo carCustomerInfoVo = proceduresService.queryCarCustomerInfo(params, user);
         return new RestResult("查询成功", carCustomerInfoVo, ResultCode.SUCCESS.code());
     }
+
+    /**
+     * web-查询一条客服记录
+     * @param params carInfoId
+     * @param user
+     * @return
+     */
+    @PostMapping(value = "/queryCustomerHandle")
+    public RestResult queryCustomerHandle(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
+        CarCustomerInfoVo carCustomerInfoVo = proceduresService.queryCarCustomerInfo(params, user);
+        return new RestResult("查询成功", carCustomerInfoVo, ResultCode.SUCCESS.code());
+    }
+    /**
+     * web-查询手续领取记录列表
+     * @param params pageNum            页码
+     *               pageSize           页面大小
+     *               searchInfo         查询条件
+     *               isProcedureIssue   1：未领取手续；2：已领取手续；
+     *               isGetSalvage       1：未领取残值；2：已领取残值；
+     * @param user
+     * @return
+     */
+    @PostMapping(value = "/queryProcedureIssueVoList")
+    public RestResult queryProcedureIssueVoList(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
+        PageInfo<CarProcedureIssueVo> carProcedureIssueVoPageInfo = proceduresService.queryProcedureIssueVoList(params, user);
+        return new RestResult("查询成功", carProcedureIssueVoPageInfo, ResultCode.SUCCESS.code());
+    }
+
+    /**
+     * web-手续发放
+     * @param params result             领取方式
+     *               receiver           领取人
+     *               carInfoId          车辆id
+     *               remark             备注
+     * @param user
+     * @return
+     */
+    @PostMapping(value = "/provideProcedureIssue")
+    public RestResult provideProcedureIssue(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
+        receiveRecordService.save(params, user);
+        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
+    }
+
 
 }

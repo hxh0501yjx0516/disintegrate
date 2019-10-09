@@ -69,6 +69,18 @@
         <association property="verificationResult" column="{carInfoId=car_info_id,carProcessingId=car_processing_id}"
                      select="com.tieshan.disintegrate.dao.CarProcedureLogMapper.selectAppOneByMap"/>
     </resultMap>
+    <resultMap type="com.tieshan.disintegrate.vo.CarProcedureIssueVo" id="crProcedureIssueVo">
+        <result property="carInfoId" column="car_info_id"/>  <!--  -->
+        <result property="carCode" column="car_code"/>  <!-- 车辆编号 -->
+        <result property="carNo" column="car_no"/>  <!-- 车牌号 -->
+        <result property="carName" column="car_name"/>  <!-- 车型 -->
+        <result property="contacts" column="contacts"/>  <!-- 联系人 -->
+        <result property="contactsPhone" column="contacts_phone"/>  <!-- 联系人手机号 -->
+        <result property="vin" column="vin"/>  <!-- vin -->
+        <result property="isGetSalvage" column="is_get_salvage"/>  <!-- 1：未领取残值；2：已领取残值； -->
+        <result property="isProcedureIssue" column="is_procedure_issue"/>  <!-- 1：未发放手续；2：已发放手续； -->
+        <result property="procedureIssueTime" column="procedure_issue_time"/>  <!-- 发放时间 -->
+    </resultMap>
 
     <select id="selectOneByMap" resultMap="carInfoMap">
         SELECT  id, disintegrate_plant_id, car_source, contacts, contacts_phone, car_no, processing_type, processing_date,
@@ -229,6 +241,29 @@
             </if>
             <if test="isVerify!=null">
                 AND p.is_verify=#{isVerify}
+            </if>
+        </where>
+    </select>
+    <select id="selectProcedureIssueVoList" resultMap="crProcedureIssueVo">
+        SELECT i.id car_info_id,i.car_code, i.car_no,i.car_name,i.contacts,i.contacts_phone,i.contacts_address,
+        ie.vin,s.is_get_salvage,p.is_procedure_issue
+        FROM ts_car_info i
+        left join ts_car_identity ie on i.id=ie.car_info_id
+        left join ts_car_processing p on i.id=p.car_info_id
+        left join ts_car_salvage s on i.id=s.car_info_id
+        <where>
+            <if test="disintegratePlantId!=null">
+                AND i.disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
+            </if>
+            <if test="isGetSalvage!=null">
+                AND s.is_get_salvage=#{isGetSalvage}
+            </if>
+            <if test="isProcedureIssue!=null">
+                AND p.is_procedure_issue=#{isProcedureIssue}
+            </if>
+            <if test="searchInfo!=null and searchInfo!=''">
+                and concat(i.contacts,i.contacts_phone,i.car_name,i.car_no,i.car_code)
+                like concat("%",#{searchInfo},"%")
             </if>
         </where>
     </select>
