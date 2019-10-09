@@ -4,6 +4,7 @@ import com.tieshan.disintegrate.pojo.CarInfo;
 import com.tieshan.disintegrate.vo.AppCarBaseVo;
 import com.tieshan.disintegrate.vo.CarCustomerInfoVo;
 import com.tieshan.disintegrate.vo.CarProcedureIssueVo;
+import com.tieshan.disintegrate.vo.CarProcedureListVo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -41,5 +42,7 @@ public interface CarInfoMapper {
     CarCustomerInfoVo selectCarCustomerInfo(Map<String, Object> map);
 
     List<CarProcedureIssueVo> selectProcedureIssueVoList(Map<String, Object> map);
+
+    List<CarProcedureListVo> selectProcedureVoList(Map<String, Object> map);
 
 }

@@ -40,7 +40,7 @@ public class CustomInterceptor implements HandlerInterceptor {
     private TokenService tokenService;
     @Autowired
     private SysLog sysLog;
-    static    IdWorker idWorker = new IdWorker(1, 1, 1);
+    static IdWorker idWorker = new IdWorker(1, 1, 1);
 
 
     @Override
@@ -100,27 +100,35 @@ public class CustomInterceptor implements HandlerInterceptor {
         try {
             String token = request.getHeader("token");
             SysUser sysUser = tokenService.getToken(token);
-            sysLog.setId(idWorker.nextId());
-            sysLog.setDepart_name(sysUser.getDepartment_name());
-            sysLog.setDisintegrate_plant_id(sysUser.getCompany_id());
-            sysLog.setOperator(sysUser.getLogin_name());
-            sysLog.setOperator_id(sysUser.getId());
-            sysLog.setMethod_url(request.getRequestURL().toString());
-            sysLog.setIp_addr(getIpAddr(request));
-            String param = getMonth(0);
-            int num = sysUserMapper.existTable(param);
-            if (num < 1) {
-                sysUserMapper.creatSyslog(param);//创建表
-                String delMonth = getMonth(-2);
-                int delnum = sysUserMapper.existTable(delMonth);
-                if (delnum > 0) {
-                    sysUserMapper.delTable(getMonth(-2));//删除两个越前的历史表
+            if (!PubMethod.isEmpty(sysUser)) {
+                Long id;
+                do {
+                    id = idWorker.nextId();
+                } while (PubMethod.isEmpty(id));
+                sysLog.setId(id);
+                sysLog.setDepart_name(sysUser.getDepartment_name());
+                sysLog.setDisintegrate_plant_id(sysUser.getCompany_id());
+                sysLog.setOperator(sysUser.getLogin_name());
+                sysLog.setOperator_id(sysUser.getId());
+                sysLog.setMethod_url(request.getRequestURL().toString());
+                sysLog.setIp_addr(getIpAddr(request));
+                String param = getMonth(0);
+                int num = sysUserMapper.existTable(param);
+                if (num < 1) {
+                    sysUserMapper.creatSyslog(param);//创建表
+                    String delMonth = getMonth(-2);
+                    int delnum = sysUserMapper.existTable(delMonth);
+                    if (delnum > 0) {
+                        sysUserMapper.delTable(getMonth(-2));//删除两个越前的历史表
+                    }
                 }
+                sysUserMapper.syslog(param, sysLog);
             }
-            sysUserMapper.syslog(param, sysLog);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
 
@@ -137,7 +145,7 @@ public class CustomInterceptor implements HandlerInterceptor {
         String ip = request.getHeader("x-forwarded-for");
         if (ip != null && ip.length() != 0 && !"unknown".equalsIgnoreCase(ip)) {
             // 多次反向代理后会有多个ip值，第一个ip才是真实ip
-            if( ip.indexOf(",")!=-1 ){
+            if (ip.indexOf(",") != -1) {
                 ip = ip.split(",")[0];
             }
         }

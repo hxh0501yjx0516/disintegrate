@@ -131,9 +131,16 @@ public interface CarSourceMapper {
     int selectCarInfoNumByCarNo(@Param(value = "carNo") String carNo,
                                 @Param(value = "disintegratePlantId") Long disintegratePlantId);
 
-    List<Map<String, Object>> selectCarInfoIsApproachList(@Param(value = "findMsg") String findMsg,
+    List<Map<String, Object>> selectCarInfoCompanyList(@Param(value = "findMsg") String findMsg,
                                                           @Param(value = "status") String status,
                                                           @Param(value = "disintegratePlantId") Long disintegratePlantId);
+
+    int updateDismantleWay(@Param(value = "carInfoId") Long carInfoId,
+                           @Param(value = "dismantlingWay") Integer dismantleWay,
+                           @Param(value = "disintegratePlantId") Long disintegratePlantId);
+
+    List<Map<String, Object>> selectHomePage(@Param(value = "state") String state,
+                                             @Param(value = "disintegratePlantId") Long disintegratePlantId);
 
 //    int selectCarInfoCountByCarSourceId(Long id);
 }
