@@ -1,12 +1,5 @@
 package com.tieshan.disintegrate.util;
 
-
-import lombok.extern.apachecommons.CommonsLog;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-
 /**
  * @description: id生成器
  * @author: huxuanhua
@@ -14,151 +7,122 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @version: 1.0
  * @modified By:
  */
-@CommonsLog
 public class IdWorker {
+    //下面两个每个5位，加起来就是10位的工作机器id
+    private long workerId;    //工作id
+    private long datacenterId;   //数据id
+    //12位的序列号
+    private long sequence;
 
-    public static final int MIN_WORKER_INDEX = 0;
-    public static final int MAX_WORKER_INDEX = 0x0F;
-
-    public static final int WORKER_LENGTH = MAX_WORKER_INDEX + 1;
-
-    private IdWorker.IdGenerator[] generators;
-    private AtomicInteger indexCounter = new AtomicInteger(0);
-
-    /**
-     * By default user all 16 indexes
-     */
-    public IdWorker() {
-        setWorkerIndexes(null);
-    }
-
-    public IdWorker(int ... indexes) {
-        setWorkerIndexes(indexes);
-    }
-
-    //@Required
-    private void setWorkerIndexes(int... workerIndexes) {
-        int indexes[];
-        if(workerIndexes == null || workerIndexes.length == 0) indexes = newSequence();
-        else indexes = newSequence(workerIndexes);
-
-        Map<Integer, IdWorker.IdGenerator> generatorMap = new HashMap<Integer, IdWorker.IdGenerator>();
-
-        generators = new IdWorker.IdGenerator[WORKER_LENGTH];
-
-        for(int i = 0; i < WORKER_LENGTH; i++) {
-            int index = indexes[i];
-            IdWorker.IdGenerator generator = generatorMap.get(index);
-            if(generator == null) {
-                generator = new IdWorker.IdGenerator(index);
-                generatorMap.put(index, generator);
-            }
-            generators[i] = generator;
+    public IdWorker(long workerId, long datacenterId, long sequence){
+        // sanity check for workerId
+        if (workerId > maxWorkerId || workerId < 0) {
+            throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0",maxWorkerId));
         }
-        log.info("Id generator initialized");
-    }
-
-    private int [] newSequence(int ... source) {
-        int x[] = new int[WORKER_LENGTH];
-        int len = source.length;
-        for(int i = 0, j =0; i < WORKER_LENGTH; i++, j++) {
-            if(j >= len) j = 0;
-            if(source[j] >= WORKER_LENGTH) throw new IllegalArgumentException("Id worker index must less than " + WORKER_LENGTH + ", but got " + source[j]);
-            x[i] = source[j];
+        if (datacenterId > maxDatacenterId || datacenterId < 0) {
+            throw new IllegalArgumentException(String.format("datacenter Id can't be greater than %d or less than 0",maxDatacenterId));
         }
-        log.info("Using indexes:" + toString(source));
-        return x;
+        System.out.printf("worker starting. timestamp left shift %d, datacenter id bits %d, worker id bits %d, sequence bits %d, workerid %d",
+                timestampLeftShift, datacenterIdBits, workerIdBits, sequenceBits, workerId);
+
+        this.workerId = workerId;
+        this.datacenterId = datacenterId;
+        this.sequence = sequence;
     }
 
-    private int [] newSequence() {
-        int x[] = new int[WORKER_LENGTH];
-        for(int i = 0; i < WORKER_LENGTH; i++) x[i] = i;
-        log.info("Using indexes:" + toString(x));
-        return x;
+    //初始时间戳
+    private long twepoch = 1288834974657L;
+
+    //长度为5位
+    private long workerIdBits = 5L;
+    private long datacenterIdBits = 5L;
+    //最大值
+    private long maxWorkerId = -1L ^ (-1L << workerIdBits);
+    private long maxDatacenterId = -1L ^ (-1L << datacenterIdBits);
+    //序列号id长度
+    private long sequenceBits = 12L;
+    //序列号最大值
+    private long sequenceMask = -1L ^ (-1L << sequenceBits);
+
+    //工作id需要左移的位数，12位
+    private long workerIdShift = sequenceBits;
+    //数据id需要左移位数 12+5=17位
+    private long datacenterIdShift = sequenceBits + workerIdBits;
+    //时间戳需要左移位数 12+5+5=22位
+    private long timestampLeftShift = sequenceBits + workerIdBits + datacenterIdBits;
+
+    //上次时间戳，初始值为负数
+    private long lastTimestamp = -1L;
+
+    public long getWorkerId(){
+        return workerId;
     }
 
-    private int nextWorkerIndex() {
-        return indexCounter.incrementAndGet() & MAX_WORKER_INDEX;
+    public long getDatacenterId(){
+        return datacenterId;
     }
 
-    public long nextId() {
-        IdWorker.IdGenerator gen = generators[nextWorkerIndex()];
-        return gen.nextId();
+    public long getTimestamp(){
+        return System.currentTimeMillis();
     }
 
-    private String toString(int array[]) {
-        if(array == null || array.length == 0) return "[]";
-        StringBuilder sb = new StringBuilder("[");
-        for(int i = 0; i < array.length; i++) {
-            sb.append(array[i]);
-            if(i < array.length - 1) sb.append(',');
-        }
-        sb.append(']');
-        return sb.toString();
-    }
+    //下一个ID生成算法
+    public synchronized long nextId() {
+        long timestamp = timeGen();
 
-    /**
-     * The core code to generate id
-     */
-    private static class IdGenerator {
-        private final long workerId;
-        private final static long jdEpoch = 1457258545962L;
-        private long sequence = 0L;
-        private final static long workerIdBits = 4L;
-        public final static long maxWorkerId = -1L ^ -1L << workerIdBits;
-        private final static long sequenceBits = 10L;
-
-        private final static long workerIdShift = sequenceBits;
-        private final static long timestampLeftShift = sequenceBits + workerIdBits;
-        public final static long sequenceMask = -1L ^ -1L << sequenceBits;
-
-        private int vibrance = -1;
-
-        private long lastTimestamp = -1L;
-
-        public IdGenerator(final long workerId) {
-            super();
-            if (workerId > maxWorkerId || workerId < 0) {
-                throw new IllegalArgumentException(String.format(
-                        "worker Id can't be greater than %d or less than 0",
-                        maxWorkerId));
-            }
-            this.workerId = workerId;
+        //获取当前时间戳如果小于上次时间戳，则表示时间戳获取出现异常
+        if (timestamp < lastTimestamp) {
+            System.err.printf("clock is moving backwards.  Rejecting requests until %d.", lastTimestamp);
+            throw new RuntimeException(String.format("Clock moved backwards.  Refusing to generate id for %d milliseconds",
+                    lastTimestamp - timestamp));
         }
 
-        public synchronized long nextId() {
-            long timestamp = System.currentTimeMillis();
-            if (this.lastTimestamp == timestamp) {
-                this.sequence = (this.sequence + 1) & sequenceMask;
-                if (this.sequence == 0) {
-                    timestamp = this.tillNextMillis(this.lastTimestamp);
-                }
-            } else {
-                this.sequence = (vibrance = ~vibrance & 1);
+        //获取当前时间戳如果等于上次时间戳（同一毫秒内），则在序列号加一；否则序列号赋值为0，从0开始。
+        if (lastTimestamp == timestamp) {
+            sequence = (sequence + 1) & sequenceMask;
+            if (sequence == 0) {
+                timestamp = tilNextMillis(lastTimestamp);
             }
-            if (timestamp < this.lastTimestamp) {
-                try {
-                    throw new Exception(
-                            String.format(
-                                    "Clock moved backwards.  Refusing to generate id for %d milliseconds",
-                                    this.lastTimestamp - timestamp));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            this.lastTimestamp = timestamp;
-            long nextId = ((timestamp - jdEpoch << timestampLeftShift))
-                    | (this.workerId << IdWorker.IdGenerator.workerIdShift) | (this.sequence);
-            return nextId;
+        } else {
+            sequence = 0;
         }
 
-        private long tillNextMillis(final long lastTimestamp) {
-            long timestamp = System.currentTimeMillis();
-            while (timestamp <= lastTimestamp) {
-                timestamp = System.currentTimeMillis();
-            }
-            return timestamp;
+        //将上次时间戳值刷新
+        lastTimestamp = timestamp;
+
+        /**
+         * 返回结果：
+         * (timestamp - twepoch) << timestampLeftShift) 表示将时间戳减去初始时间戳，再左移相应位数
+         * (datacenterId << datacenterIdShift) 表示将数据id左移相应位数
+         * (workerId << workerIdShift) 表示将工作id左移相应位数
+         * | 是按位或运算符，例如：x | y，只有当x，y都为0的时候结果才为0，其它情况结果都为1。
+         * 因为个部分只有相应位上的值有意义，其它位上都是0，所以将各部分的值进行 | 运算就能得到最终拼接好的id
+         */
+        return ((timestamp - twepoch) << timestampLeftShift) |
+                (datacenterId << datacenterIdShift) |
+                (workerId << workerIdShift) |
+                sequence;
+    }
+
+    //获取时间戳，并与上次时间戳比较
+    private long tilNextMillis(long lastTimestamp) {
+        long timestamp = timeGen();
+        while (timestamp <= lastTimestamp) {
+            timestamp = timeGen();
+        }
+        return timestamp;
+    }
+
+    //获取系统时间戳
+    private long timeGen(){
+        return System.currentTimeMillis();
+    }
+
+    //---------------测试---------------
+    public static void main(String[] args) {
+        IdWorker worker = new IdWorker(1,1,1);
+        for (int i = 0; i < 30; i++) {
+            System.out.println(worker.nextId());
         }
     }
 
