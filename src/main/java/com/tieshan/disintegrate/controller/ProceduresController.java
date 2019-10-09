@@ -7,10 +7,7 @@ import com.tieshan.disintegrate.service.IProceduresService;
 import com.tieshan.disintegrate.service.IReceiveRecordService;
 import com.tieshan.disintegrate.util.RestResult;
 import com.tieshan.disintegrate.util.ResultCode;
-import com.tieshan.disintegrate.vo.AppCarBaseVo;
-import com.tieshan.disintegrate.vo.CarCustomerInfoVo;
-import com.tieshan.disintegrate.vo.CarProcedureIssueVo;
-import com.tieshan.disintegrate.vo.ProceduresVo;
+import com.tieshan.disintegrate.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author ：ren lei
@@ -40,14 +38,14 @@ public class ProceduresController {
      * @param user
      * @return
      */
-    @PostMapping(value = "/addProcedures")
+    /*@PostMapping(value = "/addProcedures")
     public RestResult addCarInfo(@RequestBody ProceduresVo proceduresVo, @LoginUser SysUser user) {
         proceduresService.add(proceduresVo, user);
         return new RestResult("添加成功", "", ResultCode.SUCCESS.code());
-    }
+    }*/
 
     /**
-     * 修改手续
+     * 手续登记
      * @param proceduresVo
      * @param user
      * @return
@@ -72,10 +70,11 @@ public class ProceduresController {
 
     /**
      * 档案查询结果
-     * @param params carProcessingId 手续id
-     *               queryResultId  查询结果id
-     *               state          状态 1:未完成(暂存);2完成;3:不通过;
-     *               remark         备注
+     * @param params carProcessingId    手续id
+     *               queryResultId      查询结果id
+     *               state              状态 1:未完成(暂存);2完成;3:不通过;
+     *               remark             备注
+     *               recordNumber       档案号
      * @param user
      * @return
      */
@@ -87,11 +86,11 @@ public class ProceduresController {
 
     /**
      * 档案核验结果
-     * @param params carProcessingId 手续id
-     *               verificationResultId  档案核验结果id
-     *               state          状态 1:未完成(暂存);2完成;3:不通过;
-     *               result         结果
-     *               remark         备注
+     * @param params carProcessingId        手续id
+     *               verificationResultId   档案核验结果id
+     *               state                  状态 1:未完成(暂存);2完成;3:不通过;
+     *               result                 结果
+     *               remark                 备注
      * @param user
      * @return
      */
@@ -103,11 +102,11 @@ public class ProceduresController {
 
     /**
      * 档案查询客服处理结果
-     * @param params carProcessingId 手续id
-     *               queryResultId  查询结果id
-     *               recordQueryResultId  档案查询客服处理结果id
-     *               state          状态 1:未完成(暂存);2完成;3:不通过；4:退车;
-     *               remark         备注
+     * @param params carProcessingId        手续id
+     *               queryResultId          查询结果id
+     *               recordQueryResultId    档案查询客服处理结果id
+     *               state                  状态 1:未完成(暂存);2完成;3:不通过；4:退车;
+     *               remark                 备注
      * @param user
      * @return
      */
@@ -118,11 +117,11 @@ public class ProceduresController {
     }
     /**
      * 保存档案核验客服处理结果
-     * @param params carProcessingId 手续id
-     *               verificationResultId  查询结果id
-     *               recordVerificationResultId  档案核验客服处理结果id
-     *               state          状态 1:未完成(暂存);2完成;3:不通过;4:退车;
-     *               remark         备注
+     * @param params carProcessingId                手续id
+     *               verificationResultId           查询结果id
+     *               recordVerificationResultId     档案核验客服处理结果id
+     *               state                          状态 1:未完成(暂存);2完成;3:不通过;4:退车;
+     *               remark                         备注
      * @param user
      * @return
      */
@@ -134,7 +133,7 @@ public class ProceduresController {
 
     /**
      * 保存第一次打印核档单记录
-     * @param params carProcessingId 手续id
+     * @param params carProcessingId    手续id
      * @param user
      * @return
      */
@@ -146,7 +145,7 @@ public class ProceduresController {
 
     /**
      * 保存商委数据上传状态
-     * @param params carProcessingId 手续id
+     * @param params carProcessingId    手续id
      * @param user
      * @return
      */
@@ -157,18 +156,54 @@ public class ProceduresController {
     }
 
     /**
-     * 查询手续查询录列表
-     * @param params pageNum int 页码
-     *               pageSize int  页面大小
-     *               isQuery int
+     * 保存打印回收证明状态
+     * @param params carInfoId    车辆id
      * @param user
      * @return
      */
-    /*@PostMapping(value = "/queryQueryResultList")
-    public RestResult queryQueryResultList(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
-        PageInfo<CarInfo> carInfoPageInfo = proceduresService.queryQueryResultList(params, user);
-        return new RestResult("查询成功", carInfoPageInfo, ResultCode.SUCCESS.code());
-    }*/
+    @PostMapping(value = "/savePrintRecycleRecord")
+    public RestResult savePrintRecycleRecord(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
+        proceduresService.savePrintRecycleRecord(params, user);
+        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
+    }
+    /**
+     * 保存注销时间
+     * @param params carInfoId      车辆id
+     *               logoutTime     注销时间
+     * @param user
+     * @return
+     */
+    @PostMapping(value = "/saveLogoutTimeRecord")
+    public RestResult saveLogoutTimeRecord(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
+        proceduresService.saveLogoutTimeRecord(params, user);
+        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
+    }
+    /**
+     * 保存商委注销时间状态
+     * @param params carInfoId      车辆id
+     *               appointTime    商委注销时间
+     * @param user
+     * @return
+     */
+    @PostMapping(value = "/saveAppointLogoutTimeRecord")
+    public RestResult saveAppointLogoutTimeRecord(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
+        proceduresService.saveAppointLogoutTimeRecord(params, user);
+        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
+    }
+
+    /**
+     * 分页查询手续客服列表
+     * @param params pageNum int    页码
+     *               pageSize int   页面大小
+     *               searchInfo     查询条件
+     * @param user
+     * @return
+     */
+    @PostMapping(value = "/queryCarCustomerList")
+    public RestResult queryCarCustomerList(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
+        PageInfo<CarCustomerListVo> carCustomerListVoPageInfo = proceduresService.queryCarCustomerList(params, user);
+        return new RestResult("查询成功", carCustomerListVoPageInfo, ResultCode.SUCCESS.code());
+    }
 
     /**
      * app-查询核档记录列表
@@ -222,13 +257,23 @@ public class ProceduresController {
         PageInfo<CarProcedureIssueVo> carProcedureIssueVoPageInfo = proceduresService.queryProcedureIssueVoList(params, user);
         return new RestResult("查询成功", carProcedureIssueVoPageInfo, ResultCode.SUCCESS.code());
     }
-
+    /**
+     * web-查询商委上传所需数据
+     * @param params carInfoId
+     * @param user
+     * @return
+     */
+    @PostMapping(value = "/queryShangWeiData")
+    public RestResult queryShangWeiData(@RequestBody Map<String, Object> params, @LoginUser SysUser user) throws ExecutionException, InterruptedException {
+        ShangWeiDataVo shangWeiDataVo = proceduresService.queryShangWeiData(params, user);
+        return new RestResult("查询成功", shangWeiDataVo, ResultCode.SUCCESS.code());
+    }
     /**
      * web-手续发放
-     * @param params result             领取方式
-     *               receiver           领取人
-     *               carInfoId          车辆id
-     *               remark             备注
+     * @param params result     领取方式
+     *               receiver   领取人
+     *               carInfoId  车辆id
+     *               remark     备注
      * @param user
      * @return
      */
@@ -237,6 +282,17 @@ public class ProceduresController {
         receiveRecordService.save(params, user);
         return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
     }
-
-
+    /**
+     * web-查询手续管理列表
+     * @param params pageNum            页码
+     *               pageSize           页面大小
+     *               searchInfo         查询条件
+     * @param user
+     * @return
+     */
+    @PostMapping(value = "/queryProcedureVoList")
+    public RestResult queryProcedureVoList(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
+        PageInfo<CarProcedureListVo> carProcedureListVoPageInfo = proceduresService.queryProcedureVoList(params, user);
+        return new RestResult("查询成功", carProcedureListVoPageInfo, ResultCode.SUCCESS.code());
+    }
 }

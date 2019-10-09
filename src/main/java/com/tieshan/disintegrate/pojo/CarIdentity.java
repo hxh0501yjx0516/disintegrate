@@ -27,7 +27,7 @@ public class CarIdentity implements Serializable {
 	 */
 	private Long disintegratePlantId;
 	/**
-	 * 车辆归宿(来自字典表)
+	 * 车辆归属
 	 */
 	private String ascription;
 	/**

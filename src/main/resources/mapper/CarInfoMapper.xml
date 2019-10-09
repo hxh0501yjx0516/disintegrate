@@ -267,6 +267,16 @@
             </if>
         </where>
     </select>
+    <select id="selectProcedureVoList" resultType="com.tieshan.disintegrate.vo.CarProcedureListVo">
+        SELECT i.id carInfoId,i.car_code carCode, i.car_no carNo,i.car_name carName,i.contacts,i.contacts_phone contactsPhone,
+            ie.vin,p.is_query isQuery,p.is_register isRegister,p.is_verify isVerify,p.is_dismantle isDismantle,
+            p.is_data_upload isDataUpload,p.is_print_recycle isPrintRecycle,p.is_logout isLogout,
+            p.is_appoint_logout_time isAppointLogoutTime,p.is_procedure_issue isProcedureIssue,i.create_time
+        FROM ts_car_info i
+        left join ts_car_processing p on i.id=p.car_info_id
+        left join ts_car_identity ie on i.id=ie.car_info_id
+        where i.disintegrate_plant_id=#{disintegratePlantId}
+    </select>
 
     <insert id="insertCarInfo">
         INSERT INTO ts_car_info(

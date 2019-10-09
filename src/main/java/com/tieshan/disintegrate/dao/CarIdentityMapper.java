@@ -1,6 +1,7 @@
 package com.tieshan.disintegrate.dao;
 
 import com.tieshan.disintegrate.pojo.CarIdentity;
+import com.tieshan.disintegrate.vo.ShangWeiDataVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,6 +22,8 @@ public interface CarIdentityMapper {
     CarIdentity selectOneByMap(Map<String, Object> map);
 
     List<CarIdentity> selectListByMap(Map<String, Object> map);
+
+    ShangWeiDataVo selectShangWeiDataByMap(Map<String, Object> map);
 
     void insertCarIdentity(CarIdentity CarIdentity);
 
