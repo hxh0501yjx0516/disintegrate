@@ -165,4 +165,36 @@ public class CarsQueryServiceImpl implements CarsQueryService {
         carsQueryDao.updateEnterWay(carInfoId, status, companyId);
         return 1;
     }
+
+    @Override
+    public List<Map<String, Object>> findPreBreakCars(String findMsg, Integer page, Integer pageSize, Long companyId) {
+        PageHelper.startPage(page, pageSize);
+        PageHelper.orderBy("approach_time desc");
+        return carsQueryDao.findPreBreakCars(findMsg,companyId);
+    }
+
+    @Override
+    public List<Map<String, Object>> findPreBreakCarsById(Long carInfoId, Long companyId) {
+        return carsQueryDao.findPreBreakCarsById(carInfoId,companyId);
+    }
+
+    @Override
+    public void addBreakPic(CarPicData carPicData, SysUser user) {
+
+        //不管点击哪个按钮，先清空数据库
+        carPicMapper.batchDeleteBreakPic(user.getCompany_id(), carPicData.getCarInfoId());
+        pubMethod(carPicData, user);
+        //判断是暂存还是完成
+        if (carPicData.getStatus() == 2) {
+            //修改入场状态值
+            carsQueryDao.updateBreakStatus(user.getId(), carPicData.getCarInfoId(), user.getCompany_id());
+        }
+    }
+
+    @Override
+    public List<Map<String, Object>> findBreakSuccessCars(String findMsg, Integer page, Integer pageSize, Long companyId) {
+        PageHelper.startPage(page, pageSize);
+        PageHelper.orderBy("approach_time desc");
+        return carsQueryDao.findBreakSuccessCars(findMsg,companyId);
+    }
 }

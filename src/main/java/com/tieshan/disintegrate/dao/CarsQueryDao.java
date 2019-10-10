@@ -3,7 +3,9 @@ package com.tieshan.disintegrate.dao;
 import com.tieshan.disintegrate.pojo.CarPic;
 import com.tieshan.disintegrate.pojo.CarSurvey;
 import com.tieshan.disintegrate.pojo.CarsQuery;
+import com.tieshan.disintegrate.pojo.SysUser;
 import com.tieshan.disintegrate.vo.CaiPrePicVo;
+import com.tieshan.disintegrate.vo.CarPicData;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -72,4 +74,29 @@ public interface CarsQueryDao {
      * App端车辆初检拆解方式2
      */
     int updateEnterWay(@Param("carInfoId")Long carInfoId,@Param("status")Integer status,@Param("companyId")Long companyId);
+
+
+    /***
+     * App端-车辆待毁型
+     */
+    List<Map<String, Object>> findPreBreakCars(@Param("findMsg") String findMsg,@Param("companyId")Long companyId);
+    /***
+     * App端-车辆已毁型
+     */
+    List<Map<String, Object>> findBreakSuccessCars(@Param("findMsg") String findMsg,@Param("companyId")Long companyId);
+
+    /***
+     * App端根据carInfoId查询车辆待毁型数据
+     */
+    List<Map<String, Object>> findPreBreakCarsById(@Param("carInfoId")Long carInfoId,@Param("companyId")Long companyId);
+
+    /**
+     * App端添加毁型车辆
+     */
+    void updateBreakStatus(@Param("operatorId")Long operatorId,@Param("carInfoId")Long carInfoId,@Param("disId")Long disId);
+
+
+
+
+
 }

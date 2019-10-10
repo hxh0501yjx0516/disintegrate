@@ -493,5 +493,72 @@ public class CarsQueryController {
         return restResult;
     }
 
+/**------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+    /***
+     * App端-车辆待毁型
+     */
+    @GetMapping("/doCarsQuery/findPreBreakCars")
+    public RestResult findPreBreakCars(
+            @RequestParam(value = "findMsg", required = false) String findMsg,
+            @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
+            @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
+            @LoginUser SysUser user
+    ) {
+        PageInfo pageInfo = null;
+        List<Map<String,Object>> mapList = carsQueryService.findPreBreakCars(findMsg, page, pageSize, user.getCompany_id());
+        pageInfo = new PageInfo<>(mapList);
+        RestResult restResult = new RestResult("查询车辆列表信息成功", pageInfo, ResultCode.SUCCESS.code());
+        return restResult;
+    }
+    /***
+     * App端-车辆已毁型
+     */
+    @GetMapping("/doCarsQuery/findBreakSuccessCars")
+    public RestResult findBreakSuccessCars(
+            @RequestParam(value = "findMsg", required = false) String findMsg,
+            @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
+            @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
+            @LoginUser SysUser user
+    ) {
+        PageInfo pageInfo = null;
+        List<Map<String,Object>> mapList = carsQueryService.findBreakSuccessCars(findMsg, page, pageSize, user.getCompany_id());
+        pageInfo = new PageInfo<>(mapList);
+        RestResult restResult = new RestResult("查询车辆列表信息成功", pageInfo, ResultCode.SUCCESS.code());
+        return restResult;
+    }
+
+    /***
+     * App端根据carInfoId查询车辆待毁型数据/或者毁型后数据
+     */
+    @GetMapping("/doCarsQuery/findPreBreakCarsById")
+    public RestResult findPreBreakCarsById(@RequestParam(value = "carInfoId", required = false) Long carInfoId, @LoginUser SysUser user) {
+
+        List<Map<String, Object>> list = carsQueryService.findPreBreakCarsById(carInfoId, user.getCompany_id());
+        return new RestResult("查询该车辆待毁型信息成功", list, ResultCode.SUCCESS.code());
+    }
+    /***
+     * App端添加毁型照片
+     */
+    @PostMapping("/doCarsQuery/addBreakPic")
+    public RestResult addBreakPic(@RequestBody CarPicData carPicData, @LoginUser SysUser user) {
+
+        RestResult restResult = null;
+        try {
+            carsQueryService.addBreakPic(carPicData, user);
+            if (carPicData.getStatus() == 1) {
+                restResult = new RestResult("暂存图片成功", "1", ResultCode.SUCCESS.code());
+            }
+            if (carPicData.getStatus() == 2) {
+                restResult = new RestResult("毁型完成", "1", ResultCode.SUCCESS.code());
+            }
+        } catch (Exception e) {
+            log.info("插入图片失败", e);
+            return new RestResult("插入图片失败", null, ResultCode.ERROR.code());
+        }
+        return restResult;
+    }
+
+
+
 
 }

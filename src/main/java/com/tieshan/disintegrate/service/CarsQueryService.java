@@ -88,5 +88,31 @@ public interface CarsQueryService {
      */
     int dismantleWay(Long carInfoId, Integer status, Long companyId);
 
+    /***
+     * App端-车辆待毁型
+     */
+    List<Map<String,Object>> findPreBreakCars(
+            String findMsg,
+            Integer page,
+            Integer pageSize,
+            Long companyId);
+    /***
+     * App端-车辆已毁型
+     */
+    List<Map<String, Object>> findBreakSuccessCars( String findMsg,
+                                                    Integer page,
+                                                    Integer pageSize,
+                                                    Long companyId);
+    /***
+     * App端根据carInfoId查询车辆待毁型数据
+     */
+    List<Map<String,Object>> findPreBreakCarsById(Long carInfoId, Long companyId);
+
+    /**
+     * App端添加毁型车辆
+     */
+    void addBreakPic(CarPicData carPicData, SysUser user);
+
+
 }
 

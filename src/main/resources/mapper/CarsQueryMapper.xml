@@ -73,7 +73,7 @@
     <select id="findSurveyById" resultType="map">
       select info.car_code,info.car_no,info.car_name,ent.approach_time,iden.displacement,iden.vin,iden.engine,sur.car_degree,
       sur.condition_pump_count,sur.battery_count,sur.motor_count,sur.door_count,sur.alloy_rim_count,sur.cistern_count,
-      sur.electrical_machinery_count,sur.tyre_count,sur.chair_count,sur.conditioner_count,sur.catalytic_converter_count,sur.remark
+      sur.electrical_machinery_count,sur.tyre_count,sur.chair_count,sur.conditioner_count,sur.catalytic_converter_count,sur.is_alloy_rim,sur.remark
       from ts_car_survey AS sur
       join ts_car_info AS info on sur.car_info_id=info.id
       join ts_car_enter AS ent on ent.car_info_id=info.id
@@ -92,8 +92,47 @@
 
         update ts_car_enter set dismantle_way=#{status} where car_info_id=#{carInfoId} and disintegrate_plant_id=#{companyId}
     </update>
+<!--111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111-->
+    <!-- App端查询待毁型数据 -->
+    <select id="findPreBreakCars" resultType="map">
+        select ent.car_info_id,info.car_code,info.car_no,info.car_name,ent.approach_time
+        from ts_car_info AS info join ts_car_enter AS ent on ent.car_info_id=info.id join ts_car_processing AS pos on pos.car_info_id=info.id
+        <include refid="queryBreakSurvey"/>
+    </select>
+    <!--App端根据carInfoId查询车辆待毁型信息-->
+    <select id="findPreBreakCarsById" resultType="map">
 
+        select pic.id,dic.first_type,dic.two_type,dic.filed_name,pic.file_url
+        from ts_dictionary dic
+        left join ts_car_pic pic
+        on dic.first_type=pic.first_type and dic.two_type=pic.two_type and pic.car_info_id=#{carInfoId} and pic.disintegrate_plant_id=#{companyId}
+        where dic.first_type='break_pic'
+    </select>
+    <!-- App端查询毁型完成数据 -->
+    <select id="findBreakSuccessCars" resultType="map">
+        select ent.car_info_id,info.car_code,info.car_no,info.car_name,ent.approach_time
+        from ts_car_info AS info join ts_car_enter AS ent on ent.car_info_id=info.id join ts_car_processing AS pos on pos.car_info_id=info.id
+        <include refid="queryBreakSuccessSurvey"/>
+    </select>
 
+    <sql id="queryBreakSuccessSurvey">
+        <where>
+            pos.is_destructive=2 and pos.is_verify=2 and ent.disintegrate_plant_id=#{companyId}
+            <if test="findMsg!=null and findMsg!=''">
+                and concat(info.car_no,info.car_name,info.car_code)
+                like concat("%",#{findMsg},"%")
+            </if>
+        </where>
+    </sql>
+    <sql id="queryBreakSurvey">
+        <where>
+            pos.is_destructive=1 and pos.is_verify=2 and ent.disintegrate_plant_id=#{companyId}
+            <if test="findMsg!=null and findMsg!=''">
+                and concat(info.car_no,info.car_name,info.car_code)
+                like concat("%",#{findMsg},"%")
+            </if>
+        </where>
+    </sql>
     <sql id="queryWhereDismantle">
         <where>
             ent.car_info_id=info.id and ent.is_copy_number=2 and ent.dismantle_way=5 and

@@ -340,4 +340,8 @@
         DELETE FROM ts_car_pic
         WHERE disintegrate_plant_id=#{disintegratePlantId} and car_info_id=#{carInfoId} and first_type='tuo_pic'
     </delete>
+    <delete id="batchDeleteBreakPic">
+        DELETE FROM ts_car_pic
+        WHERE disintegrate_plant_id=#{disintegratePlantId} and car_info_id=#{carInfoId} and first_type='break_pic'
+    </delete>
 </mapper>
