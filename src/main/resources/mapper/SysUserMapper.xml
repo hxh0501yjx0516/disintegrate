@@ -83,7 +83,7 @@
     </insert>
     <insert id="creatSyslog">
         CREATE TABLE ts_system_log_${param} (
-          `id` bigint(36) NOT NULL,
+          `id` bigint(36) NOT NULL AUTO_INCREMENT,
           `disintegrate_plant_id` bigint(36) DEFAULT NULL COMMENT '解体厂id',
           `operator_id` bigint(36) DEFAULT NULL COMMENT '操作人id',
           `depart_name` varchar(64) DEFAULT NULL COMMENT '部门',
@@ -92,14 +92,14 @@
           `ip_addr` varchar(255) DEFAULT NULL COMMENT '访问者ip',
           `create_time` datetime DEFAULT NULL COMMENT '操作的时间',
           `is_delete` int(1) DEFAULT '2' COMMENT '是否删除。1.删除，2,正常',
-          PRIMARY KEY (`id`) USING BTREE
+           PRIMARY KEY (`id`) USING BTREE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='系统日志表';
     </insert>
 
     <insert id="insertUser">
-        INSERT INTO user ( id, login_name, user_name,head_url, user_password, phone, user_status, operator, create_time )
+        INSERT INTO user (id, login_name, user_name,head_url, user_password, phone, user_status, operator, create_time )
     VALUES
-        (#{user.id},#{user.login_name},#{user.user_name},#{user.head_url},#{user.user_password},#{user.phone},#{user.user_status},#{user.operator},now())
+        (#{user.login_name},#{user.user_name},#{user.head_url},#{user.user_password},#{user.phone},#{user.user_status},#{user.operator},now())
 </insert>
 
     <insert id="insertDepartment_user">
