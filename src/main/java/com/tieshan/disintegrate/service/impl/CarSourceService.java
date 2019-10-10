@@ -256,13 +256,13 @@ public class CarSourceService implements ICarSourceService {
         carSource.setCarLocation(params.get("carLocation").toString());
         // 设置车源的业务员id
         carSource.setUserId(Long.parseLong(params.get("userId").toString()));
-        carSource.setBankId(Long.parseLong(params.get("bankId").toString()));
+        carSource.setBankId(params.get("bankId").toString());
         // 设置更新时间
         carSource.setCreateTime(new Date());
         carSourceMapper.editCarSource(carSource);
         Bank bank = carSource.getBank();
         // 设置银行的id
-        bank.setId(carSource.getBankId());
+        bank.setId(Long.parseLong(carSource.getBankId()));
         // 设置银行的名称
         bank.setBankName(params.get("bankName").toString());
         bank.setBankBranch(params.get("bankBranch").toString());
@@ -284,7 +284,7 @@ public class CarSourceService implements ICarSourceService {
         String token = request.getHeader("token");
         SysUser sysUser = tokenService.getToken(token);
         CarSource carSource = carSourceMapper.selectCarSourceById(id, sysUser.getCompany_id());
-        Bank bank = carSourceMapper.selectBankById(carSource.getBankId());
+        Bank bank = carSourceMapper.selectBankById(Long.parseLong(carSource.getBankId()));
         carSource.setBank(bank);
         return carSource;
     }
@@ -392,7 +392,7 @@ public class CarSourceService implements ICarSourceService {
         }
         // 打款银行的id
         Long bankId = idWorker.nextId();
-        carSource.setBankId(bankId);
+        carSource.setBankId(bankId+"");
         // 设置解体厂id
         carSource.setDisintegratePlantId(sysUser.getCompany_id());
         // 创建人id
@@ -442,6 +442,40 @@ public class CarSourceService implements ICarSourceService {
     @Override
     public List<String> findBankNameList() {
         return dictionaryService.findBankNameList();
+    }
+
+    /**
+     * 查询待拆和已拆车辆
+     * @param request
+     * @param page
+     * @param pageSize
+     * @param findMsg
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> selectIsDismantle(HttpServletRequest request, Integer page, Integer pageSize, String findMsg, Integer isDismantle) {
+        PageHelper.startPage(page, pageSize);
+        PageHelper.orderBy("p.destructive_time DESC");
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        return carSourceMapper.selectIsDismantle(sysUser.getCompany_id(), findMsg, isDismantle);
+    }
+
+    /**
+     * 查询监销和不监销车辆
+     * @param request
+     * @param page
+     * @param pageSize
+     * @param findMsg
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> selectIsSuperviseSale(HttpServletRequest request, Integer page, Integer pageSize, String findMsg, Integer isSuperviseSale) {
+        PageHelper.startPage(page, pageSize);
+        PageHelper.orderBy("p.dismantle_time DESC");
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        return carSourceMapper.selectIsSuperviseSale(sysUser.getCompany_id(), findMsg, isSuperviseSale);
     }
 
     /**

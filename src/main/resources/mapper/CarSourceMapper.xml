@@ -757,7 +757,7 @@
                 create_time = #{createTime}
             </if>
         </set>
-        WHERE id = #{id};
+        WHERE id = #{id}
     </update>
 
     <select id="selectCarInfoListApp" resultType="java.util.Map">
@@ -1293,6 +1293,45 @@
         <if test='state == "15"'>    /*待残值发放*/       /*一样*/
             AND p.is_appoint_logout_time = 2
             AND s.is_get_salvage = 1
+        </if>
+    </select>
+
+    <select id="selectIsSuperviseSale" resultType="java.util.Map">
+        SELECT
+        	IFNULL( i.car_code, '' ) AS carCode,
+        	IFNULL( i.car_no, '' ) AS carNo,
+        	IFNULL( p.dismantle_time, '' ) AS dismantleTime,
+        	IFNULL( d.vin, '' ) AS vin,
+        	IFNULL( i.id, '' ) AS id
+        FROM
+        	ts_car_info AS i
+        	LEFT JOIN ts_car_processing AS p ON i.id = p.car_info_id
+        	LEFT JOIN ts_car_identity AS d ON i.id = d.car_info_id
+        WHERE
+        	i.disintegrate_plant_id = #{disintegratePlantId}
+        	AND p.is_supervise_sale = #{isSuperviseSale}
+        	<if test="findMsg != null and findMsg != ''">
+                AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%','','%')
+            </if>
+    </select>
+
+    <select id="selectIsDismantle" resultType="java.util.Map">
+        SELECT
+        IFNULL( i.car_code, '' ) AS carCode,
+        IFNULL( i.car_no, '' ) AS carNo,
+        IFNULL( p.dismantle_time, '' ) AS dismantleTime,
+        IFNULL( d.vin, '' ) AS vin,
+        IFNULL( i.id, '' ) AS id
+        FROM
+        ts_car_info AS i
+        LEFT JOIN ts_car_processing AS p ON i.id = p.car_info_id
+        LEFT JOIN ts_car_identity AS d ON i.id = d.car_info_id
+        WHERE
+        i.disintegrate_plant_id = #{disintegratePlantId}
+        AND p.is_supervise_sale = 2
+        AND p.is_dismantle = #{isDismantle}
+        <if test="findMsg != null and findMsg != ''">
+            AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%','','%')
         </if>
     </select>
 

@@ -32,7 +32,7 @@ public class CarSource implements Serializable {
 	// 业务员id
 	private Long userId;
 	// 打款银行id
-	private Long bankId;
+	private String bankId;
 	// 1:银行打款;2:现金结算
 	private String payType;
 	// 车源状态    （1：待入场;2:已入场;3:异常)
