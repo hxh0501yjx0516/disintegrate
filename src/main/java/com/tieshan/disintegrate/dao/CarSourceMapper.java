@@ -150,5 +150,7 @@ public interface CarSourceMapper {
                                                 @Param(value = "findMsg") String findMsg,
                                                 @Param(value = "isDismantle") Integer isDismantle);
 
+    void insertCarProcessing(CarProcessing carProcessing);
+
 //    int selectCarInfoCountByCarSourceId(Long id);
 }

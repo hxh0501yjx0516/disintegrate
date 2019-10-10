@@ -761,6 +761,12 @@ public class CarSourceService implements ICarSourceService {
         carEnter.setDisintegratePlantId(sysUser.getCompany_id());
         carEnter.setIsInitialSurvey(1);
         carSourceMapper.updateCarEnterIsApproach(carEnter);
+        // 将该车辆添加到手续表中
+        CarProcessing carProcessing = new CarProcessing();
+        carProcessing.setId(idWorker.nextId());
+        carProcessing.setDisintegratePlantId(sysUser.getCompany_id());
+        carProcessing.setCarInfoId(carInfoId);
+        carSourceMapper.insertCarProcessing(carProcessing);
         return 1;
     }
 
