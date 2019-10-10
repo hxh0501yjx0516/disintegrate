@@ -40,7 +40,6 @@ public class CustomInterceptor implements HandlerInterceptor {
     private TokenService tokenService;
     @Autowired
     private SysLog sysLog;
-    static IdWorker idWorker = new IdWorker(1, 1, 1);
 
 
     @Override
@@ -101,11 +100,6 @@ public class CustomInterceptor implements HandlerInterceptor {
             String token = request.getHeader("token");
             SysUser sysUser = tokenService.getToken(token);
             if (!PubMethod.isEmpty(sysUser)) {
-                Long id;
-                do {
-                    id = idWorker.nextId();
-                } while (PubMethod.isEmpty(id));
-                sysLog.setId(id);
                 sysLog.setDepart_name(sysUser.getDepartment_name());
                 sysLog.setDisintegrate_plant_id(sysUser.getCompany_id());
                 sysLog.setOperator(sysUser.getLogin_name());

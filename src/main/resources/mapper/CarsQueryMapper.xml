@@ -96,7 +96,7 @@
 
     <sql id="queryWhereDismantle">
         <where>
-            ent.car_info_id=info.id and ent.is_copy_number=2 and
+            ent.car_info_id=info.id and ent.is_copy_number=2 and ent.dismantle_way=5 and
             ent.disintegrate_plant_id=#{dpId}
             <if test="findMsg!=null and findMsg!=''">
                 and concat(info.car_no,info.car_name,info.car_code)

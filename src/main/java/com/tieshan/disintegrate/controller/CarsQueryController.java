@@ -83,7 +83,6 @@ public class CarsQueryController {
      *
      * @param findMsg 可选 string 查询条件(车牌号 / 车型 / 车辆编号)
      * @return {"msg": "查询车辆预处理车辆信息成功","data": [{"car_name": "川崎Z1000R","car_info_id": 24,"approach_time": "2019-09-23 19:59:19","car_no": "京A5W44C","car_code": "TSCAR190900001"},{"car_name": "本田CBR1000RR","car_info_id": 25,"approach_time": "2019-09-23 19:59:19","car_no": "川A5W44C","car_code": "TSCAR190900001"}],"ret_code": "0"}
-     * @catalog 拆解厂-APP/手续部-工作台/车辆预处理
      * @title 车辆预处理首页查询接口
      * @description App端查询车辆预处理车辆信息
      * @method get
@@ -137,7 +136,7 @@ public class CarsQueryController {
         List<CaiPrePicVo> list = carsQueryService.doFindCars(carInfoId, user.getCompany_id());
         RestResult restResult = null;
         if (null == list || list.size() == 0) {
-            restResult = new RestResult("未查询到车辆预处理数据", null, ResultCode.ERROR.code());
+            restResult = new RestResult("未查询到车辆预处理数据", null, ResultCode.SUCCESS.code());
         }
         restResult = new RestResult("查询车辆预处理数据成功", list, ResultCode.SUCCESS.code());
         return restResult;
@@ -216,7 +215,6 @@ public class CarsQueryController {
      *
      * @param findMsg 可选 string 查询条件(车牌号 / 车型 / 车辆编号)
      * @return {"msg": "查询预拓号车辆信息成功","data": [{"car_name": "川崎Z1000R","car_info_id": 24,"approach_time": "2019-09-23 19:59:19","car_no": "京A5W44C","car_code": "TSCAR190900001"},{"car_name": "本田CBR1000RR","car_info_id": 25,"approach_time": "2019-09-23 19:59:19","car_no": "川A5W44C","car_code": "TSCAR190900001"}],"ret_code": "0"}
-     * @catalog 拆解厂-APP/手续部-工作台/等待拓号
      * @title 预拓号首页车辆信息查询接口
      * @description App端查询车辆预拓号车辆信息
      * @method get
@@ -241,7 +239,7 @@ public class CarsQueryController {
         pageInfo = new PageInfo<>(mapList);
         RestResult restResult = null;
         if (null == mapList || mapList.size() == 0) {
-            restResult = new RestResult("未查询到预拓号车辆信息", null, ResultCode.ERROR.code());
+            restResult = new RestResult("未查询到预拓号车辆信息", null, ResultCode.SUCCESS.code());
         } else {
             restResult = new RestResult("查询预拓号车辆信息成功", pageInfo, ResultCode.SUCCESS.code());
         }
@@ -274,7 +272,7 @@ public class CarsQueryController {
         List<Map<String, Object>> list = carsQueryService.findCpTuoPic(carInfoId, user.getCompany_id());
         RestResult restResult = null;
         if (null == list || list.size() == 0) {
-            restResult = new RestResult("未查询到车辆拓号数据", null, ResultCode.ERROR.code());
+            restResult = new RestResult("未查询到车辆拓号数据", null, ResultCode.SUCCESS.code());
         } else {
             restResult = new RestResult("查询车辆拓号数据成功", list, ResultCode.SUCCESS.code());
         }
@@ -355,7 +353,6 @@ public class CarsQueryController {
      *
      * @param findMsg 可选 string 查询条件(车牌号 / 车型 / 车辆编号)
      * @return {"msg": "查询预拆解车辆信息成功","data": [{"car_name": "川崎Z1000R","car_info_id": 24,"approach_time": "2019-09-23 19:59:19","car_no": "京A5W44C","car_code": "TSCAR190900001"},{"car_name": "本田CBR1000RR","car_info_id": 25,"approach_time": "2019-09-23 19:59:19","car_no": "川A5W44C","car_code": "TSCAR190900001"}],"ret_code": "0"}
-     * @catalog 拆解厂-APP/手续部-工作台/车辆拆解
      * @title 预拆解首页车辆信息查询接口
      * @description App端查询预拆解车辆信息
      * @method get
@@ -381,7 +378,7 @@ public class CarsQueryController {
         pageInfo = new PageInfo<>(mapList);
         RestResult restResult = null;
         if (null == mapList || mapList.size() == 0) {
-            restResult = new RestResult("未查询到预拆解车辆信息", null, ResultCode.ERROR.code());
+            restResult = new RestResult("未查询到预拆解车辆信息", null, ResultCode.SUCCESS.code());
         } else {
             restResult = new RestResult("查询预拆解车辆信息成功", pageInfo, ResultCode.SUCCESS.code());
         }
@@ -430,7 +427,7 @@ public class CarsQueryController {
         List<Map<String, Object>> list = carsQueryService.findSurveyById(carInfoId, user.getCompany_id());
         RestResult restResult = null;
         if (null == list || list.size() == 0) {
-            restResult = new RestResult("未查询到该车辆初检信息", null, ResultCode.ERROR.code());
+            restResult = new RestResult("未查询到该车辆初检信息", null, ResultCode.SUCCESS.code());
         } else {
             restResult = new RestResult("查询该车辆初检信息成功", list, ResultCode.SUCCESS.code());
         }
@@ -462,7 +459,7 @@ public class CarsQueryController {
         List<CaiPrePicVo> list = carsQueryService.findPrePicById(carInfoId, user.getCompany_id());
         RestResult restResult = null;
         if (null == list || list.size() == 0) {
-            restResult = new RestResult("未查询到车辆初检信息图片", null, ResultCode.ERROR.code());
+            restResult = new RestResult("未查询到车辆初检信息图片", null, ResultCode.SUCCESS.code());
         } else {
             restResult = new RestResult("查询车辆初检信息图片成功", list, ResultCode.SUCCESS.code());
         }
