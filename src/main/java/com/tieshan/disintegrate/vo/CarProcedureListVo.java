@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * 手续查询列表
  * @author ：ren lei
  * @date ：Created in 2019/9/25 15:23
  * @modified By：
@@ -54,9 +55,9 @@ public class CarProcedureListVo implements Serializable {
      */
     private Integer isVerify;
     /**
-     * 1：未拆解；2：已拆解；
+     * 是否毁型。1.待毁型，2.已核档
      */
-    private Integer isDismantle;
+    private Integer isDestructive;
     /**
      * 1:未上传商委;2:已上传商委
      */

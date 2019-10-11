@@ -101,7 +101,7 @@ public class ProceduresController {
     }
 
     /**
-     * 档案查询客服处理结果
+     * 保存手续查询客服处理结果
      * @param params carProcessingId        手续id
      *               queryResultId          查询结果id
      *               recordQueryResultId    档案查询客服处理结果id
@@ -294,5 +294,17 @@ public class ProceduresController {
     public RestResult queryProcedureVoList(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         PageInfo<CarProcedureListVo> carProcedureListVoPageInfo = proceduresService.queryProcedureVoList(params, user);
         return new RestResult("查询成功", carProcedureListVoPageInfo, ResultCode.SUCCESS.code());
+    }
+
+    /**
+     * 分页查询核档单列表
+     * @param params
+     * @param user
+     * @return
+     */
+    @PostMapping(value = "/queryVerifyOrderList")
+    public RestResult queryVerifyOrderList(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
+        PageInfo<CarVerifyOrderVo> carVerifyOrderVoPageInfo = proceduresService.queryVerifyOrderList(params, user);
+        return new RestResult("查询成功", carVerifyOrderVoPageInfo, ResultCode.SUCCESS.code());
     }
 }

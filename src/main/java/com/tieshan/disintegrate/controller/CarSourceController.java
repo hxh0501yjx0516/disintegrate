@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.transform.Result;
 import java.security.acl.LastOwnerException;
 import java.util.List;
 import java.util.Map;
@@ -118,7 +119,7 @@ public class CarSourceController {
      * @return
      */
     @GetMapping(value = "selectCarSource")
-    public RestResult selectCarSource(Long id, HttpServletRequest request) {
+    public RestResult selectCarSource( Long id, HttpServletRequest request) {
         CarSource carSource = null;
         try {
             carSource = carSourceService.selectCarSource(id, request);
@@ -442,7 +443,7 @@ public class CarSourceController {
     }
 
     /**
-     * 添加部分初检车俩信息    过
+     * 入场：添加部分初检车俩信息    过
      *
      * @param carNo
      * @param selfWeight
@@ -760,6 +761,30 @@ public class CarSourceController {
         PageInfo pageInfo = null;
         try{
             List<Map<String, Object>> mapList = carSourceService.selectIsDismantle(request, page, pageSize, findMsg, isDismantle);
+            pageInfo = new PageInfo(mapList);
+        }catch (Exception e){
+            log.info("查询失败", e);
+            return new RestResult("查询失败", pageInfo, ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", pageInfo, ResultCode.SUCCESS.code());
+    }
+
+    /**
+     * 查询所有已拆的件（搜索条件：车辆编号，车牌号，车型）    查询该拆解厂下当前操作人所拆的件
+     * @param request
+     * @param page
+     * @param pageSize
+     * @param findMsg
+     * @return
+     */
+    @GetMapping("/selectCarPartsList")
+    public RestResult selectCarPartsList(HttpServletRequest request,
+                                         @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
+                                         @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
+                                         @RequestParam(value = "findMsg", required = false) String findMsg){
+        PageInfo pageInfo = null;
+        try{
+            List<Map<String, Object>> mapList = carSourceService.selectCarParts(request, page, pageSize, findMsg);
             pageInfo = new PageInfo(mapList);
         }catch (Exception e){
             log.info("查询失败", e);

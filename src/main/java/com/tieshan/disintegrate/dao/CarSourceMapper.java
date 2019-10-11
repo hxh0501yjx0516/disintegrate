@@ -152,5 +152,15 @@ public interface CarSourceMapper {
 
     void insertCarProcessing(CarProcessing carProcessing);
 
+    List<Map<String, Object>> selectIsDismantleComplete(@Param(value = "disintegratePlantId") Long disintegratePlantId,
+                                                        @Param(value = "findMsg") String findMsg,
+                                                        @Param(value = "isDismantle") Integer isDismantle);
+
+    List<Map<String, Object>> selectCarParts(@Param(value = "disintegratePlantId") Long disintegratePlantId,
+                                             @Param(value = "printOperatorId") Long printOperatorId,
+                                             @Param(value = "findMsg") String findMsg);
+
+    void insertCarIdentity(CarIdentity carIdentity);
+
 //    int selectCarInfoCountByCarSourceId(Long id);
 }
