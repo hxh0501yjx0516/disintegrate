@@ -657,7 +657,6 @@
 
     <update id="editCar" parameterType="com.tieshan.disintegrate.pojo.CarInfo">
         UPDATE ts_car_info SET
-                car_source = #{carSource},
                 contacts = #{contacts},
                 contacts_phone = #{contactsPhone},
                 car_no = #{carNo},
@@ -673,7 +672,7 @@
                 procedures_type = #{proceduresType},
                 remarks = #{remarks},
                 create_time = #{createTime}
-        WHERE id = #{id};
+        WHERE id = #{id}
     </update>
 
     <update id="editCarSource" parameterType="com.tieshan.disintegrate.pojo.CarSource">
@@ -1235,7 +1234,7 @@
             LEFT JOIN ts_car_procedure_log AS g ON i.id = g.car_info_id
         WHERE
         	i.disintegrate_plant_id = #{disintegratePlantId}
-        <if test='state == "1"'>   /*待初检*/      
+        <if test='state == "1"'>   /*待初检*/
             AND	e.is_approach = 2
             AND e.is_initial_survey = 1
         </if>
