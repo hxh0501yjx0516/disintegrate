@@ -17,7 +17,7 @@ public interface IProceduresService {
 
     void add(ProceduresVo proceduresVo, SysUser user);
 
-    void update(ProceduresVo proceduresVo, SysUser user);
+    void saveProcedures(ProceduresVo proceduresVo, SysUser user);
 
     ProceduresVo query(Map<String, Object> params, SysUser user);
 
