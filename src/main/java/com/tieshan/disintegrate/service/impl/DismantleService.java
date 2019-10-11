@@ -7,6 +7,7 @@ import com.tieshan.disintegrate.service.IDismantleService;
 import com.tieshan.disintegrate.token.TokenService;
 import com.tieshan.disintegrate.util.IdWorker;
 import com.tieshan.disintegrate.vo.CarBreakInfoVo;
+import com.tieshan.disintegrate.vo.CarPartsData;
 import com.tieshan.disintegrate.vo.PartsListVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -110,10 +111,17 @@ public class DismantleService implements IDismantleService {
     }
 
     @Override
-    public int addCarParts(Long carInfoId, SysUser user, List<Map<String, Object>> partsNameAndOeList, Integer partsStatus) {
+    public int addCarParts(CarPartsData carPartsData, SysUser user
+                           //Long carInfoId, SysUser user, List<Map<String, Object>> partsNameAndOeList, Integer partsStatus
+                           ) {
+        //从登录信息中获取数据
         Long companyId = user.getCompany_id();
         Long printOperatorId = user.getId();
         String printOperator = user.getUser_name();
+        //从Post传参中获取数据
+        Long carInfoId = carPartsData.getCarInfoId();
+        List<Map<String,Object>> partsNameAndOeList = carPartsData.getData();
+        int partsStatus = carPartsData.getPartsStatus();
         IdWorker idWorker = new IdWorker(1, 1, 1);
         int count = 0;
         for (Map<String, Object> map : partsNameAndOeList) {

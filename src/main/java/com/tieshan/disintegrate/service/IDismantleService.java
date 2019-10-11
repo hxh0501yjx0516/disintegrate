@@ -2,8 +2,8 @@ package com.tieshan.disintegrate.service;
 
 import com.tieshan.disintegrate.pojo.SysUser;
 import com.tieshan.disintegrate.vo.CarBreakInfoVo;
+import com.tieshan.disintegrate.vo.CarPartsData;
 import com.tieshan.disintegrate.vo.PartsListVo;
-import org.apache.ibatis.annotations.Select;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -22,31 +22,12 @@ public interface IDismantleService {
     List<CarBreakInfoVo> findDismantleList(String findMsg,Integer page,Integer pageSize,SysUser user);
     /**
      * 查询监销和不监销车辆
-     * @param request
-     * @param page
-     * @param pageSize
-     * @param findMsg
-     * @return
      */
     List<Map<String, Object>> selectIsSuperviseSale(HttpServletRequest request, Integer page, Integer pageSize, String findMsg, Integer isSuperviseSale);
-    /**
-     * 查询待拆和已拆车辆
-     * @param request
-     * @param page
-     * @param pageSize
-     * @param findMsg
-     * @return
-     */
+    /**查询待拆和已拆车辆*/
     List<Map<String, Object>> selectIsDismantle(HttpServletRequest request, Integer page, Integer pageSize, String findMsg, Integer isDismantle);
 
-    /**
-     * 查询所有已拆的件
-     * @param request
-     * @param page
-     * @param pageSize
-     * @param findMsg
-     * @return
-     */
+    /**查询所有已拆的件*/
     List<Map<String, Object>> selectCarParts(HttpServletRequest request, Integer page, Integer pageSize, String findMsg);
 
     /**更改拆解状态*/
@@ -56,7 +37,7 @@ public interface IDismantleService {
     List<Map<String,Object>> findPartsNameList();
 
     /**拆车-打印配件接口*/
-    int addCarParts(Long carInfoId,SysUser user, List<Map<String,Object>> partsNameAndOeList, Integer partsStatus);
+    int addCarParts(CarPartsData carPartsData, SysUser user);
 
     /**拆车-查询二级分类列表接口*/
     List<PartsListVo> findPartsNameListByParentId();
