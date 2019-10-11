@@ -99,7 +99,7 @@
     <insert id="insertUser">
         INSERT INTO user (id, login_name, user_name,head_url, user_password, phone, user_status, operator, create_time )
     VALUES
-        (#{user.login_name},#{user.user_name},#{user.head_url},#{user.user_password},#{user.phone},#{user.user_status},#{user.operator},now())
+        (#{user.id},#{user.login_name},#{user.user_name},#{user.head_url},#{user.user_password},#{user.phone},#{user.user_status},#{user.operator},now())
 </insert>
 
     <insert id="insertDepartment_user">

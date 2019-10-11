@@ -8,32 +8,45 @@
             MAX( CASE type WHEN 'three' THEN num ELSE 0 END ) typeThree
         FROM
             (
-            ( SELECT 'one' type, count( 1 ) AS num FROM ts_car_processing WHERE is_verify = 1 AND is_query = 2 ) UNION ALL
-            ( SELECT 'two' type, count( 1 ) AS num FROM ts_car_processing WHERE is_verify = 3 AND is_query = 2 ) UNION ALL
-            ( SELECT 'three' type, count( 1 ) AS num FROM ts_car_processing WHERE is_verify = 2 )
+            ( SELECT 'one' type, count( 1 ) AS num FROM ts_car_processing WHERE is_verify = 1 AND is_query = 2   and disintegrate_plant_id= #{id} ) UNION ALL
+            ( SELECT 'two' type, count( 1 ) AS num FROM ts_car_processing WHERE is_verify = 3 AND is_query = 2  and disintegrate_plant_id= #{id} ) UNION ALL
+            ( SELECT 'three' type, count( 1 ) AS num FROM ts_car_processing WHERE is_verify = 2   and disintegrate_plant_id= #{id})
             ) a
     </select>
     <select id="disassembleCensus" resultType="java.util.Map">
-        SELECT
+
+
+             SELECT
             MAX( CASE type WHEN 'one' THEN num ELSE 0 END ) typeOne,
             MAX( CASE type WHEN 'two' THEN num ELSE 0 END ) typeTwo,
             MAX( CASE type WHEN 'three' THEN num ELSE 0 END ) typeThree
         FROM
             (
-            ( SELECT 'one' type, count( 1 ) AS num FROM ts_car_processing WHERE is_verify = 1 AND is_query = 2 ) UNION ALL
-            ( SELECT 'two' type, count( 1 ) AS num FROM ts_car_processing WHERE is_verify = 3 AND is_query = 2 ) UNION ALL
-            ( SELECT 'three' type, count( 1 ) AS num FROM ts_car_processing WHERE is_verify = 2 ) ) a
+            ( SELECT 'one' type, count( 1 ) AS num FROM ts_car_processing WHERE is_destructive =1
+						and is_dismantle_affirm =2 and disintegrate_plant_id = #{id}) UNION ALL
+						  ( SELECT 'two' type, count( 1 ) AS num FROM ts_car_processing WHERE is_destructive =2
+                and disintegrate_plant_id = #{id})
+								 UNION ALL
+								 (SELECT 'three' type, count( 1 ) AS num FROM ts_car_parts WHERE parts_status = 1
+								  and disintegrate_plant_id = #{id})
+             ) a
     </select>
     <select id="businessCensus" resultType="java.util.Map">
-        SELECT
+         SELECT
             MAX( CASE type WHEN 'one' THEN num ELSE 0 END ) typeOne,
             MAX( CASE type WHEN 'two' THEN num ELSE 0 END ) typeTwo,
             MAX( CASE type WHEN 'three' THEN num ELSE 0 END ) typeThree
         FROM
             (
-            ( SELECT 'one' type, count( 1 ) AS num FROM ts_car_processing WHERE is_verify = 1 AND is_query = 2 ) UNION ALL
-            ( SELECT 'two' type, count( 1 ) AS num FROM ts_car_processing WHERE is_verify = 3 AND is_query = 2 ) UNION ALL
-            ( SELECT 'three' type, count( 1 ) AS num FROM ts_car_processing WHERE is_verify = 2 ) ) a
+            ( SELECT 'one' type, count( 1 ) AS num FROM ts_car_source WHERE user_id = #{id}) UNION ALL
+            ( SELECT 'two' type, count( 1 ) AS num FROM ts_car_processing tcp1
+						 						 left JOIN  ts_car_info tci  on tcp1.car_info_id = tci.id
+						 WHERE tci.operator_id= #{id}
+						   and tcp1.is_verify = 3 ) UNION ALL
+            ( SELECT 'three' type, count( 1 ) AS num FROM ts_car_processing tcp1
+						 						 left JOIN  ts_car_info tci  on tcp1.car_info_id = tci.id
+						 WHERE tci.operator_id= #{id}
+						   and  is_appoint_logout_time = 2 ) ) a
     </select>
     <select id="proceduresCensus" resultType="java.util.Map">
         SELECT
@@ -42,19 +55,41 @@
             MAX( CASE type WHEN 'three' THEN num ELSE 0 END ) typeThree
         FROM
             (
-            ( SELECT 'one' type, count( 1 ) AS num FROM ts_car_processing WHERE is_verify = 1 AND is_query = 2 ) UNION ALL
-            ( SELECT 'two' type, count( 1 ) AS num FROM ts_car_processing WHERE is_verify = 3 AND is_query = 2 ) UNION ALL
-            ( SELECT 'three' type, count( 1 ) AS num FROM ts_car_processing WHERE is_verify = 2 ) ) a
+            ( SELECT 'one' type, count( 1 ) AS num FROM ts_car_source WHERE disintegrate_plant_id = #{id}) UNION ALL
+            ( SELECT 'two' type, count( 1 ) AS num FROM ts_car_processing tcp1
+						 						 left JOIN  ts_car_info tci  on tcp1.car_info_id = tci.id
+						 WHERE tci.disintegrate_plant_id= #{id}
+						   and tcp1.is_verify = 3 ) UNION ALL
+            ( SELECT 'three' type, count( 1 ) AS num FROM ts_car_processing tcp1
+						 						 left JOIN  ts_car_info tci  on tcp1.car_info_id = tci.id
+						 WHERE tci.disintegrate_plant_id= #{id}
+						   and  is_appoint_logout_time = 2 ) ) a
     </select>
     <select id="technologyCensus" resultType="java.util.Map">
-        SELECT
+       SELECT
             MAX( CASE type WHEN 'one' THEN num ELSE 0 END ) typeOne,
             MAX( CASE type WHEN 'two' THEN num ELSE 0 END ) typeTwo,
             MAX( CASE type WHEN 'three' THEN num ELSE 0 END ) typeThree
         FROM
             (
-            ( SELECT 'one' type, count( 1 ) AS num FROM ts_car_processing WHERE is_verify = 1 AND is_query = 2 ) UNION ALL
-            ( SELECT 'two' type, count( 1 ) AS num FROM ts_car_processing WHERE is_verify = 3 AND is_query = 2 ) UNION ALL
-            ( SELECT 'three' type, count( 1 ) AS num FROM ts_car_processing WHERE is_verify = 2 ) ) a
+            ( SELECT 'one' type, count( 1 ) AS num FROM ts_car_source WHERE disintegrate_plant_id = #{id}) UNION ALL
+            ( SELECT 'two' type, count( 1 ) AS num FROM ts_car_processing tcp1
+						 						 left JOIN  ts_car_info tci  on tcp1.car_info_id = tci.id
+						 WHERE tci.disintegrate_plant_id= #{id}
+						   and tcp1.is_verify = 3 ) UNION ALL
+            ( SELECT 'three' type, count( 1 ) AS num FROM ts_car_processing tcp1
+						 						 left JOIN  ts_car_info tci  on tcp1.car_info_id = tci.id
+						 WHERE tci.disintegrate_plant_id= #{id}
+						   and  is_appoint_logout_time = 2 ) ) a
+    </select>
+    <select id="commissionaireCensus" resultType="java.util.Map">
+        SELECT
+            MAX( CASE type WHEN 'one' THEN num ELSE 0 END ) typeOne,
+            MAX( CASE type WHEN 'two' THEN num ELSE 0 END ) typeTwo
+         FROM
+            (
+            ( SELECT 'one' type, count( 1 ) AS num FROM ts_car_parts WHERE parts_status = 1 and disintegrate_plant_id= #{id}) UNION ALL
+            ( SELECT 'two' type, count( 1 ) AS num FROM ts_car_parts WHERE parts_status = 2 and disintegrate_plant_id= #{id})
+            ) a
     </select>
 </mapper>
