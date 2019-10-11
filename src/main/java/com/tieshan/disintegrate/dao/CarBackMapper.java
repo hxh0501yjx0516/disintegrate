@@ -1,9 +1,8 @@
 package com.tieshan.disintegrate.dao;
 
 import com.tieshan.disintegrate.pojo.CarBack;
-import com.tieshan.disintegrate.vo.CarBackVo;
+import com.tieshan.disintegrate.vo.CarBackListVo;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -23,7 +22,7 @@ public interface CarBackMapper {
 
     List<CarBack> selectListByMap(Map<String, Object> map);
 
-    List<CarBackVo> selectVoListByMap(Map<String, Object> map);
+    List<CarBackListVo> selectVoListByMap(Map<String, Object> map);
 
     void insertCarBack(CarBack CarBack);
 

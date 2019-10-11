@@ -448,6 +448,7 @@ public class ProceduresService implements IProceduresService {
         PageHelper.startPage(
                 StringUtils.isEmpty(params.get("pageNum")) ? 1 : Integer.parseInt(String.valueOf(params.get("pageNum"))),
                 StringUtils.isEmpty(params.get("pageSize")) ? 10 : Integer.parseInt(String.valueOf(params.get("pageSize"))));
+        PageHelper.orderBy("create_time desc");
         List<AppCarBaseVo> carInfos = carInfoMapper.selectAppList(params);
         PageInfo<AppCarBaseVo> pageInfo = new PageInfo<>(carInfos);
         return pageInfo;
@@ -465,6 +466,7 @@ public class ProceduresService implements IProceduresService {
         PageHelper.startPage(
                 StringUtils.isEmpty(params.get("pageNum")) ? 1 : Integer.parseInt(String.valueOf(params.get("pageNum"))),
                 StringUtils.isEmpty(params.get("pageSize")) ? 10 : Integer.parseInt(String.valueOf(params.get("pageSize"))));
+        PageHelper.orderBy("create_time desc");
         List<CarProcedureIssueVo> carProcedureIssueVos = carInfoMapper.selectProcedureIssueVoList(params);
         PageInfo<CarProcedureIssueVo> pageInfo = new PageInfo<>(carProcedureIssueVos);
         return pageInfo;
@@ -531,6 +533,18 @@ public class ProceduresService implements IProceduresService {
         shangWeiDataVo.setTuoPic(fc.get());
         shangWeiDataVo.setBreakPics(fd.get());
         return shangWeiDataVo;
+    }
+
+    @Override
+    public PageInfo<CarVerifyOrderVo> queryVerifyOrderList(Map<String, Object> params, SysUser user) {
+        params.put("disintegratePlantId", user.getCompany_id());
+        PageHelper.startPage(
+                StringUtils.isEmpty(params.get("page")) ? 1 : Integer.parseInt(String.valueOf(params.get("page"))),
+                StringUtils.isEmpty(params.get("pageSize")) ? 10 : Integer.parseInt(String.valueOf(params.get("pageSize"))));
+        PageHelper.orderBy("i.create_time DESC");
+        List<CarVerifyOrderVo> carVerifyOrderVos = carProcessingMapper.selectCarVerifyOrderVoList(params);
+        PageInfo<CarVerifyOrderVo> pageInfo = new PageInfo<>(carVerifyOrderVos);
+        return pageInfo;
     }
 
 

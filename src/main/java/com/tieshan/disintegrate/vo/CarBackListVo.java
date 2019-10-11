@@ -6,14 +6,14 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- *
+ * 退车列表
  * @author ：ren lei
  * @date ：Created in 2019/9/24 10:34
  * @modified By：
  * @version: 1.0.0
  */
 @Data
-public class CarBackVo implements Serializable {
+public class CarBackListVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long carInfoId;

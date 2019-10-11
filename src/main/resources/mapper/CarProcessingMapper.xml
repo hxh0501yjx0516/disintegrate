@@ -480,6 +480,19 @@
             </if>
         </where>
     </select>
+    <select id="selectCarVerifyOrderVoList" resultType="com.tieshan.disintegrate.vo.CarVerifyOrderVo">
+        SELECT i.id carInfoId,i.car_code carCode, i.car_no carNo,i.car_name carName,i.contacts,i.contacts_phone contactsPhone,
+            ie.vin,p.is_print_verify_bill isPrintVerifyBill,ie.car_properties carProperties,ie.colour,ie.car_kind carKind,
+            ie.owner,ie.engine,p.print_verify_bill_time printVerifyBillTime
+        FROM ts_car_info i
+        left join ts_car_processing p on i.id=p.car_info_id
+        left join ts_car_identity ie on i.id=ie.car_info_id
+        where i.disintegrate_plant_id=#{disintegratePlantId} and p.is_verify=2
+        <if test="searchInfo!=null and searchInfo!=''">
+            and concat(i.contacts,i.contacts_phone,i.car_name,i.car_no,i.car_code)
+            like concat("%",#{searchInfo},"%")
+        </if>
+    </select>
 
     <insert id="insertCarProcessing">
         INSERT INTO ts_car_processing(
