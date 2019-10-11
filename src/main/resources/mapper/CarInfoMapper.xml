@@ -275,7 +275,11 @@
         FROM ts_car_info i
         left join ts_car_processing p on i.id=p.car_info_id
         left join ts_car_identity ie on i.id=ie.car_info_id
-        where i.disintegrate_plant_id=#{disintegratePlantId}
+        where i.disintegrate_plant_id=#{disintegratePlantId} and p.is_appoint_logout_time=2
+        <if test="searchInfo!=null and searchInfo!=''">
+            and concat(i.contacts,i.contacts_phone,i.car_name,i.car_no,i.car_code)
+            like concat("%",#{searchInfo},"%")
+        </if>
     </select>
 
     <insert id="insertCarInfo">

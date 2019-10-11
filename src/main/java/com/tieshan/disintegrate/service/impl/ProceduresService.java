@@ -95,21 +95,21 @@ public class ProceduresService implements IProceduresService {
         }
         proceduresVo.setDisintegratePlantId(user.getCompany_id());
         carIdentityMapper.updateCarIdentity(proceduresVo);
-        if (carIdentity.getStatus() == 1) {
-            Map<String, Object> param = new HashMap<>();
-            param.put("disintegratePlantId", user.getCompany_id());
-            param.put("car_info_id", proceduresVo.getCarInfoId());
-            CarProcessing carProcessing = carProcessingMapper.selectOneByMap(param);
 
-            carProcessing.setIsRegister(proceduresVo.getStatus());
+        Map<String, Object> param = new HashMap<>();
+        param.put("disintegratePlantId", user.getCompany_id());
+        param.put("carInfoId", proceduresVo.getCarInfoId());
+        CarProcessing carProcessing = carProcessingMapper.selectOneByMap(param);
+
+        carProcessing.setIsRegister(proceduresVo.getStatus());
+
+        if (proceduresVo.getStatus() == 2) {
             //登记时间
             carProcessing.setRegisterTime(new Date());
             //登记人
             carProcessing.setRegisterUserId(user.getId());
-            //未查询
-            carProcessing.setIsQuery(1);
-            carProcessingMapper.updateCarProcessing(carProcessing);
         }
+        carProcessingMapper.updateCarProcessing(carProcessing);
     }
 
     @Override
@@ -142,7 +142,7 @@ public class ProceduresService implements IProceduresService {
         if (carProcessing.getIsRegister() != 2) {
             throw new CustomException("未登记完成！");
         }
-        if (carProcessing.getIsQuery() != 1) {
+        if (carProcessing.getIsQuery() == 2) {
             throw new CustomException("已录入查询结果！");
         }
         Integer state = Integer.valueOf(params.get("state").toString());
@@ -175,7 +175,12 @@ public class ProceduresService implements IProceduresService {
         carProcessing.setIsQuery(state);
         carProcessing.setQueryTime(new Date());
         carProcessing.setQueryUserId(user.getId());
-        carProcessing.setRecordNumber(params.get("recordNumber").toString());
+        if (!StringUtils.isEmpty(params.get("recordNumber"))) {
+            carProcessing.setRecordNumber(params.get("recordNumber").toString());
+        } else if (StringUtils.isEmpty(params.get("recordNumber")) && state == 2) {
+            throw new CustomException("查询完成需要填写档案号");
+        }
+
         carProcessingMapper.updateCarProcessing(carProcessing);
     }
 
@@ -404,7 +409,7 @@ public class ProceduresService implements IProceduresService {
         carProcessing.setIsLogout(2);
         carProcessing.setLogoutUserId(user.getId());
         try {
-            carProcessing.setLogoutTime(DateUtils.parseDate(params.get("logoutTime").toString(),"yyyy-MM-dd"));
+            carProcessing.setLogoutTime(DateUtils.parseDate(params.get("logoutTime").toString(), "yyyy-MM-dd"));
         } catch (ParseException e) {
             throw new CustomException("注销时间不能为空");
         }
@@ -424,7 +429,7 @@ public class ProceduresService implements IProceduresService {
         carProcessing.setIsAppointUserid(user.getId());
 
         try {
-            carProcessing.setIsAppointTime(DateUtils.parseDate(params.get("appointTime").toString(),"yyyy-MM-dd"));
+            carProcessing.setIsAppointTime(DateUtils.parseDate(params.get("appointTime").toString(), "yyyy-MM-dd"));
         } catch (ParseException e) {
             throw new CustomException("商委注销时间不能为空");
         }
@@ -499,23 +504,23 @@ public class ProceduresService implements IProceduresService {
     @Override
     public ShangWeiDataVo queryShangWeiData(Map<String, Object> params, SysUser user) throws ExecutionException, InterruptedException {
         params.put("disintegratePlantId", user.getCompany_id());
-        Callable a = ()->{
+        Callable a = () -> {
             Map<String, Object> map1 = params;
             return carIdentityMapper.selectShangWeiDataByMap(map1);
         };
-        Callable b = ()->{
+        Callable b = () -> {
             Map<String, Object> map2 = params;
-            map2.put("firstType","pre_pic");
+            map2.put("firstType", "pre_pic");
             return carPicMapper.selectListByMap(map2);
         };
-        Callable c= ()->{
+        Callable c = () -> {
             Map<String, Object> map3 = params;
-            map3.put("firstType","tuo_pic");
+            map3.put("firstType", "tuo_pic");
             return carPicMapper.selectListByMap(map3);
         };
-        Callable d = ()->{
+        Callable d = () -> {
             Map<String, Object> map4 = params;
-            map4.put("firstType","break_pic");
+            map4.put("firstType", "break_pic");
             return carPicMapper.selectListByMap(map4);
         };
         FutureTask<ShangWeiDataVo> fa = new FutureTask(a);
