@@ -773,9 +773,10 @@
             IFNULL(p.is_register,'') AS isRegister,
             IFNULL(p.is_query,'') AS isQuery,
             IFNULL(p.is_verify,'') AS isVerify,
+            IFNULL(p.is_destructive,'') AS isDestructive,
             IFNULL(p.is_data_upload,'') AS isDataUpload,
             IFNULL(p.is_dismantle,'') AS isDismantle,
-            IFNULL(p.is_pic_upload,'') AS isPicUpload,
+            IFNULL(p.is_logout,'') AS isLogout,
             IFNULL(p.is_appoint_logout_time,'') AS isAppointLogoutTime,
             IFNULL(s.is_get_salvage,'') AS isGetSalvage
         FROM
