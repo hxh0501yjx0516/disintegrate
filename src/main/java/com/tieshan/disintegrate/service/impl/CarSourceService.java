@@ -444,62 +444,10 @@ public class CarSourceService implements ICarSourceService {
         return dictionaryService.findBankNameList();
     }
 
-    /**
-     * 查询所有已拆的件
-     * @param request
-     * @param page
-     * @param pageSize
-     * @param findMsg
-     * @return
-     */
-    @Override
-    public List<Map<String, Object>> selectCarParts(HttpServletRequest request, Integer page, Integer pageSize, String findMsg) {
-        PageHelper.startPage(page, pageSize);
-        PageHelper.orderBy("p.print_time DESC");
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
-        return carSourceMapper.selectCarParts(sysUser.getCompany_id(),sysUser.getId(), findMsg);
-    }
 
-    /**
-     * 查询待拆和已拆车辆
-     * @param request
-     * @param page
-     * @param pageSize
-     * @param findMsg
-     * @return
-     */
-    @Override
-    public List<Map<String, Object>> selectIsDismantle(HttpServletRequest request, Integer page, Integer pageSize, String findMsg, Integer isDismantle) {
-        PageHelper.startPage(page, pageSize);
-        PageHelper.orderBy("p.destructive_time DESC");
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
-        List<Map<String, Object>> mapList = null;
-        if (isDismantle == 1){     // 待拆车：毁型时间
-            mapList = carSourceMapper.selectIsDismantle(sysUser.getCompany_id(), findMsg, isDismantle);
-        }else {         // 拆解时间
-            mapList =  carSourceMapper.selectIsDismantleComplete(sysUser.getCompany_id(), findMsg, isDismantle);
-        }
-        return mapList;
-    }
 
-    /**
-     * 查询监销和不监销车辆
-     * @param request
-     * @param page
-     * @param pageSize
-     * @param findMsg
-     * @return
-     */
-    @Override
-    public List<Map<String, Object>> selectIsSuperviseSale(HttpServletRequest request, Integer page, Integer pageSize, String findMsg, Integer isSuperviseSale) {
-        PageHelper.startPage(page, pageSize);
-        PageHelper.orderBy("p.dismantle_time DESC");
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
-        return carSourceMapper.selectIsSuperviseSale(sysUser.getCompany_id(), findMsg, isSuperviseSale);
-    }
+
+
 
     /**
      * 首页的查询
@@ -864,19 +812,15 @@ public class CarSourceService implements ICarSourceService {
                 mapCarInfo.put("status", "待核档");
             } else if (map.get("isQuery").toString().equals("2") && map.get("isVerify").toString().equals("3")) {
                 mapCarInfo.put("status", "核档未通过");
-            } else if (map.get("isVerify").toString().equals("2") && map.get("isDataUpload").toString().equals("1")) {
+            } else if (map.get("isDestructive").toString().equals("2") && map.get("isDataUpload").toString().equals("1")) {
                 mapCarInfo.put("status", "待上传商委");
-            } else if (map.get("isDataUpload").toString().equals("2") && map.get("isDismantle").toString().equals("1")) {
+            } else if (map.get("isDestructive").toString().equals("2") && map.get("isDismantle").toString().equals("1")) {
                 mapCarInfo.put("status", "待拆解");
-            } else if (map.get("isDismantle").toString().equals("2") && map.get("isPicUpload").toString().equals("1")) {
-                mapCarInfo.put("status", "待上传商委图片");
-            } else if (map.get("isPicUpload").toString().equals("2") && map.get("isAppointLogoutTime").toString().equals("1")) {
+            }  else if (map.get("isLogout").toString().equals("2") && map.get("isAppointLogoutTime").toString().equals("1")) {
                 mapCarInfo.put("status", "待商委注销");
             } else if (map.get("isAppointLogoutTime").toString().equals("2") && map.get("isGetSalvage").toString().equals("1")) {
                 mapCarInfo.put("status", "待领取残值");
-            } else if (map.get("isGetSalvage").toString().equals("2") && map.get("isPremiumCompletion").toString().equals("1")) {
-                mapCarInfo.put("status", "待报废");
-            } else if (map.get("isPremiumCompletion").toString().equals("2")) {
+            } else if (map.get("isAppointLogoutTime").toString().equals("2")) {
                 mapCarInfo.put("status", "报废完成");
             }
             // 一辆车的信息

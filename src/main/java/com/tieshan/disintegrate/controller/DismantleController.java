@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -58,7 +59,7 @@ public class DismantleController {
      * @number 1
      */
 
-    /**拆解管理模块查询接口*/
+    /** PC-拆解管理模块查询接口*/
     @GetMapping("/doCarsQuery/findDismantleObject")
     public RestResult findDismantleObject(
             @RequestParam(value = "findMsg", required = false) String findMsg,
@@ -72,7 +73,88 @@ public class DismantleController {
         return restResult;
     }
 
-    /**待拆车-确认拆解接口*/
+    /**.
+     * 查询监销和不监销车辆   (搜索条件：车辆编号，车牌号，车型)  isSuperviseSale: 1-监销，2-不监销
+     * @param request
+     * @return
+     */
+    @GetMapping("/selectIsSuperviseSale")
+    public RestResult selectIsDestructive(HttpServletRequest request,
+                                          @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
+                                          @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
+                                          @RequestParam(value = "findMsg", required = false) String findMsg,
+                                          @RequestParam(value = "isSuperviseSale", required = false, defaultValue = "1") Integer isSuperviseSale){
+        PageInfo pageInfo = null;
+        try{
+            List<Map<String, Object>> mapList = iDismantleService.selectIsSuperviseSale(request, page, pageSize, findMsg, isSuperviseSale);
+            pageInfo = new PageInfo(mapList);
+        }catch (Exception e){
+            log.info("查询失败", e);
+            return new RestResult("查询失败", pageInfo, ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", pageInfo, ResultCode.SUCCESS.code());
+    }
+
+
+    /**
+     * 查询待拆和已拆车辆(搜索条件：车辆编号，车牌号，车型)     isDismantle： 1-带拆车，2-已拆车
+     * @param request
+     * @param page
+     * @param pageSize
+     * @param findMsg
+     * @return
+     */
+    @GetMapping("/selectIsDismantle")
+    public RestResult selectIsDismantle(HttpServletRequest request,
+                                        @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
+                                        @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
+                                        @RequestParam(value = "findMsg", required = false) String findMsg,
+                                        @RequestParam(value = "isDismantle", required = false, defaultValue = "1") Integer isDismantle){
+        PageInfo pageInfo = null;
+        try{
+            List<Map<String, Object>> mapList = iDismantleService.selectIsDismantle(request, page, pageSize, findMsg, isDismantle);
+            pageInfo = new PageInfo(mapList);
+        }catch (Exception e){
+            log.info("查询失败", e);
+            return new RestResult("查询失败", pageInfo, ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", pageInfo, ResultCode.SUCCESS.code());
+    }
+
+    /**
+     * 查询所有已拆的件（搜索条件：车辆编号，车牌号，车型）    查询该拆解厂下当前操作人所拆的件
+     * @param request
+     * @param page
+     * @param pageSize
+     * @param findMsg
+     * @return
+     */
+    @GetMapping("/selectCarPartsList")
+    public RestResult selectCarPartsList(HttpServletRequest request,
+                                         @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
+                                         @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
+                                         @RequestParam(value = "findMsg", required = false) String findMsg){
+        PageInfo pageInfo = null;
+        try{
+            List<Map<String, Object>> mapList = iDismantleService.selectCarParts(request, page, pageSize, findMsg);
+            pageInfo = new PageInfo(mapList);
+        }catch (Exception e){
+            log.info("查询失败", e);
+            return new RestResult("查询失败", pageInfo, ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", pageInfo, ResultCode.SUCCESS.code());
+    }
+
+    /** APP-监销/非监销-接口*/
+
+    /** APP-待拆车/已拆车-接口*/
+
+    /** APP-已拆件-接口*/
+
+
+
+
+    /** APP-待拆车-确认拆解接口*/
     @GetMapping("/doCarsQuery/updateDismantle")
     public RestResult updateDismantle(
             @RequestParam(value = "carInfoId") Long carInfoId,@LoginUser SysUser user){
@@ -81,7 +163,7 @@ public class DismantleController {
         return restResult;
     }
 
-    /**拆车-查询打印配件名称接口*/
+    /** APP-拆车-查询打印配件名称接口*/
 
     @GetMapping("/doCarsQuery/findPartsNameList")
     public RestResult findPartsNameList(){
@@ -90,7 +172,7 @@ public class DismantleController {
         return restResult;
     }
 
-    /**拆车-打印配件后入库接口*/
+    /** APP-拆车-打印配件后入库接口*/
 
     @GetMapping("/doCarsQuery/addCarParts")
     public RestResult addCarParts(@RequestParam(value = "carInfoId") Long carInfoId,
@@ -102,7 +184,7 @@ public class DismantleController {
         return restResult;
     }
 
-    /**拆车-查询二级分类列表接口*/
+    /** APP-拆车-查询二级分类列表接口*/
     @GetMapping("/doCarsQuery/findPartsNameListByParentId")
     public RestResult findPartsNameListByParentId(){
         List<PartsListVo> mapList = iDismantleService.findPartsNameListByParentId();

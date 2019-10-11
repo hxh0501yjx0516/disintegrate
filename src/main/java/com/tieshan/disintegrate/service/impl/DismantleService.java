@@ -4,12 +4,14 @@ import com.github.pagehelper.PageHelper;
 import com.tieshan.disintegrate.dao.CarDismantleDao;
 import com.tieshan.disintegrate.pojo.SysUser;
 import com.tieshan.disintegrate.service.IDismantleService;
+import com.tieshan.disintegrate.token.TokenService;
 import com.tieshan.disintegrate.util.IdWorker;
 import com.tieshan.disintegrate.vo.CarBreakInfoVo;
 import com.tieshan.disintegrate.vo.PartsListVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +27,8 @@ import java.util.Map;
 public class DismantleService implements IDismantleService {
     @Autowired
     private CarDismantleDao carDismantleDao;
+    @Autowired
+    private TokenService tokenService;
 
     @Override
     public List<CarBreakInfoVo> findDismantleList(String findMsg, Integer page, Integer pageSize, SysUser user) {
@@ -54,6 +58,46 @@ public class DismantleService implements IDismantleService {
         //返回List
         return dismantleList;
     }
+
+
+    @Override
+    public List<Map<String, Object>> selectIsSuperviseSale(HttpServletRequest request, Integer page, Integer pageSize, String findMsg, Integer isSuperviseSale) {
+        PageHelper.startPage(page, pageSize);
+        PageHelper.orderBy("p.dismantle_time DESC");
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        return carDismantleDao.selectIsSuperviseSale(sysUser.getCompany_id(), findMsg, isSuperviseSale);
+    }
+
+
+
+    @Override
+    public List<Map<String, Object>> selectIsDismantle(HttpServletRequest request, Integer page, Integer pageSize, String findMsg, Integer isDismantle) {
+        PageHelper.startPage(page, pageSize);
+        PageHelper.orderBy("p.destructive_time DESC");
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        List<Map<String, Object>> mapList = null;
+        if (isDismantle == 1){     // 待拆车：毁型时间
+            mapList = carDismantleDao.selectIsDismantle(sysUser.getCompany_id(), findMsg, isDismantle);
+        }else {         // 拆解时间
+            mapList =  carDismantleDao.selectIsDismantleComplete(sysUser.getCompany_id(), findMsg, isDismantle);
+        }
+        return mapList;
+    }
+
+
+    @Override
+    public List<Map<String, Object>> selectCarParts(HttpServletRequest request, Integer page, Integer pageSize, String findMsg) {
+        PageHelper.startPage(page, pageSize);
+        PageHelper.orderBy("p.print_time DESC");
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        return carDismantleDao.selectCarParts(sysUser.getCompany_id(),sysUser.getId(), findMsg);
+    }
+
+
+
 
     @Override
     public void updateDismantle(Long operatorId, Long carInfoId, Long companyId) {

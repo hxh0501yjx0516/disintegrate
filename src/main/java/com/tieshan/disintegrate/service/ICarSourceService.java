@@ -78,11 +78,7 @@ public interface ICarSourceService {
 
     List<Map<String, Object>> selectHomePage(Integer page, Integer pageSize, String state, HttpServletRequest request);
 
-    List<Map<String, Object>> selectIsSuperviseSale(HttpServletRequest request, Integer page, Integer pageSize, String findMsg, Integer isSuperviseSale);
 
-    List<Map<String, Object>> selectIsDismantle(HttpServletRequest request, Integer page, Integer pageSize, String findMsg, Integer isDismantle);
-
-    List<Map<String, Object>> selectCarParts(HttpServletRequest request, Integer page, Integer pageSize, String findMsg);
 
 //    List<Map<String, Object>> selectCarSourceListApp(HttpServletRequest request);
 
