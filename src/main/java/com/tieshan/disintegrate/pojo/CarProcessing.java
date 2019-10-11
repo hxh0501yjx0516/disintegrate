@@ -270,4 +270,10 @@ public class CarProcessing implements Serializable {
 	private Integer isDelete;
 	// 报废的状态：1.待报废，2.报废完成
 	private Integer isPremiumCompletion;
+	// 是否毁型。1.待毁型，2.毁型成功
+	private Integer isDestructive;
+	// 毁型时间
+	private Date destructiveTime;
+	// 毁型操作人
+	private Long destructiveUserId;
 }

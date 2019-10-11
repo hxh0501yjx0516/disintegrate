@@ -82,6 +82,8 @@ public interface ICarSourceService {
 
     List<Map<String, Object>> selectIsDismantle(HttpServletRequest request, Integer page, Integer pageSize, String findMsg, Integer isDismantle);
 
+    List<Map<String, Object>> selectCarParts(HttpServletRequest request, Integer page, Integer pageSize, String findMsg);
+
 //    List<Map<String, Object>> selectCarSourceListApp(HttpServletRequest request);
 
 //    void addCarSourceApp(CarSource carSource, HttpServletRequest request);

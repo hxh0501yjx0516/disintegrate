@@ -445,6 +445,23 @@ public class CarSourceService implements ICarSourceService {
     }
 
     /**
+     * 查询所有已拆的件
+     * @param request
+     * @param page
+     * @param pageSize
+     * @param findMsg
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> selectCarParts(HttpServletRequest request, Integer page, Integer pageSize, String findMsg) {
+        PageHelper.startPage(page, pageSize);
+        PageHelper.orderBy("p.print_time DESC");
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        return carSourceMapper.selectCarParts(sysUser.getCompany_id(),sysUser.getId(), findMsg);
+    }
+
+    /**
      * 查询待拆和已拆车辆
      * @param request
      * @param page
@@ -458,7 +475,13 @@ public class CarSourceService implements ICarSourceService {
         PageHelper.orderBy("p.destructive_time DESC");
         String token = request.getHeader("token");
         SysUser sysUser = tokenService.getToken(token);
-        return carSourceMapper.selectIsDismantle(sysUser.getCompany_id(), findMsg, isDismantle);
+        List<Map<String, Object>> mapList = null;
+        if (isDismantle == 1){     // 待拆车：毁型时间
+            mapList = carSourceMapper.selectIsDismantle(sysUser.getCompany_id(), findMsg, isDismantle);
+        }else {         // 拆解时间
+            mapList =  carSourceMapper.selectIsDismantleComplete(sysUser.getCompany_id(), findMsg, isDismantle);
+        }
+        return mapList;
     }
 
     /**
@@ -767,6 +790,12 @@ public class CarSourceService implements ICarSourceService {
         carProcessing.setDisintegratePlantId(sysUser.getCompany_id());
         carProcessing.setCarInfoId(carInfoId);
         carSourceMapper.insertCarProcessing(carProcessing);
+        // 将该车辆信息添加到车辆身份表中
+        CarIdentity carIdentity = new CarIdentity();
+        carIdentity.setId(idWorker.nextId());
+        carIdentity.setDisintegratePlantId(sysUser.getCompany_id());
+        carIdentity.setCarInfoId(carInfoId);
+        carSourceMapper.insertCarIdentity(carIdentity);
         return 1;
     }
 
