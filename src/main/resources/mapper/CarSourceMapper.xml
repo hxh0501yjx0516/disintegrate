@@ -777,8 +777,7 @@
             IFNULL(p.is_dismantle,'') AS isDismantle,
             IFNULL(p.is_pic_upload,'') AS isPicUpload,
             IFNULL(p.is_appoint_logout_time,'') AS isAppointLogoutTime,
-            IFNULL(s.is_get_salvage,'') AS isGetSalvage,
-            IFNULL(p.is_premium_completion,'') AS isPremiumCompletion
+            IFNULL(s.is_get_salvage,'') AS isGetSalvage
         FROM
         	ts_car_info AS i
             LEFT JOIN ts_car_identity AS d ON i.id = d.car_info_id
@@ -790,31 +789,27 @@
             <if test="findMsg != null and findMsg != ''">
                 AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%',#{findMsg},'%')
             </if>
-            <if test='states == "1"'>
+            <if test='states == "1"'>        /*待入场*/
                 AND e.is_approach = 1
             </if>
-            <if test='states == "2"'>
-                AND e.is_approach = 2
+            <if test='states == "2"'>        /*待核档状态*/
+                AND p.is_query = 2
                 AND p.is_verify = 1
             </if>
-            <if test='states == "3"'>
-                AND p.is_verify = 2
+            <if test='states == "3"'>        /*待商委注销状态*/
+                AND p.is_logout = 2
                 AND p.is_appoint_logout_time = 1
             </if>
-            <if test='states == "4"'>
+            <if test='states == "4"'>        /*待领取残值状态*/
                 AND p.is_appoint_logout_time = 2
                 AND s.is_get_salvage = 1
             </if>
-            <if test='states == "5"'>
-                AND s.is_get_salvage = 2
-                AND p.is_premium_completion = 1
+            <if test='states == "5"'>        /*报废成功*/
+                AND p.is_logout = 2
+                AND p.is_appoint_logout_time = 2
             </if>
-            <if test='states == "6"'>
-                AND s.is_get_salvage = 2
-                AND p.is_premium_completion = 2
-            </if>
-            <if test='states == "7"'>
-                AND e.is_approach = 2
+            <if test='states == "6"'>        /*核档未通过*/
+                AND p.is_query = 2
                 AND p.is_verify = 3
             </if>
     </select>
@@ -1266,7 +1261,7 @@
             AND p.is_verify = 1
         </if>
         <if test='state == "9"'>    /*待拆解*/
-            AND p.is_verify = 2
+            AND p.is_destructive = 2
             AND p.is_dismantle = 1
         </if>
         <if test='state == "10"'>    /*待上传商委数据*/

@@ -812,19 +812,15 @@ public class CarSourceService implements ICarSourceService {
                 mapCarInfo.put("status", "待核档");
             } else if (map.get("isQuery").toString().equals("2") && map.get("isVerify").toString().equals("3")) {
                 mapCarInfo.put("status", "核档未通过");
-            } else if (map.get("isVerify").toString().equals("2") && map.get("isDataUpload").toString().equals("1")) {
+            } else if (map.get("isDestructive").toString().equals("2") && map.get("isDataUpload").toString().equals("1")) {
                 mapCarInfo.put("status", "待上传商委");
-            } else if (map.get("isDataUpload").toString().equals("2") && map.get("isDismantle").toString().equals("1")) {
+            } else if (map.get("isDestructive").toString().equals("2") && map.get("isDismantle").toString().equals("1")) {
                 mapCarInfo.put("status", "待拆解");
-            } else if (map.get("isDismantle").toString().equals("2") && map.get("isPicUpload").toString().equals("1")) {
-                mapCarInfo.put("status", "待上传商委图片");
-            } else if (map.get("isPicUpload").toString().equals("2") && map.get("isAppointLogoutTime").toString().equals("1")) {
+            }  else if (map.get("isLogout").toString().equals("2") && map.get("isAppointLogoutTime").toString().equals("1")) {
                 mapCarInfo.put("status", "待商委注销");
             } else if (map.get("isAppointLogoutTime").toString().equals("2") && map.get("isGetSalvage").toString().equals("1")) {
                 mapCarInfo.put("status", "待领取残值");
-            } else if (map.get("isGetSalvage").toString().equals("2") && map.get("isPremiumCompletion").toString().equals("1")) {
-                mapCarInfo.put("status", "待报废");
-            } else if (map.get("isPremiumCompletion").toString().equals("2")) {
+            } else if (map.get("isAppointLogoutTime").toString().equals("2")) {
                 mapCarInfo.put("status", "报废完成");
             }
             // 一辆车的信息

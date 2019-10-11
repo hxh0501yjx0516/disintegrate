@@ -360,7 +360,7 @@ public class CarSourceController {
      *
      * @param id
      * @param request
-     * @param state    1-待入场状态    2-待核档状态    3-待商委注销状态     4-待领取残值状态     5-待报废状态     6-报废成功     7-核档未通过
+     * @param state    1-待入场状态    2-待核档状态    3-待商委注销状态     4-待领取残值状态     5-报废成功      6-核档未通过
      * @param findMsg
      * @param page
      * @param pageSize
