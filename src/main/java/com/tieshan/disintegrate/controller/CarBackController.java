@@ -4,10 +4,9 @@ import com.github.pagehelper.PageInfo;
 import com.tieshan.disintegrate.annotation.LoginUser;
 import com.tieshan.disintegrate.pojo.SysUser;
 import com.tieshan.disintegrate.service.ICarBackService;
-import com.tieshan.disintegrate.service.impl.CarBackService;
 import com.tieshan.disintegrate.util.RestResult;
 import com.tieshan.disintegrate.util.ResultCode;
-import com.tieshan.disintegrate.vo.CarBackVo;
+import com.tieshan.disintegrate.vo.CarBackListVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -64,7 +63,7 @@ public class CarBackController {
      */
     @PostMapping(value = "/queryCarBackVoList")
     public RestResult queryCarBackVoList(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
-        PageInfo<CarBackVo> carBackVoPageInfo = carBackService.queryCarBackVoList(params, user);
+        PageInfo<CarBackListVo> carBackVoPageInfo = carBackService.queryCarBackVoList(params, user);
         return new RestResult("查询成功", carBackVoPageInfo, ResultCode.SUCCESS.code());
     }
 }

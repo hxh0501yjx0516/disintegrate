@@ -1,6 +1,7 @@
 package com.tieshan.disintegrate.dao;
 
 import com.tieshan.disintegrate.pojo.CarProcessing;
+import com.tieshan.disintegrate.vo.CarVerifyOrderVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -37,4 +38,6 @@ public interface CarProcessingMapper {
     void deleteCarProcessingByMap(Map<String, Object> map);
 
     void batchDeleteCarProcessingByMap(Map<String, Object> map);
+
+    List<CarVerifyOrderVo> selectCarVerifyOrderVoList(Map<String, Object> map);
 }

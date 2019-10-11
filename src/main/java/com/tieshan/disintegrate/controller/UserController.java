@@ -3,6 +3,7 @@ package com.tieshan.disintegrate.controller;
 import com.github.pagehelper.PageInfo;
 import com.tieshan.disintegrate.constant.ConStants;
 import com.tieshan.disintegrate.pojo.SysUser;
+import com.tieshan.disintegrate.service.ICensusService;
 import com.tieshan.disintegrate.service.IUserService;
 import com.tieshan.disintegrate.token.TokenService;
 import com.tieshan.disintegrate.util.PubMethod;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.Result;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +35,8 @@ public class UserController {
     private IUserService userService;
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private ICensusService censusService;
 
     /**
      * 添加用户
@@ -76,12 +80,12 @@ public class UserController {
      */
     @GetMapping(value = "/getUser")
     public RestResult getUser(@RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) int page,
-                                                 @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) int pageSize) {
+                              @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) int pageSize) {
         RestResult restResult = null;
         try {
             List<Map<String, Object>> mapList = userService.getUser(page, pageSize);
             PageInfo<Map<String, Object>> pageInfo = new PageInfo<>(mapList);
-            restResult = new RestResult("获取用户列表",pageInfo, ResultCode.SUCCESS.code());
+            restResult = new RestResult("获取用户列表", pageInfo, ResultCode.SUCCESS.code());
         } catch (Exception e) {
             log.info("获取员工列表失败------->", e);
         }
@@ -186,7 +190,11 @@ public class UserController {
         try {
             String token = request.getHeader("token");
             SysUser sysUser = tokenService.getToken(token);
-            restResult = new RestResult("获取用户信息", sysUser, ResultCode.SUCCESS.code());
+            censusService.census(sysUser);
+            Map<String, Object> resultMap = new HashMap<>();
+            resultMap.put("sysUser", sysUser);
+            resultMap.put("census", censusService.census(sysUser));
+            restResult = new RestResult("获取用户信息", resultMap, ResultCode.SUCCESS.code());
         } catch (Exception e) {
             log.info("获取用户信息失败---->", e);
             return new RestResult("获取用户信息失败", null, ResultCode.ERROR.code());

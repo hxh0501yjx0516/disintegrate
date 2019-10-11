@@ -51,4 +51,5 @@ public interface IProceduresService {
 
     ShangWeiDataVo queryShangWeiData(Map<String, Object> params, SysUser user) throws ExecutionException, InterruptedException;
 
+    PageInfo<CarVerifyOrderVo> queryVerifyOrderList(Map<String, Object> params, SysUser user);
 }

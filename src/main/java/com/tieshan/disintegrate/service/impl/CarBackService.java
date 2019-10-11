@@ -1,16 +1,14 @@
 package com.tieshan.disintegrate.service.impl;
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.tieshan.disintegrate.dao.CarBackMapper;
 import com.tieshan.disintegrate.dao.CarInfoMapper;
 import com.tieshan.disintegrate.exception.CustomException;
 import com.tieshan.disintegrate.pojo.CarBack;
-import com.tieshan.disintegrate.pojo.CarInfo;
 import com.tieshan.disintegrate.pojo.SysUser;
 import com.tieshan.disintegrate.service.ICarBackService;
-import com.tieshan.disintegrate.vo.CarBackVo;
+import com.tieshan.disintegrate.vo.CarBackListVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -63,14 +61,14 @@ public class CarBackService implements ICarBackService {
     }
 
     @Override
-    public PageInfo<CarBackVo> queryCarBackVoList(Map<String, Object> params, SysUser user) {
+    public PageInfo<CarBackListVo> queryCarBackVoList(Map<String, Object> params, SysUser user) {
         params.put("disintegratePlantId", user.getCompany_id());
         PageHelper.startPage(
                 StringUtils.isEmpty(params.get("pageNum")) ? 1 : Integer.parseInt(String.valueOf(params.get("pageNum"))),
                 StringUtils.isEmpty(params.get("pageSize")) ? 10 : Integer.parseInt(String.valueOf(params.get("pageSize"))));
         PageHelper.orderBy("b.create_time desc");
-        List<CarBackVo> carBackVos = carBackMapper.selectVoListByMap(params);
-        PageInfo<CarBackVo> pageInfo = new PageInfo<>(carBackVos);
+        List<CarBackListVo> carBackListVos = carBackMapper.selectVoListByMap(params);
+        PageInfo<CarBackListVo> pageInfo = new PageInfo<>(carBackListVos);
         return pageInfo;
     }
 }
