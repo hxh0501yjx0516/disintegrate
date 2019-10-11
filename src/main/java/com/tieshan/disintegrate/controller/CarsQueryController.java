@@ -391,7 +391,6 @@ public class CarsQueryController {
      *
      * @param carInfoId 必选 Long 车辆Id，从之前返回数据中带过来
      * @return {"msg": "查询该车辆初检信息成功","data": [{"motor_count": 3,"battery_count": 2,"cistern_count": 3,"alloy_rim_count": 1,"remark": "aerer","chair_count": 1,"car_name": "川崎Z1000R","approach_time": "2019-09-23 19:59:19","engine": "发动机号码","door_count": 1,"tyre_count": 1,"catalytic_converter_count": 2,"car_no": "京A5W44C","car_degree": 12,"car_code": "TSCAR190900001","displacement": "汽车排量","vin": "VIN码","conditioner_count": 2,"condition_pump_count": 1,"electrical_machinery_count": 4}],"ret_code": "0"}
-     * @catalog 拆解厂-APP/手续部-工作台/车辆拆解
      * @title App端根据carInfoId查询车辆初检信息
      * @description App端根据carInfoId查询车辆初检信息
      * @method get
@@ -425,13 +424,7 @@ public class CarsQueryController {
     public RestResult findSurveyById(@RequestParam(value = "carInfoId", required = false) Long carInfoId, @LoginUser SysUser user) {
 
         List<Map<String, Object>> list = carsQueryService.findSurveyById(carInfoId, user.getCompany_id());
-        RestResult restResult = null;
-        if (null == list || list.size() == 0) {
-            restResult = new RestResult("未查询到该车辆初检信息", null, ResultCode.SUCCESS.code());
-        } else {
-            restResult = new RestResult("查询该车辆初检信息成功", list, ResultCode.SUCCESS.code());
-        }
-        return restResult;
+        return new RestResult("查询该车辆初检信息成功", list, ResultCode.SUCCESS.code());
     }
     /**
      * showdoc

@@ -4,7 +4,9 @@ import com.github.pagehelper.PageHelper;
 import com.tieshan.disintegrate.dao.CarDismantleDao;
 import com.tieshan.disintegrate.pojo.SysUser;
 import com.tieshan.disintegrate.service.IDismantleService;
+import com.tieshan.disintegrate.util.IdWorker;
 import com.tieshan.disintegrate.vo.CarBreakInfoVo;
+import com.tieshan.disintegrate.vo.PartsListVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,31 +27,87 @@ public class DismantleService implements IDismantleService {
     private CarDismantleDao carDismantleDao;
 
     @Override
-    public List<CarBreakInfoVo> findDismantleList(String findMsg,Integer page,Integer pageSize,SysUser user) {
+    public List<CarBreakInfoVo> findDismantleList(String findMsg, Integer page, Integer pageSize, SysUser user) {
         List<CarBreakInfoVo> dismantleList = new ArrayList<>();
         CarBreakInfoVo breakInfoVo = null;
         //分页信息
         PageHelper.startPage(page, pageSize);
         PageHelper.orderBy("id desc");
         //查询出基本信息封装为Map中，下一步遍历
-        List<Map<String,Object>> carInfoList = carDismantleDao.findCarInfo(findMsg,user.getCompany_id());
+        List<Map<String, Object>> carInfoList = carDismantleDao.findCarInfo(findMsg, user.getCompany_id());
         for (Map<String, Object> carInfoMap : carInfoList) {
             breakInfoVo = new CarBreakInfoVo();
             //获取当前CarInfoId，为后续查询图片使用
-            String str=String.valueOf(carInfoMap.get("id"));
-            Long carInfoId=Long.valueOf(str);
+            String str = String.valueOf(carInfoMap.get("id"));
+            Long carInfoId = Long.valueOf(str);
             //封装一行数据
             breakInfoVo.setCarCode(carInfoMap.get("car_code").toString());
             breakInfoVo.setCarNo(carInfoMap.get("car_no").toString());
             breakInfoVo.setCarName(carInfoMap.get("car_name").toString());
             breakInfoVo.setContacts(carInfoMap.get("contacts").toString());
             breakInfoVo.setContactsPhone(carInfoMap.get("contacts_phone").toString());
-            breakInfoVo.setPrePic(carDismantleDao.findPrePic(carInfoId,user.getCompany_id()));
-            breakInfoVo.setBreakPic(carDismantleDao.findBreakPic(carInfoId,user.getCompany_id()));
+            breakInfoVo.setPrePic(carDismantleDao.findPrePic(carInfoId, user.getCompany_id()));
+            breakInfoVo.setBreakPic(carDismantleDao.findBreakPic(carInfoId, user.getCompany_id()));
             //将封装好的一整行数据存入List
             dismantleList.add(breakInfoVo);
         }
         //返回List
         return dismantleList;
     }
+
+    @Override
+    public void updateDismantle(Long operatorId, Long carInfoId, Long companyId) {
+        carDismantleDao.updateDismantle(operatorId, carInfoId, companyId);
+    }
+
+    @Override
+    public List<Map<String, Object>> findPartsNameList() {
+        return carDismantleDao.findPartsNameList();
+    }
+
+    @Override
+    public int addCarParts(Long carInfoId, SysUser user, List<Map<String, Object>> partsNameAndOeList, Integer partsStatus) {
+        Long companyId = user.getCompany_id();
+        Long printOperatorId = user.getId();
+        String printOperator = user.getUser_name();
+        IdWorker idWorker = new IdWorker(1, 1, 1);
+        int count = 0;
+        for (Map<String, Object> map : partsNameAndOeList) {
+            Long id = idWorker.nextId();
+            String oe = map.get("oe").toString();
+            String partsName = map.get("partsName").toString();
+            carDismantleDao.addCarParts(id, carInfoId, companyId, oe, partsName, partsStatus, printOperatorId, printOperator);
+            count++;
+        }
+        return count;
+    }
+
+    @Override
+    public List<PartsListVo> findPartsNameListByParentId() {
+
+        //先查询一级拆车件名称
+        List<Map<String,Object>> parentList = carDismantleDao.findPartsParentList();
+        List<PartsListVo> partsList = new ArrayList<>();
+        for (Map<String, Object> map : parentList) {
+            String str = String.valueOf(map.get("id"));
+            String parentName = map.get("parts_category_name").toString();
+            Long parentId = Long.valueOf(str);
+            //根据取出来的一级中的id 作为条件 查询二级拆车件名称
+            List<Map<String,Object>>sonList = carDismantleDao.findPartsNameListByParentId(parentId);
+            List<String> list = new ArrayList<>();
+            for (Map<String, Object> sonMap : sonList) {
+                String sonName = sonMap.get("parts_name").toString();
+                list.add(sonName);
+            }
+            PartsListVo partsListVo = new PartsListVo();
+            partsListVo.setParentName(parentName);
+            partsListVo.setSonName(list);
+            partsList.add(partsListVo);
+        }
+        return partsList;
+
+    }
+
+
+
 }
