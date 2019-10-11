@@ -8,6 +8,7 @@ import com.tieshan.disintegrate.service.IDismantleService;
 import com.tieshan.disintegrate.util.RestResult;
 import com.tieshan.disintegrate.util.ResultCode;
 import com.tieshan.disintegrate.vo.CarBreakInfoVo;
+import com.tieshan.disintegrate.vo.PartsListVo;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @description: 拆解管理模块控制层
@@ -69,5 +71,44 @@ public class DismantleController {
         RestResult restResult = new RestResult("查询拆解车辆列表信息成功", pageInfo, ResultCode.SUCCESS.code());
         return restResult;
     }
+
+    /**待拆车-确认拆解接口*/
+    @GetMapping("/doCarsQuery/updateDismantle")
+    public RestResult updateDismantle(
+            @RequestParam(value = "carInfoId") Long carInfoId,@LoginUser SysUser user){
+        iDismantleService.updateDismantle(user.getId(),carInfoId,user.getCompany_id());
+        RestResult restResult = new RestResult("确认拆解成功", null, ResultCode.SUCCESS.code());
+        return restResult;
+    }
+
+    /**拆车-查询打印配件名称接口*/
+
+    @GetMapping("/doCarsQuery/findPartsNameList")
+    public RestResult findPartsNameList(){
+        List<Map<String,Object>> mapList = iDismantleService.findPartsNameList();
+        RestResult restResult = new RestResult("查询成功", mapList, ResultCode.SUCCESS.code());
+        return restResult;
+    }
+
+    /**拆车-打印配件后入库接口*/
+
+    @GetMapping("/doCarsQuery/addCarParts")
+    public RestResult addCarParts(@RequestParam(value = "carInfoId") Long carInfoId,
+                                  @RequestParam(value = "partsName") List<Map<String,Object>> partsNameAndOeList,//里面有OE号 和 件名
+                                  @RequestParam(value = "partsStatus") Integer partsStatus,
+                                  @LoginUser SysUser user){
+        int rows  = iDismantleService.addCarParts(carInfoId,user,partsNameAndOeList,partsStatus);
+        RestResult restResult = new RestResult("打印成功", rows, ResultCode.SUCCESS.code());
+        return restResult;
+    }
+
+    /**拆车-查询二级分类列表接口*/
+    @GetMapping("/doCarsQuery/findPartsNameListByParentId")
+    public RestResult findPartsNameListByParentId(){
+        List<PartsListVo> mapList = iDismantleService.findPartsNameListByParentId();
+        RestResult restResult = new RestResult("查询成功", mapList, ResultCode.SUCCESS.code());
+        return restResult;
+    }
+
 
 }
