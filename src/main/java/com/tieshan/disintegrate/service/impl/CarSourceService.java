@@ -444,62 +444,10 @@ public class CarSourceService implements ICarSourceService {
         return dictionaryService.findBankNameList();
     }
 
-    /**
-     * 查询所有已拆的件
-     * @param request
-     * @param page
-     * @param pageSize
-     * @param findMsg
-     * @return
-     */
-    @Override
-    public List<Map<String, Object>> selectCarParts(HttpServletRequest request, Integer page, Integer pageSize, String findMsg) {
-        PageHelper.startPage(page, pageSize);
-        PageHelper.orderBy("p.print_time DESC");
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
-        return carSourceMapper.selectCarParts(sysUser.getCompany_id(),sysUser.getId(), findMsg);
-    }
 
-    /**
-     * 查询待拆和已拆车辆
-     * @param request
-     * @param page
-     * @param pageSize
-     * @param findMsg
-     * @return
-     */
-    @Override
-    public List<Map<String, Object>> selectIsDismantle(HttpServletRequest request, Integer page, Integer pageSize, String findMsg, Integer isDismantle) {
-        PageHelper.startPage(page, pageSize);
-        PageHelper.orderBy("p.destructive_time DESC");
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
-        List<Map<String, Object>> mapList = null;
-        if (isDismantle == 1){     // 待拆车：毁型时间
-            mapList = carSourceMapper.selectIsDismantle(sysUser.getCompany_id(), findMsg, isDismantle);
-        }else {         // 拆解时间
-            mapList =  carSourceMapper.selectIsDismantleComplete(sysUser.getCompany_id(), findMsg, isDismantle);
-        }
-        return mapList;
-    }
 
-    /**
-     * 查询监销和不监销车辆
-     * @param request
-     * @param page
-     * @param pageSize
-     * @param findMsg
-     * @return
-     */
-    @Override
-    public List<Map<String, Object>> selectIsSuperviseSale(HttpServletRequest request, Integer page, Integer pageSize, String findMsg, Integer isSuperviseSale) {
-        PageHelper.startPage(page, pageSize);
-        PageHelper.orderBy("p.dismantle_time DESC");
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
-        return carSourceMapper.selectIsSuperviseSale(sysUser.getCompany_id(), findMsg, isSuperviseSale);
-    }
+
+
 
     /**
      * 首页的查询

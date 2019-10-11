@@ -1295,45 +1295,6 @@
         </if>
     </select>
 
-    <select id="selectIsSuperviseSale" resultType="java.util.Map">
-        SELECT
-        	IFNULL( i.car_code, '' ) AS carCode,
-        	IFNULL( i.car_no, '' ) AS carNo,
-        	IFNULL( p.dismantle_time, '' ) AS dismantleTime,
-        	IFNULL( d.vin, '' ) AS vin,
-        	IFNULL( i.id, '' ) AS id
-        FROM
-        	ts_car_info AS i
-        	LEFT JOIN ts_car_processing AS p ON i.id = p.car_info_id
-        	LEFT JOIN ts_car_identity AS d ON i.id = d.car_info_id
-        WHERE
-        	i.disintegrate_plant_id = #{disintegratePlantId}
-        	AND p.is_supervise_sale = #{isSuperviseSale}
-        	<if test="findMsg != null and findMsg != ''">
-                AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%','','%')
-            </if>
-    </select>
-
-    <select id="selectIsDismantleComplete" resultType="java.util.Map">
-        SELECT
-        IFNULL( i.car_code, '' ) AS carCode,
-        IFNULL( i.car_no, '' ) AS carNo,
-        IFNULL( p.dismantle_time, '' ) AS dismantleTime,
-        IFNULL( d.vin, '' ) AS vin,
-        IFNULL( i.id, '' ) AS id
-        FROM
-        ts_car_info AS i
-        LEFT JOIN ts_car_processing AS p ON i.id = p.car_info_id
-        LEFT JOIN ts_car_identity AS d ON i.id = d.car_info_id
-        WHERE
-        i.disintegrate_plant_id = #{disintegratePlantId}
-        AND p.is_supervise_sale = 2
-        AND p.is_dismantle = #{isDismantle}
-        <if test="findMsg != null and findMsg != ''">
-            AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%',#{findMsg},'%')
-        </if>
-    </select>
-
     <insert id="insertCarProcessing" parameterType="com.tieshan.disintegrate.pojo.CarProcessing">
         INSERT INTO ts_car_processing
         <trim prefix="(" suffixOverrides="," suffix=")">
@@ -1388,48 +1349,6 @@
         </trim>
     </insert>
 
-
-
-
-
-    <select id="selectIsDismantle" resultType="java.util.Map">
-        SELECT
-        IFNULL( i.car_code, '' ) AS carCode,
-        IFNULL( i.car_no, '' ) AS carNo,
-        IFNULL( p.destructive_time, '' ) AS destructiveTime,
-        IFNULL( d.vin, '' ) AS vin,
-        IFNULL( i.id, '' ) AS id
-        FROM
-        ts_car_info AS i
-        LEFT JOIN ts_car_processing AS p ON i.id = p.car_info_id
-        LEFT JOIN ts_car_identity AS d ON i.id = d.car_info_id
-        WHERE
-        i.disintegrate_plant_id = #{disintegratePlantId}
-        AND p.is_supervise_sale = 2
-        AND p.is_dismantle = #{isDismantle}
-        <if test="findMsg != null and findMsg != ''">
-            AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%',#{findMsg},'%')
-        </if>
-    </select>
-
-
-
-    <select id="selectCarParts" resultType="java.util.Map">
-        SELECT
-        	IFNULL( i.id, '' ) AS id,
-        	IFNULL( i.car_no, '' ) AS carNo,
-        	IFNULL( d.vin, '' ) AS vin,
-        	IFNULL( p.parts_name, '' ) AS partsName,
-        	IFNULL( p.print_time, '' ) AS printTime,
-        	IFNULL( p.print_operator, '' ) AS printOperator
-        FROM
-        	ts_car_info AS i
-        	LEFT JOIN ts_car_identity AS d ON i.id = d.car_info_id
-        	LEFT JOIN ts_car_parts AS p ON i.id = p.car_info_id
-        WHERE
-        	i.disintegrate_plant_id = #{disintegratePlantId}
-        	AND p.print_operator_id = #{printOperatorId}
-    </select>
 
     <delete id="deleteCarSourceById" parameterType="java.lang.Long">
         DELETE FROM ts_car_source WHERE id =#{id} AND disintegrate_plant_id = #{disintegratePlantId}
