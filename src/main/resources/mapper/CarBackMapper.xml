@@ -172,7 +172,7 @@
         SELECT i.id car_info_id,i.car_no,i.car_code, i.car_name,i.contacts,i.contacts_phone,i.contacts_address,e.vin,b.is_print_car_order
         FROM ts_car_info i
         left join ts_car_identity e on i.id=e.car_info_id
-        left join ts_car_back b on i.id=b.car_info_id
+        inner join ts_car_back b on i.id=b.car_info_id
         <where>
             AND i.disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
             <if test="searchInfo!=null and searchInfo!=''">

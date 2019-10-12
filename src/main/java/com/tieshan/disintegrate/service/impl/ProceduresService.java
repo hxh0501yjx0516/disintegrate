@@ -85,7 +85,7 @@ public class ProceduresService implements IProceduresService {
 
     @Override
     @Transactional
-    public void update(ProceduresVo proceduresVo, SysUser user) {
+    public void saveProcedures(ProceduresVo proceduresVo, SysUser user) {
         Map<String, Object> map = new HashMap<>();
         map.put("disintegratePlantId", user.getCompany_id());
         map.put("id", proceduresVo.getId());

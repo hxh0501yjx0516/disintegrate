@@ -50,9 +50,9 @@ public class ProceduresController {
      * @param user
      * @return
      */
-    @PostMapping(value = "/updateProcedures")
-    public RestResult updateCarInfo(@RequestBody ProceduresVo proceduresVo, @LoginUser SysUser user) {
-        proceduresService.update(proceduresVo, user);
+    @PostMapping(value = "/saveProcedures")
+    public RestResult saveProcedures(@RequestBody ProceduresVo proceduresVo, @LoginUser SysUser user) {
+        proceduresService.saveProcedures(proceduresVo, user);
         return new RestResult("修改成功", "", ResultCode.SUCCESS.code());
     }
 

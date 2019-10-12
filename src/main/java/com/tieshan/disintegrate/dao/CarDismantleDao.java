@@ -15,24 +15,34 @@ import java.util.Map;
 @Mapper
 public interface CarDismantleDao {
 
-    /**查询拆解管理模块车辆信息*/
+    /** PC-查询拆解管理模块车辆信息*/
     @Select({"<script>" +
-            "SELECT id,car_code,car_no,car_name,contacts,contacts_phone " +
-            "FROM ts_car_info " +
-            "WHERE disintegrate_plant_id=#{companyId}" +
+            "SELECT info.id,info.car_code,info.car_no,info.car_name,info.contacts,info.contacts_phone\n" +
+            "FROM ts_car_info info,ts_car_processing pos\n" +
+            "WHERE info.disintegrate_plant_id=#{companyId}\n" +
+            "and info.id=pos.car_info_id\n" +
+            "and pos.is_destructive=2" +
             "<if test=\"findMsg!=null and findMsg!=''\">\n" +
-            "and concat(car_code,car_no,car_name,contacts,contacts_phone)\n" +
+            "and concat(info.car_code,info.car_no,info.car_name,info.contacts,info.contacts_phone)\n" +
             "like concat(\"%\",#{findMsg},\"%\")\n" +
             "</if>" +
             "</script>"})
     List<Map<String,Object>> findCarInfo(@Param("findMsg")String findMsg,@Param("companyId") Long companyId);
 
-    /**查询监销和不监销车辆*/
+    /**查询拆解管理模块车辆拆解前照片*/
+    @Select("select file_url from ts_car_pic where car_info_id=#{carInfoId} and disintegrate_plant_id=#{companyId} and first_type='pre_pic'")
+    List<Map<String,Object>> findPrePic(@Param("carInfoId") Long carInfoId,@Param("companyId") Long companyId);
+
+    /**查询拆解管理模块车辆拆解后照片*/
+    @Select("select file_url from ts_car_pic where car_info_id=#{carInfoId} and disintegrate_plant_id=#{companyId} and first_type='break_pic'")
+    List<Map<String,Object>> findBreakPic(@Param("carInfoId") Long carInfoId,@Param("companyId") Long companyId);
+
+    /** APP - 查询监销和不监销车辆*/
     @Select({"<script>" +
             "        SELECT\n" +
             "        \tIFNULL( i.car_code, '' ) AS carCode,\n" +
             "        \tIFNULL( i.car_no, '' ) AS carNo,\n" +
-            "        \tIFNULL( p.dismantle_time, '' ) AS dismantleTime,\n" +
+            "        \tIFNULL( p.destructive_time, '' ) AS destructiveTime,\n" +
             "        \tIFNULL( d.vin, '' ) AS vin,\n" +
             "        \tIFNULL( i.id, '' ) AS id\n" +
             "        FROM\n" +
@@ -97,7 +107,7 @@ public interface CarDismantleDao {
                                                         @Param(value = "isDismantle") Integer isDismantle);
     /**查询所有已拆的件*/
     @Select({"<script>" +
-            "        SELECT\n" +
+            " SELECT\n" +
             "        \tIFNULL( i.id, '' ) AS id,\n" +
             "        \tIFNULL( i.car_no, '' ) AS carNo,\n" +
             "        \tIFNULL( d.vin, '' ) AS vin,\n" +
@@ -110,19 +120,16 @@ public interface CarDismantleDao {
             "        \tLEFT JOIN ts_car_parts AS p ON i.id = p.car_info_id\n" +
             "        WHERE\n" +
             "        \ti.disintegrate_plant_id = #{disintegratePlantId}\n" +
-            "        \tAND p.print_operator_id = #{printOperatorId}" +
+            "        \tAND p.print_operator_id = #{printOperatorId}\n" +
+            "\t\t\t\t\t<if test=\"findMsg != null and findMsg != ''\">\n" +
+            "            AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%',#{findMsg},'%')\n" +
+            "        </if>" +
             "</script>"})
     List<Map<String, Object>> selectCarParts(@Param(value = "disintegratePlantId") Long disintegratePlantId,
                                              @Param(value = "printOperatorId") Long printOperatorId,
                                              @Param(value = "findMsg") String findMsg);
 
-    /**查询拆解管理模块车辆拆解前照片*/
-    @Select("select file_url from ts_car_pic where car_info_id=#{carInfoId} and disintegrate_plant_id=#{companyId} and first_type='pre_pic'")
-    List<Map<String,Object>> findPrePic(@Param("carInfoId") Long carInfoId,@Param("companyId") Long companyId);
 
-    /**查询拆解管理模块车辆拆解后照片*/
-    @Select("select file_url from ts_car_pic where car_info_id=#{carInfoId} and disintegrate_plant_id=#{companyId} and first_type='break_pic'")
-    List<Map<String,Object>> findBreakPic(@Param("carInfoId") Long carInfoId,@Param("companyId") Long companyId);
 
     /**更改拆解状态*/
     @Update("update ts_car_processing set is_dismantle=2,dismantle_user_id=#{operatorId},dismantle_time=now() " +

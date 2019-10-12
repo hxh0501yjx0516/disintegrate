@@ -8,12 +8,11 @@ import com.tieshan.disintegrate.service.IDismantleService;
 import com.tieshan.disintegrate.util.RestResult;
 import com.tieshan.disintegrate.util.ResultCode;
 import com.tieshan.disintegrate.vo.CarBreakInfoVo;
+import com.tieshan.disintegrate.vo.CarPartsData;
 import com.tieshan.disintegrate.vo.PartsListVo;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -78,7 +77,7 @@ public class DismantleController {
      * @param request
      * @return
      */
-    @GetMapping("/selectIsSuperviseSale")
+    @GetMapping("/doCarsQuery/selectIsSuperviseSale")
     public RestResult selectIsDestructive(HttpServletRequest request,
                                           @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
                                           @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
@@ -104,7 +103,7 @@ public class DismantleController {
      * @param findMsg
      * @return
      */
-    @GetMapping("/selectIsDismantle")
+    @GetMapping("/doCarsQuery/selectIsDismantle")
     public RestResult selectIsDismantle(HttpServletRequest request,
                                         @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
                                         @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
@@ -129,7 +128,7 @@ public class DismantleController {
      * @param findMsg
      * @return
      */
-    @GetMapping("/selectCarPartsList")
+    @GetMapping("/doCarsQuery/selectCarPartsList")
     public RestResult selectCarPartsList(HttpServletRequest request,
                                          @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
                                          @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
@@ -145,16 +144,12 @@ public class DismantleController {
         return new RestResult("查询成功", pageInfo, ResultCode.SUCCESS.code());
     }
 
-    /** APP-监销/非监销-接口*/
-
-    /** APP-待拆车/已拆车-接口*/
-
-    /** APP-已拆件-接口*/
-
-
-
-
-    /** APP-待拆车-确认拆解接口*/
+    /**
+     *@Description: APP-待拆车-确认拆解接口
+     * @param: carInfoId
+     * @param: user
+     * @return:
+     */
     @GetMapping("/doCarsQuery/updateDismantle")
     public RestResult updateDismantle(
             @RequestParam(value = "carInfoId") Long carInfoId,@LoginUser SysUser user){
@@ -163,8 +158,10 @@ public class DismantleController {
         return restResult;
     }
 
-    /** APP-拆车-查询打印配件名称接口*/
-
+    /**
+     *@Description: APP-拆车-查询打印配件名称接口
+     * @return:
+     */
     @GetMapping("/doCarsQuery/findPartsNameList")
     public RestResult findPartsNameList(){
         List<Map<String,Object>> mapList = iDismantleService.findPartsNameList();
@@ -172,25 +169,28 @@ public class DismantleController {
         return restResult;
     }
 
-    /** APP-拆车-打印配件后入库接口*/
-
-    @GetMapping("/doCarsQuery/addCarParts")
-    public RestResult addCarParts(@RequestParam(value = "carInfoId") Long carInfoId,
-                                  @RequestParam(value = "partsName") List<Map<String,Object>> partsNameAndOeList,//里面有OE号 和 件名
-                                  @RequestParam(value = "partsStatus") Integer partsStatus,
-                                  @LoginUser SysUser user){
-        int rows  = iDismantleService.addCarParts(carInfoId,user,partsNameAndOeList,partsStatus);
-        RestResult restResult = new RestResult("打印成功", rows, ResultCode.SUCCESS.code());
+    /**
+     *@Description: APP-拆车-打印配件后入库接口
+     * @param: carPartsData 封装的数据
+     * @param: user
+     * @return:
+     */
+    @PostMapping("/doCarsQuery/addCarParts")
+    public RestResult addCarParts(@RequestBody CarPartsData carPartsData,@LoginUser SysUser user){
+        int rows  = iDismantleService.addCarParts(carPartsData,user);
+        RestResult restResult = new RestResult("打印成功,打印了"+rows+"条数据", rows, ResultCode.SUCCESS.code());
         return restResult;
     }
 
-    /** APP-拆车-查询二级分类列表接口*/
+    /**
+     *@Description: APP-拆车-查询二级分类列表接口
+     * @return:
+     */
     @GetMapping("/doCarsQuery/findPartsNameListByParentId")
     public RestResult findPartsNameListByParentId(){
         List<PartsListVo> mapList = iDismantleService.findPartsNameListByParentId();
         RestResult restResult = new RestResult("查询成功", mapList, ResultCode.SUCCESS.code());
         return restResult;
     }
-
 
 }

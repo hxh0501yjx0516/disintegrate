@@ -19,6 +19,8 @@ import java.util.Map;
 @AllArgsConstructor
 public class CarSalvageVo {
 
+    /**车辆Id*/
+    private Long carInfoId;
     /**车辆编号*/
     private String carCode;
     /**车牌号*/
