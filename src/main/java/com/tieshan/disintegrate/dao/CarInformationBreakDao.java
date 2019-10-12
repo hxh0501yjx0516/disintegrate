@@ -22,7 +22,7 @@ public interface CarInformationBreakDao {
      * @param: carInfoId car_info的主键(车辆编号ID)
      * @return: List
      */
-    @Select("select dismantle_way,dismantle_time,dismantle_user_id from ts_car_enter where car_info_id=#{carInfoId} and disintegrate_plant_id=#{companyId}")
+    @Select("select dismantle_way,dismantle_time,dismantle_user_name from ts_car_enter where car_info_id=#{carInfoId} and disintegrate_plant_id=#{companyId}")
     List<Map<String,Object>> findCarBreakById(@Param("carInfoId") Long carInfoId,@Param("companyId")Long companyId);
 
     /**
