@@ -65,7 +65,7 @@ public class ProceduresController {
     @PostMapping(value = "/queryProcedures")
     public RestResult queryProcedures(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         ProceduresVo proceduresVo = proceduresService.query(params, user);
-        return new RestResult("修改成功", proceduresVo, ResultCode.SUCCESS.code());
+        return new RestResult("查询成功", proceduresVo, ResultCode.SUCCESS.code());
     }
 
     /**

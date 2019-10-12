@@ -114,10 +114,12 @@ public class ProceduresService implements IProceduresService {
 
     @Override
     public ProceduresVo query(Map<String, Object> params, SysUser user) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("disintegratePlantId", user.getCompany_id());
-        CarIdentity carIdentity = carIdentityMapper.selectOneByMap(map);
+        params.put("disintegratePlantId", user.getCompany_id());
+        CarIdentity carIdentity = carIdentityMapper.selectOneByMap(params);
         ProceduresVo proceduresVo = new ProceduresVo();
+        if (carIdentity == null) {
+            return null;
+        }
         BeanUtils.copyProperties(carIdentity, proceduresVo);
         return proceduresVo;
     }

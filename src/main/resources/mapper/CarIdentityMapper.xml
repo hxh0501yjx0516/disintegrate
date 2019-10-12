@@ -38,104 +38,36 @@
     </resultMap>
 
     <select id="selectOneByMap" resultMap="carIdentityMap">
-        SELECT  id, disintegrate_plant_id, ascription, car_info_id, colour, owner, phone, id_card, agend, agend_idcard,
-        car_kind, fuel_type, reg_time, issue_time, nature_usege, car_type, vin, engine, issue_size, displacement,
-        carrying_capacity, remarks, frame_number, car_weight, owner_address, owner_zipcode, car_properties,
-        is_delete, card_color, status, record_no
-        FROM ts_car_identity
+        SELECT  ie.id, ie.disintegrate_plant_id, ie.ascription, ie.car_info_id, ie.colour, ie.owner, ie.phone, ie.id_card, ie.agend, ie.agend_idcard,
+        ie.car_kind, ie.fuel_type, ie.reg_time, ie.issue_time, ie.nature_usege, ie.car_type, ie.vin, ie.engine, ie.issue_size, ie.displacement,
+        ie.carrying_capacity, ie.remarks, ie.frame_number, ie.car_weight, ie.owner_address, ie.owner_zipcode, ie.car_properties,
+        ie.is_delete, s.card_color, ie.status, ie.record_no
+        FROM ts_car_identity ie
+        left join ts_car_survey s on ie.car_info_id=s.car_info_id
         <where>
             <if test="id!=null">
-                AND id=#{id}  <!--  -->
+                AND ie.id=#{id}  <!--  -->
             </if>
             <if test="disintegratePlantId!=null">
-                AND disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
+                AND ie.disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
             </if>
             <if test="ascription!=null and ascription!=''">
-                AND ascription=#{ascription}  <!-- 车辆归宿(来自字典表) -->
+                AND ie.ascription=#{ascription}  <!-- 车辆归宿(来自字典表) -->
             </if>
             <if test="carInfoId!=null">
-                AND car_info_id=#{carInfoId}  <!-- car_info主键id -->
-            </if>
-            <if test="colour!=null and colour!=''">
-                AND colour=#{colour}  <!-- 车辆颜色(来自字典表) -->
-            </if>
-            <if test="owner!=null and owner!=''">
-                AND owner=#{owner}  <!-- 车主姓名（或组织结构名称） -->
-            </if>
-            <if test="phone!=null and phone!=''">
-                AND phone=#{phone}  <!-- 车主电话 -->
-            </if>
-            <if test="idCard!=null and idCard!=''">
-                AND id_card=#{idCard}  <!-- 车主身份证号（组织结构代码） -->
-            </if>
-            <if test="agend!=null and agend!=''">
-                AND agend=#{agend}  <!-- 代理人 -->
-            </if>
-            <if test="agendIdcard!=null and agendIdcard!=''">
-                AND agend_idcard=#{agendIdcard}  <!-- 代理人身份证号 -->
-            </if>
-            <if test="carKind!=null and carKind!=''">
-                AND car_kind=#{carKind}  <!-- 车辆性质(来之字典表) -->
-            </if>
-            <if test="fuelType!=null and fuelType!=''">
-                AND fuel_type=#{fuelType}  <!-- 燃油性质(来之字典表） -->
-            </if>
-            <if test="regTime!=null">
-                AND reg_time=#{regTime}  <!-- 注册时间 -->
-            </if>
-            <if test="issueTime!=null">
-                AND issue_time=#{issueTime}  <!-- 发证日期 -->
-            </if>
-            <if test="natureUsege!=null and natureUsege!=''">
-                AND nature_usege=#{natureUsege}  <!-- 使用性质(来之字典表),营运非营运。。。 -->
-            </if>
-            <if test="carType!=null and carType!=''">
-                AND car_type=#{carType}  <!-- 车辆型号 -->
-            </if>
-            <if test="vin!=null and vin!=''">
-                AND vin=#{vin}  <!-- 车辆识别代码(vin） -->
-            </if>
-            <if test="engine!=null and engine!=''">
-                AND engine=#{engine}  <!-- 发动机号码 -->
-            </if>
-            <if test="issueSize!=null and issueSize!=''">
-                AND issue_size=#{issueSize}  <!-- 外廓尺寸 -->
-            </if>
-            <if test="displacement!=null and displacement!=''">
-                AND displacement=#{displacement}  <!-- 汽车排量 -->
-            </if>
-            <if test="carryingCapacity!=null and carryingCapacity!=''">
-                AND carrying_capacity=#{carryingCapacity}  <!-- 核定载人数 -->
-            </if>
-            <if test="remarks!=null and remarks!=''">
-                AND remarks=#{remarks}  <!-- 备注 -->
-            </if>
-            <if test="frameNumber!=null and frameNumber!=''">
-                AND frame_number=#{frameNumber}  <!-- 车架号码 -->
-            </if>
-            <if test="carWeight!=null and carWeight!=''">
-                AND car_weight=#{carWeight}  <!-- 整车质量(车本上的质量) -->
-            </if>
-            <if test="ownerAddress!=null and ownerAddress!=''">
-                AND owner_address=#{ownerAddress}  <!-- 车主地址 -->
-            </if>
-            <if test="ownerZipcode!=null and ownerZipcode!=''">
-                AND owner_zipcode=#{ownerZipcode}  <!-- 车主邮编 -->
+                AND ie.car_info_id=#{carInfoId}  <!-- car_info主键id -->
             </if>
             <if test="carProperties!=null and carProperties!=''">
-                AND car_properties=#{carProperties}  <!-- 车辆性质(来之字典表) 小轿车，大卡车。。。 -->
+                AND ie.car_properties=#{carProperties}  <!-- 车辆性质(来之字典表) 小轿车，大卡车。。。 -->
             </if>
             <if test="isDelete!=null">
-                AND is_delete=#{isDelete}  <!-- 是否删除。1.删除，2,正常 -->
-            </if>
-            <if test="cardColor!=null and cardColor!=''">
-                AND card_color=#{cardColor}  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
+                AND ie.is_delete=#{isDelete}  <!-- 是否删除。1.删除，2,正常 -->
             </if>
             <if test="status!=null">
-                AND status=#{status}  <!-- 1:暂存，2:提交（登记完成） -->
+                AND ie.status=#{status}  <!-- 1:暂存，2:提交（登记完成） -->
             </if>
             <if test="recordNo!=null and recordNo!=''">
-                AND  record_no=#{ recordNo}  <!-- 档案号 -->
+                AND  ie.record_no=#{ recordNo}  <!-- 档案号 -->
             </if>
         </where>
     </select>
