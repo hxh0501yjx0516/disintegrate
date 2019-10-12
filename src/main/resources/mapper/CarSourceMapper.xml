@@ -1111,6 +1111,7 @@
         WHERE
         	i.disintegrate_plant_id = #{disintegratePlantId}
         	AND s.dismantling_way != 5
+            AND i.car_location_area IS NULL OR i.car_location_area = ''
         	<if test="findMsg != null and findMsg != ''">
                 AND CONCAT(i.car_no,i.car_name,i.car_code) LIKE CONCAT("%",#{findMsg},"%")
             </if>

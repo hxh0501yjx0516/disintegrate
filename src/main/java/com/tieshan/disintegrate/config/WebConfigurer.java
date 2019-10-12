@@ -28,17 +28,6 @@ public class WebConfigurer implements WebMvcConfigurer {
         StringHttpMessageConverter converter = new StringHttpMessageConverter(Charset.forName("UTF-8"));
         return converter;
     }
-    @Bean
-    public HttpMessageConverters customConverters() {
-        MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
-        ObjectMapper objectMapper = new ObjectMapper();
-        SimpleModule simpleModule = new SimpleModule();
-        simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
-        simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
-        objectMapper.registerModule(simpleModule);
-        jackson2HttpMessageConverter.setObjectMapper(objectMapper);
-        return new HttpMessageConverters(new HttpMessageConverter[]{jackson2HttpMessageConverter});
-    }
 
    /* @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
