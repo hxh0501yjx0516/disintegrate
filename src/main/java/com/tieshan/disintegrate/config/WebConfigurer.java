@@ -31,7 +31,7 @@ public class WebConfigurer implements WebMvcConfigurer {
         StringHttpMessageConverter converter = new StringHttpMessageConverter(Charset.forName("UTF-8"));
         return converter;
     }
-    @Bean
+   /* @Bean
     public HttpMessageConverters customConverters() {
         MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -47,7 +47,7 @@ public class WebConfigurer implements WebMvcConfigurer {
         objectMapper.registerModule(simpleModule);
         jackson2HttpMessageConverter.setObjectMapper(objectMapper);
         return new HttpMessageConverters(new HttpMessageConverter[]{jackson2HttpMessageConverter});
-    }
+    }*/
    /* @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(responseBodyConverter());

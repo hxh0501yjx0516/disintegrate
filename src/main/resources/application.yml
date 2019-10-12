@@ -1,3 +1,9 @@
 spring:
   profiles:
     active: @profileActive@
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+    generator:
+      write_numbers_as_strings: true
+
