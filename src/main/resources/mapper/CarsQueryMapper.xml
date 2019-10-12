@@ -5,6 +5,7 @@
 <mapper namespace="com.tieshan.disintegrate.dao.CarsQueryDao">
 
     <resultMap type="com.tieshan.disintegrate.pojo.CarsQuery" id="carsQueryMap">
+        <result property="carCode" column="car_code"/>
         <result property="carNo" column="car_no"/>
         <result property="carInfoId" column="car_info_id"/>
         <result property="cardColor" column="card_color"/>
@@ -20,7 +21,7 @@
     <!-- 查询列表数据 -->
     <select id="findPageObjects"
             resultMap="carsQueryMap">
-        select iden.car_info_id,info.car_no,sur.card_color,info.car_name,iden.car_kind,iden.nature_usege,
+        select iden.car_info_id,info.car_code,info.car_no,sur.card_color,info.car_name,iden.car_kind,iden.nature_usege,
         iden.car_properties,iden.reg_time,iden.issue_time,iden.owner,iden.phone,info.contacts,
         info.contacts_phone,iden.vin,iden.engine
         from ts_car_identity AS iden
@@ -156,7 +157,7 @@
     <sql id="queryWhereMsg">
         <where>
             <if test="findMsg!=null and findMsg!=''">
-                and concat(iden.owner,iden.phone,info.car_name,info.car_no,info.id,iden.vin,iden.engine)
+                and concat(iden.owner,iden.phone,info.car_name,info.car_no,info.car_code,iden.vin,iden.engine)
                 like concat("%",#{findMsg},"%")
             </if>
         </where>

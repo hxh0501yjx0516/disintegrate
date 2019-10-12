@@ -19,9 +19,13 @@ import java.util.Date;
 @Accessors(chain = true)
 public class CarsQuery{
     /**
-     * 车辆编号-->car_info.id
+     * 车辆id-->car_info.id
      * */
     private Long carInfoId;
+    /**
+     * 车辆编号-->car_code
+     * */
+    private String carCode;
     /**
      * 车牌号-->car_info.车牌号
      * */
