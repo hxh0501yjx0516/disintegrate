@@ -13,6 +13,7 @@ import com.tieshan.disintegrate.util.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -35,14 +36,14 @@ public class CarsQueryServiceImpl implements CarsQueryService {
     @Override
     public List<CarsQuery> findPageObjects(String findMsg, Integer page, Integer pageSize,Long companyId) {
         PageHelper.startPage(page, pageSize);
-        PageHelper.orderBy("reg_time desc");
+        PageHelper.orderBy("iden.reg_time desc");
         return carsQueryDao.findPageObjects(findMsg,companyId);
     }
 
     @Override
     public List<Map<String, Object>> findPretreatmentCars(String findMsg, Integer page, Integer pageSize,Long dpId) {
         PageHelper.startPage(page, pageSize);
-        PageHelper.orderBy("approach_time desc");
+        PageHelper.orderBy("ent.approach_time desc");
         return carsQueryDao.findPretreatmentCars(findMsg, dpId);
     }
 
@@ -74,7 +75,7 @@ public class CarsQueryServiceImpl implements CarsQueryService {
     @Override
     public List<Map<String, Object>> findCopyNumberCars(String findMsg, Integer page, Integer pageSize,Long dpId) {
         PageHelper.startPage(page, pageSize);
-        PageHelper.orderBy("approach_time desc");
+        PageHelper.orderBy("ent.approach_time desc");
         return carsQueryDao.findCopyNumberCars(findMsg, dpId);
     }
     @Override
@@ -114,10 +115,11 @@ public class CarsQueryServiceImpl implements CarsQueryService {
         for (int i = 0; i < carPicDataList.size(); i++) {
             //解析Map
             Map<String, Object> map = carPicDataList.get(i);
-            String fileName = map.get("filed_name").toString();
-            String fileUrl = map.get("fileUrl").toString();
-            String firstType = map.get("first_type").toString();
-            String twoType = map.get("two_type").toString();
+            //StringUtils.isEmpty(map.get("oe"))?"":(map.get("oe").toString());
+            String fileName = StringUtils.isEmpty(map.get("filed_name"))?"":(map.get("filed_name").toString());
+            String fileUrl = StringUtils.isEmpty(map.get("fileUrl"))?"":(map.get("fileUrl").toString());
+            String firstType = StringUtils.isEmpty(map.get("first_type"))?"":(map.get("first_type").toString());
+            String twoType = StringUtils.isEmpty(map.get("two_type"))?"":(map.get("two_type").toString());
             //封装值
             Long idxx = idWorker.nextId();
             carPic = new CarPic();
@@ -147,7 +149,7 @@ public class CarsQueryServiceImpl implements CarsQueryService {
     @Override
     public List<Map<String, Object>> findDismantleCars(String findMsg,Integer page, Integer pageSize, Long dpId) {
         PageHelper.startPage(page, pageSize);
-        PageHelper.orderBy("approach_time desc");
+        PageHelper.orderBy("ent.approach_time desc");
         return carsQueryDao.findDismantleCars(findMsg, dpId);
     }
     @Override
@@ -169,7 +171,7 @@ public class CarsQueryServiceImpl implements CarsQueryService {
     @Override
     public List<Map<String, Object>> findPreBreakCars(String findMsg, Integer page, Integer pageSize, Long companyId) {
         PageHelper.startPage(page, pageSize);
-        PageHelper.orderBy("approach_time desc");
+        PageHelper.orderBy("ent.approach_time desc");
         return carsQueryDao.findPreBreakCars(findMsg,companyId);
     }
 
@@ -193,8 +195,11 @@ public class CarsQueryServiceImpl implements CarsQueryService {
 
     @Override
     public List<Map<String, Object>> findBreakSuccessCars(String findMsg, Integer page, Integer pageSize, Long companyId) {
+//        System.err.println(carsQueryDao.findBreakSuccessCars(findMsg,companyId));
+        List<Map<String, Object>> mapList = carsQueryDao.findBreakSuccessCars(findMsg, companyId);
+        System.out.println(mapList);
         PageHelper.startPage(page, pageSize);
-        PageHelper.orderBy("approach_time desc");
-        return carsQueryDao.findBreakSuccessCars(findMsg,companyId);
+        PageHelper.orderBy("ent.approach_time desc");
+        return mapList;
     }
 }
