@@ -17,15 +17,25 @@ public interface CarDismantleDao {
 
     /** PC-查询拆解管理模块车辆信息*/
     @Select({"<script>" +
-            "SELECT id,car_code,car_no,car_name,contacts,contacts_phone " +
-            "FROM ts_car_info " +
-            "WHERE disintegrate_plant_id=#{companyId}" +
+            "SELECT info.id,info.car_code,info.car_no,info.car_name,info.contacts,info.contacts_phone\n" +
+            "FROM ts_car_info info,ts_car_processing pos\n" +
+            "WHERE info.disintegrate_plant_id=#{companyId}\n" +
+            "and info.id=pos.car_info_id\n" +
+            "and pos.is_destructive=2" +
             "<if test=\"findMsg!=null and findMsg!=''\">\n" +
-            "and concat(car_code,car_no,car_name,contacts,contacts_phone)\n" +
+            "and concat(info.car_code,info.car_no,info.car_name,info.contacts,info.contacts_phone)\n" +
             "like concat(\"%\",#{findMsg},\"%\")\n" +
             "</if>" +
             "</script>"})
     List<Map<String,Object>> findCarInfo(@Param("findMsg")String findMsg,@Param("companyId") Long companyId);
+
+    /**查询拆解管理模块车辆拆解前照片*/
+    @Select("select file_url from ts_car_pic where car_info_id=#{carInfoId} and disintegrate_plant_id=#{companyId} and first_type='pre_pic'")
+    List<Map<String,Object>> findPrePic(@Param("carInfoId") Long carInfoId,@Param("companyId") Long companyId);
+
+    /**查询拆解管理模块车辆拆解后照片*/
+    @Select("select file_url from ts_car_pic where car_info_id=#{carInfoId} and disintegrate_plant_id=#{companyId} and first_type='break_pic'")
+    List<Map<String,Object>> findBreakPic(@Param("carInfoId") Long carInfoId,@Param("companyId") Long companyId);
 
     /** APP - 查询监销和不监销车辆*/
     @Select({"<script>" +
@@ -119,13 +129,7 @@ public interface CarDismantleDao {
                                              @Param(value = "printOperatorId") Long printOperatorId,
                                              @Param(value = "findMsg") String findMsg);
 
-    /**查询拆解管理模块车辆拆解前照片*/
-    @Select("select file_url from ts_car_pic where car_info_id=#{carInfoId} and disintegrate_plant_id=#{companyId} and first_type='pre_pic'")
-    List<Map<String,Object>> findPrePic(@Param("carInfoId") Long carInfoId,@Param("companyId") Long companyId);
 
-    /**查询拆解管理模块车辆拆解后照片*/
-    @Select("select file_url from ts_car_pic where car_info_id=#{carInfoId} and disintegrate_plant_id=#{companyId} and first_type='break_pic'")
-    List<Map<String,Object>> findBreakPic(@Param("carInfoId") Long carInfoId,@Param("companyId") Long companyId);
 
     /**更改拆解状态*/
     @Update("update ts_car_processing set is_dismantle=2,dismantle_user_id=#{operatorId},dismantle_time=now() " +
