@@ -246,12 +246,13 @@
     </select>
     <select id="selectProcedureIssueVoList" resultMap="crProcedureIssueVo">
         SELECT i.id car_info_id,i.car_code, i.car_no,i.car_name,i.contacts,i.contacts_phone,i.contacts_address,
-        ie.vin,s.is_get_salvage,p.is_procedure_issue
+        ie.vin,s.is_get_salvage,p.is_procedure_issue,p.procedure_issue_time
         FROM ts_car_info i
         left join ts_car_identity ie on i.id=ie.car_info_id
         left join ts_car_processing p on i.id=p.car_info_id
         left join ts_car_salvage s on i.id=s.car_info_id
-        <where>
+        where i.disintegrate_plant_id=#{disintegratePlantId}
+            AND p.is_appoint_logout_time=2
             <if test="disintegratePlantId!=null">
                 AND i.disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
             </if>
@@ -265,7 +266,6 @@
                 and concat(i.contacts,i.contacts_phone,i.car_name,i.car_no,i.car_code)
                 like concat("%",#{searchInfo},"%")
             </if>
-        </where>
     </select>
     <select id="selectProcedureVoList" resultType="com.tieshan.disintegrate.vo.CarProcedureListVo">
         SELECT i.id carInfoId,i.car_code carCode, i.car_no carNo,i.car_name carName,i.contacts,i.contacts_phone contactsPhone,

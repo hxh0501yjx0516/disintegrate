@@ -1,6 +1,7 @@
 package com.tieshan.disintegrate.config;
 
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -15,6 +16,8 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 
 @Configuration
 public class WebConfigurer implements WebMvcConfigurer {
@@ -28,7 +31,23 @@ public class WebConfigurer implements WebMvcConfigurer {
         StringHttpMessageConverter converter = new StringHttpMessageConverter(Charset.forName("UTF-8"));
         return converter;
     }
+   /* @Bean
+    public HttpMessageConverters customConverters() {
+        MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
+        ObjectMapper objectMapper = new ObjectMapper();
+        SimpleModule simpleModule = new SimpleModule();
+        simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
+        simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
 
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        //设置全局的时间转化
+        SimpleDateFormat smt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        objectMapper.setDateFormat(smt);
+        objectMapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));//解决时区差8小时问题
+        objectMapper.registerModule(simpleModule);
+        jackson2HttpMessageConverter.setObjectMapper(objectMapper);
+        return new HttpMessageConverters(new HttpMessageConverter[]{jackson2HttpMessageConverter});
+    }*/
    /* @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(responseBodyConverter());
