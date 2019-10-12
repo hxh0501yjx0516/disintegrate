@@ -22,9 +22,9 @@ public interface CarInformationIdentityDao {
      * @param: carInfoId car_info的主键(车辆编号ID)
      * @return: List
      */
-    @Select("select iden.*,info.contacts,info.contacts_phone,info.contacts_address,info.driv_license,info.regist_license " +
-            "from ts_car_identity iden,ts_car_info info " +
-            "where iden.car_info_id=info.id and info.id=#{carInfoId} and iden.disintegrate_plant_id=#{companyId}")
+    @Select("select iden.*,info.contacts,info.contacts_phone,info.contacts_address,info.driv_license,info.regist_license,pro.register_time,pro.register_user_name " +
+            "from ts_car_identity iden join ts_car_info info on iden.car_info_id=info.id " +
+            "join ts_car_processing pro on pro.car_info_id=info.id where info.id=#{carInfoId} and iden.disintegrate_plant_id=#{companyId}")
     List<Map<String,Object>> findCarIdentityById(@Param("carInfoId") Long carInfoId,@Param("companyId")Long companyId);
 
     /**
