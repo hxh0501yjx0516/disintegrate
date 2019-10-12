@@ -39,7 +39,7 @@ public class DismantleService implements IDismantleService {
         CarBreakInfoVo breakInfoVo = null;
         //分页信息
         PageHelper.startPage(page, pageSize);
-        PageHelper.orderBy("id desc");
+        PageHelper.orderBy("info.id desc");
         //查询出基本信息封装为Map中，下一步遍历
         List<Map<String, Object>> carInfoList = carDismantleDao.findCarInfo(findMsg, user.getCompany_id());
         if(!PubMethod.isEmpty(carInfoList)){
@@ -132,8 +132,10 @@ public class DismantleService implements IDismantleService {
         int count = 0;
         for (Map<String, Object> map : partsNameAndOeList) {
             Long id = idWorker.nextId();
-            String oe = map.get("oe").toString();
-            String partsName = map.get("partsName").toString();
+            //String oe = map.get("oe").toString();
+            //String partsName = map.get("partsName").toString();
+            String oe = StringUtils.isEmpty(map.get("oe"))?"":(map.get("oe").toString());
+            String partsName = StringUtils.isEmpty(map.get("partsName"))?"":(map.get("partsName").toString());
             carDismantleDao.addCarParts(id, carInfoId, companyId, oe, partsName, partsStatus, printOperatorId, printOperator);
             count++;
         }
