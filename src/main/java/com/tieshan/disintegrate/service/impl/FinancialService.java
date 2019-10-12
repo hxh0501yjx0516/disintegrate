@@ -29,7 +29,7 @@ public class FinancialService implements IFinancialService {
     public List<CarSalvageVo> findCarInfoAndSalvage(String findMsg, Integer page, Integer pageSize, SysUser user) {
 
         PageHelper.startPage(page, pageSize);
-        PageHelper.orderBy("id desc");
+        PageHelper.orderBy("info.id desc");
         List<CarSalvageVo> list = financialDao.findCarInfoAndSalvage(findMsg,user.getCompany_id());
         return list;
     }
@@ -47,7 +47,7 @@ public class FinancialService implements IFinancialService {
     @Override
     public List<Map<String, Object>> findCarInfoGetSalvage(String findMsg,Integer page,Integer pageSize, SysUser user) {
         PageHelper.startPage(page, pageSize);
-        PageHelper.orderBy("get_salvage_time desc");
+        PageHelper.orderBy("sal.get_salvage_time desc");
         return financialDao.findCarInfoGetSalvage(findMsg,user.getCompany_id());
     }
 
