@@ -39,8 +39,11 @@ public interface IDismantleService {
     /**拆车-打印配件接口*/
     int addCarParts(CarPartsData carPartsData, SysUser user);
 
+    /**拆车-查询一级分类列表接口*/
+    List<PartsListVo> findFirstPartsName();
+
     /**拆车-查询二级分类列表接口*/
-    List<PartsListVo> findPartsNameListByParentId();
+    List<PartsListVo> findSecondPartsName(Long parentId);
 
 
 }

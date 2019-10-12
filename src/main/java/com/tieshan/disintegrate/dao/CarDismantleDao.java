@@ -1,5 +1,6 @@
 package com.tieshan.disintegrate.dao;
 
+import com.tieshan.disintegrate.vo.PartsListVo;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -150,12 +151,12 @@ public interface CarDismantleDao {
                     @Param("partsStatus")Integer partsStatus,
                     @Param("printOperatorId")Long printOperatorId,
                     @Param("printOperator")String printOperator);
-    /**拆车-查询二级分类列表*/
-    @Select("select id,parts_category_name from ts_car_parts_category")
-    List<Map<String,Object>> findPartsParentList();
+    /**拆车-查询一级分类列表*/
+    @Select("select id,parts_category_name AS parts_name from ts_car_parts_category")
+    List<PartsListVo> findFirstPartsName();
     /**拆车-查询二级分类列表*/
     @Select("select id,parts_name from ts_car_parts_dictionary where parts_category_id=#{parentId}")
-    List<Map<String,Object>> findPartsNameListByParentId(@Param("parentId")Long parentId);
+    List<PartsListVo> findSecondPartsName(@Param("parentId")Long parentId);
 
 
 
