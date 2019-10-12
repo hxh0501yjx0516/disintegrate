@@ -103,7 +103,7 @@
     <!--App端根据carInfoId查询车辆待毁型信息-->
     <select id="findPreBreakCarsById" resultType="map">
 
-        select pic.id,dic.first_type,dic.two_type,dic.filed_name,pic.file_url
+        select dic.first_type,dic.two_type,dic.filed_name file_name,pic.file_url
         from ts_dictionary dic
         left join ts_car_pic pic
         on dic.first_type=pic.first_type and dic.two_type=pic.two_type and pic.car_info_id=#{carInfoId} and pic.disintegrate_plant_id=#{companyId}
