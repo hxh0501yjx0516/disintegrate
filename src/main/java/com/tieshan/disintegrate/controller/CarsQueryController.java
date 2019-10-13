@@ -551,6 +551,50 @@ public class CarsQueryController {
         return restResult;
     }
 
+    /***
+     * App端-查询报废车辆列表
+     */
+    @GetMapping("/doCarsQuery/findProCars")
+    public RestResult findProCars(
+            @RequestParam(value = "findMsg", required = false) String findMsg,
+            @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
+            @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
+            @LoginUser SysUser user
+    ) {
+        PageInfo pageInfo = null;
+        List<Map<String,Object>> mapList = carsQueryService.findProCars(findMsg, page, pageSize, user.getCompany_id());
+        pageInfo = new PageInfo<>(mapList);
+        RestResult restResult = new RestResult("查询车辆列表信息成功", pageInfo, ResultCode.SUCCESS.code());
+        return restResult;
+    }
+
+    /***
+     * App端根据carInfoId查询报废证明照片数据
+     */
+    @GetMapping("/doCarsQuery/findProCarsById")
+    public RestResult findProCarsById(@RequestParam(value = "carInfoId", required = false) Long carInfoId, @LoginUser SysUser user) {
+
+        List<Map<String, Object>> list = carsQueryService.findProCarsById(carInfoId, user.getCompany_id());
+        return new RestResult("查询该车辆报废证明信息成功", list, ResultCode.SUCCESS.code());
+    }
+    /***
+     * App端添加报废证明照片
+     */
+    @PostMapping("/doCarsQuery/addProPic")
+    public RestResult addProPic(@RequestBody CarPicData carPicData, @LoginUser SysUser user) {
+
+        RestResult restResult = null;
+        try {
+            carsQueryService.addProPic(carPicData, user);
+                restResult = new RestResult("暂存图片成功", "1", ResultCode.SUCCESS.code());
+
+        } catch (Exception e) {
+            log.info("插入图片失败", e);
+            return new RestResult("插入图片失败", null, ResultCode.ERROR.code());
+        }
+        return restResult;
+    }
+
 
 
 

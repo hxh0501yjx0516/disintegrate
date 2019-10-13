@@ -36,4 +36,5 @@ public interface CarPicMapper {
     void batchDeleteCarPic(Long disintegratePlantId,Long carInfoId);
     void batchDeleteTuoPic(Long disintegratePlantId,Long carInfoId);
     void batchDeleteBreakPic(Long disintegratePlantId,Long carInfoId);
+    void batchDeleteProPic(Long disintegratePlantId,Long carInfoId);
 }

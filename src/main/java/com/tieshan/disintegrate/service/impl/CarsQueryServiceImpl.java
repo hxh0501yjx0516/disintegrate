@@ -202,4 +202,25 @@ public class CarsQueryServiceImpl implements CarsQueryService {
         PageHelper.orderBy("ent.approach_time desc");
         return mapList;
     }
+
+    @Override
+    public List<Map<String, Object>> findProCars(String findMsg, Integer page, Integer pageSize, Long companyId) {
+        PageHelper.startPage(page, pageSize);
+        PageHelper.orderBy("isAppointTime desc");
+        return carsQueryDao.findProCars(findMsg,companyId);
+    }
+
+    @Override
+    public List<Map<String, Object>> findProCarsById(Long carInfoId, Long companyId) {
+        return carsQueryDao.findProCarsById(carInfoId,companyId);
+    }
+
+    @Override
+    public void addProPic(CarPicData carPicData, SysUser user) {
+
+        //不管点击哪个按钮，先清空数据库
+        carPicMapper.batchDeleteProPic(user.getCompany_id(), carPicData.getCarInfoId());
+        pubMethod(carPicData, user);
+
+    }
 }

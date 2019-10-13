@@ -95,7 +95,15 @@ public interface CarsQueryDao {
      */
     void updateBreakStatus(@Param("operatorId")Long operatorId,@Param("carInfoId")Long carInfoId,@Param("disId")Long disId);
 
+    /***
+     * App端根据carInfoId查询车辆报废证明数据
+     */
+    List<Map<String, Object>> findProCarsById(@Param("carInfoId")Long carInfoId,@Param("companyId")Long companyId);
 
+    /***
+     * App端-报废车辆
+     */
+    List<Map<String, Object>> findProCars(@Param("findMsg") String findMsg,@Param("companyId")Long companyId);
 
 
 
