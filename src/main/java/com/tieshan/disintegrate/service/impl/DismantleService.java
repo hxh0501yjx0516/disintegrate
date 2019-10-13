@@ -123,18 +123,22 @@ public class DismantleService implements IDismantleService {
         String printOperator = user.getUser_name();
         //从Post传参中获取数据
         Long carInfoId = carPartsData.getCarInfoId();
-        List<Map<String, Object>> partsNameAndOeList = carPartsData.getData();
+        String carCode = carPartsData.getCarCode();
+        List<Map<String, Object>> partsNameAndCodeList = carPartsData.getData();
         int partsStatus = carPartsData.getPartsStatus();
         IdWorker idWorker = new IdWorker(1, 1, 1);
         int count = 0;
-        for (Map<String, Object> map : partsNameAndOeList) {
+        for (Map<String, Object> map : partsNameAndCodeList) {
             Long id = idWorker.nextId();
-            //String oe = map.get("oe").toString();
-            //String partsName = map.get("partsName").toString();
-            String oe = StringUtils.isEmpty(map.get("oe")) ? "" : (map.get("oe").toString());
+            String partsCode = StringUtils.isEmpty(map.get("partsCode")) ? "" : (map.get("partsCode").toString());
             String partsName = StringUtils.isEmpty(map.get("partsName")) ? "" : (map.get("partsName").toString());
-            carDismantleDao.addCarParts(id, carInfoId, companyId, oe, partsName, partsStatus, printOperatorId, printOperator);
-            count++;
+            if(!StringUtils.isEmpty(carDismantleDao.findPartByName(carInfoId,partsName))){
+            }
+            else{
+                partsCode=carCode+partsCode;
+                carDismantleDao.addCarParts(id, carInfoId, companyId, partsCode, partsName, partsStatus, printOperatorId, printOperator);
+                count++;
+            }
         }
         return count;
     }
@@ -148,4 +152,5 @@ public class DismantleService implements IDismantleService {
     public List<PartsListVo> findSecondPartsName(Long parentId) {
         return carDismantleDao.findSecondPartsName(parentId);
     }
+
 }

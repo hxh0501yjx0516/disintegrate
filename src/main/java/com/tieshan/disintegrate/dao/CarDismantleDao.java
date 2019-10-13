@@ -138,15 +138,17 @@ public interface CarDismantleDao {
     void updateDismantle(@Param("operatorId") Long operatorId,@Param("carInfoId") Long carInfoId,@Param("companyId") Long companyId);
 
     /**拆车-查询打印配件名称*/
-    @Select("select filed_name from ts_dictionary where first_type='car_parts'")
+    @Select("select two_type partsCode,filed_name from ts_dictionary where first_type='car_parts'")
     List<Map<String,Object>> findPartsNameList();
 
-    @Insert("INSERT into ts_car_parts(id,car_info_id,disintegrate_plant_id,oe,parts_name,parts_status,print_operator_id,print_operator,print_time) " +
-            "VALUES(#{id},#{carInfoId},#{companyId},#{oe},#{partsName},#{partsStatus},#{printOperatorId},#{printOperator},now())")
+    @Select("select id from ts_car_parts where car_info_id=#{carInfoId} and parts_name=#{partsName}")
+    Map<String,Object>findPartByName(@Param("carInfoId") Long carInfoId,@Param("partsName") String partsName);
+    @Insert("INSERT IGNORE into ts_car_parts(id,car_info_id,disintegrate_plant_id,parts_code,parts_name,parts_status,print_operator_id,print_operator,print_time) " +
+            "VALUES(#{id},#{carInfoId},#{companyId},#{partsCode},#{partsName},#{partsStatus},#{printOperatorId},#{printOperator},now())")
     int addCarParts(@Param("id")Long id,
                     @Param("carInfoId")Long carInfoId,
                     @Param("companyId")Long companyId,
-                    @Param("oe")String oe,
+                    @Param("partsCode")String oe,
                     @Param("partsName")String partsName,
                     @Param("partsStatus")Integer partsStatus,
                     @Param("printOperatorId")Long printOperatorId,
@@ -155,9 +157,8 @@ public interface CarDismantleDao {
     @Select("select id,parts_category_name AS parts_name from ts_car_parts_category")
     List<PartsListVo> findFirstPartsName();
     /**拆车-查询二级分类列表*/
-    @Select("select id,parts_name from ts_car_parts_dictionary where parts_category_id=#{parentId}")
+    @Select("select id,parts_code,parts_name from ts_car_parts_dictionary where parts_category_id=#{parentId}")
     List<PartsListVo> findSecondPartsName(@Param("parentId")Long parentId);
-
 
 
 }

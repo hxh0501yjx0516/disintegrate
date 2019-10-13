@@ -25,4 +25,6 @@ public class PartsListVo implements Serializable {
     private Long id;
     /**拆车件一级名称*/
     private String parts_name;
+    /**拆车件编号*/
+    private String parts_code;
 }
