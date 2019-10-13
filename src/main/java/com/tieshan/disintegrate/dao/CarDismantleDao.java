@@ -65,7 +65,7 @@ public interface CarDismantleDao {
             "        SELECT\n" +
             "        IFNULL( i.car_code, '' ) AS carCode,\n" +
             "        IFNULL( i.car_no, '' ) AS carNo,\n" +
-            "        IFNULL( p.destructive_time, '' ) AS Time,\n" +
+            "        IFNULL( p.destructive_time, '' ) AS time,\n" +
             "        IFNULL( d.vin, '' ) AS vin,\n" +
             "        IFNULL( i.id, '' ) AS id\n" +
             "        FROM\n" +
@@ -74,7 +74,7 @@ public interface CarDismantleDao {
             "        LEFT JOIN ts_car_identity AS d ON i.id = d.car_info_id\n" +
             "        WHERE\n" +
             "        i.disintegrate_plant_id = #{disintegratePlantId}\n" +
-            "        AND p.is_supervise_sale = 2\n" +
+            "        AND p.is_destructive = 2\n" +
             "        AND p.is_dismantle = #{isDismantle}\n" +
             "        <if test=\"findMsg != null and findMsg != ''\">\n" +
             "            AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%',#{findMsg},'%')\n" +
@@ -88,7 +88,7 @@ public interface CarDismantleDao {
             "        SELECT\n" +
             "        IFNULL( i.car_code, '' ) AS carCode,\n" +
             "        IFNULL( i.car_no, '' ) AS carNo,\n" +
-            "        IFNULL( p.dismantle_time, '' ) AS Time,\n" +
+            "        IFNULL( p.dismantle_time, '' ) AS time,\n" +
             "        IFNULL( d.vin, '' ) AS vin,\n" +
             "        IFNULL( i.id, '' ) AS id\n" +
             "        FROM\n" +
@@ -97,7 +97,7 @@ public interface CarDismantleDao {
             "        LEFT JOIN ts_car_identity AS d ON i.id = d.car_info_id\n" +
             "        WHERE\n" +
             "        i.disintegrate_plant_id = #{disintegratePlantId}\n" +
-            "        AND p.is_supervise_sale = 2\n" +
+            "        AND p.is_destructive = 2\n" +
             "        AND p.is_dismantle = #{isDismantle}\n" +
             "        <if test=\"findMsg != null and findMsg != ''\">\n" +
             "            AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%',#{findMsg},'%')\n" +
