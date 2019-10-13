@@ -65,7 +65,7 @@ public interface CarDismantleDao {
             "        SELECT\n" +
             "        IFNULL( i.car_code, '' ) AS carCode,\n" +
             "        IFNULL( i.car_no, '' ) AS carNo,\n" +
-            "        IFNULL( p.destructive_time, '' ) AS destructiveTime,\n" +
+            "        IFNULL( p.destructive_time, '' ) AS Time,\n" +
             "        IFNULL( d.vin, '' ) AS vin,\n" +
             "        IFNULL( i.id, '' ) AS id\n" +
             "        FROM\n" +
@@ -88,7 +88,7 @@ public interface CarDismantleDao {
             "        SELECT\n" +
             "        IFNULL( i.car_code, '' ) AS carCode,\n" +
             "        IFNULL( i.car_no, '' ) AS carNo,\n" +
-            "        IFNULL( p.dismantle_time, '' ) AS dismantleTime,\n" +
+            "        IFNULL( p.dismantle_time, '' ) AS Time,\n" +
             "        IFNULL( d.vin, '' ) AS vin,\n" +
             "        IFNULL( i.id, '' ) AS id\n" +
             "        FROM\n" +
