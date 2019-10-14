@@ -71,6 +71,10 @@ public class JPushUtil {
      * @return
      */
     public static PushPayload android(Map<String, String> map) {
+        String msg_content = map.get("msg_content");
+        if (msg_content.length() > 20) {
+            msg_content = msg_content.substring(0, 20);
+        }
         return PushPayload.newBuilder()
                 .setPlatform(Platform.android())
                 .setAudience(Audience.all())
@@ -78,7 +82,7 @@ public class JPushUtil {
                         .setAlert(map.get("msg_title"))
                         .addPlatformNotification(AndroidNotification.newBuilder()
                                 .setTitle(map.get("msg_title"))
-                                .setAlert(map.get("msg_content").substring(0, 20))
+                                .setAlert(msg_content)
                                 //此字段为透传字段，不会显示在通知栏。用户可以通过此字段来做一些定制需求，如特定的key传要指定跳转的页面（value）
                                 .addExtras(map)
                                 .build()
@@ -91,13 +95,10 @@ public class JPushUtil {
     /**
      * 推送到所有用户 (IOS)
      *
-     * @param notification_title
-     * @param msg_title
-     * @param msg_content
      * @param map
      * @return
      */
-    public static PushPayload buildPushIOS(String notification_title, String msg_title, String msg_content, Map<String, String> map) {
+    public static PushPayload buildPushIOS(Map<String, String> map) {
         return PushPayload.newBuilder()
                 .setPlatform(Platform.android_ios())
                 .setAudience(Audience.all())
@@ -105,7 +106,7 @@ public class JPushUtil {
 //                        .setAlert("公告")
                                 .addPlatformNotification(IosNotification.newBuilder()
                                         //传一个IosAlert对象，指定apns title、title、subtitle等
-                                        .setAlert("公告")
+                                        .setAlert(map.get("msg_title"))
                                         //直接传alert
                                         //此项是指定此推送的badge自动加1
                                         .incrBadge(1)
@@ -116,24 +117,6 @@ public class JPushUtil {
                                         .build()
                                 )
                                 .build()
-                )
-                //Platform指定了哪些平台就会像指定平台中符合推送条件的设备进行推送。 jpush的自定义消息，
-                // sdk默认不做任何处理，不会有通知提示。建议看文档http://docs.jpush.io/guideline/faq/的
-                // [通知与自定义消息有什么区别？]了解通知和自定义消息的区别
-                .setMessage(Message.newBuilder()
-                        .setMsgContent(msg_content)
-                        .setTitle(msg_title)
-                        .addExtra("msgKey", map.toString())
-                        .build())
-
-                .setOptions(Options.newBuilder()
-                        //此字段的值是用来指定本推送要推送的apns环境，false表示开发，true表示生产；对android和自定义消息无意义
-                        .setApnsProduction(false)
-                        //此字段是给开发者自己给推送编号，方便推送者分辨推送记录
-                        .setSendno(1)
-                        //此字段的值是用来指定本推送的离线保存时长，如果不传此字段则默认保存一天，最多指定保留十天，单位为秒
-                        .setTimeToLive(86400)
-                        .build()
                 )
                 .build();
     }

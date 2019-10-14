@@ -53,6 +53,13 @@ public class NoticeController {
     public RestResult push(@RequestBody Notice notice, HttpServletRequest request) {
         RestResult restResult = null;
         int num = noticeService.insertNotice(notice, request);
+        if (num > 0) {
+            restResult = new RestResult("推送成功", null, ResultCode.SUCCESS.code());
+
+        }else{
+            restResult = new RestResult("推送失败", null, ResultCode.SUCCESS.code());
+
+        }
         restResult = new RestResult("推送成功", num, ResultCode.SUCCESS.code());
 
         return restResult;
