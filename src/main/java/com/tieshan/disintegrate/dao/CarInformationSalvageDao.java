@@ -35,9 +35,12 @@ public interface CarInformationSalvageDao {
      * @param: carInfoId car_info的主键(车辆编号ID)
      * @return: List
      */
-    @Select("select IFNULL( create_time, '' ) AS create_time," +
-            "IFNULL( operator, '' ) AS operator," +
-            "IFNULL( remark, '' ) AS remark from ts_car_procedure_log where car_info_id=#{carInfoId} and type=7 and disintegrate_plant_id=#{companyId}")
+    @Select("select IFNULL( pro.create_time, '' ) AS create_time," +
+            "IFNULL( sal.salvage, '' ) AS salvage," +
+            "IFNULL( pro.operator, '' ) AS operator," +
+            "IFNULL( pro.remark, '' ) AS remark " +
+            "from ts_car_salvage sal join ts_car_procedure_log pro on sal.car_info_id=pro.car_info_id " +
+            "where pro.car_info_id=#{carInfoId} and pro.type=7 and pro.disintegrate_plant_id=#{companyId}")
     List<Map<String,Object>> findCarBreakLogById(@Param("carInfoId") Long carInfoId,@Param("companyId")Long companyId);
 
 
