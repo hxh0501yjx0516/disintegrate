@@ -30,6 +30,9 @@ public interface IDismantleService {
     /**查询所有已拆的件*/
     List<Map<String, Object>> selectCarParts(HttpServletRequest request, Integer page, Integer pageSize, String findMsg);
 
+    /**查询某辆车已拆件的个数*/
+    int selectAllPartsById(Long carInfoId,Long companyId);
+
     /**更改拆解状态*/
     void updateDismantle(Long operatorId,Long carInfoId,Long companyId);
 

@@ -92,6 +92,10 @@ public class DismantleService implements IDismantleService {
         return mapList;
     }
 
+    @Override
+    public int selectAllPartsById(Long carInfoId, Long companyId) {
+        return carDismantleDao.selectAllPartsById(carInfoId,companyId);
+    }
 
     @Override
     public List<Map<String, Object>> selectCarParts(HttpServletRequest request, Integer page, Integer pageSize, String findMsg) {
