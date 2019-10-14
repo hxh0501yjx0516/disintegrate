@@ -95,16 +95,19 @@ public interface CarDismantleDao {
             "        IFNULL( ent.dismantle_way, '' ) AS dismantleWay,\n" +
             "        IFNULL( p.dismantle_time, '' ) AS time,\n" +
             "        IFNULL( d.vin, '' ) AS vin,\n" +
+            "        count(par.id) AS count,\n" +
             "        IFNULL( i.id, '' ) AS id\n" +
             "        FROM\n" +
             "        ts_car_info AS i\n" +
             "        LEFT JOIN ts_car_processing AS p ON i.id = p.car_info_id\n" +
             "        LEFT JOIN ts_car_identity AS d ON i.id = d.car_info_id\n" +
             "        LEFT JOIN ts_car_enter AS ent ON i.id = ent.car_info_id\n" +
+            "        LEFT JOIN ts_car_parts AS par ON i.id = par.car_info_id\n" +
             "        WHERE\n" +
             "        i.disintegrate_plant_id = #{disintegratePlantId}\n" +
             "        AND p.is_destructive = 2\n" +
             "        AND p.is_dismantle = #{isDismantle}\n" +
+            "GROUP BY i.car_code" +
             "        <if test=\"findMsg != null and findMsg != ''\">\n" +
             "            AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%',#{findMsg},'%')\n" +
             "        </if>" +
