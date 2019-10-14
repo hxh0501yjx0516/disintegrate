@@ -106,5 +106,5 @@ public interface CarsQueryDao {
     List<Map<String, Object>> findProCars(@Param("findMsg") String findMsg,@Param("companyId")Long companyId);
 
 
-
+    List<Map<String, Object>> findProCarsComplete(@Param("findMsg") String findMsg,@Param("companyId")Long companyId);
 }
