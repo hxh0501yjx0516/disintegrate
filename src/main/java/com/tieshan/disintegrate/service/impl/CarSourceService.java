@@ -1,6 +1,7 @@
 package com.tieshan.disintegrate.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.tieshan.disintegrate.dao.CarInformationDao;
 import com.tieshan.disintegrate.dao.CarSourceMapper;
 import com.tieshan.disintegrate.dao.SysUserMapper;
 import com.tieshan.disintegrate.pojo.*;
@@ -32,7 +33,8 @@ public class CarSourceService implements ICarSourceService {
 
     @Autowired
     private SysUserMapper sysUserMapper;
-//
+
+
 //    @Autowired
 //    private UserService userService;
 
@@ -139,19 +141,19 @@ public class CarSourceService implements ICarSourceService {
     }
 
 
-    /**
-     * 通过主键id查询车辆信息
-     *
-     * @param id
-     * @param request
-     * @return
-     */
-    @Override
-    public CarInfo selectCarInfoById(Long id, HttpServletRequest request) {
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
-        return carSourceMapper.selectCarInfoById(id, sysUser.getCompany_id());
-    }
+//    /**
+//     * 通过主键id查询车辆信息
+//     *
+//     * @param id
+//     * @param request
+//     * @return
+//     */
+//    @Override
+//    public CarInfo selectCarInfoById(Long id, HttpServletRequest request) {
+//        String token = request.getHeader("token");
+//        SysUser sysUser = tokenService.getToken(token);
+//        return carSourceMapper.selectCarInfoById(id, sysUser.getCompany_id());
+//    }
 
     /**
      * 修改车辆信息
@@ -445,9 +447,50 @@ public class CarSourceService implements ICarSourceService {
     }
 
 
+    /**
+     * 查询拓号/预处理/毁型/保费证明的图片
+     * @param request
+     * @param id
+     * @param state
+     * @return
+     */
+    @Override
+    public List<String> selectPicList(HttpServletRequest request, Long id, String state) {
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        String firstType = "";
+        if (state.equals("1")){          // 预处理照片
+            firstType = "pre_pic";
+        }else if (state.equals("2")){     // 拓号照片
+            firstType = "tuo_pic";
+        }else if (state.equals("3")){    // 毁型照片
+            firstType = "break_pic";
+        }else if (state.equals("4")){    // 报废证明照片
+            firstType = "pro_pic";
+        }
+        return carSourceMapper.selectPicList( id, sysUser.getCompany_id(), firstType);
+    }
 
-
-
+    /**
+     * 通过车辆编号来查询车辆
+     *
+     * @param request
+     * @param carCode
+     * @return
+     * */
+    @Override
+    public Map<String, Object> selectCarInfo(HttpServletRequest request, String carCode) {
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        Map<String, Object> map = carSourceMapper.selectCarInfo(carCode, sysUser.getCompany_id());
+        // 查询拓号的图片集
+        // 查询预处理的图片集
+//        List<String> prePicList = carSourceMapper.selectPrePic(carCode, sysUser.getCompany_id());
+//        List<String> destructiveList = carSourceMapper.selectDestructivePic(carCode, sysUser.getCompany_id());
+//        // 查询报废手续图片集
+//        List<String> proPicList = carSourceMapper.selectProPicList(carCode, sysUser.getCompany_id());
+        return map;
+    }
 
     /**
      * 首页的查询
@@ -777,7 +820,7 @@ public class CarSourceService implements ICarSourceService {
         for (Map<String, Object> map : mapList) {
             // 定义一个map集合对象
             Map<String, Object> mapCarInfo = new HashMap<>();
-            System.out.println(map);
+//            System.out.println(map);
 //            Set<String> keySet = map.keySet();
 //            for (String key : keySet) {
 //                String value = map.get(key).toString();
@@ -795,39 +838,53 @@ public class CarSourceService implements ICarSourceService {
             mapCarInfo.put("carCode", map.get("carCode").toString());
             mapCarInfo.put("vin", map.get("vin").toString());
             mapCarInfo.put("approachTime", map.get("approachTime").toString());
+            mapCarInfo.put("verifyResult", map.get("verifyResult").toString());
             // 判断车辆当前的状态
             if (map.get("isApproach").toString().equals("1")) {
                 mapCarInfo.put("status", "待入场");
+                mapCarInfo.put("statusCode", "1");
             } else if (map.get("isApproach").toString().equals("2") && map.get("isInitialSurvey").toString().equals("1")) {
                 mapCarInfo.put("status", "待初检");
+                mapCarInfo.put("statusCode", "2");
             } else if (map.get("isInitialSurvey").toString().equals("2") && map.get("isPretreatment").toString().equals("1")) {
                 mapCarInfo.put("status", "待预处理");
+                mapCarInfo.put("statusCode", "3");
             } else if (map.get("isPretreatment").toString().equals("2") && map.get("isCopyNumber").toString().equals("1")) {
                 mapCarInfo.put("status", "待拓号");
+                mapCarInfo.put("statusCode", "4");
             } else if (map.get("isCopyNumber").toString().equals("2") && map.get("isRegister").toString().equals("1")) {
                 mapCarInfo.put("status", "待登记");
+                mapCarInfo.put("statusCode", "5");
             } else if (map.get("isRegister").toString().equals("2") && map.get("isQuery").toString().equals("1")) {
                 mapCarInfo.put("status", "待查询");
+                mapCarInfo.put("statusCode", "6");
             } else if (map.get("isQuery").toString().equals("2") && map.get("isVerify").toString().equals("1")) {
                 mapCarInfo.put("status", "待核档");
+                mapCarInfo.put("statusCode", "7");
             } else if (map.get("isQuery").toString().equals("2") && map.get("isVerify").toString().equals("3")) {
                 mapCarInfo.put("status", "核档未通过");
+                mapCarInfo.put("statusCode", "8");
             } else if (map.get("isDestructive").toString().equals("2") && map.get("isDataUpload").toString().equals("1")) {
                 mapCarInfo.put("status", "待上传商委");
+                mapCarInfo.put("statusCode", "9");
             } else if (map.get("isDestructive").toString().equals("2") && map.get("isDismantle").toString().equals("1")) {
                 mapCarInfo.put("status", "待拆解");
+                mapCarInfo.put("statusCode", "10");
             }  else if (map.get("isLogout").toString().equals("2") && map.get("isAppointLogoutTime").toString().equals("1")) {
                 mapCarInfo.put("status", "待商委注销");
+                mapCarInfo.put("statusCode", "11");
             } else if (map.get("isAppointLogoutTime").toString().equals("2") && map.get("isGetSalvage").toString().equals("1")) {
                 mapCarInfo.put("status", "待领取残值");
+                mapCarInfo.put("statusCode", "12");
             } else if (map.get("isAppointLogoutTime").toString().equals("2")) {
                 mapCarInfo.put("status", "报废完成");
+                mapCarInfo.put("statusCode", "13");
             }
             // 一辆车的信息
             resultMapList.add(mapCarInfo);
-            System.err.println(mapCarInfo);
+//            System.err.println(mapCarInfo);
         }
-        System.out.println(resultMapList);
+//        System.out.println(resultMapList);
         return resultMapList;
     }
 }

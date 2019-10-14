@@ -229,25 +229,6 @@ public class CarSourceController {
         return new RestResult("添加成功", null, ResultCode.SUCCESS.code());
     }
 
-    /**
-     * 通过主键id查询车辆信息   9   显示查询成功，但是没有数据     过         APP端的原型图还没有出来，所有showdoc需要加一个接口
-     *
-     * @param id
-     * @param request
-     * @return
-     */
-    @GetMapping(value = "selectCarInfoById")
-    public RestResult selectCarInfoById(Long id, HttpServletRequest request) {
-        CarInfo carInfo = null;
-        try {
-            carInfo = carSourceService.selectCarInfoById(id, request);
-        } catch (Exception e) {
-            log.info("查询失败", e);
-            return new RestResult("查询失败", "", ResultCode.ERROR.code());
-        }
-        return new RestResult("查询成功", carInfo, ResultCode.SUCCESS.code());
-    }
-
 
     /**
      * 编辑车辆信息   10    过
@@ -360,7 +341,7 @@ public class CarSourceController {
      *
      * @param id
      * @param request
-     * @param state    1-待入场状态    2-待核档状态    3-待商委注销状态     4-待领取残值状态     5-报废成功      6-核档未通过
+     * @param state    1-待入场状态    2-待核档状态    3-待商委注销状态     4-待领取残值状态     5-报废成功      6-核档未通过    全部
      * @param findMsg
      * @param page
      * @param pageSize
@@ -715,12 +696,41 @@ public class CarSourceController {
     }
 
 
+    /**
+     * 通过车辆编号来查询车辆
+     * @param request
+     * @param carCode
+     * @return
+     */
+    @GetMapping("/selectCarInfo")
+    public RestResult selectCarInfo(HttpServletRequest request, String carCode){
+        Map<String, Object> map = null;
+        try{
+            map = carSourceService.selectCarInfo(request, carCode);
+        }catch (Exception e){
+            log.info("查询失败", e);
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", map, ResultCode.SUCCESS.code());
+    }
 
-
-
-    /*------------------------------------------------------------------------------------------------------------------*/
-
-
+    /**
+     * 查询拓号/预处理/毁型/保费证明的图片
+     * @param request
+     * @param id
+     * @return
+     */
+    @GetMapping("/selectPicList")
+    public RestResult selectPicList(HttpServletRequest request, Long id, String state){
+        List<String> list = null;
+        try{
+            list = carSourceService.selectPicList(request, id, state);
+        }catch (Exception e){
+            log.info("查询失败", e);
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", list, ResultCode.SUCCESS.code());
+    }
 
 
 //    /**

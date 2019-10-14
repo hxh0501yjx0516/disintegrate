@@ -630,30 +630,7 @@
 	        AND disintegrate_plant_id = #{disintegratePlantId};
     </select>
 
-    <select id="selectCarInfoById" parameterType="java.lang.Long" resultType="com.tieshan.disintegrate.pojo.CarInfo">
-        SELECT
-	        IFNULL( id, '' ) AS id,
-	        IFNULL( contacts, '' ) AS contacts,
-	        IFNULL( contacts_phone, '' ) AS contactsPhone,
-	        IFNULL( car_no, '' ) AS carNo,
-	        IFNULL( car_name, '' ) AS carName,
-	        IFNULL( contacts_address, '' ) AS contactsAddress,
-	        IFNULL( processing_type, '' ) AS processingType,
-	        IFNULL( processing_date, '' ) AS processingDate,
-	        IFNULL( driv_license, '' ) AS drivLicense,
-	        IFNULL( regist_license, '' ) AS registLicense,
-	        IFNULL( businese_license, '' ) AS busineseLicense,
-	        IFNULL( people_license, '' ) AS peopleLicense,
-	        IFNULL( break_license, '' ) AS breakLicense,
-	        IFNULL( exception_license, '' ) AS exceptionLicense,
-	        IFNULL( procedures_type, '' ) AS proceduresType,
-	        IFNULL( remarks, '' ) AS remarks
-        FROM
-	        ts_car_info
-        WHERE
-	        id = #{id}
-	        AND disintegrate_plant_id = #{disintegratePlantId};
-    </select>
+
 
     <update id="editCar" parameterType="com.tieshan.disintegrate.pojo.CarInfo">
         UPDATE ts_car_info SET
@@ -778,7 +755,8 @@
             IFNULL(p.is_dismantle,'') AS isDismantle,
             IFNULL(p.is_logout,'') AS isLogout,
             IFNULL(p.is_appoint_logout_time,'') AS isAppointLogoutTime,
-            IFNULL(s.is_get_salvage,'') AS isGetSalvage
+            IFNULL(s.is_get_salvage,'') AS isGetSalvage,
+            IFNULL(p.verify_result,'') AS verifyResult
         FROM
         	ts_car_info AS i
             LEFT JOIN ts_car_identity AS d ON i.id = d.car_info_id
@@ -1111,7 +1089,7 @@
         WHERE
         	i.disintegrate_plant_id = #{disintegratePlantId}
         	AND s.dismantling_way != 5
-            AND i.car_location_area IS NULL OR i.car_location_area = ''
+        AND i.car_location_area IS NULL OR i.car_location_area = ''
         	<if test="findMsg != null and findMsg != ''">
                 AND CONCAT(i.car_no,i.car_name,i.car_code) LIKE CONCAT("%",#{findMsg},"%")
             </if>
@@ -1345,6 +1323,46 @@
         </trim>
     </insert>
 
+    <select id="selectCarInfo" resultType="java.util.Map">
+        SELECT
+	        IFNULL( i.id, '' ) AS id,
+	        IFNULL( i.car_code, '' ) AS carCode,
+	        IFNULL( i.car_no, '' ) AS carNo,
+	        IFNULL( i.car_name, '' ) AS carName,
+	        IFNULL( d.vin, '' ) AS vin,
+	        IFNULL( d.displacement, '' ) AS displacement,
+	        IFNULL( e.is_approach, '' ) AS isApproach,
+	        IFNULL( e.is_initial_survey, '' ) AS isInitialSurvey,
+	        IFNULL( e.is_pretreatment, '' ) AS isPretreatment,
+	        IFNULL( e.is_copy_number, '' ) AS isCopyNumber,
+	        IFNULL( p.is_query, '' ) AS isQuery,
+            IFNULL( p.is_verify, '' ) AS isVerify,
+	        IFNULL( p.is_logout, '' ) AS isLogout,
+	        IFNULL( p.is_destructive, '' ) AS isDestructive,
+	        IFNULL( p.is_appoint_logout_time, '' ) AS isAppointLogoutTime,
+	        IFNULL( CONCAT( i.car_location_area, ' ', i.car_location_row, ' ', i.car_location_column, ' ', i.car_location_number ), '' ) AS carAddress,
+	        IFNULL( p.verify_result, '' ) AS verifyResult
+        FROM
+        	ts_car_info AS i
+        	LEFT JOIN ts_car_enter AS e ON i.id = e.car_info_id
+        	LEFT JOIN ts_car_identity AS d ON i.id = d.car_info_id
+        	LEFT JOIN ts_car_processing AS p ON i.id = p.car_info_id
+        WHERE
+	        i.car_code = #{carCode}
+	        AND i.disintegrate_plant_id = #{disintegratePlantId}
+    </select>
+
+    <select id="selectPicList" resultType="java.lang.String">
+         SELECT
+        	p.file_url
+        FROM
+        	ts_car_info AS i
+        	LEFT JOIN ts_car_pic AS p ON i.id = p.car_info_id
+        WHERE
+        	i.disintegrate_plant_id = #{disintegratePlantId}
+        	AND p.car_info_id = #{carInfoId}
+        	AND p.first_type = #{firstType}
+    </select>
 
     <delete id="deleteCarSourceById" parameterType="java.lang.Long">
         DELETE FROM ts_car_source WHERE id =#{id} AND disintegrate_plant_id = #{disintegratePlantId}
