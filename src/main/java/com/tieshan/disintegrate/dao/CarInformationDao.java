@@ -22,7 +22,7 @@ public interface CarInformationDao {
      * @param: id car_info的主键(车辆编号ID)
      * @return: CarsQueryInfo
      */
-    @Select("select iden.car_info_id,info.car_no,sur.card_color,info.car_name,iden.vin,iden.engine " +
+    @Select("select iden.car_info_id,info.car_code,info.car_no,sur.card_color,info.car_name,iden.vin,iden.engine " +
             "from ts_car_identity AS iden join ts_car_info AS info on iden.car_info_id=info.id " +
             "join ts_car_survey AS sur on sur.car_info_id=info.id " +
             "and iden.disintegrate_plant_id=#{companyId} " +

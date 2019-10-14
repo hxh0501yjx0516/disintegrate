@@ -22,8 +22,10 @@ public class CarPartsData implements Serializable {
     private static final long serialVersionUID = -1281208248971156925L;
     /**车辆Id*/
     private Long carInfoId;
+    /**车辆编号*/
+    private String carCode;
     /**状态码，打印还是入库*/
     private Integer partsStatus;
-    /**封装传入的数据，里面有OE号 和 件名*/
+    /**封装传入的数据，件编号、件名*/
     private List<Map<String,Object>> data;
 }

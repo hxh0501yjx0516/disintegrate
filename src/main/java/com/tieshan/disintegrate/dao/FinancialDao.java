@@ -82,7 +82,7 @@ public interface FinancialDao {
             "sal.get_salvage_time,iden.owner,info.driv_license,info.regist_license,sur.plate_count,sur.car_degree," +
             "sur.condition_pump_count,sur.battery_count,sur.motor_count,sur.alloy_rim_count,sur.tyre_count," +
             "sur.catalytic_converter_count,sur.door_count,sur.cistern_count,sur.chair_count,sur.electrical_machinery_count," +
-            "sur.conditioner_count,sal.remark,CURDATE() FROM ts_car_info AS info\n" +
+            "sur.conditioner_count,sal.remark,CURDATE() AS Time FROM ts_car_info AS info\n" +
             "JOIN ts_car_identity AS iden ON info.id=iden.car_info_id\n" +
             "JOIN ts_car_salvage AS sal ON info.id=sal.car_info_id\n" +
             "JOIN ts_car_survey AS sur ON info.id=sur.car_info_id\n" +

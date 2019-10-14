@@ -113,6 +113,23 @@ public interface CarsQueryService {
      */
     void addBreakPic(CarPicData carPicData, SysUser user);
 
+    /***
+     * App端-报废车辆
+     */
+    List<Map<String,Object>> findProCars(
+            String findMsg,
+            Integer page,
+            Integer pageSize,
+            Long companyId);
+    /***
+     * App端根据carInfoId查询车辆待毁型数据
+     */
+    List<Map<String,Object>> findProCarsById(Long carInfoId, Long companyId);
+    /**
+     * App端添加报废证明图片
+     */
+    void addProPic(CarPicData carPicData, SysUser user);
+
 
 }
 

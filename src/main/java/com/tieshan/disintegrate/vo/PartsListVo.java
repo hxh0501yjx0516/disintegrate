@@ -21,8 +21,10 @@ import java.util.Map;
 public class PartsListVo implements Serializable {
     private static final long serialVersionUID = -1281208248971156925L;
 
-    /**状态码，暂存还是完成*/
-    private String parentName;
-    /**封装传入的图片*/
-    private List<String> sonName;
+    /**一级拆车件id*/
+    private Long id;
+    /**拆车件一级名称*/
+    private String parts_name;
+    /**拆车件编号*/
+    private String parts_code;
 }

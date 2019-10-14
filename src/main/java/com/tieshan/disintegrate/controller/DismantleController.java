@@ -183,14 +183,25 @@ public class DismantleController {
     }
 
     /**
-     *@Description: APP-拆车-查询二级分类列表接口
+     *@Description: APP-拆车-查询一级分类列表接口
      * @return:
      */
-    @GetMapping("/doCarsQuery/findPartsNameListByParentId")
-    public RestResult findPartsNameListByParentId(){
-        List<PartsListVo> mapList = iDismantleService.findPartsNameListByParentId();
+    @GetMapping("/doCarsQuery/findFirstPartsName")
+    public RestResult findFirstPartsName(){
+        List<PartsListVo> mapList = iDismantleService.findFirstPartsName();
         RestResult restResult = new RestResult("查询成功", mapList, ResultCode.SUCCESS.code());
         return restResult;
     }
+    /**
+     *@Description: APP-拆车-根据一级id查询二级分类列表接口
+     * @return:
+     */
+    @GetMapping("/doCarsQuery/findSecondPartsName")
+    public RestResult findSecondPartsName(@RequestParam("id")Long parentId){
+        List<PartsListVo> mapList = iDismantleService.findSecondPartsName(parentId);
+        RestResult restResult = new RestResult("查询成功", mapList, ResultCode.SUCCESS.code());
+        return restResult;
+    }
+
 
 }
