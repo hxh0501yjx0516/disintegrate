@@ -552,17 +552,18 @@ public class CarsQueryController {
     }
 
     /***
-     * App端-查询报废车辆列表
+     * App端-查询报废证明照片车辆列表
      */
     @GetMapping("/doCarsQuery/findProCars")
     public RestResult findProCars(
             @RequestParam(value = "findMsg", required = false) String findMsg,
             @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
             @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
+            @RequestParam(value = "status", required = false) Integer status,
             @LoginUser SysUser user
     ) {
         PageInfo pageInfo = null;
-        List<Map<String,Object>> mapList = carsQueryService.findProCars(findMsg, page, pageSize, user.getCompany_id());
+        List<Map<String,Object>> mapList = carsQueryService.findProCars(findMsg, page, pageSize, user.getCompany_id(),status);
         pageInfo = new PageInfo<>(mapList);
         RestResult restResult = new RestResult("查询车辆列表信息成功", pageInfo, ResultCode.SUCCESS.code());
         return restResult;

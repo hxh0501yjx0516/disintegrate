@@ -22,7 +22,10 @@ public interface CarInformationBreakDao {
      * @param: carInfoId car_info的主键(车辆编号ID)
      * @return: List
      */
-    @Select("select dismantle_way,dismantle_time,dismantle_user_name from ts_car_enter where car_info_id=#{carInfoId} and disintegrate_plant_id=#{companyId}")
+    @Select("select IFNULL( dismantle_way, '' ) AS dismantle_way," +
+            "IFNULL( dismantle_time, '' ) AS dismantle_time," +
+            "IFNULL( dismantle_user_name, '' ) AS dismantle_user_name " +
+            "from ts_car_enter where car_info_id=#{carInfoId} and disintegrate_plant_id=#{companyId}")
     List<Map<String,Object>> findCarBreakById(@Param("carInfoId") Long carInfoId,@Param("companyId")Long companyId);
 
     /**
@@ -30,7 +33,11 @@ public interface CarInformationBreakDao {
      * @param: carInfoId car_info的主键(车辆编号ID)
      * @return: List
      */
-    @Select("select pic.file_name,pic.file_url,pic.create_time,pic.operator from ts_car_pic pic " +
+    @Select("select IFNULL( pic.file_name, '' ) AS file_name," +
+            "IFNULL( pic.file_url, '' ) AS file_url," +
+            "IFNULL( pic.create_time, '' ) AS create_time," +
+            "IFNULL( pic.operator, '' ) AS operator" +
+            " from ts_car_pic pic " +
             "where pic.car_info_id=#{carInfoId} and pic.first_type='break_pic' and disintegrate_plant_id=#{companyId}")
     List<Map<String,Object>> findCarBreakPicById(@Param("carInfoId") Long carInfoId,@Param("companyId")Long companyId);
 
@@ -39,6 +46,9 @@ public interface CarInformationBreakDao {
      * @param: carInfoId car_info的主键(车辆编号ID)
      * @return: List
      */
-    @Select("select create_time,operator,remark from ts_car_procedure_log where car_info_id=#{carInfoId} and type=6 and disintegrate_plant_id=#{companyId}")
+    @Select("select IFNULL( create_time, '' ) AS create_time," +
+            "IFNULL( operator, '' ) AS operator," +
+            "IFNULL( remark, '' ) AS remark " +
+            "from ts_car_procedure_log where car_info_id=#{carInfoId} and type=6 and disintegrate_plant_id=#{companyId}")
     List<Map<String,Object>> findCarBreakLogById(@Param("carInfoId") Long carInfoId,@Param("companyId")Long companyId);
 }
