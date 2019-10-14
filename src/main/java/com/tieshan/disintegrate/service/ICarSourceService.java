@@ -32,7 +32,7 @@ public interface ICarSourceService {
 
     List<Map<String, Object>> selectCarInfoList(Long id, HttpServletRequest request);
 
-    CarInfo selectCarInfoById(Long id, HttpServletRequest request);
+//    CarInfo selectCarInfoById(Long id, HttpServletRequest request);
 
     void editCar(CarInfo carInfo);
 
@@ -78,6 +78,9 @@ public interface ICarSourceService {
 
     List<Map<String, Object>> selectHomePage(Integer page, Integer pageSize, String state, HttpServletRequest request);
 
+    Map<String, Object> selectCarInfo(HttpServletRequest request, String carCode);
+
+    List<String> selectPicList(HttpServletRequest request, Long id, String state);
 
 
 //    List<Map<String, Object>> selectCarSourceListApp(HttpServletRequest request);

@@ -3,6 +3,7 @@ package com.tieshan.disintegrate.dao;
 import com.tieshan.disintegrate.pojo.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Map;
@@ -44,8 +45,8 @@ public interface CarSourceMapper {
     List<Map<String, Object>> selectCarInfoList(@Param(value = "carSource") Long carSource,
                                                 @Param(value = "disintegratePlantId") Long disintegratePlantId);
 
-    CarInfo selectCarInfoById(@Param(value = "id") Long id,
-                              @Param(value = "disintegratePlantId") Long disintegratePlantId);
+    Map<String, Object> selectCarInfo(@Param(value = "carCode") String carCode,
+                          @Param(value = "disintegratePlantId") Long disintegratePlantId);
 
     void editCar(CarInfo carInfo);
 
@@ -149,6 +150,25 @@ public interface CarSourceMapper {
 
 
     void insertCarIdentity(CarIdentity carIdentity);
+
+//    Map<String, Object> selectCarInfo(@Param(value = "carCode") String carCode,
+//                                      @Param(value = "disintegratePlantId") Long disintegratePlantId);
+
+//    List<String> selectPrePic(@Param(value = "carCode") String carCode,
+//                              @Param(value = "disintegratePlantId") Long disintegratePlantId);
+//
+//    List<String> selectDestructivePic(@Param(value = "carCode") String carCode,
+//                                      @Param(value = "disintegratePlantId") Long disintegratePlantId);
+//
+//    List<String> selectProPicList(@Param(value = "carCode") String carCode,
+//                                  @Param(value = "disintegratePlantId") Long disintegratePlantId);
+//
+//    List<String> selectTuoPicList(@Param(value = "carCode") String carCode,
+//                                  @Param(value = "disintegratePlantId") Long disintegratePlantId);
+
+    List<String> selectPicList(@Param(value = "carInfoId") Long carInfoId,
+                               @Param(value = "disintegratePlantId") Long disintegratePlantId,
+                               @Param(value = "firstType") String firstType);
 
 //    int selectCarInfoCountByCarSourceId(Long id);
 }
