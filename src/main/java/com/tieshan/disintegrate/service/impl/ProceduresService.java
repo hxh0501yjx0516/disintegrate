@@ -110,6 +110,16 @@ public class ProceduresService implements IProceduresService {
             carProcessing.setRegisterUserId(user.getId());
         }
         carProcessingMapper.updateCarProcessing(carProcessing);
+
+        CarInfo carInfo = new CarInfo();
+        carInfo.setId(proceduresVo.getCarInfoId());
+        carInfo.setDrivLicense(proceduresVo.getDrivLicense());
+        carInfo.setRegistLicense(proceduresVo.getRegistLicense());
+        carInfo.setContacts(proceduresVo.getContacts());
+        carInfo.setContactsPhone(proceduresVo.getContactsPhone());
+        carInfo.setContactsAddress(proceduresVo.getContactsAddress());
+
+        carInfoMapper.updateCarInfo(carInfo);
     }
 
     @Override
