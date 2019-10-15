@@ -152,6 +152,24 @@
         on dic.first_type=pic.first_type and dic.two_type=pic.two_type and pic.car_info_id=#{carInfoId} and pic.disintegrate_plant_id=#{companyId}
         where dic.first_type='pro_pic'
     </select>
+    <!-- App端查询本部已处理数据 -->
+    <select id="findIsHandle" resultType="map">
+        select ent.car_info_id,info.car_code,info.car_no,info.car_name,ent.approach_time
+        from ts_car_info info
+        left join ts_car_enter ent on ent.car_info_id=info.id
+        left join ts_car_processing pro on pro.car_info_id=info.id
+        <include refid="queryWhereIsHandle"/>
+    </select>
+    <sql id="queryWhereIsHandle">
+        <where>
+            pro.is_upload_pic=2 and
+            ent.disintegrate_plant_id=#{companyId}
+            <if test="findMsg!=null and findMsg!=''">
+                and concat(info.car_no,info.car_name,info.car_code)
+                like concat("%",#{findMsg},"%")
+            </if>
+        </where>
+    </sql>
 
     <sql id="findProCarsComplete">
         <where>

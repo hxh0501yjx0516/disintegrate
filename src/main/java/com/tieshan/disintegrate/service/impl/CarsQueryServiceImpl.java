@@ -196,10 +196,11 @@ public class CarsQueryServiceImpl implements CarsQueryService {
     @Override
     public List<Map<String, Object>> findBreakSuccessCars(String findMsg, Integer page, Integer pageSize, Long companyId) {
 //        System.err.println(carsQueryDao.findBreakSuccessCars(findMsg,companyId));
-        List<Map<String, Object>> mapList = carsQueryDao.findBreakSuccessCars(findMsg, companyId);
-        System.out.println(mapList);
+
+        //System.out.println(mapList);
         PageHelper.startPage(page, pageSize);
         PageHelper.orderBy("ent.approach_time desc");
+        List<Map<String, Object>> mapList = carsQueryDao.findBreakSuccessCars(findMsg, companyId);
         return mapList;
     }
 
@@ -228,5 +229,13 @@ public class CarsQueryServiceImpl implements CarsQueryService {
         carPicMapper.batchDeleteProPic(user.getCompany_id(), carPicData.getCarInfoId());
         pubMethod(carPicData, user);
 
+    }
+
+    @Override
+    public List<Map<String, Object>> findIsHandle(String findMsg, Integer page, Integer pageSize, Long companyId) {
+        PageHelper.startPage(page, pageSize);
+        PageHelper.orderBy("ent.approach_time desc");
+        List<Map<String, Object>> mapList = carsQueryDao.findIsHandle(findMsg, companyId);
+        return mapList;
     }
 }
