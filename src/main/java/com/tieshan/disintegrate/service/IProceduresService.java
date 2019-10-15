@@ -43,6 +43,8 @@ public interface IProceduresService {
 
     CarCustomerInfoVo queryCarCustomerInfo(Map<String, Object> params, SysUser user);
 
+    WebCarCustomerInfoVo queryWebCarCustomerInfo(Map<String, Object> params, SysUser user);
+
     PageInfo<CarProcedureIssueVo> queryProcedureIssueVoList(Map<String, Object> params, SysUser user);
 
     PageInfo<CarCustomerListVo> queryCarCustomerList(Map<String, Object> params, SysUser user);

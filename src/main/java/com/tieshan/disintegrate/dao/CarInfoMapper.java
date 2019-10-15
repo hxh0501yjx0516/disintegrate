@@ -38,6 +38,8 @@ public interface CarInfoMapper {
 
     CarCustomerInfoVo selectCarCustomerInfo(Map<String, Object> map);
 
+    WebCarCustomerInfoVo selectWebCarCustomerInfo(Map<String, Object> map);
+
     List<CarProcedureIssueVo> selectProcedureIssueVoList(Map<String, Object> map);
 
     List<CarProcedureListVo> selectProcedureVoList(Map<String, Object> map);

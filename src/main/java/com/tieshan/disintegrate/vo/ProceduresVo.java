@@ -13,7 +13,7 @@ import lombok.Data;
 public class ProceduresVo extends CarIdentity {
 
     /**
-     * 车辆联系人
+     * 交车人
      */
     private String contacts;
     /**
@@ -24,4 +24,12 @@ public class ProceduresVo extends CarIdentity {
      * 交车人地址
      */
     private String contactsAddress;
+    /**
+     * 行驶证
+     */
+    private Integer drivLicense;
+    // 登记证
+    private Integer registLicense;
+
+
 }

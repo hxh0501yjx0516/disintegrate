@@ -160,33 +160,33 @@ public interface SysUserMapper {
     /**
      * 创建系统日志表
      *
-     * @param param
+     * @param yearMonth
      * @return
      */
-    int creatSyslog(@Param("param") String param);
+    int creatSyslog(@Param("yearMonth") String yearMonth);
 
     /**
      * 插入日志信息
      *
-     * @param param
+     * @param yearMonth
      * @return
      */
-    int syslog(@Param("param") String param, @Param("sysLog") SysLog sysLog);
+    int syslog(@Param("yearMonth") String yearMonth, @Param("sysLog") SysLog sysLog);
 
     /**
      * 判断表是否存在
      *
-     * @param param
+     * @param yearMonth
      * @return
      */
-    int existTable(@Param("param") String param);
+    int existTable(@Param("yearMonth") String yearMonth);
 
     /**
      * 删除表
      *
-     * @param param
+     * @param yearMonth
      * @return
      */
 
-    int delTable(@Param("param") String param);
+    int delTable(@Param("yearMonth") String yearMonth);
 }
