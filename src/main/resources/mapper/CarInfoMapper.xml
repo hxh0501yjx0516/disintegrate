@@ -89,6 +89,7 @@
         <result property="displacement" column="displacement"/>  <!-- 汽车排量 -->
         <result property="carryingCapacity" column="carrying_capacity"/>  <!-- 核定载人数 -->
         <result property="remarks" column="remarks"/>  <!-- 备注 -->
+        <result property="recordNumber" column="record_number"/>  <!-- 备注 -->
         <collection property="queryRecord" column="car_info_id"
                     select="com.tieshan.disintegrate.dao.CarProcedureLogMapper.selectWebProcedureVo"/>
     </resultMap>
@@ -320,7 +321,7 @@
         ie.owner_zipcode,ie.owner_address,ie.agend,ie.agend_idcard,i.contacts,i.contacts_phone,i.contacts_address,
         i.driv_license,i.regist_license,i.car_name,ie.car_weight,ie.car_kind,ie.fuel_type,ie.reg_time,ie.issue_time,
         ie.nature_usege,ie.car_properties,ie.vin,ie.engine,ie.issue_size,ie.displacement,ie.carrying_capacity,
-        ie.remarks,p.is_verify,p.is_query
+        ie.remarks,p.is_verify,p.is_query,p.record_number
         FROM ts_car_info i
         left join ts_car_enter e on i.id=e.car_info_id
         left join ts_car_identity ie on i.id=ie.car_info_id

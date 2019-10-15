@@ -142,6 +142,8 @@ public class WebCarCustomerInfoVo implements Serializable {
      */
     private String remarks;
 
+    private String recordNumber;
+
 
     private List<WebRecordHandleVo> queryRecord;
 
