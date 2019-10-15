@@ -36,12 +36,50 @@
         <result property="status" column="status"/>  <!-- 1:暂存，2:提交（登记完成） -->
         <result property="recordNo" column="record_no"/>  <!-- 档案号 -->
     </resultMap>
+    <resultMap type="com.tieshan.disintegrate.vo.ProceduresVo" id="proceduresVoMap">
+        <result property="id" column="id"/>  <!--  -->
+        <result property="disintegratePlantId" column="disintegrate_plant_id"/>  <!-- 解体厂id -->
+        <result property="ascription" column="ascription"/>  <!-- 车辆归宿(来自字典表) -->
+        <result property="carInfoId" column="car_info_id"/>  <!-- car_info主键id -->
+        <result property="colour" column="colour"/>  <!-- 车辆颜色(来自字典表) -->
+        <result property="owner" column="owner"/>  <!-- 车主姓名（或组织结构名称） -->
+        <result property="phone" column="phone"/>  <!-- 车主电话 -->
+        <result property="idCard" column="id_card"/>  <!-- 车主身份证号（组织结构代码） -->
+        <result property="agend" column="agend"/>  <!-- 代理人 -->
+        <result property="agendIdcard" column="agend_idcard"/>  <!-- 代理人身份证号 -->
+        <result property="carKind" column="car_kind"/>  <!-- 车辆性质(来之字典表) -->
+        <result property="fuelType" column="fuel_type"/>  <!-- 燃油性质(来之字典表） -->
+        <result property="regTime" column="reg_time"/>  <!-- 注册时间 -->
+        <result property="issueTime" column="issue_time"/>  <!-- 发证日期 -->
+        <result property="natureUsege" column="nature_usege"/>  <!-- 使用性质(来之字典表),营运非营运。。。 -->
+        <result property="carType" column="car_type"/>  <!-- 车辆型号 -->
+        <result property="vin" column="vin"/>  <!-- 车辆识别代码(vin） -->
+        <result property="engine" column="engine"/>  <!-- 发动机号码 -->
+        <result property="issueSize" column="issue_size"/>  <!-- 外廓尺寸 -->
+        <result property="displacement" column="displacement"/>  <!-- 汽车排量 -->
+        <result property="carryingCapacity" column="carrying_capacity"/>  <!-- 核定载人数 -->
+        <result property="remarks" column="remarks"/>  <!-- 备注 -->
+        <result property="frameNumber" column="frame_number"/>  <!-- 车架号码 -->
+        <result property="carWeight" column="car_weight"/>  <!-- 整车质量(车本上的质量) -->
+        <result property="ownerAddress" column="owner_address"/>  <!-- 车主地址 -->
+        <result property="ownerZipcode" column="owner_zipcode"/>  <!-- 车主邮编 -->
+        <result property="carProperties" column="car_properties"/>  <!-- 车辆性质(来之字典表) 小轿车，大卡车。。。 -->
+        <result property="isDelete" column="is_delete"/>  <!-- 是否删除。1.删除，2,正常 -->
+        <result property="cardColor" column="card_color"/>  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
+        <result property="status" column="status"/>  <!-- 1:暂存，2:提交（登记完成） -->
+        <result property="recordNo" column="record_no"/>  <!-- 档案号 -->
+        <result property="contacts" column="contacts"/>  <!-- 交车人 -->
+        <result property="contactsPhone" column="contacts_phone"/>  <!-- 手机号 -->
+        <result property="contacts" column="contacts_address"/>  <!-- 交车人地址 -->
+        <result property="drivLicense" column="driv_license"/>  <!-- 档案号 -->
+        <result property="registLicense" column="regist_license"/>  <!-- 档案号 -->
+    </resultMap>
 
-    <select id="selectOneByMap" resultMap="carIdentityMap">
+    <select id="selectOneByMap" resultMap="proceduresVoMap">
         SELECT  ie.id, ie.disintegrate_plant_id, ie.ascription, ie.car_info_id, ie.colour, ie.owner, ie.phone, ie.id_card, ie.agend, ie.agend_idcard,
         ie.car_kind, ie.fuel_type, ie.reg_time, ie.issue_time, ie.nature_usege, ie.car_type, ie.vin, ie.engine, ie.issue_size, ie.displacement,
         ie.carrying_capacity, ie.remarks, ie.frame_number, ie.car_weight, ie.owner_address, ie.owner_zipcode, ie.car_properties,
-        ie.is_delete, s.card_color, ie.status, ie.record_no
+        ie.is_delete, s.card_color, ie.status, ie.record_no,i.driv_license,i.regist_license,i.contacts,i.contacts_phone,i.contacts_address
         FROM ts_car_identity ie
         left join ts_car_survey s on ie.car_info_id=s.car_info_id
         <where>
