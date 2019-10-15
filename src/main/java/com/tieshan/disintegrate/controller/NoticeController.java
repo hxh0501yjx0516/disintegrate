@@ -1,6 +1,8 @@
 package com.tieshan.disintegrate.controller;
 
 import cn.jpush.api.push.model.PushPayload;
+import com.github.pagehelper.PageInfo;
+import com.tieshan.disintegrate.constant.ConStants;
 import com.tieshan.disintegrate.pojo.Notice;
 import com.tieshan.disintegrate.service.INoticeService;
 import com.tieshan.disintegrate.util.PubMethod;
@@ -56,7 +58,7 @@ public class NoticeController {
         if (num > 0) {
             restResult = new RestResult("推送成功", null, ResultCode.SUCCESS.code());
 
-        }else{
+        } else {
             restResult = new RestResult("推送失败", null, ResultCode.SUCCESS.code());
 
         }
@@ -67,14 +69,18 @@ public class NoticeController {
     }
 
     @PostMapping("/selNotice")
-    public RestResult selNotice(String type, String device_type, HttpServletRequest request) {
+    public RestResult selNotice(String type, String device_type, HttpServletRequest request,
+                                @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) int page,
+                                @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) int pageSize) {
         RestResult restResult = null;
         try {
-            List<Map<String, Object>> resultList = noticeService.selNotice(type, device_type, request);
+            List<Map<String, Object>> resultList = noticeService.selNotice(type, device_type, request, page, pageSize);
+            PageInfo<Map<String, Object>> pageInfo = new PageInfo<>(resultList);
+
             if (!PubMethod.isEmpty(resultList)) {
-                restResult = new RestResult("通知列表", resultList, ResultCode.SUCCESS.code());
+                restResult = new RestResult("通知列表", pageInfo, ResultCode.SUCCESS.code());
             } else {
-                restResult = new RestResult("暂无通知", resultList, ResultCode.ERROR.code());
+                restResult = new RestResult("暂无通知", null, ResultCode.ERROR.code());
 
             }
         } catch (Exception e) {

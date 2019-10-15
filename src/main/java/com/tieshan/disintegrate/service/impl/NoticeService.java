@@ -5,6 +5,7 @@ import cn.jiguang.common.resp.APIConnectionException;
 import cn.jiguang.common.resp.APIRequestException;
 import cn.jpush.api.JPushClient;
 import cn.jpush.api.push.model.PushPayload;
+import com.github.pagehelper.PageHelper;
 import com.tieshan.disintegrate.dao.NoticeMapper;
 import com.tieshan.disintegrate.pojo.Notice;
 import com.tieshan.disintegrate.pojo.SysUser;
@@ -14,6 +15,7 @@ import com.tieshan.disintegrate.util.IdWorker;
 import com.tieshan.disintegrate.util.JPushUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
@@ -51,6 +53,7 @@ public class NoticeService implements INoticeService {
     }
 
     @Override
+    @Transactional
     public int insertNotice(Notice notice, HttpServletRequest request) {
         String token = request.getHeader("token");
         SysUser sysUser = tokenService.getToken(token);
@@ -67,7 +70,19 @@ public class NoticeService implements INoticeService {
             pushMap.remove("operator");
             pushMap.remove("disintegrate_plant_id");
             try {
-                resultNum = JPushUtil.buildPushAndroid(pushMap);
+                if ("1".equals(pushMap.get("device_type"))) {
+                    resultNum = JPushUtil.buildPushAndroid(pushMap);
+
+                } else if ("2".equals(pushMap.get("device_type"))) {
+                    resultNum = JPushUtil.buildPushIOS(pushMap);
+                } else {
+                    pushMap.put("device_type", "1");
+                    resultNum = JPushUtil.buildPushAndroid(pushMap);
+                    pushMap.put("device_type", "2");
+                    resultNum = JPushUtil.buildPushIOS(pushMap);
+                }
+
+
             } catch (APIConnectionException e) {
                 e.printStackTrace();
             } catch (APIRequestException e) {
@@ -78,9 +93,11 @@ public class NoticeService implements INoticeService {
     }
 
     @Override
-    public List<Map<String, Object>> selNotice(String type, String device_type, HttpServletRequest request) {
+    public List<Map<String, Object>> selNotice(String type, String device_type, HttpServletRequest request,int page, int pageSize) {
         String token = request.getHeader("token");
         SysUser sysUser = tokenService.getToken(token);
+        PageHelper.startPage(page, pageSize);
+        PageHelper.orderBy("datetime desc");
         List<Map<String, Object>> resultList = noticeMapper.selNotice(type, device_type, sysUser.getCompany_id() + "");
         return resultList;
     }
