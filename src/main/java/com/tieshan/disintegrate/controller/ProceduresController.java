@@ -53,7 +53,7 @@ public class ProceduresController {
     @PostMapping(value = "/saveProcedures")
     public RestResult saveProcedures(@RequestBody ProceduresVo proceduresVo, @LoginUser SysUser user) {
         proceduresService.saveProcedures(proceduresVo, user);
-        return new RestResult("修改成功", "", ResultCode.SUCCESS.code());
+        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
     }
 
     /**
@@ -239,8 +239,8 @@ public class ProceduresController {
      */
     @PostMapping(value = "/queryCustomerHandle")
     public RestResult queryCustomerHandle(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
-        CarCustomerInfoVo carCustomerInfoVo = proceduresService.queryCarCustomerInfo(params, user);
-        return new RestResult("查询成功", carCustomerInfoVo, ResultCode.SUCCESS.code());
+        WebCarCustomerInfoVo webCarCustomerInfoVo = proceduresService.queryWebCarCustomerInfo(params, user);
+        return new RestResult("查询成功", webCarCustomerInfoVo, ResultCode.SUCCESS.code());
     }
     /**
      * web-查询手续领取记录列表
