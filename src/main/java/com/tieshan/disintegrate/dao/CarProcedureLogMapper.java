@@ -3,6 +3,7 @@ package com.tieshan.disintegrate.dao;
 import com.tieshan.disintegrate.pojo.CarProcedureLog;
 import com.tieshan.disintegrate.vo.CarCustomerListVo;
 import com.tieshan.disintegrate.vo.RecordHandleVo;
+import com.tieshan.disintegrate.vo.WebRecordHandleVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -41,6 +42,8 @@ public interface CarProcedureLogMapper {
     List<RecordHandleVo> selectQueryVo(Long carInfoId);
 
     List<RecordHandleVo> selectVerifyVo(Long carInfoId);
+
+    List<WebRecordHandleVo> selectWebProcedureVo(Long carInfoId);
 
     CarProcedureLog selectCustomerVo(Long procedureLogId);
 

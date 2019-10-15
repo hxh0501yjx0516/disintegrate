@@ -88,9 +88,9 @@ public class ProceduresService implements IProceduresService {
     public void saveProcedures(ProceduresVo proceduresVo, SysUser user) {
         Map<String, Object> map = new HashMap<>();
         map.put("disintegratePlantId", user.getCompany_id());
-        map.put("id", proceduresVo.getId());
-        CarIdentity carIdentity = carIdentityMapper.selectOneByMap(map);
-        if (carIdentity.getStatus() == 2) {
+        map.put("carInfoId", proceduresVo.getCarInfoId());
+        ProceduresVo OldProceduresVo = carIdentityMapper.selectOneByMap(map);
+        if (OldProceduresVo.getStatus() == 2) {
             throw new CustomException("已登记完成！不能修改");
         }
         proceduresVo.setDisintegratePlantId(user.getCompany_id());
@@ -110,17 +110,23 @@ public class ProceduresService implements IProceduresService {
             carProcessing.setRegisterUserId(user.getId());
         }
         carProcessingMapper.updateCarProcessing(carProcessing);
+
+        CarInfo carInfo = new CarInfo();
+        carInfo.setId(proceduresVo.getCarInfoId());
+        carInfo.setDisintegratePlantId(user.getCompany_id());
+        carInfo.setDrivLicense(proceduresVo.getDrivLicense());
+        carInfo.setRegistLicense(proceduresVo.getRegistLicense());
+        carInfo.setContacts(proceduresVo.getContacts());
+        carInfo.setContactsPhone(proceduresVo.getContactsPhone());
+        carInfo.setContactsAddress(proceduresVo.getContactsAddress());
+
+        carInfoMapper.updateCarInfo(carInfo);
     }
 
     @Override
     public ProceduresVo query(Map<String, Object> params, SysUser user) {
         params.put("disintegratePlantId", user.getCompany_id());
-        CarIdentity carIdentity = carIdentityMapper.selectOneByMap(params);
-        ProceduresVo proceduresVo = new ProceduresVo();
-        if (carIdentity == null) {
-            return null;
-        }
-        BeanUtils.copyProperties(carIdentity, proceduresVo);
+        ProceduresVo proceduresVo = carIdentityMapper.selectOneByMap(params);
         return proceduresVo;
     }
 
@@ -468,6 +474,12 @@ public class ProceduresService implements IProceduresService {
     }
 
     @Override
+    public WebCarCustomerInfoVo queryWebCarCustomerInfo(Map<String, Object> params, SysUser user) {
+        params.put("disintegratePlantId", user.getCompany_id());
+        return carInfoMapper.selectWebCarCustomerInfo(params);
+    }
+
+    @Override
     public PageInfo<CarProcedureIssueVo> queryProcedureIssueVoList(Map<String, Object> params, SysUser user) {
         params.put("disintegratePlantId", user.getCompany_id());
         PageHelper.startPage(
@@ -497,7 +509,7 @@ public class ProceduresService implements IProceduresService {
         PageHelper.startPage(
                 StringUtils.isEmpty(params.get("pageNum")) ? 1 : Integer.parseInt(String.valueOf(params.get("pageNum"))),
                 StringUtils.isEmpty(params.get("pageSize")) ? 10 : Integer.parseInt(String.valueOf(params.get("pageSize"))));
-        PageHelper.orderBy("create_time desc");
+        PageHelper.orderBy("i.create_time desc");
         List<CarProcedureListVo> carProcedureListVos = carInfoMapper.selectProcedureVoList(params);
         PageInfo<CarProcedureListVo> pageInfo = new PageInfo<>(carProcedureListVos);
         return pageInfo;

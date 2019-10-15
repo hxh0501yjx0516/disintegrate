@@ -596,6 +596,22 @@ public class CarsQueryController {
         return restResult;
     }
 
+    /***
+     * App端-查询本部已处理车辆列表
+     */
+    @GetMapping("/doCarsQuery/findIsHandle")
+    public RestResult findIsHandle(
+            @RequestParam(value = "findMsg", required = false) String findMsg,
+            @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
+            @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
+            @LoginUser SysUser user
+    ) {
+        PageInfo pageInfo = null;
+        List<Map<String,Object>> mapList = carsQueryService.findIsHandle(findMsg, page, pageSize, user.getCompany_id());
+        pageInfo = new PageInfo<>(mapList);
+        RestResult restResult = new RestResult("查询车辆列表信息成功", pageInfo, ResultCode.SUCCESS.code());
+        return restResult;
+    }
 
 
 

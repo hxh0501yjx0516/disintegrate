@@ -63,6 +63,16 @@ public class JPushUtil {
         return 2;
 
     }
+    public static int buildPushIOS(Map<String, String> map) throws APIConnectionException, APIRequestException {
+        PushPayload pushPayload = JPushUtil.ios(map);
+        PushResult pushResult = jpushClient.sendPush(pushPayload);
+        System.err.println(pushResult);
+        if (pushResult.getResponseCode() == 200) {
+            return 1;
+        }
+        return 2;
+
+    }
 
 
     /**
@@ -98,7 +108,7 @@ public class JPushUtil {
      * @param map
      * @return
      */
-    public static PushPayload buildPushIOS(Map<String, String> map) {
+    public static PushPayload ios(Map<String, String> map) {
         return PushPayload.newBuilder()
                 .setPlatform(Platform.android_ios())
                 .setAudience(Audience.all())

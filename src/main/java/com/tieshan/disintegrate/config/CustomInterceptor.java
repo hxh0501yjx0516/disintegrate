@@ -106,19 +106,19 @@ public class CustomInterceptor implements HandlerInterceptor {
                 sysLog.setOperator_id(sysUser.getId());
                 sysLog.setMethod_url(request.getRequestURL().toString());
                 sysLog.setIp_addr(getIpAddr(request));
-                String param = getMonth(0);
-                System.err.println("判断参数------------>>>>>>>>>>>>>" + param);
+                String yearMonth = getMonth(0);
+                System.err.println("判断参数------------>>>>>>>>>>>>>" + yearMonth);
                 System.err.println("请求------------>>>>>>>>>>>>>" + request.getRequestURL().toString());
-                int num = sysUserMapper.existTable(param);
+                int num = sysUserMapper.existTable(yearMonth);
                 if (num < 1) {
-                    sysUserMapper.creatSyslog(param);//创建表
+                    sysUserMapper.creatSyslog(yearMonth);//创建表
                     String delMonth = getMonth(-2);
                     int delnum = sysUserMapper.existTable(delMonth);
                     if (delnum > 0) {
                         sysUserMapper.delTable(getMonth(-2));//删除两个越前的历史表
                     }
                 }
-                sysUserMapper.syslog(param, sysLog);
+                sysUserMapper.syslog(yearMonth, sysLog);
             }
 
         } catch (Exception e) {

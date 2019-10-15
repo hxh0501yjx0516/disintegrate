@@ -131,6 +131,14 @@ public interface CarsQueryService {
      */
     void addProPic(CarPicData carPicData, SysUser user);
 
+    /***
+     * App端-本部已处理
+     */
+    List<Map<String,Object>> findIsHandle(
+            String findMsg,
+            Integer page,
+            Integer pageSize,
+            Long companyId);
 
 }
 

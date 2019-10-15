@@ -103,4 +103,8 @@ public interface CarsQueryDao {
 
 
     List<Map<String, Object>> findProCarsComplete(@Param("findMsg") String findMsg,@Param("companyId")Long companyId);
+    /***
+     * App端-本部已处理
+     */
+    List<Map<String, Object>> findIsHandle(@Param("findMsg") String findMsg,@Param("companyId")Long companyId);
 }
