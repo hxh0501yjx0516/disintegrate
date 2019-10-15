@@ -113,6 +113,7 @@ public class ProceduresService implements IProceduresService {
 
         CarInfo carInfo = new CarInfo();
         carInfo.setId(proceduresVo.getCarInfoId());
+        carInfo.setDisintegratePlantId(user.getCompany_id());
         carInfo.setDrivLicense(proceduresVo.getDrivLicense());
         carInfo.setRegistLicense(proceduresVo.getRegistLicense());
         carInfo.setContacts(proceduresVo.getContacts());
@@ -508,7 +509,7 @@ public class ProceduresService implements IProceduresService {
         PageHelper.startPage(
                 StringUtils.isEmpty(params.get("pageNum")) ? 1 : Integer.parseInt(String.valueOf(params.get("pageNum"))),
                 StringUtils.isEmpty(params.get("pageSize")) ? 10 : Integer.parseInt(String.valueOf(params.get("pageSize"))));
-        PageHelper.orderBy("create_time desc");
+        PageHelper.orderBy("i.create_time desc");
         List<CarProcedureListVo> carProcedureListVos = carInfoMapper.selectProcedureVoList(params);
         PageInfo<CarProcedureListVo> pageInfo = new PageInfo<>(carProcedureListVos);
         return pageInfo;
