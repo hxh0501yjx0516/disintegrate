@@ -162,7 +162,7 @@
     </select>
     <sql id="queryWhereIsHandle">
         <where>
-            pro.is_upload_pic=2 and
+            pro.is_destructive=2 and ent.dismantle_way!=5
             ent.disintegrate_plant_id=#{companyId}
             <if test="findMsg!=null and findMsg!=''">
                 and concat(info.car_no,info.car_name,info.car_code)
