@@ -68,21 +68,21 @@
             FROM
                 information_schema.TABLES
             WHERE
-                table_name = 'ts_system_log_${param}'
+                table_name = 'ts_system_log_${yearMonth}'
 
     </select>
     <delete id="delTable">
-        DROP TABLE ts_system_log_${param}
+        DROP TABLE ts_system_log_${yearMonth}
     </delete>
     <insert id="syslog">
-        INSERT INTO ts_system_log_${param} ( id, disintegrate_plant_id, operator_id,
+        INSERT INTO ts_system_log_${yearMonth} ( id, disintegrate_plant_id, operator_id,
          depart_name,operator,method_url,create_time,ip_addr)
         VALUES
 	    (#{sysLog.id},#{sysLog.disintegrate_plant_id},#{sysLog.operator_id},#{sysLog.depart_name},
 	    #{sysLog.operator},#{sysLog.method_url},now(),#{sysLog.ip_addr})
     </insert>
     <insert id="creatSyslog">
-        CREATE TABLE ts_system_log_${param} (
+        CREATE TABLE ts_system_log_${yearMonth} (
           `id` bigint(36) NOT NULL AUTO_INCREMENT,
           `disintegrate_plant_id` bigint(36) DEFAULT NULL COMMENT '解体厂id',
           `operator_id` bigint(36) DEFAULT NULL COMMENT '操作人id',
