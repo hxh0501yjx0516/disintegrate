@@ -89,8 +89,8 @@ public class ProceduresService implements IProceduresService {
         Map<String, Object> map = new HashMap<>();
         map.put("disintegratePlantId", user.getCompany_id());
         map.put("carInfoId", proceduresVo.getCarInfoId());
-        CarIdentity carIdentity = carIdentityMapper.selectOneByMap(map);
-        if (carIdentity.getStatus() == 2) {
+        ProceduresVo OldProceduresVo = carIdentityMapper.selectOneByMap(map);
+        if (OldProceduresVo.getStatus() == 2) {
             throw new CustomException("已登记完成！不能修改");
         }
         proceduresVo.setDisintegratePlantId(user.getCompany_id());
@@ -115,12 +115,7 @@ public class ProceduresService implements IProceduresService {
     @Override
     public ProceduresVo query(Map<String, Object> params, SysUser user) {
         params.put("disintegratePlantId", user.getCompany_id());
-        CarIdentity carIdentity = carIdentityMapper.selectOneByMap(params);
-        ProceduresVo proceduresVo = new ProceduresVo();
-        if (carIdentity == null) {
-            return null;
-        }
-        BeanUtils.copyProperties(carIdentity, proceduresVo);
+        ProceduresVo proceduresVo = carIdentityMapper.selectOneByMap(params);
         return proceduresVo;
     }
 

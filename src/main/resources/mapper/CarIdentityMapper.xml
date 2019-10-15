@@ -82,6 +82,7 @@
         ie.is_delete, s.card_color, ie.status, ie.record_no,i.driv_license,i.regist_license,i.contacts,i.contacts_phone,i.contacts_address
         FROM ts_car_identity ie
         left join ts_car_survey s on ie.car_info_id=s.car_info_id
+        left join ts_car_info i on i.id=ie.car_info_id
         <where>
             <if test="id!=null">
                 AND ie.id=#{id}  <!--  -->
