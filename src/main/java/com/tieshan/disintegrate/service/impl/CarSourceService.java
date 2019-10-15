@@ -463,16 +463,18 @@ public class CarSourceService implements ICarSourceService {
 //        return carSourceMapper.selectPicList( id, sysUser.getCompany_id(), firstType);
 //    }
 
-//    /**
-//     * 查询（某个拆解厂）首页每个状态下的车辆数量
-//     * @param request
-//     * @return
-//     */
-//    @Override
-//    public Map<String, Integer> selectCarInfoCount(HttpServletRequest request) {
-//
-//        return null;
-//    }
+    /**
+     * 查询（某个拆解厂）首页每个状态下的车辆数量
+     * @param request
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> selectCarInfoCount(HttpServletRequest request) {
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        List<Map<String, Object>> countMapList = carSourceMapper.selectCarInfoCount(sysUser.getCompany_id());
+        return countMapList;
+    }
 
     /**
      * 通过车辆编号来查询车辆

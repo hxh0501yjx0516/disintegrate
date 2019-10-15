@@ -79,7 +79,7 @@ public interface ICarSourceService {
 
     CarInfoPage selectCarInfo(HttpServletRequest request, String carCode);
 
-//    Map<String, Integer> selectCarInfoCount(HttpServletRequest request);
+    List<Map<String, Object>> selectCarInfoCount(HttpServletRequest request);
 
 //    List<String> selectPicList(HttpServletRequest request, Long id, String state);
 

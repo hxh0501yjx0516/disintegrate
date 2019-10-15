@@ -656,22 +656,22 @@ public class CarSourceController {
         return restResult;
     }
 
-//    /**
-//     * 查询（某个拆解厂）首页每个状态下的车辆数量
-//     * @param request
-//     * @return
-//     */
-//    @GetMapping("/selectCarInfoCount")
-//    public RestResult selecrCarInfoCount(HttpServletRequest request){
-//        Map<String, Integer> map = null;
-//        try{
-//            map = carSourceService.selectCarInfoCount(request);
-//        }catch(Exception e){
-//            log.info("查询失败", e);
-//            return new RestResult("查询失败", map, ResultCode.ERROR.code());
-//        }
-//        return new RestResult("查询成功", map, ResultCode.SUCCESS.code());
-//    }
+    /**
+     * 查询（某个拆解厂）首页每个状态下的车辆数量
+     * @param request
+     * @return
+     */
+    @GetMapping("/selectCarInfoCount")
+    public RestResult selecrCarInfoCount(HttpServletRequest request){
+        List<Map<String, Object>> countMapList = null;
+        try{
+            countMapList = carSourceService.selectCarInfoCount(request);
+        }catch(Exception e){
+            log.info("查询失败", e);
+            return new RestResult("查询失败", countMapList, ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", countMapList, ResultCode.SUCCESS.code());
+    }
 
     /**
      * 首页的查询
