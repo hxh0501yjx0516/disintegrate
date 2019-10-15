@@ -582,9 +582,6 @@
             <if test="processingDate!=null">
                 processing_date=#{processingDate},  <!-- 处理日期 -->
             </if>
-            <if test="procedures!=null and procedures!=''">
-                procedures=#{procedures},  <!-- 驾驶证 行驶本等等 -->
-            </if>
             <if test="proceduresType!=null and proceduresType!=''">
                 procedures_type=#{proceduresType},  <!-- 手续获取方式 -->
             </if>
@@ -636,9 +633,6 @@
                 </if>
                 <if test="item.processingDate!=null">
                     processing_date=#{item.processingDate},  <!-- 处理日期 -->
-                </if>
-                <if test="item.procedures!=null and item.procedures!=''">
-                    procedures=#{item.procedures},  <!-- 驾驶证 行驶本等等 -->
                 </if>
                 <if test="item.proceduresType!=null and item.proceduresType!=''">
                     procedures_type=#{item.proceduresType},  <!-- 手续获取方式 -->
