@@ -3,7 +3,6 @@ package com.tieshan.disintegrate.dao;
 import com.tieshan.disintegrate.pojo.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Map;
@@ -166,7 +165,7 @@ public interface CarSourceMapper {
 //    List<String> selectTuoPicList(@Param(value = "carCode") String carCode,
 //                                  @Param(value = "disintegratePlantId") Long disintegratePlantId);
 
-    List<String> selectPicList(@Param(value = "carInfoId") Long carInfoId,
+    List<Map<String, Object>> selectPicList(@Param(value = "carInfoId") Long carInfoId,
                                @Param(value = "disintegratePlantId") Long disintegratePlantId,
                                @Param(value = "firstType") String firstType);
 

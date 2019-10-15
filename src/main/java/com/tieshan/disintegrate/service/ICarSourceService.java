@@ -1,6 +1,7 @@
 package com.tieshan.disintegrate.service;
 
 import com.tieshan.disintegrate.pojo.CarInfo;
+import com.tieshan.disintegrate.pojo.CarInfoPage;
 import com.tieshan.disintegrate.pojo.CarSource;
 import com.tieshan.disintegrate.pojo.CarSurvey;
 import javax.servlet.http.HttpServletRequest;
@@ -31,8 +32,6 @@ public interface ICarSourceService {
     CarSource selectCarSource(Long id, HttpServletRequest request);
 
     List<Map<String, Object>> selectCarInfoList(Long id, HttpServletRequest request);
-
-//    CarInfo selectCarInfoById(Long id, HttpServletRequest request);
 
     void editCar(CarInfo carInfo);
 
@@ -78,9 +77,11 @@ public interface ICarSourceService {
 
     List<Map<String, Object>> selectHomePage(Integer page, Integer pageSize, String state, HttpServletRequest request);
 
-    Map<String, Object> selectCarInfo(HttpServletRequest request, String carCode);
+    CarInfoPage selectCarInfo(HttpServletRequest request, String carCode);
 
-    List<String> selectPicList(HttpServletRequest request, Long id, String state);
+//    Map<String, Integer> selectCarInfoCount(HttpServletRequest request);
+
+//    List<String> selectPicList(HttpServletRequest request, Long id, String state);
 
 
 //    List<Map<String, Object>> selectCarSourceListApp(HttpServletRequest request);

@@ -1,24 +1,20 @@
 package com.tieshan.disintegrate.controller;
 
-import com.github.pagehelper.Constant;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.tieshan.disintegrate.constant.ConStants;
 import com.tieshan.disintegrate.pojo.CarInfo;
+import com.tieshan.disintegrate.pojo.CarInfoPage;
 import com.tieshan.disintegrate.pojo.CarSource;
 import com.tieshan.disintegrate.pojo.CarSurvey;
 import com.tieshan.disintegrate.service.DictionaryService;
 import com.tieshan.disintegrate.service.ICarSourceService;
 import com.tieshan.disintegrate.util.RestResult;
 import com.tieshan.disintegrate.util.ResultCode;
-import javafx.scene.chart.ValueAxis;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.transform.Result;
-import java.security.acl.LastOwnerException;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +38,8 @@ public class CarSourceController {
     private DictionaryService dictionaryService;
 
     /**
-     * PC： 查询某拆解厂的指定的车源状态或者搜索条件查询车源的信息
+     * PC： 车源列表：查询某拆解厂下的所有车源（搜索条件：联系人，电话，联系人地址；车源状态：暂无）
+     * APP：车源列表：查询某拆解厂下某业务员下的所有车源（搜索条件：联系人，电话，联系人地址）
      *
      * @param sourceType 车源状态
      * @param findMsg    搜索条件
@@ -56,7 +53,7 @@ public class CarSourceController {
                                           @RequestParam(value = "page", required = false, defaultValue = ConStants.PAGE) Integer page,
                                           @RequestParam(value = "pageSize", required = false, defaultValue = ConStants.PAGESIZE) Integer pageSize,
                                           HttpServletRequest request) {
-        PageInfo pageInfo = null;/*PageInfo<Map<String, Object>>*/
+        PageInfo pageInfo = null;
         try {
             List<Map<String, Object>> mapList = carSourceService.selectCarSourceList(sourceType, findMsg, page, pageSize, request);
             pageInfo = new PageInfo<>(mapList);
@@ -66,17 +63,6 @@ public class CarSourceController {
         }
         return new RestResult("查询成功", pageInfo, ResultCode.SUCCESS.code());
     }
-
-
-//    /**
-//     * APP端：查询某拆解厂的某业务员的车源列表管理    再查一次数据 放在开发文档上
-//     *
-//     * @return
-//     */
-//    @GetMapping("/selectCarSourceListApp")
-//    public RestResult selectCarSourceListApp(HttpServletRequest request) {
-//        return new RestResult("查询成功", carSourceService.selectCarSourceListApp(request), ResultCode.SUCCESS.code());
-//    }
 
     /**
      * 查询所有的用户的姓名和id （业务员）    2    过
@@ -670,6 +656,23 @@ public class CarSourceController {
         return restResult;
     }
 
+//    /**
+//     * 查询（某个拆解厂）首页每个状态下的车辆数量
+//     * @param request
+//     * @return
+//     */
+//    @GetMapping("/selectCarInfoCount")
+//    public RestResult selecrCarInfoCount(HttpServletRequest request){
+//        Map<String, Integer> map = null;
+//        try{
+//            map = carSourceService.selectCarInfoCount(request);
+//        }catch(Exception e){
+//            log.info("查询失败", e);
+//            return new RestResult("查询失败", map, ResultCode.ERROR.code());
+//        }
+//        return new RestResult("查询成功", map, ResultCode.SUCCESS.code());
+//    }
+
     /**
      * 首页的查询
      *      state: 1-待初检，2-待打印软牌，3-待预处理，4-待拓号，5-待确定拆解方式，6-待登记，7-待查询，8-待核档，9-待拆解，10-待上传商委数据，11-待打印回收证明，12-待录入注销时间，13-待录入商委注销时间，14-待处理手续异常，15-待残值发放
@@ -704,33 +707,33 @@ public class CarSourceController {
      */
     @GetMapping("/selectCarInfo")
     public RestResult selectCarInfo(HttpServletRequest request, String carCode){
-        Map<String, Object> map = null;
+        CarInfoPage carInfoPage = null;
         try{
-            map = carSourceService.selectCarInfo(request, carCode);
+            carInfoPage = carSourceService.selectCarInfo(request, carCode);
         }catch (Exception e){
             log.info("查询失败", e);
-            return new RestResult("查询失败", "", ResultCode.ERROR.code());
+            return new RestResult("查询失败", carInfoPage, ResultCode.ERROR.code());
         }
-        return new RestResult("查询成功", map, ResultCode.SUCCESS.code());
+        return new RestResult("查询成功", carInfoPage, ResultCode.SUCCESS.code());
     }
 
-    /**
-     * 查询拓号/预处理/毁型/保费证明的图片
-     * @param request
-     * @param id
-     * @return
-     */
-    @GetMapping("/selectPicList")
-    public RestResult selectPicList(HttpServletRequest request, Long id, String state){
-        List<String> list = null;
-        try{
-            list = carSourceService.selectPicList(request, id, state);
-        }catch (Exception e){
-            log.info("查询失败", e);
-            return new RestResult("查询失败", "", ResultCode.ERROR.code());
-        }
-        return new RestResult("查询成功", list, ResultCode.SUCCESS.code());
-    }
+//    /**
+//     * 查询拓号/预处理/毁型/保费证明的图片
+//     * @param request
+//     * @param id
+//     * @return
+//     */
+//    @GetMapping("/selectPicList")
+//    public RestResult selectPicList(HttpServletRequest request, Long id, String state){
+//        List<String> list = null;
+//        try{
+//            list = carSourceService.selectPicList(request, id, state);
+//        }catch (Exception e){
+//            log.info("查询失败", e);
+//            return new RestResult("查询失败", "", ResultCode.ERROR.code());
+//        }
+//        return new RestResult("查询成功", list, ResultCode.SUCCESS.code());
+//    }
 
 
 //    /**

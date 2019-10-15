@@ -1,7 +1,6 @@
 package com.tieshan.disintegrate.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.tieshan.disintegrate.dao.CarInformationDao;
 import com.tieshan.disintegrate.dao.CarSourceMapper;
 import com.tieshan.disintegrate.dao.SysUserMapper;
 import com.tieshan.disintegrate.pojo.*;
@@ -13,6 +12,7 @@ import com.tieshan.disintegrate.util.PubMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
@@ -219,7 +219,7 @@ public class CarSourceService implements ICarSourceService {
         // 获得token中的信息
         String token = request.getHeader("token");
         SysUser sysUser = tokenService.getToken(token);
-        System.out.println(sysUser);
+        // 设置分页信息
         PageHelper.startPage(page, pageSize);
         PageHelper.orderBy("s.create_time DESC");
         // 查询指定状态的车源
@@ -227,11 +227,6 @@ public class CarSourceService implements ICarSourceService {
             carSourceList = carSourceMapper.selectCarSourceList(sysUser.getCompany_id(), sourceType, findMsg);
         } else {
             carSourceList = carSourceMapper.selectCarSourceListApp(sysUser.getCompany_id(), sysUser.getId(), sysUser.getLogin_name(), findMsg);
-            /*int carInfoCount = 0;
-            for (Map<String, Object> map : carSourceList) {
-                carInfoCount += Integer.parseInt(map.get("count").toString());
-                map.put("carInfoCount", carInfoCount);
-            }*/
         }
         return carSourceList;
     }
@@ -376,9 +371,6 @@ public class CarSourceService implements ICarSourceService {
         carSource.setCount(Integer.parseInt(params.get("count").toString()));
         // 设置车源位置
         carSource.setCarLocation(params.get("carLocation").toString());
-        // 设置车源的入场状态
-//        carSource.setSourceType("1");
-
         // 获得token
         String token = request.getHeader("token");
         String[] split = token.split("-");
@@ -394,7 +386,7 @@ public class CarSourceService implements ICarSourceService {
         }
         // 打款银行的id
         Long bankId = idWorker.nextId();
-        carSource.setBankId(bankId+"");
+        carSource.setBankId(bankId.toString());
         // 设置解体厂id
         carSource.setDisintegratePlantId(sysUser.getCompany_id());
         // 创建人id
@@ -447,49 +439,194 @@ public class CarSourceService implements ICarSourceService {
     }
 
 
-    /**
-     * 查询拓号/预处理/毁型/保费证明的图片
-     * @param request
-     * @param id
-     * @param state
-     * @return
-     */
-    @Override
-    public List<String> selectPicList(HttpServletRequest request, Long id, String state) {
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
-        String firstType = "";
-        if (state.equals("1")){          // 预处理照片
-            firstType = "pre_pic";
-        }else if (state.equals("2")){     // 拓号照片
-            firstType = "tuo_pic";
-        }else if (state.equals("3")){    // 毁型照片
-            firstType = "break_pic";
-        }else if (state.equals("4")){    // 报废证明照片
-            firstType = "pro_pic";
-        }
-        return carSourceMapper.selectPicList( id, sysUser.getCompany_id(), firstType);
-    }
+//    /**
+//     * 查询拓号/预处理/毁型/保费证明的图片
+//     * @param request
+//     * @param id
+//     * @param state
+//     * @return
+//     */
+//    @Override
+//    public List<String> selectPicList(HttpServletRequest request, Long id, String state) {
+//        String token = request.getHeader("token");
+//        SysUser sysUser = tokenService.getToken(token);
+//        String firstType = "";
+//        if (state.equals("1")){          // 预处理照片
+//            firstType = "pre_pic";
+//        }else if (state.equals("2")){     // 拓号照片
+//            firstType = "tuo_pic";
+//        }else if (state.equals("3")){    // 毁型照片
+//            firstType = "break_pic";
+//        }else if (state.equals("4")){    // 报废证明照片
+//            firstType = "pro_pic";
+//        }
+//        return carSourceMapper.selectPicList( id, sysUser.getCompany_id(), firstType);
+//    }
+
+//    /**
+//     * 查询（某个拆解厂）首页每个状态下的车辆数量
+//     * @param request
+//     * @return
+//     */
+//    @Override
+//    public Map<String, Integer> selectCarInfoCount(HttpServletRequest request) {
+//
+//        return null;
+//    }
 
     /**
      * 通过车辆编号来查询车辆
-     *
+     *      1-未初检， 2-已初检未预处理，3-已预处理未拓号，4-已拓号未存放车辆位置，5-已存放车辆位置未核档，6-已核档未毁形，7-已毁形未上传报废手续，8-已上传报废手续
      * @param request
      * @param carCode
      * @return
      * */
     @Override
-    public Map<String, Object> selectCarInfo(HttpServletRequest request, String carCode) {
+    public CarInfoPage selectCarInfo(HttpServletRequest request, String carCode) {
         String token = request.getHeader("token");
         SysUser sysUser = tokenService.getToken(token);
+        CarInfoPage carInfoPage = new CarInfoPage();
         Map<String, Object> map = carSourceMapper.selectCarInfo(carCode, sysUser.getCompany_id());
-        // 查询拓号的图片集
-        // 查询预处理的图片集
-//        List<String> prePicList = carSourceMapper.selectPrePic(carCode, sysUser.getCompany_id());
-//        List<String> destructiveList = carSourceMapper.selectDestructivePic(carCode, sysUser.getCompany_id());
-//        // 查询报废手续图片集
-//        List<String> proPicList = carSourceMapper.selectProPicList(carCode, sysUser.getCompany_id());
-        return map;
+        // 设置车辆的信息
+        long id = Long.parseLong(map.get("id").toString());
+        carInfoPage.setId(id);
+        carInfoPage.setCarCode(map.get("carCode").toString());
+        carInfoPage.setCarNo(map.get("carNo").toString());
+        carInfoPage.setCarName(map.get("carName").toString());
+        carInfoPage.setVin(map.get("vin").toString());
+        carInfoPage.setDisplacement(map.get("displacement").toString());
+        Map<String, List<Map<String, Object>>> carInfoPageMap = new HashMap<>();
+        String firstType = null;
+        // 判断该车辆的当前状态
+        if (map.get("isApproach").toString().equals("2") && map.get("isInitialSurvey").toString().equals("1")){
+            // 1-未初检
+            carInfoPage.setStatus("1");
+            // 初检已完成或者预处理完成时
+        }/*else */if (map.get("isInitialSurvey").toString().equals("2")){
+            // 2-已初检未预处理
+            carInfoPage.setStatus("2");
+            // 初检状态为2时,当预处理状态未1，通过车辆id查询初检信息
+            CarSurvey carSurvey = carSourceMapper.selectCarSurveyByCarInfoId(id, sysUser.getCompany_id());
+            carInfoPage.setCarSurvey(carSurvey);
+            // 预处理完成时或者拓号完成时
+        }/*else */if (map.get("isPretreatment").toString().equals("2")){
+            // 3-已预处理未拓号
+            carInfoPage.setStatus("3");
+            /*CarSurvey carSurvey = carSourceMapper.selectCarSurveyByCarInfoId(id, sysUser.getCompany_id());
+            carInfoPage.setCarSurvey(carSurvey);*/
+            // 查询预处理图片
+            firstType = "pre_pic";
+            List<Map<String, Object>> isPretreatmentList = carSourceMapper.selectPicList(id, sysUser.getCompany_id(), firstType);
+            carInfoPageMap.put("prePic", isPretreatmentList);
+            carInfoPage.setMap(carInfoPageMap);
+            // 拓号完成的或者已核档或者核档不通过
+        }/*else */if (map.get("isCopyNumber").toString().equals("2")){
+            if (StringUtils.isEmpty(map.get("carAddress").toString())) {
+                // 4-已拓号未存放车辆位置
+                carInfoPage.setStatus("4");
+            }else{
+                // 5-已存放车辆位置未核档
+                carInfoPage.setStatus("5");
+                carInfoPage.setCarAddress(map.get("carAddress").toString());
+                // 设置核档信息
+                carInfoPage.setIsVerify(Integer.parseInt(map.get("isVerify").toString()));
+                carInfoPage.setVerifyReason(map.get("verifyResult").toString());
+            }
+            /*CarSurvey carSurvey = carSourceMapper.selectCarSurveyByCarInfoId(id, sysUser.getCompany_id());
+            carInfoPage.setCarSurvey(carSurvey);
+            // 查询预处理图片
+            firstType = "pre_pic";
+            List<Map<String, Object>> prepicList = carSourceMapper.selectPicList(id, sysUser.getCompany_id(), firstType);
+            carInfoPageMap.put("prePic", prepicList);
+            carInfoPage.setMap(carInfoPageMap);*/
+            // 查询拓号图片
+            firstType = "tuo_pic";
+            List<Map<String, Object>> tuoPicList = carSourceMapper.selectPicList(id, sysUser.getCompany_id(), firstType);
+            carInfoPageMap.put("tuoPic", tuoPicList);
+            carInfoPage.setMap(carInfoPageMap);
+            // 核档完成时或者核档不通过时或者毁型完成时
+        }/*else */if ((map.get("isVerify").toString().equals("2") && map.get("isDestructive").toString().equals("1")) || (map.get("isVerify").toString().equals("3"))){
+            // 6-已核档未毁形
+            carInfoPage.setStatus("6");
+           /* // 设置车辆位置
+            carInfoPage.setCarAddress(map.get("carAddress").toString());
+            // 初检信息
+            CarSurvey carSurvey = carSourceMapper.selectCarSurveyByCarInfoId(id, sysUser.getCompany_id());
+            carInfoPage.setCarSurvey(carSurvey);
+            // 查询预处理图片
+            firstType = "pre_pic";
+            List<Map<String, Object>> prepicList = carSourceMapper.selectPicList(id, sysUser.getCompany_id(), firstType);
+            carInfoPageMap.put("prePic", prepicList);
+            carInfoPage.setMap(carInfoPageMap);
+            // 查询拓号图片
+            firstType = "tuo_pic";
+            List<Map<String, Object>> tuoPicList = carSourceMapper.selectPicList(id, sysUser.getCompany_id(), firstType);
+            carInfoPageMap.put("tuoPic", tuoPicList);
+            carInfoPage.setMap(carInfoPageMap);*/
+            // 设置核档信息
+            carInfoPage.setIsVerify(Integer.parseInt(map.get("isVerify").toString()));
+            carInfoPage.setVerifyReason(map.get("verifyResult").toString());
+            // 毁型完成时或者已上传报废证明时
+        }/*else */if (map.get("isDestructive").toString().equals("2")){
+            // 7-已毁形未上传报废手续
+            carInfoPage.setStatus("7");
+            /*// 设置车辆位置
+            carInfoPage.setCarAddress(map.get("carAddress").toString());
+            // 初检信息
+            CarSurvey carSurvey = carSourceMapper.selectCarSurveyByCarInfoId(id, sysUser.getCompany_id());
+            carInfoPage.setCarSurvey(carSurvey);
+            // 查询预处理图片
+            firstType = "pre_pic";
+            List<Map<String, Object>> prepicList = carSourceMapper.selectPicList(id, sysUser.getCompany_id(), firstType);
+            carInfoPageMap.put("prePic", prepicList);
+            carInfoPage.setMap(carInfoPageMap);
+            // 查询拓号图片
+            firstType = "tuo_pic";
+            List<Map<String, Object>> tuoPicList = carSourceMapper.selectPicList(id, sysUser.getCompany_id(), firstType);
+            carInfoPageMap.put("tuoPic", tuoPicList);
+            carInfoPage.setMap(carInfoPageMap);
+            // 设置核档信息
+            carInfoPage.setIsVerify(Integer.parseInt(map.get("isVerify").toString()));
+            carInfoPage.setVerifyReason(map.get("verifyResult").toString());*/
+            // 查询毁型图片
+            firstType = "break_pic";
+            List<Map<String, Object>> breakPicList = carSourceMapper.selectPicList(id, sysUser.getCompany_id(), firstType);
+            carInfoPageMap.put("breakPic", breakPicList);
+            carInfoPage.setMap(carInfoPageMap);
+            // 已上传报废证明时
+        }/*else */  if (map.get("isUploadPic").toString().equals("2")){
+            // 8-已上传报废手续
+            carInfoPage.setStatus("8");
+            /*// 设置车辆位置
+            carInfoPage.setCarAddress(map.get("carAddress").toString());
+            // 初检信息
+            CarSurvey carSurvey = carSourceMapper.selectCarSurveyByCarInfoId(id, sysUser.getCompany_id());
+            carInfoPage.setCarSurvey(carSurvey);
+            // 查询预处理图片
+            firstType = "pre_pic";
+            List<Map<String, Object>> prepicList = carSourceMapper.selectPicList(id, sysUser.getCompany_id(), firstType);
+            carInfoPageMap.put("prePic", prepicList);
+            carInfoPage.setMap(carInfoPageMap);
+            // 查询拓号图片
+            firstType = "tuo_pic";
+            List<Map<String, Object>> tuoPicList = carSourceMapper.selectPicList(id, sysUser.getCompany_id(), firstType);
+            carInfoPageMap.put("tuoPic", tuoPicList);
+            carInfoPage.setMap(carInfoPageMap);
+            // 设置核档信息
+            carInfoPage.setIsVerify(Integer.parseInt(map.get("isVerify").toString()));
+            carInfoPage.setVerifyReason(map.get("verifyResult").toString());
+            // 查询毁型图片
+            firstType = "break_pic";
+            List<Map<String, Object>> breakPicList = carSourceMapper.selectPicList(id, sysUser.getCompany_id(), firstType);
+            carInfoPageMap.put("breakPic", breakPicList);
+            carInfoPage.setMap(carInfoPageMap);*/
+            // 查询报废手续的图片
+            firstType = "pro_pic";
+            List<Map<String, Object>> proPicList = carSourceMapper.selectPicList(id, sysUser.getCompany_id(), firstType);
+            carInfoPageMap.put("proPic", proPicList);
+            carInfoPage.setMap(carInfoPageMap);
+        }
+        return carInfoPage;
     }
 
     /**

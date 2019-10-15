@@ -218,18 +218,6 @@
         <include refid="queryMsg2"></include>
     </select>
 
-    <!--<select id="selectCarInfoCountByCarSourceId" parameterType="java.lang.Long" resultType="java.lang.Integer">
-        SELECT
-        	count( i.id ) AS carInfoCountByCarSourceId
-        FROM
-        	ts_car_source AS s
-        	LEFT JOIN ts_car_info AS i ON s.id = i.car_source
-        WHERE
-        	s.disintegrate_plant_id = #{disintegratePlantId}
-        	AND s.create_operator = #{loginName} AND
-            s.create_operator_id = #{userId}
-    </select>-->
-
     <sql id="queryMsg2">
         <if test="findMsg != null and findMsg != ''">
             AND concat(s.contacts, s.phone, s.car_location)
@@ -1335,11 +1323,10 @@
 	        IFNULL( e.is_initial_survey, '' ) AS isInitialSurvey,
 	        IFNULL( e.is_pretreatment, '' ) AS isPretreatment,
 	        IFNULL( e.is_copy_number, '' ) AS isCopyNumber,
-	        IFNULL( p.is_query, '' ) AS isQuery,
             IFNULL( p.is_verify, '' ) AS isVerify,
-	        IFNULL( p.is_logout, '' ) AS isLogout,
 	        IFNULL( p.is_destructive, '' ) AS isDestructive,
 	        IFNULL( p.is_appoint_logout_time, '' ) AS isAppointLogoutTime,
+	        IFNULL( p.is_upload_pic, '' ) AS isUploadPic,
 	        IFNULL( CONCAT( i.car_location_area, ' ', i.car_location_row, ' ', i.car_location_column, ' ', i.car_location_number ), '' ) AS carAddress,
 	        IFNULL( p.verify_result, '' ) AS verifyResult
         FROM
@@ -1352,9 +1339,10 @@
 	        AND i.disintegrate_plant_id = #{disintegratePlantId}
     </select>
 
-    <select id="selectPicList" resultType="java.lang.String">
+    <select id="selectPicList" resultType="java.util.Map">
          SELECT
-        	p.file_url
+            IFNULL(p.file_name, '') AS fileName,
+        	IFNULL(p.file_url, '') AS fileUrl
         FROM
         	ts_car_info AS i
         	LEFT JOIN ts_car_pic AS p ON i.id = p.car_info_id
