@@ -53,9 +53,9 @@ public interface CarDismantleDao {
             "        WHERE\n" +
             "        \ti.disintegrate_plant_id = #{disintegratePlantId}\n" +
             "        \tAND p.is_supervise_sale = #{isSuperviseSale}\n" +
-            "        \t<if test=\"findMsg != null and findMsg != ''\">\n" +
-            "                AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%','','%')\n" +
-            "            </if>" +
+            "\t\t\t\t\t<if test=\"findMsg != null and findMsg != ''\">\n" +
+            "            AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%',#{findMsg},'%')\n" +
+            "        </if>" +
             "</script>"})
     List<Map<String, Object>> selectIsSuperviseSale(@Param(value = "disintegratePlantId") Long disintegratePlantId,
                                                     @Param(value = "findMsg") String findMsg,
@@ -65,6 +65,8 @@ public interface CarDismantleDao {
             "        SELECT\n" +
             "        IFNULL( i.car_code, '' ) AS carCode,\n" +
             "        IFNULL( i.car_no, '' ) AS carNo,\n" +
+            "        IFNULL( i.car_name, '' ) AS carName,\n" +
+            "        IFNULL( ent.dismantle_way, '' ) AS dismantleWay,\n" +
             "        IFNULL( p.destructive_time, '' ) AS time,\n" +
             "        IFNULL( d.vin, '' ) AS vin,\n" +
             "        IFNULL( i.id, '' ) AS id\n" +
@@ -72,11 +74,12 @@ public interface CarDismantleDao {
             "        ts_car_info AS i\n" +
             "        LEFT JOIN ts_car_processing AS p ON i.id = p.car_info_id\n" +
             "        LEFT JOIN ts_car_identity AS d ON i.id = d.car_info_id\n" +
+            "        LEFT JOIN ts_car_enter AS ent ON i.id = ent.car_info_id\n" +
             "        WHERE\n" +
             "        i.disintegrate_plant_id = #{disintegratePlantId}\n" +
             "        AND p.is_destructive = 2\n" +
             "        AND p.is_dismantle = #{isDismantle}\n" +
-            "        <if test=\"findMsg != null and findMsg != ''\">\n" +
+            "\t\t\t\t\t<if test=\"findMsg != null and findMsg != ''\">\n" +
             "            AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%',#{findMsg},'%')\n" +
             "        </if>" +
             "</script>"})
@@ -88,30 +91,41 @@ public interface CarDismantleDao {
             "        SELECT\n" +
             "        IFNULL( i.car_code, '' ) AS carCode,\n" +
             "        IFNULL( i.car_no, '' ) AS carNo,\n" +
+            "        IFNULL( i.car_name, '' ) AS carName,\n" +
+            "        IFNULL( ent.dismantle_way, '' ) AS dismantleWay,\n" +
             "        IFNULL( p.dismantle_time, '' ) AS time,\n" +
             "        IFNULL( d.vin, '' ) AS vin,\n" +
+            "        count(par.id) AS count,\n" +
             "        IFNULL( i.id, '' ) AS id\n" +
             "        FROM\n" +
             "        ts_car_info AS i\n" +
             "        LEFT JOIN ts_car_processing AS p ON i.id = p.car_info_id\n" +
             "        LEFT JOIN ts_car_identity AS d ON i.id = d.car_info_id\n" +
+            "        LEFT JOIN ts_car_enter AS ent ON i.id = ent.car_info_id\n" +
+            "        LEFT JOIN ts_car_parts AS par ON i.id = par.car_info_id\n" +
             "        WHERE\n" +
             "        i.disintegrate_plant_id = #{disintegratePlantId}\n" +
-            "        AND p.is_destructive = 2\n" +
-            "        AND p.is_dismantle = #{isDismantle}\n" +
-            "        <if test=\"findMsg != null and findMsg != ''\">\n" +
-            "            AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%',#{findMsg},'%')\n" +
+            "        AND p.is_destructive = 2 AND p.is_dismantle = #{isDismantle}\n" +
+            "\t\t\t\t\t<if test=\"findMsg != null and findMsg != ''\">\n" +
+            "and concat(i.car_code,i.car_no,i.car_name)\n" +
+            "like concat(\"%\",#{findMsg},\"%\")\n" +
             "        </if>" +
+            "GROUP BY i.car_code" +
             "</script>"})
     List<Map<String, Object>> selectIsDismantleComplete(@Param(value = "disintegratePlantId") Long disintegratePlantId,
                                                         @Param(value = "findMsg") String findMsg,
                                                         @Param(value = "isDismantle") Integer isDismantle);
+    /**查询某辆车已拆件的个数*/
+    @Select("select count(*) from ts_car_parts where car_info_id=#{carInfoId} and disintegrate_plant_id=#{companyId}")
+    int selectAllPartsById(@Param("carInfoId")Long carInfoId,@Param("companyId")Long companyId);
+
     /**查询所有已拆的件*/
     @Select({"<script>" +
             " SELECT\n" +
             "        \tIFNULL( i.id, '' ) AS id,\n" +
             "        \tIFNULL( i.car_no, '' ) AS carNo,\n" +
             "        \tIFNULL( d.vin, '' ) AS vin,\n" +
+            "        \tIFNULL( p.parts_code, '' ) AS partsCode,\n" +
             "        \tIFNULL( p.parts_name, '' ) AS partsName,\n" +
             "        \tIFNULL( p.print_time, '' ) AS printTime,\n" +
             "        \tIFNULL( p.print_operator, '' ) AS printOperator\n" +

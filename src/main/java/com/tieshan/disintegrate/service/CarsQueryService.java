@@ -120,7 +120,8 @@ public interface CarsQueryService {
             String findMsg,
             Integer page,
             Integer pageSize,
-            Long companyId);
+            Long companyId,
+            Integer status);
     /***
      * App端根据carInfoId查询车辆待毁型数据
      */

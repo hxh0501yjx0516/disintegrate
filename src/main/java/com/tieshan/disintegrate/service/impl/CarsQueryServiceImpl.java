@@ -204,10 +204,16 @@ public class CarsQueryServiceImpl implements CarsQueryService {
     }
 
     @Override
-    public List<Map<String, Object>> findProCars(String findMsg, Integer page, Integer pageSize, Long companyId) {
+    public List<Map<String, Object>> findProCars(String findMsg, Integer page, Integer pageSize, Long companyId,Integer status) {
         PageHelper.startPage(page, pageSize);
         PageHelper.orderBy("isAppointTime desc");
-        return carsQueryDao.findProCars(findMsg,companyId);
+        List<Map<String, Object>> mapList  = null;
+        if(status==1){
+            mapList = carsQueryDao.findProCars(findMsg,companyId);
+        }else {
+            mapList = carsQueryDao.findProCarsComplete(findMsg,companyId);
+        }
+        return mapList;
     }
 
     @Override

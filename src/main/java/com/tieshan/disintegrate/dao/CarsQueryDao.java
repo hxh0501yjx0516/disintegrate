@@ -1,11 +1,7 @@
 package com.tieshan.disintegrate.dao;
 
-import com.tieshan.disintegrate.pojo.CarPic;
-import com.tieshan.disintegrate.pojo.CarSurvey;
 import com.tieshan.disintegrate.pojo.CarsQuery;
-import com.tieshan.disintegrate.pojo.SysUser;
 import com.tieshan.disintegrate.vo.CaiPrePicVo;
-import com.tieshan.disintegrate.vo.CarPicData;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -106,5 +102,5 @@ public interface CarsQueryDao {
     List<Map<String, Object>> findProCars(@Param("findMsg") String findMsg,@Param("companyId")Long companyId);
 
 
-
+    List<Map<String, Object>> findProCarsComplete(@Param("findMsg") String findMsg,@Param("companyId")Long companyId);
 }

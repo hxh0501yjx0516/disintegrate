@@ -115,7 +115,7 @@
         from ts_car_info AS info join ts_car_enter AS ent on ent.car_info_id=info.id join ts_car_processing AS pos on pos.car_info_id=info.id
         <include refid="queryBreakSuccessSurvey"/>
     </select>
-    <!-- App端查询报废列表数据 -->
+    <!-- APP端查询待上传报废照片的列表数据 -->
     <select id="findProCars" resultType="map">
         SELECT
         IFNULL( i.id, '' ) AS carInfoId,
@@ -128,6 +128,21 @@
         LEFT JOIN ts_car_processing AS p ON i.id = p.car_info_id
         <include refid="queryFindProCars"/>
     </select>
+
+    <!--APP端查询已上传报废照片的列表数据-->
+    <select id="findProCarsComplete" resultType="map">
+        SELECT
+        IFNULL( i.id, '' ) AS carInfoId,
+        IFNULL( i.car_code, '' ) AS carCode,
+        IFNULL( i.car_no, '' ) AS carNo,
+        IFNULL( i.car_name, '' ) AS carName,
+        IFNULL( p.is_appoint_time, '' ) AS isAppointTime
+        FROM
+        ts_car_info AS i
+        LEFT JOIN ts_car_processing AS p ON i.id = p.car_info_id
+        <include refid="findProCarsComplete"/>
+    </select>
+
     <!--App端根据carInfoId查询车辆报废证明照片信息-->
     <select id="findProCarsById" resultType="map">
 
@@ -137,11 +152,25 @@
         on dic.first_type=pic.first_type and dic.two_type=pic.two_type and pic.car_info_id=#{carInfoId} and pic.disintegrate_plant_id=#{companyId}
         where dic.first_type='pro_pic'
     </select>
+
+    <sql id="findProCarsComplete">
+        <where>
+            i.disintegrate_plant_id = 1
+            AND p.is_logout = 2
+            AND p.is_appoint_logout_time = 2
+            AND p.is_upload_pic=2
+            <if test="findMsg!=null and findMsg!=''">
+                and concat(carNo,info.carName,carCode)
+                like concat("%",#{findMsg},"%")
+            </if>
+        </where>
+    </sql>
     <sql id="queryFindProCars">
         <where>
             i.disintegrate_plant_id = 1
             AND p.is_logout = 2
             AND p.is_appoint_logout_time = 2
+            AND p.is_upload_pic=1
             <if test="findMsg!=null and findMsg!=''">
                 and concat(carNo,info.carName,carCode)
                 like concat("%",#{findMsg},"%")

@@ -13,4 +13,37 @@
                 ORDER BY
                     id DESC
     </select>
+    <insert id="insertNotice">
+        insert into
+            ts_notice(id,msg_title,msg_content,type,device_type,datetime,operator,disintegrate_plant_id)
+        values
+         (#{notice.id},#{notice.msg_title},#{notice.msg_content},#{notice.type}
+         ,#{notice.device_type},#{notice.datetime},#{notice.operator},#{notice.disintegrate_plant_id})
+    </insert>
+    <select id="selNotice" resultType="java.util.Map">
+            SELECT
+                IFNULL( id, '' ) AS id,
+                IFNULL( msg_title, '' ) AS msg_title,
+                IFNULL( SUBSTRING( msg_content, 1, 20 ), '' ) AS msg_content,
+                IFNULL( type, '' ) AS type,
+                IFNULL( datetime, '' ) AS datetime
+            FROM
+                ts_notice
+                WHERE type=#{type}
+                  and device_type=#{device_type}
+                    and disintegrate_plant_id=#{disintegrate_plant_id}
+    </select>
+    <select id="selNoticeById" resultType="java.util.Map">
+
+        SELECT
+                IFNULL( id, '' ) AS id,
+                IFNULL( msg_title, '' ) AS msg_title,
+                IFNULL(msg_content, '' ) AS msg_content,
+                IFNULL( type, '' ) AS type,
+                IFNULL( datetime, '' ) AS datetime
+            FROM
+                ts_notice
+                WHERE id=#{id}
+
+    </select>
 </mapper>
