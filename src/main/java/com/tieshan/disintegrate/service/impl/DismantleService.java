@@ -80,7 +80,7 @@ public class DismantleService implements IDismantleService {
     @Override
     public List<Map<String, Object>> selectIsDismantle(HttpServletRequest request, Integer page, Integer pageSize, String findMsg, Integer isDismantle) {
         PageHelper.startPage(page, pageSize);
-        PageHelper.orderBy("p.destructive_time DESC");
+        PageHelper.orderBy("time DESC");
         String token = request.getHeader("token");
         SysUser sysUser = tokenService.getToken(token);
         List<Map<String, Object>> mapList = null;

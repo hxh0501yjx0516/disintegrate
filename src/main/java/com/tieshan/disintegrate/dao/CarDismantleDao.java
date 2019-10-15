@@ -53,9 +53,9 @@ public interface CarDismantleDao {
             "        WHERE\n" +
             "        \ti.disintegrate_plant_id = #{disintegratePlantId}\n" +
             "        \tAND p.is_supervise_sale = #{isSuperviseSale}\n" +
-            "        \t<if test=\"findMsg != null and findMsg != ''\">\n" +
-            "                AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%','','%')\n" +
-            "            </if>" +
+            "\t\t\t\t\t<if test=\"findMsg != null and findMsg != ''\">\n" +
+            "            AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%',#{findMsg},'%')\n" +
+            "        </if>" +
             "</script>"})
     List<Map<String, Object>> selectIsSuperviseSale(@Param(value = "disintegratePlantId") Long disintegratePlantId,
                                                     @Param(value = "findMsg") String findMsg,
@@ -79,7 +79,7 @@ public interface CarDismantleDao {
             "        i.disintegrate_plant_id = #{disintegratePlantId}\n" +
             "        AND p.is_destructive = 2\n" +
             "        AND p.is_dismantle = #{isDismantle}\n" +
-            "        <if test=\"findMsg != null and findMsg != ''\">\n" +
+            "\t\t\t\t\t<if test=\"findMsg != null and findMsg != ''\">\n" +
             "            AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%',#{findMsg},'%')\n" +
             "        </if>" +
             "</script>"})
@@ -105,12 +105,12 @@ public interface CarDismantleDao {
             "        LEFT JOIN ts_car_parts AS par ON i.id = par.car_info_id\n" +
             "        WHERE\n" +
             "        i.disintegrate_plant_id = #{disintegratePlantId}\n" +
-            "        AND p.is_destructive = 2\n" +
-            "        AND p.is_dismantle = #{isDismantle}\n" +
-            "GROUP BY i.car_code" +
-            "        <if test=\"findMsg != null and findMsg != ''\">\n" +
-            "            AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%',#{findMsg},'%')\n" +
+            "        AND p.is_destructive = 2 AND p.is_dismantle = #{isDismantle}\n" +
+            "\t\t\t\t\t<if test=\"findMsg != null and findMsg != ''\">\n" +
+            "and concat(i.car_code,i.car_no,i.car_name)\n" +
+            "like concat(\"%\",#{findMsg},\"%\")\n" +
             "        </if>" +
+            "GROUP BY i.car_code" +
             "</script>"})
     List<Map<String, Object>> selectIsDismantleComplete(@Param(value = "disintegratePlantId") Long disintegratePlantId,
                                                         @Param(value = "findMsg") String findMsg,
