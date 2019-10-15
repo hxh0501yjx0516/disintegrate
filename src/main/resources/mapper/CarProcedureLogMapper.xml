@@ -195,6 +195,15 @@
             like concat("%",#{searchInfo},"%")
         </if>
     </select>
+    <select id="selectWebProcedureVo" resultType="com.tieshan.disintegrate.vo.WebRecordHandleVo">
+        SELECT  l.id queryId, l.type, l.result, l.remark, l.create_time queryTime,
+        l.operator_id, l.operator, l.state,lm.id customerHandleId,l.result customerHandleResult,
+        l.remark customerHandleRemark,lm.create_time customerHandleTime,
+        lm.operator customerHandleOperator,lm.state customerHandleState
+        FROM ts_car_procedure_log l
+        left join ts_car_procedure_log lm on l.id= lm.procedure_log_id
+        where l.car_info_id=#{carInfoId} AND (l.type=1 or l.type=2)  order by l.create_time
+    </select>
     <insert id="insertCarProcedureLog">
         INSERT INTO ts_car_procedure_log(
         <trim suffixOverrides=",">

@@ -57,7 +57,41 @@
         <collection property="verifyRecord" column="car_info_id"
                     select="com.tieshan.disintegrate.dao.CarProcedureLogMapper.selectVerifyVo"/>
     </resultMap>
-
+    <resultMap type="com.tieshan.disintegrate.vo.WebCarCustomerInfoVo" id="carInfoWebVoMap">
+        <result property="carInfoId" column="car_info_id"/>  <!--  -->
+        <result property="carCode" column="car_code"/>  <!-- 车辆编号 -->
+        <result property="carNo" column="car_no"/>  <!-- 车牌号 -->
+        <result property="ascription" column="ascription"/>  <!-- 车辆归属 -->
+        <result property="cardColor" column="card_color"/>  <!-- 车牌颜色 -->
+        <result property="owner" column="owner"/>  <!-- 车主姓名（或组织机构名称） -->
+        <result property="phone" column="phone"/>  <!-- 车主电话 -->
+        <result property="idCard" column="id_card"/>  <!-- 车主身份证号（组织结构代码） -->
+        <result property="ownerZipcode" column="owner_zipcode"/>  <!-- 车主邮编 -->
+        <result property="ownerAddress" column="owner_address"/>  <!-- 车主地址 -->
+        <result property="agend" column="agend"/>  <!-- 代理人 -->
+        <result property="agendIdcard" column="agend_idcard"/>  <!-- 代理人身份证号 -->
+        <result property="contacts" column="contacts"/>  <!-- 交车人姓名 -->
+        <result property="contactsPhone" column="contacts_phone"/>  <!-- 交车人电话 -->
+        <result property="contactsAddress" column="contacts_address"/>  <!-- 交车人地址 -->
+        <result property="drivLicense" column="driv_license"/>  <!-- 行驶本。1.没有，2.有 -->
+        <result property="registLicense" column="regist_license"/>  <!-- 登记证。1.没有，2.有 -->
+        <result property="carName" column="car_name"/>  <!-- 车型 -->
+        <result property="carWeight" column="car_weight"/>  <!-- 整车质量 -->
+        <result property="carKind" column="car_kind"/>  <!-- 车辆性质 -->
+        <result property="fuelType" column="fuel_type"/>  <!-- 燃油性质 -->
+        <result property="regTime" column="reg_time"/>  <!-- 注册时间 -->
+        <result property="issueTime" column="issue_time"/>  <!-- 发证日期 -->
+        <result property="natureUsege" column="nature_usege"/>  <!-- 使用性质 -->
+        <result property="carProperties" column="car_properties"/>  <!-- 车辆类型 -->
+        <result property="vin" column="vin"/>  <!-- vin -->
+        <result property="engine" column="engine"/>  <!-- 发动机号码 -->
+        <result property="issueSize" column="issue_size"/>  <!-- 外廓尺寸 -->
+        <result property="displacement" column="displacement"/>  <!-- 汽车排量 -->
+        <result property="carryingCapacity" column="carrying_capacity"/>  <!-- 核定载人数 -->
+        <result property="remarks" column="remarks"/>  <!-- 备注 -->
+        <collection property="queryRecord" column="car_info_id"
+                    select="com.tieshan.disintegrate.dao.CarProcedureLogMapper.selectWebProcedureVo"/>
+    </resultMap>
     <resultMap type="com.tieshan.disintegrate.vo.AppCarBaseVo" id="appCarBaseVo">
         <result property="carInfoId" column="car_info_id"/>  <!--  -->
         <result property="carCode" column="car_code"/>  <!-- 车辆编号 -->
@@ -280,6 +314,32 @@
             and concat(i.contacts,i.contacts_phone,i.car_name,i.car_no,i.car_code)
             like concat("%",#{searchInfo},"%")
         </if>
+    </select>
+    <select id="selectWebCarCustomerInfo" resultMap="carInfoWebVoMap">
+        SELECT i.id car_info_id,i.car_code, i.car_no,ie.ascription,s.card_color,ie.owner,ie.phone,ie.id_card,
+        ie.owner_zipcode,ie.owner_address,ie.agend,ie.agend_idcard,i.contacts,i.contacts_phone,i.contacts_address,
+        i.driv_license,i.regist_license,i.car_name,ie.car_weight,ie.car_kind,ie.fuel_type,ie.reg_time,ie.issue_time,
+        ie.nature_usege,ie.car_properties,ie.vin,ie.engine,ie.issue_size,ie.displacement,ie.carrying_capacity,
+        ie.remarks,p.is_verify,p.is_query
+        FROM ts_car_info i
+        left join ts_car_enter e on i.id=e.car_info_id
+        left join ts_car_identity ie on i.id=ie.car_info_id
+        left join ts_car_processing p on i.id=p.car_info_id
+        left join ts_car_survey s on i.id=s.car_info_id
+        <where>
+            <if test="disintegratePlantId!=null">
+                AND i.disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
+            </if>
+            <if test="carInfoId!=null">
+                AND i.id=#{carInfoId}
+            </if>
+            <if test="isQuery!=null">
+                AND p.is_query=#{isQuery}
+            </if>
+            <if test="isVerify!=null">
+                AND p.is_verify=#{isVerify}
+            </if>
+        </where>
     </select>
 
     <insert id="insertCarInfo">
