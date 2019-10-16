@@ -230,7 +230,7 @@ public class ProceduresService implements IProceduresService {
         carProcedurelog.setState(state);
 
 
-        if (StringUtils.isEmpty(params.get("queryId")) && StringUtils.isEmpty(params.get("carProcessingId"))) {
+        if (StringUtils.isEmpty(params.get("queryId")) && StringUtils.isEmpty(params.get("verificationResultId"))) {
             IdWorker idWorker = new IdWorker(1, 1, 1);
             carProcedurelog.setId(idWorker.nextId());
             carProcedureLogMapper.insertCarProcedureLog(carProcedurelog);
@@ -238,7 +238,7 @@ public class ProceduresService implements IProceduresService {
             if (!StringUtils.isEmpty(params.get("queryId"))) {
                 carProcedurelog.setId(Long.valueOf(params.get("queryId").toString()));
             }else{
-                carProcedurelog.setId(Long.valueOf(params.get("carProcessingId").toString()));
+                carProcedurelog.setId(Long.valueOf(params.get("verificationResultId").toString()));
             }
             carProcedureLogMapper.updateCarProcedureLog(carProcedurelog);
         }
@@ -547,13 +547,12 @@ public class ProceduresService implements IProceduresService {
         FutureTask<List<CarPic>> fd = new FutureTask(d);
 
         new Thread(fa).start();
-        new Thread(fb).start();
-        new Thread(fc).start();
-        new Thread(fd).start();
-
         ShangWeiDataVo shangWeiDataVo = fa.get();
+        new Thread(fb).start();
         shangWeiDataVo.setPrePics(fb.get());
+        new Thread(fc).start();
         shangWeiDataVo.setTuoPic(fc.get());
+        new Thread(fd).start();
         shangWeiDataVo.setBreakPics(fd.get());
         return shangWeiDataVo;
     }

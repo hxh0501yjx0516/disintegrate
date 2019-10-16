@@ -27,6 +27,7 @@ public interface CarInformationSalvageDao {
             "IFNULL( sal.get_salvage_time, '' ) AS get_salvage_time " +
             "from ts_car_salvage AS sal join ts_car_info AS info on sal.car_info_id=info.id " +
             "where sal.car_info_id=#{carInfoId} " +
+            "and is_get_salvage=1 " +
             "and info.disintegrate_plant_id=#{companyId}")
     List<Map<String,Object>> findCarBreakById(@Param("carInfoId") Long carInfoId,@Param("companyId")Long companyId);
 
