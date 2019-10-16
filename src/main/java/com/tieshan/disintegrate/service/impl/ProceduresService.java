@@ -547,13 +547,12 @@ public class ProceduresService implements IProceduresService {
         FutureTask<List<CarPic>> fd = new FutureTask(d);
 
         new Thread(fa).start();
-        new Thread(fb).start();
-        new Thread(fc).start();
-        new Thread(fd).start();
-
         ShangWeiDataVo shangWeiDataVo = fa.get();
+        new Thread(fb).start();
         shangWeiDataVo.setPrePics(fb.get());
+        new Thread(fc).start();
         shangWeiDataVo.setTuoPic(fc.get());
+        new Thread(fd).start();
         shangWeiDataVo.setBreakPics(fd.get());
         return shangWeiDataVo;
     }
