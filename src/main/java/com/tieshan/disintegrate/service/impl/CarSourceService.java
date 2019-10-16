@@ -44,6 +44,14 @@ public class CarSourceService implements ICarSourceService {
     @Autowired
     private TokenService tokenService;
 
+    public SysUser getSysUser(HttpServletRequest request){
+        // 获取token信息
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        return sysUser;
+    }
+
+
     /**
      * 添加车辆      时间转换
      *
@@ -62,8 +70,7 @@ public class CarSourceService implements ICarSourceService {
         carInfo.setCarSource(carInfo.getCarSource());
 
         // 获取token信息
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
+        SysUser sysUser = getSysUser(request);
 
         // 设置车辆的其他信息
         carInfo.setDisintegratePlantId(sysUser.getCompany_id());
@@ -198,9 +205,7 @@ public class CarSourceService implements ICarSourceService {
      */
     @Override
     public CarSource selectCarSource(Long id, HttpServletRequest request) {
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
-        return carSourceMapper.selectCarSource(id, sysUser.getCompany_id());
+        return carSourceMapper.selectCarSource(id, getSysUser(request).getCompany_id());
     }
 
     /**
@@ -278,9 +283,7 @@ public class CarSourceService implements ICarSourceService {
      */
     @Override
     public CarSource selectCarSourceById(Long id, HttpServletRequest request) {
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
-        CarSource carSource = carSourceMapper.selectCarSourceById(id, sysUser.getCompany_id());
+        CarSource carSource = carSourceMapper.selectCarSourceById(id, getSysUser(request).getCompany_id());
         Bank bank = carSourceMapper.selectBankById(Long.parseLong(carSource.getBankId()));
         carSource.setBank(bank);
         return carSource;
@@ -294,46 +297,8 @@ public class CarSourceService implements ICarSourceService {
      */
     @Override
     public void deleteCarInfoById(Long id, HttpServletRequest request) {
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
-        carSourceMapper.deleteCarInfoById(id, sysUser.getCompany_id());
+        carSourceMapper.deleteCarInfoById(id, getSysUser(request).getCompany_id());
     }
-
-//    /**
-//     * APP: 增加车源    前端不用返回业务员id，需要自己添加业务员id
-//     * @param carSource
-//     * @param request
-//     */
-//    @Override
-//    public void addCarSourceApp(CarSource carSource, HttpServletRequest request) {
-//        IdWorker idWorker = new IdWorker(1, 1, 1);
-//        long carSourceId = idWorker.nextId();
-//        carSource.setId(carSourceId);
-//        String token = request.getHeader("token");
-//        SysUser sysUser = tokenService.getToken(token);
-//        // 业务员的id
-//        carSource.setUserId();
-//        // 解体厂的id
-//        carSource.setDisintegratePlantId(sysUser.getCompany_id());
-//
-//        long bankId = idWorker.nextId();
-//        carSource.setBankId(bankId);
-//        carSource.set
-//
-//
-//    }
-
-//    /**
-//     * APP端：查询某拆解厂的某业务员的车源列表管理
-//     *
-//     * @return
-//     */
-//    @Override
-//    public List<Map<String, Object>> selectCarSourceListApp(HttpServletRequest request) {
-//        String token = request.getHeader("token");
-//        SysUser sysUser = tokenService.getToken(token);
-//        return carSourceMapper.selectCarSourceListApp(sysUser.getCompany_id(), sysUser.getId(), sysUser.getLogin_name());
-//    }
 
     /**
      * 删除指定的车源和旗下的车辆
@@ -343,8 +308,7 @@ public class CarSourceService implements ICarSourceService {
      */
     @Override
     public void deleteCarSource(Long id, HttpServletRequest request) {
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
+        SysUser sysUser = getSysUser(request);
         // 先删除指定车源下的所有车辆
         carSourceMapper.deleteCarInfoById(id, sysUser.getCompany_id());
         // 删除指定的车源
@@ -463,17 +427,24 @@ public class CarSourceService implements ICarSourceService {
 //        return carSourceMapper.selectPicList( id, sysUser.getCompany_id(), firstType);
 //    }
 
+
+
     /**
-     * 查询（某个拆解厂）首页每个状态下的车辆数量
+     * PC:查询（某个拆解厂）首页每个状态下的车辆数量
      * @param request
      * @return
      */
     @Override
     public List<Map<String, Object>> selectCarInfoCount(HttpServletRequest request) {
+        SysUser sysUser = getSysUser(request);
         String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
-        List<Map<String, Object>> countMapList = carSourceMapper.selectCarInfoCount(sysUser.getCompany_id());
-        return countMapList;
+        List<Map<String, Object>> mapList = new ArrayList<>();
+        if (token.split("-")[0].equals("PC")){
+            mapList = carSourceMapper.selectCarInfoCount(sysUser.getCompany_id());
+        }else{
+//            mapList = carSourceMapper.selectCarInfoCountAPP()
+        }
+        return mapList;
     }
 
     /**
@@ -485,10 +456,10 @@ public class CarSourceService implements ICarSourceService {
      * */
     @Override
     public CarInfoPage selectCarInfo(HttpServletRequest request, String carCode) {
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
+        SysUser sysUser = getSysUser(request);
+        Long companyId = sysUser.getCompany_id();
         CarInfoPage carInfoPage = new CarInfoPage();
-        Map<String, Object> map = carSourceMapper.selectCarInfo(carCode, sysUser.getCompany_id());
+        Map<String, Object> map = carSourceMapper.selectCarInfo(carCode, companyId);
         // 设置车辆的信息
         long id = Long.parseLong(map.get("id").toString());
         carInfoPage.setId(id);
@@ -504,25 +475,26 @@ public class CarSourceService implements ICarSourceService {
             // 1-未初检
             carInfoPage.setStatus("1");
             // 初检已完成或者预处理完成时
-        }/*else */if (map.get("isInitialSurvey").toString().equals("2")){
+        }
+        if (map.get("isInitialSurvey").toString().equals("2")){
             // 2-已初检未预处理
             carInfoPage.setStatus("2");
             // 初检状态为2时,当预处理状态未1，通过车辆id查询初检信息
-            CarSurvey carSurvey = carSourceMapper.selectCarSurveyByCarInfoId(id, sysUser.getCompany_id());
+            CarSurvey carSurvey = carSourceMapper.selectCarSurveyByCarInfoId(id, companyId);
             carInfoPage.setCarSurvey(carSurvey);
             // 预处理完成时或者拓号完成时
-        }/*else */if (map.get("isPretreatment").toString().equals("2")){
+        }
+        if (map.get("isPretreatment").toString().equals("2")){
             // 3-已预处理未拓号
             carInfoPage.setStatus("3");
-            /*CarSurvey carSurvey = carSourceMapper.selectCarSurveyByCarInfoId(id, sysUser.getCompany_id());
-            carInfoPage.setCarSurvey(carSurvey);*/
             // 查询预处理图片
             firstType = "pre_pic";
-            List<Map<String, Object>> isPretreatmentList = carSourceMapper.selectPicList(id, sysUser.getCompany_id(), firstType);
+            List<Map<String, Object>> isPretreatmentList = carSourceMapper.selectPicList(id, companyId, firstType);
             carInfoPageMap.put("prePic", isPretreatmentList);
             carInfoPage.setMap(carInfoPageMap);
             // 拓号完成的或者已核档或者核档不通过
-        }/*else */if (map.get("isCopyNumber").toString().equals("2")){
+        }
+        if (map.get("isCopyNumber").toString().equals("2")){
             if (StringUtils.isEmpty(map.get("carAddress").toString())) {
                 // 4-已拓号未存放车辆位置
                 carInfoPage.setStatus("4");
@@ -534,97 +506,37 @@ public class CarSourceService implements ICarSourceService {
                 carInfoPage.setIsVerify(Integer.parseInt(map.get("isVerify").toString()));
                 carInfoPage.setVerifyReason(map.get("verifyResult").toString());
             }
-            /*CarSurvey carSurvey = carSourceMapper.selectCarSurveyByCarInfoId(id, sysUser.getCompany_id());
-            carInfoPage.setCarSurvey(carSurvey);
-            // 查询预处理图片
-            firstType = "pre_pic";
-            List<Map<String, Object>> prepicList = carSourceMapper.selectPicList(id, sysUser.getCompany_id(), firstType);
-            carInfoPageMap.put("prePic", prepicList);
-            carInfoPage.setMap(carInfoPageMap);*/
             // 查询拓号图片
             firstType = "tuo_pic";
-            List<Map<String, Object>> tuoPicList = carSourceMapper.selectPicList(id, sysUser.getCompany_id(), firstType);
+            List<Map<String, Object>> tuoPicList = carSourceMapper.selectPicList(id, companyId, firstType);
             carInfoPageMap.put("tuoPic", tuoPicList);
             carInfoPage.setMap(carInfoPageMap);
             // 核档完成时或者核档不通过时或者毁型完成时
-        }/*else */if ((map.get("isVerify").toString().equals("2") && map.get("isDestructive").toString().equals("1")) || (map.get("isVerify").toString().equals("3"))){
+        }
+        if ((map.get("isVerify").toString().equals("2") && map.get("isDestructive").toString().equals("1")) || (map.get("isVerify").toString().equals("3"))){
             // 6-已核档未毁形
             carInfoPage.setStatus("6");
-           /* // 设置车辆位置
-            carInfoPage.setCarAddress(map.get("carAddress").toString());
-            // 初检信息
-            CarSurvey carSurvey = carSourceMapper.selectCarSurveyByCarInfoId(id, sysUser.getCompany_id());
-            carInfoPage.setCarSurvey(carSurvey);
-            // 查询预处理图片
-            firstType = "pre_pic";
-            List<Map<String, Object>> prepicList = carSourceMapper.selectPicList(id, sysUser.getCompany_id(), firstType);
-            carInfoPageMap.put("prePic", prepicList);
-            carInfoPage.setMap(carInfoPageMap);
-            // 查询拓号图片
-            firstType = "tuo_pic";
-            List<Map<String, Object>> tuoPicList = carSourceMapper.selectPicList(id, sysUser.getCompany_id(), firstType);
-            carInfoPageMap.put("tuoPic", tuoPicList);
-            carInfoPage.setMap(carInfoPageMap);*/
             // 设置核档信息
             carInfoPage.setIsVerify(Integer.parseInt(map.get("isVerify").toString()));
             carInfoPage.setVerifyReason(map.get("verifyResult").toString());
             // 毁型完成时或者已上传报废证明时
-        }/*else */if (map.get("isDestructive").toString().equals("2")){
+        }
+        if (map.get("isDestructive").toString().equals("2")){
             // 7-已毁形未上传报废手续
             carInfoPage.setStatus("7");
-            /*// 设置车辆位置
-            carInfoPage.setCarAddress(map.get("carAddress").toString());
-            // 初检信息
-            CarSurvey carSurvey = carSourceMapper.selectCarSurveyByCarInfoId(id, sysUser.getCompany_id());
-            carInfoPage.setCarSurvey(carSurvey);
-            // 查询预处理图片
-            firstType = "pre_pic";
-            List<Map<String, Object>> prepicList = carSourceMapper.selectPicList(id, sysUser.getCompany_id(), firstType);
-            carInfoPageMap.put("prePic", prepicList);
-            carInfoPage.setMap(carInfoPageMap);
-            // 查询拓号图片
-            firstType = "tuo_pic";
-            List<Map<String, Object>> tuoPicList = carSourceMapper.selectPicList(id, sysUser.getCompany_id(), firstType);
-            carInfoPageMap.put("tuoPic", tuoPicList);
-            carInfoPage.setMap(carInfoPageMap);
-            // 设置核档信息
-            carInfoPage.setIsVerify(Integer.parseInt(map.get("isVerify").toString()));
-            carInfoPage.setVerifyReason(map.get("verifyResult").toString());*/
             // 查询毁型图片
             firstType = "break_pic";
-            List<Map<String, Object>> breakPicList = carSourceMapper.selectPicList(id, sysUser.getCompany_id(), firstType);
+            List<Map<String, Object>> breakPicList = carSourceMapper.selectPicList(id, companyId, firstType);
             carInfoPageMap.put("breakPic", breakPicList);
             carInfoPage.setMap(carInfoPageMap);
             // 已上传报废证明时
-        }/*else */  if (map.get("isUploadPic").toString().equals("2")){
+        }
+        if (map.get("isUploadPic").toString().equals("2")){
             // 8-已上传报废手续
             carInfoPage.setStatus("8");
-            /*// 设置车辆位置
-            carInfoPage.setCarAddress(map.get("carAddress").toString());
-            // 初检信息
-            CarSurvey carSurvey = carSourceMapper.selectCarSurveyByCarInfoId(id, sysUser.getCompany_id());
-            carInfoPage.setCarSurvey(carSurvey);
-            // 查询预处理图片
-            firstType = "pre_pic";
-            List<Map<String, Object>> prepicList = carSourceMapper.selectPicList(id, sysUser.getCompany_id(), firstType);
-            carInfoPageMap.put("prePic", prepicList);
-            carInfoPage.setMap(carInfoPageMap);
-            // 查询拓号图片
-            firstType = "tuo_pic";
-            List<Map<String, Object>> tuoPicList = carSourceMapper.selectPicList(id, sysUser.getCompany_id(), firstType);
-            carInfoPageMap.put("tuoPic", tuoPicList);
-            carInfoPage.setMap(carInfoPageMap);
-            // 设置核档信息
-            carInfoPage.setIsVerify(Integer.parseInt(map.get("isVerify").toString()));
-            carInfoPage.setVerifyReason(map.get("verifyResult").toString());
-            // 查询毁型图片
-            firstType = "break_pic";
-            List<Map<String, Object>> breakPicList = carSourceMapper.selectPicList(id, sysUser.getCompany_id(), firstType);
-            carInfoPageMap.put("breakPic", breakPicList);
-            carInfoPage.setMap(carInfoPageMap);*/
             // 查询报废手续的图片
             firstType = "pro_pic";
-            List<Map<String, Object>> proPicList = carSourceMapper.selectPicList(id, sysUser.getCompany_id(), firstType);
+            List<Map<String, Object>> proPicList = carSourceMapper.selectPicList(id, companyId, firstType);
             carInfoPageMap.put("proPic", proPicList);
             carInfoPage.setMap(carInfoPageMap);
         }
@@ -641,11 +553,9 @@ public class CarSourceService implements ICarSourceService {
      */
     @Override
     public List<Map<String, Object>> selectHomePage(Integer page, Integer pageSize, String state, HttpServletRequest request) {
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
         PageHelper.startPage(page, pageSize);
         PageHelper.orderBy("e.approach_time DESC");
-        return carSourceMapper.selectHomePage(state, sysUser.getCompany_id());
+        return carSourceMapper.selectHomePage(state, getSysUser(request).getCompany_id());
     }
 
     /**
@@ -657,9 +567,7 @@ public class CarSourceService implements ICarSourceService {
      */
     @Override
     public int updateDismantleWay(Long carInfoId, Integer dismantleWay, HttpServletRequest request) {
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
-        return carSourceMapper.updateDismantleWay(carInfoId, dismantleWay, sysUser.getCompany_id());
+        return carSourceMapper.updateDismantleWay(carInfoId, dismantleWay, getSysUser(request).getCompany_id());
     }
 
     /**
@@ -674,11 +582,9 @@ public class CarSourceService implements ICarSourceService {
      */
     @Override
     public List<Map<String, Object>> selectCarInfoCompanyList(HttpServletRequest request, Integer page, Integer pageSize, String findMsg, String status) {
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
         PageHelper.startPage(page, pageSize);
         PageHelper.orderBy("e.approach_time DESC");
-        return carSourceMapper.selectCarInfoCompanyList(findMsg, status, sysUser.getCompany_id());
+        return carSourceMapper.selectCarInfoCompanyList(findMsg, status, getSysUser(request).getCompany_id());
     }
 
     /**
@@ -689,10 +595,7 @@ public class CarSourceService implements ICarSourceService {
      */
     @Override
     public int selectCarInfoCountByCarNo(String carNo, HttpServletRequest request) {
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
-        int count = carSourceMapper.selectCarInfoCountByCarNo(carNo, sysUser.getCompany_id());
-        return count;
+        return carSourceMapper.selectCarInfoCountByCarNo(carNo, getSysUser(request).getCompany_id());
     }
 
     /**
@@ -703,10 +606,7 @@ public class CarSourceService implements ICarSourceService {
      */
     @Override
     public int selectCarInfoNumByCarNo(String carNo, HttpServletRequest request) {
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
-        int count = carSourceMapper.selectCarInfoNumByCarNo(carNo, sysUser.getCompany_id());
-        return count;
+        return carSourceMapper.selectCarInfoNumByCarNo(carNo, getSysUser(request).getCompany_id());
     }
 
     /**
@@ -717,8 +617,7 @@ public class CarSourceService implements ICarSourceService {
      */
     @Override
     public List<Map<String, Object>> selectCarInfoListByIsVerify(Integer page, Integer pageSize, HttpServletRequest request, String findMsg) {
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
+        SysUser sysUser = getSysUser(request);
         PageHelper.startPage(page, pageSize);
         PageHelper.orderBy("p.verify_time DESC");
         List<Map<String, Object>> mapList = carSourceMapper.selectCarInfoListByIsVerify(sysUser.getId(), sysUser.getLogin_name(), sysUser.getCompany_id(), findMsg);
@@ -747,9 +646,7 @@ public class CarSourceService implements ICarSourceService {
      */
     @Override
     public List<Map<String, Object>> selectLocationListByPid(Long id, HttpServletRequest request) {
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
-        return carSourceMapper.selectLocationListByPid(id, sysUser.getCompany_id());
+        return carSourceMapper.selectLocationListByPid(id, getSysUser(request).getCompany_id());
     }
 
     /**
@@ -763,11 +660,9 @@ public class CarSourceService implements ICarSourceService {
      */
     @Override
     public List<Map<String, Object>> selectCarInfoListByDisintegratePlantId(Integer page, Integer pageSize, String findMsg, HttpServletRequest request) {
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
         // 设置分页信息
         PageHelper.startPage(page, pageSize);
-        return carSourceMapper.selectCarInfoListByDisintegratePlantId(sysUser.getCompany_id(), findMsg);
+        return carSourceMapper.selectCarInfoListByDisintegratePlantId(getSysUser(request).getCompany_id(), findMsg);
     }
 
     /**
@@ -779,8 +674,7 @@ public class CarSourceService implements ICarSourceService {
     @Override
     @Transactional
     public void editCarSurveyComplete(CarSurvey carSurvey, HttpServletRequest request) {
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
+        SysUser sysUser = getSysUser(request);
         carSurvey.setCreateTime(new Date());
         carSurvey.setCreateOperator(sysUser.getLogin_name());
         carSurvey.setCreateOperatorId(sysUser.getId());
@@ -804,8 +698,7 @@ public class CarSourceService implements ICarSourceService {
     @Override
     @Transactional
     public void editCarSurvey(CarSurvey carSurvey, HttpServletRequest request) {
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
+        SysUser sysUser = getSysUser(request);
         carSurvey.setCreateTime(new Date());
         carSurvey.setCreateOperator(sysUser.getLogin_name());
         carSurvey.setCreateOperatorId(sysUser.getId());
@@ -822,9 +715,7 @@ public class CarSourceService implements ICarSourceService {
      */
     @Override
     public CarSurvey selectCarSurveyByCarInfoId(Long id, HttpServletRequest request) {
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
-        return carSourceMapper.selectCarSurveyByCarInfoId(id, sysUser.getCompany_id());
+        return carSourceMapper.selectCarSurveyByCarInfoId(id, getSysUser(request).getCompany_id());
     }
 
     /**
@@ -836,9 +727,7 @@ public class CarSourceService implements ICarSourceService {
      */
     @Override
     public Map<String, Object> selectCarInfoByIdAndCarEnter(Long id, HttpServletRequest request) {
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
-        return carSourceMapper.selectCarInfoByIdAndCarEnter(id, sysUser.getCompany_id());
+        return carSourceMapper.selectCarInfoByIdAndCarEnter(id, getSysUser(request).getCompany_id());
     }
 
     /**
@@ -854,9 +743,7 @@ public class CarSourceService implements ICarSourceService {
     public List<Map<String, Object>> selectCarInfoByIsInitialSurvey(Integer page, Integer pageSize, String findMsg, HttpServletRequest request) {
         PageHelper.startPage(page, pageSize);
         PageHelper.orderBy("e.approach_time DESC");
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
-        return carSourceMapper.selectCarInfoByIsInitialSurvey(sysUser.getCompany_id(), findMsg);
+        return carSourceMapper.selectCarInfoByIsInitialSurvey(getSysUser(request).getCompany_id(), findMsg);
     }
 
     /**
@@ -868,9 +755,7 @@ public class CarSourceService implements ICarSourceService {
      */
     @Override
     public Map<String, Object> selectCarInfoReason(Long id, HttpServletRequest request) {
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
-        return carSourceMapper.selectCarInfoReason(id, sysUser.getCompany_id());
+        return carSourceMapper.selectCarInfoReason(id, getSysUser(request).getCompany_id());
     }
 
     /**
@@ -883,10 +768,11 @@ public class CarSourceService implements ICarSourceService {
     @Override
     @Transactional
     public int insertCarSurveyPart(String carNo, String selfWeight, String cardColor, HttpServletRequest request) {
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
+        SysUser sysUser = getSysUser(request);
+        Long companyId = sysUser.getCompany_id();
+        Long id = sysUser.getId();
         // 通过车牌号查询车辆id
-        Map<String, Object> map = carSourceMapper.selectCarInfoByCarNo(carNo, sysUser.getCompany_id());
+        Map<String, Object> map = carSourceMapper.selectCarInfoByCarNo(carNo, companyId);
         if (PubMethod.isEmpty(map)) {
             return 2;
         }
@@ -894,13 +780,13 @@ public class CarSourceService implements ICarSourceService {
         IdWorker idWorker = new IdWorker(1, 1, 1);
         CarSurvey carSurvey = new CarSurvey();
         carSurvey.setId(idWorker.nextId());
-        carSurvey.setDisintegratePlantId(sysUser.getCompany_id());
+        carSurvey.setDisintegratePlantId(companyId);
 
         Long carInfoId = Long.parseLong(map.get("carInfoId").toString());
 
         carSurvey.setCarInfoId(carInfoId);
         carSurvey.setSelfWeight(selfWeight);
-        carSurvey.setCreateOperatorId(sysUser.getId());
+        carSurvey.setCreateOperatorId(id);
         carSurvey.setCreateOperator(sysUser.getLogin_name());
         carSurvey.setCardColor(cardColor);
         carSurvey.setCreateTime(new Date());
@@ -910,20 +796,20 @@ public class CarSourceService implements ICarSourceService {
         carEnter.setId(Long.parseLong(map.get("id").toString()));
         carEnter.setIsApproach(2);
         carEnter.setApproachTime(new Date());
-        carEnter.setApproachUserId(sysUser.getId());
-        carEnter.setDisintegratePlantId(sysUser.getCompany_id());
+        carEnter.setApproachUserId(id);
+        carEnter.setDisintegratePlantId(companyId);
         carEnter.setIsInitialSurvey(1);
         carSourceMapper.updateCarEnterIsApproach(carEnter);
         // 将该车辆添加到手续表中
         CarProcessing carProcessing = new CarProcessing();
         carProcessing.setId(idWorker.nextId());
-        carProcessing.setDisintegratePlantId(sysUser.getCompany_id());
+        carProcessing.setDisintegratePlantId(companyId);
         carProcessing.setCarInfoId(carInfoId);
         carSourceMapper.insertCarProcessing(carProcessing);
         // 将该车辆信息添加到车辆身份表中
         CarIdentity carIdentity = new CarIdentity();
         carIdentity.setId(idWorker.nextId());
-        carIdentity.setDisintegratePlantId(sysUser.getCompany_id());
+        carIdentity.setDisintegratePlantId(companyId);
         carIdentity.setCarInfoId(carInfoId);
         carSourceMapper.insertCarIdentity(carIdentity);
         return 1;
@@ -944,34 +830,17 @@ public class CarSourceService implements ICarSourceService {
     public List<Map<String, Object>> selectCarInfoListApp(Long id, HttpServletRequest request, String state, String findMsg, Integer page, Integer pageSize) {
         // 定义一个查询结果的结果集对象
         List<Map<String, Object>> resultMapList = new ArrayList<>();
-
         // 设置分页信息
         PageHelper.startPage(page, pageSize);
         PageHelper.orderBy("i.create_time DESC");
-        // 获取token
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
         List<Map<String, Object>> mapList = null;
         // 查询所有指定车源下的车辆
-        mapList = carSourceMapper.selectCarInfoListApp(id, sysUser.getCompany_id(), state, findMsg);
+        mapList = carSourceMapper.selectCarInfoListApp(id, getSysUser(request).getCompany_id(), state, findMsg);
         System.out.println(mapList);
         // 遍历maps集合
         for (Map<String, Object> map : mapList) {
             // 定义一个map集合对象
             Map<String, Object> mapCarInfo = new HashMap<>();
-//            System.out.println(map);
-//            Set<String> keySet = map.keySet();
-//            for (String key : keySet) {
-//                String value = map.get(key).toString();
-//                System.out.println(key+"::::::"+value);
-////                mapCarInfo.put(key, value);
-//            }
-//            mapCarInfo.putAll(map);
-//            Iterator<String> iterator = keySet.iterator();
-//                if (iterator.hasNext()){
-//                    String key = iterator.next();
-//                    Object value = map.get(key);
-//                }
             mapCarInfo.put("id", map.get("id").toString());
             mapCarInfo.put("carNo", map.get("carNo").toString());
             mapCarInfo.put("carCode", map.get("carCode").toString());
@@ -1021,9 +890,7 @@ public class CarSourceService implements ICarSourceService {
             }
             // 一辆车的信息
             resultMapList.add(mapCarInfo);
-//            System.err.println(mapCarInfo);
         }
-//        System.out.println(resultMapList);
         return resultMapList;
     }
 }

@@ -81,6 +81,8 @@ public interface ICarSourceService {
 
     List<Map<String, Object>> selectCarInfoCount(HttpServletRequest request);
 
+//    List<Map<String, Object>> selectCarInfoCountAPP(HttpServletRequest request);
+
 //    List<String> selectPicList(HttpServletRequest request, Long id, String state);
 
 

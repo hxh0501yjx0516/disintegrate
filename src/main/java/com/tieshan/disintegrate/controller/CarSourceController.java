@@ -596,6 +596,7 @@ public class CarSourceController {
      */
     @PostMapping("/editCarInfoLocation")
     public RestResult editCarInfoLocation(CarInfo carInfo) {
+        System.out.println(carInfo);
         try {
             carSourceService.editCarInfoLocation(carInfo);
         } catch (Exception e) {
@@ -657,12 +658,13 @@ public class CarSourceController {
     }
 
     /**
-     * 查询（某个拆解厂）首页每个状态下的车辆数量
+     * PC:查询（某个拆解厂）首页每个状态下的车辆数量
+     * APP:查询首页每个状态下的车辆数量
      * @param request
      * @return
      */
     @GetMapping("/selectCarInfoCount")
-    public RestResult selecrCarInfoCount(HttpServletRequest request){
+    public RestResult selectCarInfoCount(HttpServletRequest request){
         List<Map<String, Object>> countMapList = null;
         try{
             countMapList = carSourceService.selectCarInfoCount(request);
