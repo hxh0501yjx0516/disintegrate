@@ -20,6 +20,7 @@ public interface CarPartsInfoDao {
     /** APP - 查询待入库拆车件*/
     @Select({"<script>" +
             "        SELECT\n" +
+            "        \tIFNULL( i.id, '' ) AS carInfoId,\n" +
             "        \tIFNULL( p.parts_code, '' ) AS partsCode,\n" +
             "        \tIFNULL( p.parts_name, '' ) AS partsName,\n" +
             "        \tIFNULL( i.car_no, '' ) AS carNo,\n" +
@@ -42,6 +43,7 @@ public interface CarPartsInfoDao {
     /** APP - 查询已库拆车件*/
     @Select({"<script>" +
             "        SELECT\n" +
+            "        \tIFNULL( i.id, '' ) AS carInfoId,\n" +
             "        \tIFNULL( p.parts_code, '' ) AS partsCode,\n" +
             "        \tIFNULL( p.parts_name, '' ) AS partsName,\n" +
             "        \tIFNULL( i.car_no, '' ) AS carNo,\n" +
