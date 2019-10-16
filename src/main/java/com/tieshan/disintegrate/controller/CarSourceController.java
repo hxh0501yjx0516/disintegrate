@@ -8,6 +8,7 @@ import com.tieshan.disintegrate.pojo.CarSource;
 import com.tieshan.disintegrate.pojo.CarSurvey;
 import com.tieshan.disintegrate.service.DictionaryService;
 import com.tieshan.disintegrate.service.ICarSourceService;
+import com.tieshan.disintegrate.util.PubMethod;
 import com.tieshan.disintegrate.util.RestResult;
 import com.tieshan.disintegrate.util.ResultCode;
 import lombok.extern.apachecommons.CommonsLog;
@@ -595,15 +596,20 @@ public class CarSourceController {
      * @return
      */
     @PostMapping("/editCarInfoLocation")
-    public RestResult editCarInfoLocation(CarInfo carInfo) {
-        System.out.println(carInfo);
+    public RestResult editCarInfoLocation(@RequestBody CarInfo carInfo) {
+        RestResult restResult = null;
         try {
-            carSourceService.editCarInfoLocation(carInfo);
+            if (carInfo.getId() == null || carInfo.getCarLocationArea() == null || carInfo.getCarLocationRow() == null || carInfo.getCarLocationColumn() == null || carInfo.getCarLocationNumber() == null){
+                restResult = new RestResult("添加车辆存放位置失败", "", ResultCode.ERROR.code());
+            }else{
+                carSourceService.editCarInfoLocation(carInfo);
+                restResult = new RestResult("添加车辆存放位置成功", null, ResultCode.SUCCESS.code());
+            }
         } catch (Exception e) {
             log.info("添加车辆存放位置失败", e);
-            return new RestResult("添加车辆存放位置失败", null, ResultCode.ERROR.code());
+            return new RestResult("添加车辆存放位置失败", "", ResultCode.ERROR.code());
         }
-        return new RestResult("添加车辆存放位置成功", null, ResultCode.SUCCESS.code());
+        return restResult;
     }
 
     /**
