@@ -8,7 +8,6 @@ import com.tieshan.disintegrate.pojo.CarSource;
 import com.tieshan.disintegrate.pojo.CarSurvey;
 import com.tieshan.disintegrate.service.DictionaryService;
 import com.tieshan.disintegrate.service.ICarSourceService;
-import com.tieshan.disintegrate.util.PubMethod;
 import com.tieshan.disintegrate.util.RestResult;
 import com.tieshan.disintegrate.util.ResultCode;
 import lombok.extern.apachecommons.CommonsLog;

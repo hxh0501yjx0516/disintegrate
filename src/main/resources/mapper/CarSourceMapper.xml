@@ -1311,6 +1311,33 @@
         </trim>
     </insert>
 
+    <insert id="insertCarSalvage" parameterType="com.tieshan.disintegrate.pojo.CarSalvage">
+        INSERT INTO ts_car_salvage
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="disintegratePlantId != null">
+                disintegrate_plant_id,
+            </if>
+            <if test="carInfoId != null">
+                car_info_id
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="disintegratePlantId != null">
+                #{disintegratePlantId},
+            </if>
+            <if test="carInfoId != null">
+                #{carInfoId}
+            </if>
+        </trim>
+    </insert>
+
     <select id="selectCarInfo" resultType="java.util.Map">
         SELECT
 	        IFNULL( i.id, '' ) AS id,
@@ -1369,6 +1396,32 @@
         ( SELECT '待录入商委注销时间', count( 1 ) AS num FROM ts_car_info i LEFT JOIN ts_car_processing p ON i.id = p.car_info_id WHERE p.is_logout = 2 AND p.is_appoint_logout_time = 1 AND i.disintegrate_plant_id = 1 )
         UNION ALL
         ( SELECT '待领取残值', count( 1 ) AS num FROM ts_car_info i LEFT JOIN ts_car_processing p ON i.id = p.car_info_id LEFT JOIN ts_car_salvage AS s ON i.id = s.car_info_id WHERE p.is_appoint_logout_time = 2 AND s.is_get_salvage = 1 AND i.disintegrate_plant_id = 1 )
+    </select>
+
+    <select id="selectCarInfoCountAPP" resultType="java.util.Map">
+        ( SELECT '车辆入场' type,count( 1 ) AS num FROM ts_car_info i LEFT JOIN ts_car_enter e ON i.id = e.car_info_id WHERE e.is_approach = 1 AND i.disintegrate_plant_id = 1 )
+        UNION ALL
+        ( SELECT '等待初检',count( 1 ) AS num FROM ts_car_info i LEFT JOIN ts_car_enter e ON i.id = e.car_info_id WHERE e.is_approach = 2 AND e.is_initial_survey = 1 AND i.disintegrate_plant_id = 1 )
+        UNION ALL
+        ( SELECT '等待预处理', count( 1 ) AS num FROM ts_car_info i LEFT JOIN ts_car_enter e ON i.id = e.car_info_id WHERE e.is_initial_survey = 2 AND e.is_pretreatment = 1 AND i.disintegrate_plant_id = 1 )
+        UNION ALL
+        ( SELECT '等待拓号', count( 1 ) AS num FROM ts_car_info i LEFT JOIN ts_car_enter e ON i.id = e.car_info_id WHERE is_pretreatment = 2 AND is_copy_number = 1 AND i.disintegrate_plant_id = 1 )
+        UNION ALL
+        ( SELECT '拆解方式', count( 1 ) AS num FROM ts_car_info i LEFT JOIN ts_car_enter e ON i.id = e.car_info_id LEFT JOIN ts_car_survey u ON i.id = u.car_info_id WHERE u.dismantling_way = 5 AND e.is_copy_number = 2 AND i.disintegrate_plant_id = 1 )
+        UNION ALL
+        ( SELECT '存放位置', count( 1 ) AS num FROM ts_car_info i LEFT JOIN ts_car_enter e ON i.id = e.car_info_id LEFT JOIN ts_car_processing p ON i.id = p.car_info_id LEFT JOIN ts_car_survey u ON i.id = u.car_info_id WHERE u.dismantling_way != 5 AND ((i.car_location_area IS NULL) OR (i.car_location_area = '')) AND p.is_verify = 1 AND i.disintegrate_plant_id = 1 )
+        UNION ALL
+        ( SELECT '未核档', count( 1 ) AS num FROM ts_car_info i LEFT JOIN ts_car_processing p ON i.id = p.car_info_id WHERE p.is_query = 2 AND p.is_verify = 1 AND i.disintegrate_plant_id = 1 )
+        UNION ALL
+        ( SELECT '待毁形车辆', count( 1 ) AS num FROM ts_car_info i LEFT JOIN ts_car_processing p ON i.id = p.car_info_id WHERE p.is_verify = 2 AND p.is_destructive = 1 AND i.disintegrate_plant_id = 1 )
+        UNION ALL
+        ( SELECT '待拆车辆', count( 1 ) AS num FROM ts_car_info i LEFT JOIN ts_car_processing p ON i.id = p.car_info_id WHERE p.is_destructive = 2 AND p.is_dismantle = 1  AND i.disintegrate_plant_id = 1 )
+        UNION ALL
+        ( SELECT '报废证明', count( 1 ) AS num FROM ts_car_info i LEFT JOIN ts_car_processing p ON i.id = p.car_info_id WHERE p.is_appoint_logout_time = 2 AND p.is_upload_pic = 1  AND i.disintegrate_plant_id = 1 )
+        UNION ALL
+        ( SELECT '核档不通过', count( 1 ) AS num FROM ts_car_info i LEFT JOIN ts_car_processing p ON i.id = p.car_info_id WHERE p.is_verify = 3 AND i.disintegrate_plant_id = 1 )
+        UNION ALL
+        ( SELECT '入库管理', count( 1 ) AS num FROM ts_car_info i LEFT JOIN ts_car_parts p ON i.id = p.car_info_id WHERE p.parts_status = 1 AND i.disintegrate_plant_id = 1 )
     </select>
 
     <select id="selectSoftPrintCount" resultType="java.lang.Integer">
