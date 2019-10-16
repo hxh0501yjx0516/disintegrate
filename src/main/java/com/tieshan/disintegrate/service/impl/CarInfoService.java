@@ -30,21 +30,10 @@ public class CarInfoService implements ICarInfoService {
         carInfoMapper.insertCarInfo(carInfo);
     }
 
-    @Override
-    public void addBatch(List<CarInfo> carInfos) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("list", carInfos);
-        carInfoMapper.insertBatchCarInfo(map);
-    }
 
     @Override
     public void update(CarInfo carInfo) {
         carInfoMapper.updateCarInfo(carInfo);
-    }
-
-    @Override
-    public void updateBatch(Map<String, Object> params) {
-        carInfoMapper.updateBatchCarInfo(params);
     }
 
     @Override
@@ -62,13 +51,4 @@ public class CarInfoService implements ICarInfoService {
         return carInfoMapper.selectOneByMap(map);
     }
 
-    @Override
-    public void delete(Map<String, Object> map) {
-        carInfoMapper.deleteCarInfoByMap(map);
-    }
-
-    @Override
-    public void deleteBatch(Map<String, Object> map) {
-        carInfoMapper.batchDeleteCarInfoByMap(map);
-    }
 }
