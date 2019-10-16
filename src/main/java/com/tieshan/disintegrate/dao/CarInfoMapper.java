@@ -24,15 +24,7 @@ public interface CarInfoMapper {
 
     void insertCarInfo(CarInfo CarInfo);
 
-    void insertBatchCarInfo(Map<String, Object> map);
-
     void updateCarInfo(CarInfo CarInfo);
-
-    void updateBatchCarInfo(Map<String, Object> map);
-
-    void deleteCarInfoByMap(Map<String, Object> map);
-
-    void batchDeleteCarInfoByMap(Map<String, Object> map);
 
     List<AppCarBaseVo> selectAppList(Map<String, Object> map);
 

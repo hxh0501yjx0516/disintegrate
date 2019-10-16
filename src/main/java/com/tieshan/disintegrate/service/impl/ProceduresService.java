@@ -142,7 +142,6 @@ public class ProceduresService implements IProceduresService {
     @Transactional
     public void recordQueryResult(Map<String, Object> params, SysUser user) {
         params.put("disintegratePlantId", user.getCompany_id());
-        params.put("id", params.get("carProcessingId"));
         CarProcessing carProcessing = carProcessingMapper.selectOneByMap(params);
         if (carProcessing == null) {
             throw new CustomException("查询失败！");
@@ -171,12 +170,12 @@ public class ProceduresService implements IProceduresService {
         carProcedurelog.setState(state);
 
 
-        if (StringUtils.isEmpty(params.get("carProcedureLogId"))) {
+        if (StringUtils.isEmpty(params.get("queryId"))) {
             IdWorker idWorker = new IdWorker(1, 1, 1);
             carProcedurelog.setId(idWorker.nextId());
             carProcedureLogMapper.insertCarProcedureLog(carProcedurelog);
         } else {
-            carProcedurelog.setId(Long.valueOf(params.get("carProcedureLogId").toString()));
+            carProcedurelog.setId(Long.valueOf(params.get("queryId").toString()));
             carProcedureLogMapper.updateCarProcedureLog(carProcedurelog);
         }
 
@@ -193,7 +192,7 @@ public class ProceduresService implements IProceduresService {
     }
 
     /**
-     * @param params carProcessingId
+     * @param params carInfoId
      *               carProcedureLogId
      *               state
      *               remark
@@ -231,12 +230,12 @@ public class ProceduresService implements IProceduresService {
         carProcedurelog.setState(state);
 
 
-        if (StringUtils.isEmpty(params.get("carProcedureLogId"))) {
+        if (StringUtils.isEmpty(params.get("queryId"))) {
             IdWorker idWorker = new IdWorker(1, 1, 1);
             carProcedurelog.setId(idWorker.nextId());
             carProcedureLogMapper.insertCarProcedureLog(carProcedurelog);
         } else {
-            carProcedurelog.setId(Long.valueOf(params.get("carProcedureLogId").toString()));
+            carProcedurelog.setId(Long.valueOf(params.get("queryId").toString()));
             carProcedureLogMapper.updateCarProcedureLog(carProcedurelog);
         }
 
@@ -250,7 +249,6 @@ public class ProceduresService implements IProceduresService {
     @Transactional
     public void recordQueryCustomerResult(Map<String, Object> params, SysUser user) {
         params.put("disintegratePlantId", user.getCompany_id());
-        params.put("id", params.get("carProcessingId"));
         CarProcessing carProcessing = carProcessingMapper.selectOneByMap(params);
         if (carProcessing == null) {
             throw new CustomException("查询失败！");
@@ -265,7 +263,7 @@ public class ProceduresService implements IProceduresService {
         CarProcedureLog carProcedurelog = new CarProcedureLog();
         carProcedurelog.setCarInfoId(carProcessing.getCarInfoId());
         carProcedurelog.setDisintegratePlantId(user.getCompany_id());
-        carProcedurelog.setProcedureLogId(Long.valueOf(params.get("queryResultId").toString()));
+        carProcedurelog.setProcedureLogId(Long.valueOf(params.get("queryId").toString()));
 
         carProcedurelog.setType(3);
         if (!StringUtils.isEmpty(params.get("remark"))) {
@@ -279,11 +277,11 @@ public class ProceduresService implements IProceduresService {
         carProcedurelog.setState(state);
 
         IdWorker idWorker = new IdWorker(1, 1, 1);
-        if (StringUtils.isEmpty(params.get("recordQueryResultId"))) {
+        if (StringUtils.isEmpty(params.get("customerHandleId"))) {
             carProcedurelog.setId(idWorker.nextId());
             carProcedureLogMapper.insertCarProcedureLog(carProcedurelog);
         } else {
-            carProcedurelog.setId(Long.valueOf(params.get("recordQueryResultId").toString()));
+            carProcedurelog.setId(Long.valueOf(params.get("customerHandleId").toString()));
             carProcedureLogMapper.updateCarProcedureLog(carProcedurelog);
         }
         if (state == 2) {
@@ -309,7 +307,6 @@ public class ProceduresService implements IProceduresService {
     @Transactional
     public void recordVerificationCustomerResult(Map<String, Object> params, SysUser user) {
         params.put("disintegratePlantId", user.getCompany_id());
-        params.put("id", params.get("carProcessingId"));
         CarProcessing carProcessing = carProcessingMapper.selectOneByMap(params);
         if (carProcessing == null) {
             throw new CustomException("查询失败！");
@@ -324,7 +321,7 @@ public class ProceduresService implements IProceduresService {
         CarProcedureLog carProcedurelog = new CarProcedureLog();
         carProcedurelog.setCarInfoId(carProcessing.getCarInfoId());
         carProcedurelog.setDisintegratePlantId(user.getCompany_id());
-        carProcedurelog.setProcedureLogId(Long.valueOf(params.get("recordVerificationResultId").toString()));
+        carProcedurelog.setProcedureLogId(Long.valueOf(params.get("queryId").toString()));
 
         carProcedurelog.setType(3);
         if (!StringUtils.isEmpty(params.get("remark"))) {
@@ -338,11 +335,11 @@ public class ProceduresService implements IProceduresService {
         carProcedurelog.setState(state);
 
         IdWorker idWorker = new IdWorker(1, 1, 1);
-        if (StringUtils.isEmpty(params.get("verificationResultId"))) {
+        if (StringUtils.isEmpty(params.get("customerHandleId"))) {
             carProcedurelog.setId(idWorker.nextId());
             carProcedureLogMapper.insertCarProcedureLog(carProcedurelog);
         } else {
-            carProcedurelog.setId(Long.valueOf(params.get("verificationResultId").toString()));
+            carProcedurelog.setId(Long.valueOf(params.get("customerHandleId").toString()));
             carProcedureLogMapper.updateCarProcedureLog(carProcedurelog);
         }
         if (state == 2) {
@@ -350,7 +347,7 @@ public class ProceduresService implements IProceduresService {
             carProcessing.setVerifyResult(null);
             carProcessing.setVerifyTime(null);
             carProcessing.setVerifyUserId(null);
-            carProcessingMapper.updateQueryCarProcessing(carProcessing);
+            carProcessingMapper.updateVerifyCarProcessing(carProcessing);
         } else if (state == 4) {//退车
             CarBack carBack = new CarBack();
             carBack.setId(idWorker.nextId());

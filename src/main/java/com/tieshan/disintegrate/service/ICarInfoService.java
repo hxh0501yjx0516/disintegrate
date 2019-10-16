@@ -16,17 +16,12 @@ public interface ICarInfoService {
 
     void add(CarInfo carInfo);
 
-    void addBatch(List<CarInfo> carInfos);
 
     void update(CarInfo carInfo);
 
-    void updateBatch(Map<String, Object> params);
 
     PageInfo<CarInfo> queryPage(Map<String, Object> params);
 
     CarInfo queryOne(Map<String, Object> map);
 
-    void delete(Map<String, Object> map);
-
-    void deleteBatch(Map<String, Object> map);
 }

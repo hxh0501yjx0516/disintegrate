@@ -239,13 +239,13 @@
                 AND i.disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
             </if>
             <if test="isQuery!=null">
-                AND p.is_query=#{isQuery}
+                AND p.is_query=#{isQuery} and p.is_register=2
             </if>
             <if test="isVerify!=null">
-                AND p.is_verify=#{isVerify}
+                AND p.is_verify=#{isVerify} and p.is_query=2
             </if>
             <if test="isVerify==null or isVerify==''">
-                and p.is_verify!=''
+                and p.is_verify!='' and p.is_query=2
             </if>
             <if test="searchInfo!=null and searchInfo!=''">
                 and concat(i.contacts,i.contacts_phone,i.car_name,i.car_no,i.car_code)

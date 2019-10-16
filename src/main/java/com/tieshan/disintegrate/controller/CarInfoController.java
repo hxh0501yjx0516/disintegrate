@@ -46,25 +46,6 @@ public class CarInfoController {
         return new RestResult("添加成功", carInfo, ResultCode.SUCCESS.code());
     }
 
-    /**
-     * 添加多个
-     * @param carInfos
-     * @param user
-     * @return
-     * @throws InterruptedException
-     */
-    @PostMapping(value = "/addList")
-    public RestResult addList(@RequestBody List<CarInfo> carInfos, @LoginUser SysUser user) throws InterruptedException {
-        for (int i = 0; i < carInfos.size(); i++) {
-            IdWorker idWorker = new IdWorker(1, 1, 1);
-            carInfos.get(i).setId(idWorker.nextId());
-            carInfos.get(i).setOperator(user.getUser_name());
-            carInfos.get(i).setDisintegratePlantId(user.getCompany_id());
-            Thread.sleep(1000);
-        }
-        carInfoService.addBatch(carInfos);
-        return new RestResult("添加成功", "", ResultCode.SUCCESS.code());
-    }
 
     /**
      * 修改
@@ -79,19 +60,6 @@ public class CarInfoController {
         return new RestResult("修改成功", carInfo, ResultCode.SUCCESS.code());
     }
 
-    /**
-     * 修改多个
-     * @param carInfos
-     * @param user
-     * @return
-     */
-    @PostMapping(value = "/updateList")
-    public RestResult updateCarInfo(@RequestBody List<CarInfo> carInfos, @LoginUser SysUser user) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("disintegratePlantId", user.getCompany_id());
-        carInfoService.updateBatch(params);
-        return new RestResult("修改成功", "", ResultCode.SUCCESS.code());
-    }
 
     /**
      * 查询多个
@@ -119,32 +87,5 @@ public class CarInfoController {
         map.put("disintegratePlantId", user.getCompany_id());
         CarInfo carInfo = carInfoService.queryOne(map);
         return new RestResult("", carInfo, ResultCode.SUCCESS.code());
-    }
-    /**
-     * 删除
-     * @param id
-     * @param user
-     * @return
-     */
-    @PostMapping(value = "/delete")
-    public RestResult delete(@RequestBody Long id, @LoginUser SysUser user) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("id", id);
-        map.put("disintegratePlantId", user.getCompany_id());
-        carInfoService.delete(map);
-        return new RestResult("删除成功", "", ResultCode.SUCCESS.code());
-    }
-
-    /**
-     * 批量删除
-     * @param params
-     * @param user
-     * @return
-     */
-    @PostMapping(value = "/deleteList")
-    public RestResult deleteList(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
-        params.put("disintegratePlantId", user.getCompany_id());
-        carInfoService.deleteBatch(params);
-        return new RestResult("删除成功", "", ResultCode.SUCCESS.code());
     }
 }
