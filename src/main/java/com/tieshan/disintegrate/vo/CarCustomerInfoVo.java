@@ -142,6 +142,7 @@ public class CarCustomerInfoVo implements Serializable {
      */
     private String remarks;
 
+    private Date approachTime;
 
     private List<RecordHandleVo> queryRecord;
 

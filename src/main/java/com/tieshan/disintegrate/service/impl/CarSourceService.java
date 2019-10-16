@@ -9,6 +9,7 @@ import com.tieshan.disintegrate.service.ICarSourceService;
 import com.tieshan.disintegrate.token.TokenService;
 import com.tieshan.disintegrate.util.IdWorker;
 import com.tieshan.disintegrate.util.PubMethod;
+import com.tieshan.disintegrate.vo.CarSalvageVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -442,7 +443,7 @@ public class CarSourceService implements ICarSourceService {
         if (token.split("-")[0].equals("PC")){
             mapList = carSourceMapper.selectCarInfoCount(sysUser.getCompany_id());
         }else{
-//            mapList = carSourceMapper.selectCarInfoCountAPP()
+            mapList = carSourceMapper.selectCarInfoCountAPP(sysUser.getCompany_id(), sysUser.getId());
         }
         return mapList;
     }
@@ -812,6 +813,12 @@ public class CarSourceService implements ICarSourceService {
         carIdentity.setDisintegratePlantId(companyId);
         carIdentity.setCarInfoId(carInfoId);
         carSourceMapper.insertCarIdentity(carIdentity);
+        // 将该车辆信息添加到车辆残值表中
+        CarSalvage carSalvage = new CarSalvage();
+        carSalvage.setId(idWorker.nextId());
+        carSalvage.setCarInfoId(carInfoId);
+        carSalvage.setDisintegratePlantId(companyId);
+        carSourceMapper.insertCarSalvage(carSalvage);
         return 1;
     }
 

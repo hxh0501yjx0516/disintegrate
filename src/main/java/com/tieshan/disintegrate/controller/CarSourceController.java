@@ -8,7 +8,6 @@ import com.tieshan.disintegrate.pojo.CarSource;
 import com.tieshan.disintegrate.pojo.CarSurvey;
 import com.tieshan.disintegrate.service.DictionaryService;
 import com.tieshan.disintegrate.service.ICarSourceService;
-import com.tieshan.disintegrate.util.PubMethod;
 import com.tieshan.disintegrate.util.RestResult;
 import com.tieshan.disintegrate.util.ResultCode;
 import lombok.extern.apachecommons.CommonsLog;
@@ -665,7 +664,7 @@ public class CarSourceController {
 
     /**
      * PC:查询（某个拆解厂）首页每个状态下的车辆数量
-     * APP:查询首页每个状态下的车辆数量
+     * APP:查询首页每个状态下的车辆数量   1-车辆入场   2-等待初检   3-等待预处理   4-等待拓号  5-拆解方式  6-存放位置  7-未核档  8-待毁形车辆  9-待拆车辆  10-报废证明   11-核档不通过    12-入库管理
      * @param request
      * @return
      */
