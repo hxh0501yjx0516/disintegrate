@@ -596,7 +596,7 @@ public class CarSourceController {
      * @return
      */
     @PostMapping("/editCarInfoLocation")
-    public RestResult editCarInfoLocation(CarInfo carInfo) {
+    public RestResult editCarInfoLocation(@RequestBody CarInfo carInfo) {
         RestResult restResult = null;
         try {
             if (carInfo.getId() == null || carInfo.getCarLocationArea() == null || carInfo.getCarLocationRow() == null || carInfo.getCarLocationColumn() == null || carInfo.getCarLocationNumber() == null){
