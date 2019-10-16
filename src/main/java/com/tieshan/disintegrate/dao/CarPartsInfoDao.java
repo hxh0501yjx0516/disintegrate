@@ -35,7 +35,7 @@ public interface CarPartsInfoDao {
             "        \ti.disintegrate_plant_id = #{disintegratePlantId}\n" +
             "and p.parts_status=1" +
             "        \t<if test=\"findMsg != null and findMsg != ''\">\n" +
-            "                AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%','','%')\n" +
+            "                AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%',#{findMsg},'%')\n" +
             "            </if>" +
             "</script>"})
     List<PartsInfoVo> selectPreParts(@Param(value = "disintegratePlantId") Long disintegratePlantId,
@@ -58,7 +58,7 @@ public interface CarPartsInfoDao {
             "        \ti.disintegrate_plant_id = #{disintegratePlantId}\n" +
             "and p.parts_status=2" +
             "        \t<if test=\"findMsg != null and findMsg != ''\">\n" +
-            "                AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%','','%')\n" +
+            "                AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%',#{findMsg},'%')\n" +
             "            </if>" +
             "</script>"})
     List<PartsInfoVo> selectIsParts(@Param(value = "disintegratePlantId") Long disintegratePlantId,
