@@ -171,6 +171,11 @@ public interface CarSourceMapper {
 
     List<Map<String, Object>> selectCarInfoCount(@Param(value = "disintegratePlantId") Long disintegratePlantId);
 
+    void insertCarSalvage(CarSalvage carSalvage);
+
+    List<Map<String, Object>> selectCarInfoCountAPP(@Param(value = "disintegratePlantId") Long disintegratePlantId,
+                                                    @Param(value = "userId") Long userId);
+
 //    Integer selectSoftPrintCount(@Param(value = "disintegratePlantId") Long disintegratePlantId);
 
 //    Integer selectDismantlingWayCount(@Param(value = "disintegratePlantId") Long disintegratePlantId);
