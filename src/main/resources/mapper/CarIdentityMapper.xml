@@ -73,13 +73,17 @@
         <result property="contacts" column="contacts_address"/>  <!-- 交车人地址 -->
         <result property="drivLicense" column="driv_license"/>  <!-- 行驶本。1.没有，2.有 -->
         <result property="registLicense" column="regist_license"/>  <!-- 登记证。1.没有，2.有 -->
+        <result property="carCard" column="car_card"/>  <!--  -->
+        <result property="carNo" column="car_no"/>  <!--  -->
+        <result property="carCode" column="car_code"/>  <!--  -->
     </resultMap>
 
     <select id="selectOneByMap" resultMap="proceduresVoMap">
         SELECT  ie.id, ie.disintegrate_plant_id, ie.ascription, ie.car_info_id, ie.colour, ie.owner, ie.phone, ie.id_card, ie.agend, ie.agend_idcard,
         ie.car_kind, ie.fuel_type, ie.reg_time, ie.issue_time, ie.nature_usege, ie.car_type, ie.vin, ie.engine, ie.issue_size, ie.displacement,
         ie.carrying_capacity, ie.remarks, ie.frame_number, ie.car_weight, ie.owner_address, ie.owner_zipcode, ie.car_properties,
-        ie.is_delete, s.card_color, ie.status, ie.record_no,i.driv_license,i.regist_license,i.contacts,i.contacts_phone,i.contacts_address
+        ie.is_delete, s.card_color, ie.status, ie.record_no,i.driv_license,i.regist_license,i.contacts,i.contacts_phone,i.contacts_address,
+        i.car_no,i.car_code
         FROM ts_car_identity ie
         left join ts_car_survey s on ie.car_info_id=s.car_info_id
         left join ts_car_info i on i.id=ie.car_info_id
@@ -115,7 +119,7 @@
         SELECT  id, disintegrate_plant_id, ascription, car_info_id, colour, owner, phone, id_card, agend, agend_idcard,
         car_kind, fuel_type, reg_time, issue_time, nature_usege, car_type, vin, engine, issue_size, displacement,
         carrying_capacity, remarks, frame_number, car_weight, owner_address, owner_zipcode, car_properties,
-        is_delete, card_color, status, record_no
+        is_delete, status, record_no
         FROM ts_car_identity
         <where>
             <if test="id!=null">
@@ -201,9 +205,6 @@
             </if>
             <if test="isDelete!=null">
                 AND is_delete=#{isDelete}  <!-- 是否删除。1.删除，2,正常 -->
-            </if>
-            <if test="cardColor!=null and cardColor!=''">
-                AND card_color=#{cardColor}  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
             </if>
             <if test="status!=null">
                 AND status=#{status}  <!-- 1:暂存，2:提交（登记完成） -->
@@ -310,9 +311,6 @@
             <if test="isDelete!=null">
                 is_delete,  <!-- 是否删除。1.删除，2,正常 -->
             </if>
-            <if test="cardColor!=null and cardColor!=''">
-                card_color,  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
-            </if>
             <if test="status!=null">
                 status,  <!-- 1:暂存，2:提交（登记完成） -->
             </if>
@@ -405,9 +403,6 @@
             </if>
             <if test="isDelete!=null">
                 #{isDelete},  <!-- 是否删除。1.删除，2,正常 -->
-            </if>
-            <if test="cardColor!=null and cardColor!=''">
-                #{cardColor},  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
             </if>
             <if test="status!=null">
                 #{status},  <!-- 1:暂存，2:提交（登记完成） -->
@@ -506,9 +501,6 @@
                 <if test="item.isDelete!=null">
                     is_delete,  <!-- 是否删除。1.删除，2,正常 -->
                 </if>
-                <if test="item.cardColor!=null and item.cardColor!=''">
-                    card_color,  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
-                </if>
                 <if test="item.status!=null">
                     status,  <!-- 1:暂存，2:提交（登记完成） -->
                 </if>
@@ -602,9 +594,6 @@
                 <if test="item.isDelete!=null">
                     #{item.isDelete},  <!-- 是否删除。1.删除，2,正常 -->
                 </if>
-                <if test="item.cardColor!=null and item.cardColor!=''">
-                    #{item.cardColor},  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
-                </if>
                 <if test="item.status!=null">
                     #{item.status},  <!-- 1:暂存，2:提交（登记完成） -->
                 </if>
@@ -697,9 +686,6 @@
             <if test="isDelete!=null">
                 is_delete=#{isDelete},  <!-- 是否删除。1.删除，2,正常 -->
             </if>
-            <if test="cardColor!=null and cardColor!=''">
-                card_color=#{cardColor},  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
-            </if>
             <if test="status!=null">
                 status=#{status},  <!-- 1:暂存，2:提交（登记完成） -->
             </if>
@@ -790,9 +776,6 @@
                 </if>
                 <if test="item.isDelete!=null">
                     is_delete=#{item.isDelete},  <!-- 是否删除。1.删除，2,正常 -->
-                </if>
-                <if test="item.cardColor!=null and item.cardColor!=''">
-                    card_color=#{item.cardColor},  <!-- 车牌颜色(来之字典表),蓝色，黄色。。。 -->
                 </if>
                 <if test="item.status!=null">
                     status=#{item.status},  <!-- 1:暂存，2:提交（登记完成） -->

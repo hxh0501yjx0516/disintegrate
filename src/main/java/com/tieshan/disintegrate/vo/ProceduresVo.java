@@ -31,5 +31,7 @@ public class ProceduresVo extends CarIdentity {
     // 登记证
     private Integer registLicense;
 
-
+    private String carCard;
+    private String carNo;
+    private String carCode;
 }
