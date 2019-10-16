@@ -230,12 +230,16 @@ public class ProceduresService implements IProceduresService {
         carProcedurelog.setState(state);
 
 
-        if (StringUtils.isEmpty(params.get("queryId"))) {
+        if (StringUtils.isEmpty(params.get("queryId")) && StringUtils.isEmpty(params.get("carProcessingId"))) {
             IdWorker idWorker = new IdWorker(1, 1, 1);
             carProcedurelog.setId(idWorker.nextId());
             carProcedureLogMapper.insertCarProcedureLog(carProcedurelog);
         } else {
-            carProcedurelog.setId(Long.valueOf(params.get("queryId").toString()));
+            if (!StringUtils.isEmpty(params.get("queryId"))) {
+                carProcedurelog.setId(Long.valueOf(params.get("queryId").toString()));
+            }else{
+                carProcedurelog.setId(Long.valueOf(params.get("carProcessingId").toString()));
+            }
             carProcedureLogMapper.updateCarProcedureLog(carProcedurelog);
         }
 
@@ -381,6 +385,7 @@ public class ProceduresService implements IProceduresService {
         }
         CarProcessing carProcessing = new CarProcessing();
         carProcessing.setId(sourceCarProcessing.getId());
+        carProcessing.setDisintegratePlantId(user.getCompany_id());
         carProcessing.setIsDataUpload(2);
         carProcessing.setDataUploadUserId(user.getId());
         carProcessing.setDataUploadTime(new Date());
@@ -395,6 +400,7 @@ public class ProceduresService implements IProceduresService {
             throw new CustomException("车辆信息不存在！");
         }
         CarProcessing carProcessing = new CarProcessing();
+        carProcessing.setDisintegratePlantId(user.getCompany_id());
         carProcessing.setId(sourceCarProcessing.getId());
         carProcessing.setIsPrintRecycle(2);
         carProcessing.setPrintRecycleUserId(user.getId());
@@ -410,6 +416,7 @@ public class ProceduresService implements IProceduresService {
             throw new CustomException("车辆信息不存在！");
         }
         CarProcessing carProcessing = new CarProcessing();
+        carProcessing.setDisintegratePlantId(user.getCompany_id());
         carProcessing.setId(sourceCarProcessing.getId());
         carProcessing.setIsLogout(2);
         carProcessing.setLogoutUserId(user.getId());
@@ -432,7 +439,7 @@ public class ProceduresService implements IProceduresService {
         carProcessing.setId(sourceCarProcessing.getId());
         carProcessing.setIsAppointLogoutTime(2);
         carProcessing.setIsAppointUserid(user.getId());
-
+        carProcessing.setDisintegratePlantId(user.getCompany_id());
         try {
             carProcessing.setIsAppointTime(DateUtils.parseDate(params.get("appointTime").toString(), "yyyy-MM-dd"));
         } catch (ParseException e) {
