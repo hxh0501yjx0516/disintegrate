@@ -8,6 +8,7 @@ import com.tieshan.disintegrate.pojo.CarSource;
 import com.tieshan.disintegrate.pojo.CarSurvey;
 import com.tieshan.disintegrate.service.DictionaryService;
 import com.tieshan.disintegrate.service.ICarSourceService;
+import com.tieshan.disintegrate.util.PubMethod;
 import com.tieshan.disintegrate.util.RestResult;
 import com.tieshan.disintegrate.util.ResultCode;
 import lombok.extern.apachecommons.CommonsLog;
@@ -595,14 +596,20 @@ public class CarSourceController {
      * @return
      */
     @PostMapping("/editCarInfoLocation")
-    public RestResult editCarInfoLocation(CarInfo carInfo) {
+    public RestResult editCarInfoLocation(@RequestBody CarInfo carInfo) {
+        RestResult restResult = null;
         try {
-            carSourceService.editCarInfoLocation(carInfo);
+            if (carInfo.getId() == null || carInfo.getCarLocationArea() == null || carInfo.getCarLocationRow() == null || carInfo.getCarLocationColumn() == null || carInfo.getCarLocationNumber() == null){
+                restResult = new RestResult("添加车辆存放位置失败", "", ResultCode.ERROR.code());
+            }else{
+                carSourceService.editCarInfoLocation(carInfo);
+                restResult = new RestResult("添加车辆存放位置成功", null, ResultCode.SUCCESS.code());
+            }
         } catch (Exception e) {
             log.info("添加车辆存放位置失败", e);
-            return new RestResult("添加车辆存放位置失败", null, ResultCode.ERROR.code());
+            return new RestResult("添加车辆存放位置失败", "", ResultCode.ERROR.code());
         }
-        return new RestResult("添加车辆存放位置成功", null, ResultCode.SUCCESS.code());
+        return restResult;
     }
 
     /**
@@ -656,22 +663,23 @@ public class CarSourceController {
         return restResult;
     }
 
-//    /**
-//     * 查询（某个拆解厂）首页每个状态下的车辆数量
-//     * @param request
-//     * @return
-//     */
-//    @GetMapping("/selectCarInfoCount")
-//    public RestResult selecrCarInfoCount(HttpServletRequest request){
-//        Map<String, Integer> map = null;
-//        try{
-//            map = carSourceService.selectCarInfoCount(request);
-//        }catch(Exception e){
-//            log.info("查询失败", e);
-//            return new RestResult("查询失败", map, ResultCode.ERROR.code());
-//        }
-//        return new RestResult("查询成功", map, ResultCode.SUCCESS.code());
-//    }
+    /**
+     * PC:查询（某个拆解厂）首页每个状态下的车辆数量
+     * APP:查询首页每个状态下的车辆数量
+     * @param request
+     * @return
+     */
+    @GetMapping("/selectCarInfoCount")
+    public RestResult selectCarInfoCount(HttpServletRequest request){
+        List<Map<String, Object>> countMapList = null;
+        try{
+            countMapList = carSourceService.selectCarInfoCount(request);
+        }catch(Exception e){
+            log.info("查询失败", e);
+            return new RestResult("查询失败", countMapList, ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", countMapList, ResultCode.SUCCESS.code());
+    }
 
     /**
      * 首页的查询

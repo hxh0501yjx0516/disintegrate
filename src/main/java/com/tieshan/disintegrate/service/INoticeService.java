@@ -18,7 +18,7 @@ public interface INoticeService {
 
     int insertNotice(Notice notice, HttpServletRequest request);
 
-    List<Map<String, Object>> selNotice(String type, String device_type,HttpServletRequest request);
+    List<Map<String, Object>> selNotice(String type, String device_type,HttpServletRequest request,int page, int pageSize);
 
     Map<String, Object> selNoticeById(String id);
 

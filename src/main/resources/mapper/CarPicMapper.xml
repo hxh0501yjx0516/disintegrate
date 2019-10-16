@@ -57,7 +57,8 @@
     </select>
 
     <select id="selectListByMap" resultMap="carPicMap">
-        SELECT  id, disintegrate_plant_id, file_name, file_url, first_type, two_type, operator_id, operator, create_time, is_delete FROM ts_car_pic
+        SELECT  id, disintegrate_plant_id, file_name, file_url, first_type, two_type, operator_id, operator,
+        create_time, is_delete FROM ts_car_pic
         <where>
             <if test="disintegratePlantId!=null">
                 AND disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
@@ -76,9 +77,6 @@
             </if>
             <if test="carInfoId!=null">
                 AND car_info_id=#{carInfoId}  <!-- carinfo的主键id -->
-            </if>
-            <if test="createTime!=null">
-                AND create_time=#{createTime}  <!--  -->
             </if>
             <if test="isDelete!=null">
                 AND is_delete=#{isDelete}  <!-- 是否删除。1.删除，2,正常 -->

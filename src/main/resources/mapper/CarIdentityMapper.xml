@@ -71,8 +71,8 @@
         <result property="contacts" column="contacts"/>  <!-- 交车人 -->
         <result property="contactsPhone" column="contacts_phone"/>  <!-- 手机号 -->
         <result property="contacts" column="contacts_address"/>  <!-- 交车人地址 -->
-        <result property="drivLicense" column="driv_license"/>  <!-- 档案号 -->
-        <result property="registLicense" column="regist_license"/>  <!-- 档案号 -->
+        <result property="drivLicense" column="driv_license"/>  <!-- 行驶本。1.没有，2.有 -->
+        <result property="registLicense" column="regist_license"/>  <!-- 登记证。1.没有，2.有 -->
     </resultMap>
 
     <select id="selectOneByMap" resultMap="proceduresVoMap">

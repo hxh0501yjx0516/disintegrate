@@ -169,5 +169,16 @@ public interface CarSourceMapper {
                                @Param(value = "disintegratePlantId") Long disintegratePlantId,
                                @Param(value = "firstType") String firstType);
 
+    List<Map<String, Object>> selectCarInfoCount(@Param(value = "disintegratePlantId") Long disintegratePlantId);
+
+//    Integer selectSoftPrintCount(@Param(value = "disintegratePlantId") Long disintegratePlantId);
+
+//    Integer selectDismantlingWayCount(@Param(value = "disintegratePlantId") Long disintegratePlantId);
+//
+//    Integer selectDismantleCount(@Param(value = "disintegratePlantId") Long disintegratePlantId);
+//
+//    Integer selectExceptionCount(@Param(value = "disintegratePlantId") Long disintegratePlantId);
+
+
 //    int selectCarInfoCountByCarSourceId(Long id);
 }

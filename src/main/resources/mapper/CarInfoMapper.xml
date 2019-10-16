@@ -89,6 +89,7 @@
         <result property="displacement" column="displacement"/>  <!-- 汽车排量 -->
         <result property="carryingCapacity" column="carrying_capacity"/>  <!-- 核定载人数 -->
         <result property="remarks" column="remarks"/>  <!-- 备注 -->
+        <result property="recordNumber" column="record_number"/>  <!-- 备注 -->
         <collection property="queryRecord" column="car_info_id"
                     select="com.tieshan.disintegrate.dao.CarProcedureLogMapper.selectWebProcedureVo"/>
     </resultMap>
@@ -238,13 +239,13 @@
                 AND i.disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
             </if>
             <if test="isQuery!=null">
-                AND p.is_query=#{isQuery}
+                AND p.is_query=#{isQuery} and p.is_register=2
             </if>
             <if test="isVerify!=null">
-                AND p.is_verify=#{isVerify}
+                AND p.is_verify=#{isVerify} and p.is_query=2
             </if>
             <if test="isVerify==null or isVerify==''">
-                and p.is_verify!=''
+                and p.is_verify!='' and p.is_query=2
             </if>
             <if test="searchInfo!=null and searchInfo!=''">
                 and concat(i.contacts,i.contacts_phone,i.car_name,i.car_no,i.car_code)
@@ -320,7 +321,7 @@
         ie.owner_zipcode,ie.owner_address,ie.agend,ie.agend_idcard,i.contacts,i.contacts_phone,i.contacts_address,
         i.driv_license,i.regist_license,i.car_name,ie.car_weight,ie.car_kind,ie.fuel_type,ie.reg_time,ie.issue_time,
         ie.nature_usege,ie.car_properties,ie.vin,ie.engine,ie.issue_size,ie.displacement,ie.carrying_capacity,
-        ie.remarks,p.is_verify,p.is_query
+        ie.remarks,p.is_verify,p.is_query,p.record_number
         FROM ts_car_info i
         left join ts_car_enter e on i.id=e.car_info_id
         left join ts_car_identity ie on i.id=ie.car_info_id
@@ -447,123 +448,10 @@
         </trim>
         )
     </insert>
-    <insert id="insertBatchCarInfo">
-        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
-            INSERT INTO ts_car_info (
-            <trim suffixOverrides=",">
-                <if test="item.id!=null">
-                    id,  <!--  -->
-                </if>
-                <if test="item.disintegratePlantId!=null">
-                    disintegrate_plant_id,  <!-- 解体厂id -->
-                </if>
-                <if test="item.carSource!=null">
-                    car_source,  <!-- 车源主键id -->
-                </if>
-                <if test="item.contacts!=null and item.contacts!=''">
-                    contacts,  <!-- 车辆联系人 -->
-                </if>
-                <if test="item.contactsPhone!=null and item.contactsPhone!=''">
-                    contacts_phone,  <!-- 手机号 -->
-                </if>
-                <if test="item.carNo!=null and item.carNo!=''">
-                    car_no,  <!-- 车牌号 -->
-                </if>
-                <if test="item.processingType!=null and item.processingType!=''">
-                    processing_type,  <!-- 车辆回收方式（来自字典表) -->
-                </if>
-                <if test="item.processingDate!=null">
-                    processing_date,  <!-- 处理日期 -->
-                </if>
-                <if test="item.procedures!=null and item.procedures!=''">
-                    procedures,  <!-- 驾驶证 行驶本等等 -->
-                </if>
-                <if test="item.proceduresType!=null and item.proceduresType!=''">
-                    procedures_type,  <!-- 手续获取方式 -->
-                </if>
-                <if test="item.remarks!=null and item.remarks!=''">
-                    remarks,  <!-- 备注 -->
-                </if>
-                <if test="item.createTime!=null">
-                    create_time,  <!--  -->
-                </if>
-                <if test="item.operatorId!=null">
-                    operator_id,  <!-- 操作人id -->
-                </if>
-                <if test="item.operator!=null and item.operator!=''">
-                    operator,  <!-- 操作人 -->
-                </if>
-                <if test="item.carName!=null and item.carName!=''">
-                    car_name,  <!-- 车型 -->
-                </if>
-                <if test="item.isDelete!=null">
-                    is_delete,  <!-- 是否删除。1.删除，2,正常 -->
-                </if>
-            </trim>
-            )VALUES(
-            <trim suffixOverrides=",">
-                <if test="item.id!=null">
-                    #{item.id},  <!--  -->
-                </if>
-                <if test="item.disintegratePlantId!=null">
-                    #{item.disintegratePlantId},  <!-- 解体厂id -->
-                </if>
-                <if test="item.carSource!=null">
-                    #{item.carSource},  <!-- 车源主键id -->
-                </if>
-                <if test="item.contacts!=null and item.contacts!=''">
-                    #{item.contacts},  <!-- 车辆联系人 -->
-                </if>
-                <if test="item.contactsPhone!=null and item.contactsPhone!=''">
-                    #{item.contactsPhone},  <!-- 手机号 -->
-                </if>
-                <if test="item.carNo!=null and item.carNo!=''">
-                    #{item.carNo},  <!-- 车牌号 -->
-                </if>
-                <if test="item.processingType!=null and item.processingType!=''">
-                    #{item.processingType},  <!-- 车辆回收方式（来自字典表) -->
-                </if>
-                <if test="item.processingDate!=null">
-                    #{item.processingDate},  <!-- 处理日期 -->
-                </if>
-                <if test="item.procedures!=null and item.procedures!=''">
-                    #{item.procedures},  <!-- 驾驶证 行驶本等等 -->
-                </if>
-                <if test="item.proceduresType!=null and item.proceduresType!=''">
-                    #{item.proceduresType},  <!-- 手续获取方式 -->
-                </if>
-                <if test="item.remarks!=null and item.remarks!=''">
-                    #{item.remarks},  <!-- 备注 -->
-                </if>
-                <if test="item.createTime!=null">
-                    #{item.createTime},  <!--  -->
-                </if>
-                <if test="item.operatorId!=null">
-                    #{item.operatorId},  <!-- 操作人id -->
-                </if>
-                <if test="item.operator!=null and item.operator!=''">
-                    #{item.operator},  <!-- 操作人 -->
-                </if>
-                <if test="item.carName!=null and item.carName!=''">
-                    #{item.carName},  <!-- 车型 -->
-                </if>
-                <if test="item.isDelete!=null">
-                    #{item.isDelete},  <!-- 是否删除。1.删除，2,正常 -->
-                </if>
-            </trim>
-            )
-        </foreach>
-    </insert>
 
     <update id="updateCarInfo">
         UPDATE ts_car_info
         <trim prefix="set" suffixOverrides=",">
-            <if test="id!=null">
-                id=#{id},  <!--  -->
-            </if>
-            <if test="disintegratePlantId!=null">
-                disintegrate_plant_id=#{disintegratePlantId},  <!-- 解体厂id -->
-            </if>
             <if test="carSource!=null">
                 car_source=#{carSource},  <!-- 车源主键id -->
             </if>
@@ -573,6 +461,9 @@
             <if test="contactsPhone!=null and contactsPhone!=''">
                 contacts_phone=#{contactsPhone},  <!-- 手机号 -->
             </if>
+            <if test="contactsAddress!=null and contactsAddress!=''">
+                contacts_address=#{contactsAddress},  <!-- 手机号 -->
+            </if>
             <if test="carNo!=null and carNo!=''">
                 car_no=#{carNo},  <!-- 车牌号 -->
             </if>
@@ -581,9 +472,6 @@
             </if>
             <if test="processingDate!=null">
                 processing_date=#{processingDate},  <!-- 处理日期 -->
-            </if>
-            <if test="procedures!=null and procedures!=''">
-                procedures=#{procedures},  <!-- 驾驶证 行驶本等等 -->
             </if>
             <if test="proceduresType!=null and proceduresType!=''">
                 procedures_type=#{proceduresType},  <!-- 手续获取方式 -->
@@ -606,75 +494,14 @@
             <if test="isDelete!=null">
                 is_delete=#{isDelete},  <!-- 是否删除。1.删除，2,正常 -->
             </if>
+            <if test="drivLicense!=null and drivLicense!=''">
+                driv_license=#{drivLicense},  <!-- 手机号 -->
+            </if>
+            <if test="registLicense!=null and drivLicense!=''">
+                regist_license=#{registLicense},  <!-- 手机号 -->
+            </if>
         </trim>
         WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
     </update>
-    <update id="updateBatchCarInfo">
-        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
-            update ts_car_info
-            <trim prefix="set" suffixOverrides=",">
-                <if test="item.id!=null">
-                    id=#{item.id},  <!--  -->
-                </if>
-                <if test="item.disintegratePlantId!=null">
-                    disintegrate_plant_id=#{item.disintegratePlantId},  <!-- 解体厂id -->
-                </if>
-                <if test="item.carSource!=null">
-                    car_source=#{item.carSource},  <!-- 车源主键id -->
-                </if>
-                <if test="item.contacts!=null and item.contacts!=''">
-                    contacts=#{item.contacts},  <!-- 车辆联系人 -->
-                </if>
-                <if test="item.contactsPhone!=null and item.contactsPhone!=''">
-                    contacts_phone=#{item.contactsPhone},  <!-- 手机号 -->
-                </if>
-                <if test="item.carNo!=null and item.carNo!=''">
-                    car_no=#{item.carNo},  <!-- 车牌号 -->
-                </if>
-                <if test="item.processingType!=null and item.processingType!=''">
-                    processing_type=#{item.processingType},  <!-- 车辆回收方式（来自字典表) -->
-                </if>
-                <if test="item.processingDate!=null">
-                    processing_date=#{item.processingDate},  <!-- 处理日期 -->
-                </if>
-                <if test="item.procedures!=null and item.procedures!=''">
-                    procedures=#{item.procedures},  <!-- 驾驶证 行驶本等等 -->
-                </if>
-                <if test="item.proceduresType!=null and item.proceduresType!=''">
-                    procedures_type=#{item.proceduresType},  <!-- 手续获取方式 -->
-                </if>
-                <if test="item.remarks!=null and item.remarks!=''">
-                    remarks=#{item.remarks},  <!-- 备注 -->
-                </if>
-                <if test="item.createTime!=null">
-                    create_time=#{item.createTime},  <!--  -->
-                </if>
-                <if test="item.operatorId!=null">
-                    operator_id=#{item.operatorId},  <!-- 操作人id -->
-                </if>
-                <if test="item.operator!=null and item.operator!=''">
-                    operator=#{item.operator},  <!-- 操作人 -->
-                </if>
-                <if test="item.carName!=null and item.carName!=''">
-                    car_name=#{item.carName},  <!-- 车型 -->
-                </if>
-                <if test="item.isDelete!=null">
-                    is_delete=#{item.isDelete},  <!-- 是否删除。1.删除，2,正常 -->
-                </if>
-            </trim>
-            WHERE id=#{item.id} AND disintegrate_plant_id=#{item.disintegratePlantId}
-        </foreach>
-    </update>
 
-    <delete id="deleteCarInfoByMap">
-        DELETE FROM ts_car_info WHERE id=#{id} AND disintegrate_plant_id=#{disintegratePlantId}
-    </delete>
-
-    <delete id="batchDeleteCarInfoByMap">
-        DELETE FROM ts_car_info
-        WHERE disintegrate_plant_id=#{disintegratePlantId} and id in
-        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
-            #{item}
-        </foreach>
-    </delete>
 </mapper>
