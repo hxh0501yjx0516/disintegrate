@@ -195,7 +195,7 @@
             </if>
         </where>
     </sql>
-
+    <!-- App端查询毁型完成数据 -->
     <sql id="queryBreakSuccessSurvey">
         <where>
             pos.is_destructive=2 and pos.is_verify=2 and ent.disintegrate_plant_id=#{companyId}
@@ -205,6 +205,7 @@
             </if>
         </where>
     </sql>
+    <!-- App端查询待毁型数据 -->
     <sql id="queryBreakSurvey">
         <where>
             pos.is_destructive=1 and pos.is_verify=2 and ent.disintegrate_plant_id=#{companyId}
@@ -214,6 +215,7 @@
             </if>
         </where>
     </sql>
+    <!-- App端查询车辆预拆解数据 -->
     <sql id="queryWhereDismantle">
         <where>
             ent.car_info_id=info.id and ent.is_copy_number=2 and ent.dismantle_way=5 and
@@ -224,6 +226,7 @@
             </if>
         </where>
     </sql>
+    <!-- App端查询预处理数据 -->
     <sql id="queryWhereSurvey">
         <where>
             ent.car_info_id=info.id and ent.is_initial_survey=2 and ent.is_pretreatment=1 and
@@ -242,6 +245,7 @@
             </if>
         </where>
     </sql>
+    <!-- App端查询车辆拓号数据 -->
     <sql id="queryWherePretreatment">
         <where>
             ent.car_info_id=info.id and ent.is_pretreatment=2 and ent.is_copy_number=1 and
