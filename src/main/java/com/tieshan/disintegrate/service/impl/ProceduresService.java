@@ -230,7 +230,7 @@ public class ProceduresService implements IProceduresService {
         carProcedurelog.setState(state);
 
 
-        if (StringUtils.isEmpty(params.get("queryId")) && StringUtils.isEmpty(params.get("carProcessingId"))) {
+        if (StringUtils.isEmpty(params.get("queryId")) && StringUtils.isEmpty(params.get("verificationResultId"))) {
             IdWorker idWorker = new IdWorker(1, 1, 1);
             carProcedurelog.setId(idWorker.nextId());
             carProcedureLogMapper.insertCarProcedureLog(carProcedurelog);
@@ -238,7 +238,7 @@ public class ProceduresService implements IProceduresService {
             if (!StringUtils.isEmpty(params.get("queryId"))) {
                 carProcedurelog.setId(Long.valueOf(params.get("queryId").toString()));
             }else{
-                carProcedurelog.setId(Long.valueOf(params.get("carProcessingId").toString()));
+                carProcedurelog.setId(Long.valueOf(params.get("verificationResultId").toString()));
             }
             carProcedureLogMapper.updateCarProcedureLog(carProcedurelog);
         }
