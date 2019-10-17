@@ -234,6 +234,25 @@ public class CarSourceController {
     }
 
     /**
+     * 查询指定车辆
+     *
+     * @param id
+     * @param request
+     * @return
+     */
+    @DeleteMapping(value = "/selectCarInfoById")
+    public RestResult selectCarInfoById(Long id, HttpServletRequest request) {
+        CarInfo carInfo = null;
+        try {
+            carInfo = carSourceService.selectCarInfoById(id, request);
+        } catch (Exception e) {
+            log.info("查询车辆失败", e);
+            return new RestResult("查询失败", carInfo, ResultCode.ERROR.code());
+        }
+        return new RestResult("查询成功", carInfo, ResultCode.SUCCESS.code());
+    }
+
+    /**
      * 删除车辆    11     过
      *
      * @param id
@@ -546,7 +565,7 @@ public class CarSourceController {
     /**
      * .
      * 查询该解体厂下的所有车辆     过
-     *
+     *车辆存放位置列表
      * @param page
      * @param pageSize
      * @param findMsg

@@ -149,19 +149,19 @@ public class CarSourceService implements ICarSourceService {
     }
 
 
-//    /**
-//     * 通过主键id查询车辆信息
-//     *
-//     * @param id
-//     * @param request
-//     * @return
-//     */
-//    @Override
-//    public CarInfo selectCarInfoById(Long id, HttpServletRequest request) {
-//        String token = request.getHeader("token");
-//        SysUser sysUser = tokenService.getToken(token);
-//        return carSourceMapper.selectCarInfoById(id, sysUser.getCompany_id());
-//    }
+    /**
+     * 通过主键id查询车辆信息
+     *
+     * @param id
+     * @param request
+     * @return
+     */
+    @Override
+    public CarInfo selectCarInfoById(Long id, HttpServletRequest request) {
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        return carSourceMapper.selectCarInfoById(id, sysUser.getCompany_id());
+    }
 
     /**
      * 修改车辆信息
@@ -253,8 +253,6 @@ public class CarSourceService implements ICarSourceService {
         carSource.setContacts(params.get("contacts").toString());
         // 设置车源的联系人电话
         carSource.setPhone(params.get("phone").toString());
-        // 设置车源的车辆台次
-        carSource.setCount(Integer.parseInt(params.get("count").toString()));
         // 设置车源的位置
         carSource.setCarLocation(params.get("carLocation").toString());
         // 设置车源的业务员id
@@ -332,8 +330,6 @@ public class CarSourceService implements ICarSourceService {
         carSource.setContacts(params.get("contacts").toString());
         // 设置车源联系人电话
         carSource.setPhone(params.get("phone").toString());
-        // 设置车源的车辆台次
-        carSource.setCount(Integer.parseInt(params.get("count").toString()));
         // 设置车源位置
         carSource.setCarLocation(params.get("carLocation").toString());
         // 获得token
@@ -652,7 +648,7 @@ public class CarSourceService implements ICarSourceService {
 
     /**
      * 查询某解体厂下的所有车辆
-     *
+     *车辆存放位置列表
      * @param page
      * @param pageSize
      * @param findMsg
@@ -663,6 +659,7 @@ public class CarSourceService implements ICarSourceService {
     public List<Map<String, Object>> selectCarInfoListByDisintegratePlantId(Integer page, Integer pageSize, String findMsg, HttpServletRequest request) {
         // 设置分页信息
         PageHelper.startPage(page, pageSize);
+        PageHelper.orderBy("e.approach_time DESC");
         return carSourceMapper.selectCarInfoListByDisintegratePlantId(getSysUser(request).getCompany_id(), findMsg);
     }
 
@@ -760,7 +757,7 @@ public class CarSourceService implements ICarSourceService {
     }
 
     /**
-     * 添加部分初检信息和车牌图片
+     * 添加部分初检信息
      *
      * @param carNo
      * @param selfWeight
@@ -792,15 +789,6 @@ public class CarSourceService implements ICarSourceService {
         carSurvey.setCardColor(cardColor);
         carSurvey.setCreateTime(new Date());
         carSourceMapper.insertCarSurveyPart(carSurvey);
-        // 修改车辆入场的状态
-        CarEnter carEnter = new CarEnter();
-        carEnter.setId(Long.parseLong(map.get("id").toString()));
-        carEnter.setIsApproach(2);
-        carEnter.setApproachTime(new Date());
-        carEnter.setApproachUserId(id);
-        carEnter.setDisintegratePlantId(companyId);
-        carEnter.setIsInitialSurvey(1);
-        carSourceMapper.updateCarEnterIsApproach(carEnter);
         // 将该车辆添加到手续表中
         CarProcessing carProcessing = new CarProcessing();
         carProcessing.setId(idWorker.nextId());
@@ -819,6 +807,15 @@ public class CarSourceService implements ICarSourceService {
         carSalvage.setCarInfoId(carInfoId);
         carSalvage.setDisintegratePlantId(companyId);
         carSourceMapper.insertCarSalvage(carSalvage);
+        // 修改车辆入场的状态
+        CarEnter carEnter = new CarEnter();
+        carEnter.setId(Long.parseLong(map.get("id").toString()));
+        carEnter.setIsApproach(2);
+        carEnter.setApproachTime(new Date());
+        carEnter.setApproachUserId(id);
+        carEnter.setDisintegratePlantId(companyId);
+        carEnter.setIsInitialSurvey(1);
+        carSourceMapper.updateCarEnterIsApproach(carEnter);
         return 1;
     }
 

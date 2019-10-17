@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * @description:车源信息表
  *
- * @author ren lei
+ * @author ningfeng
  * @date 2019-09-06 10:54:01
  * @version: 1.0
  * @modified By:
@@ -20,13 +20,9 @@ public interface CarSourceMapper {
 
     void insertCarSource(CarSource carSource);
 
-    void updateCarSource(CarSource carSource);
-
     List<CarSource> selectListByMap(Map map);
 
     CarSource selectOneByMap(Map map);
-
-    void deleteByMap(Map map);
 
     void insertBank(Bank bank);
 
@@ -69,7 +65,7 @@ public interface CarSourceMapper {
                                                      @Param(value = "loginName") String loginName,
                                                      @Param(value = "findMsg") String findMsg);
 
-    List<Long> selectCarInfoIdList(Long disintegratePlantId);
+//    List<Long> selectCarInfoIdList(Long disintegratePlantId);
 
 //    List<Map<String, Object>> selectCarInfoListByIds(@Param(value = "id") Long id,@Param(value = "disintegratePlantId") Long disintegratePlantId);
 
@@ -86,9 +82,9 @@ public interface CarSourceMapper {
 
     void insertCarSurveyPart(CarSurvey carSurvey);
 
-    void insertCarPic(@Param(value = "id") Long id,
-                      @Param(value = "carInfoId") Long carInfoId,
-                      @Param(value = "picUrl") String picUrl);
+//    void insertCarPic(@Param(value = "id") Long id,
+//                      @Param(value = "carInfoId") Long carInfoId,
+//                      @Param(value = "picUrl") String picUrl);
 
     Map<String, Object> selectCarInfoReason(@Param(value = "id") Long id,
                                             @Param(value = "disintegratePlantId") Long disintegratePlantId);
@@ -175,6 +171,9 @@ public interface CarSourceMapper {
 
     List<Map<String, Object>> selectCarInfoCountAPP(@Param(value = "disintegratePlantId") Long disintegratePlantId,
                                                     @Param(value = "userId") Long userId);
+
+    CarInfo selectCarInfoById(@Param(value = "id") Long id,
+                              @Param(value = "disintegratePlantId") Long disintegratePlantId);
 
 //    Integer selectSoftPrintCount(@Param(value = "disintegratePlantId") Long disintegratePlantId);
 
