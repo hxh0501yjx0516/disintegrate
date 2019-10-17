@@ -1,8 +1,11 @@
 package com.tieshan.disintegrate.config;
 
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.slf4j.Logger;
@@ -15,6 +18,7 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
@@ -31,14 +35,22 @@ public class WebConfigurer implements WebMvcConfigurer {
         StringHttpMessageConverter converter = new StringHttpMessageConverter(Charset.forName("UTF-8"));
         return converter;
     }
-   /* @Bean
+
+    @Bean
     public HttpMessageConverters customConverters() {
         MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
         ObjectMapper objectMapper = new ObjectMapper();
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
         simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
-
+        objectMapper.getSerializerProvider().setNullValueSerializer(
+                new JsonSerializer() {
+                    @Override
+                    public void serialize(Object o, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+                        jsonGenerator.writeString("");
+                    }
+                }
+        );
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         //设置全局的时间转化
         SimpleDateFormat smt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -47,7 +59,7 @@ public class WebConfigurer implements WebMvcConfigurer {
         objectMapper.registerModule(simpleModule);
         jackson2HttpMessageConverter.setObjectMapper(objectMapper);
         return new HttpMessageConverters(new HttpMessageConverter[]{jackson2HttpMessageConverter});
-    }*/
+    }
    /* @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(responseBodyConverter());
