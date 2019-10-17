@@ -1,5 +1,6 @@
 package com.tieshan.disintegrate.service.impl;
 
+import com.alibaba.druid.support.json.JSONUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.tieshan.disintegrate.dao.*;
@@ -8,6 +9,7 @@ import com.tieshan.disintegrate.pojo.*;
 import com.tieshan.disintegrate.service.IProceduresService;
 import com.tieshan.disintegrate.util.IdWorker;
 import com.tieshan.disintegrate.vo.*;
+import lombok.extern.apachecommons.CommonsLog;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,7 @@ import java.util.concurrent.FutureTask;
  * @modified By：
  * @version: 1.0.0
  */
+@CommonsLog
 @Service
 public class ProceduresService implements IProceduresService {
 
@@ -86,6 +89,7 @@ public class ProceduresService implements IProceduresService {
     @Override
     @Transactional
     public void saveProcedures(ProceduresVo proceduresVo, SysUser user) {
+        log.info("proceduresVo---->>>>"+JSONUtils.toJSONString(proceduresVo));
         Map<String, Object> map = new HashMap<>();
         map.put("disintegratePlantId", user.getCompany_id());
         map.put("carInfoId", proceduresVo.getCarInfoId());
