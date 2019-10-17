@@ -39,8 +39,17 @@
 
        delete  from department where  id=#{id}
    </delete>
-   <insert id="addDepart">
+    <insert id="addDepart">
         INSERT INTO department ( id, department_name,  department_describe,company_code ,operator, create_time)
          VALUES 	(#{depart.id},#{depart.department_name},#{depart.department_describe},#{depart.company_code},#{depart.operator},now())
    </insert>
+    <select id="getDepartById" resultType="java.util.Map">
+         SELECT
+            IFNULL(id,'') as id,
+            IFNULL(department_name,'') as department_name,
+           IFNULL( department_describe,'') as department_describe
+        FROM
+            department
+            where id=#{id}
+    </select>
 </mapper>
