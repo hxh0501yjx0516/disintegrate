@@ -58,7 +58,7 @@
                 )
                 AND r.resource_type = 1
             ORDER BY
-                r.seq
+                r.pid
     </select>
 
 
