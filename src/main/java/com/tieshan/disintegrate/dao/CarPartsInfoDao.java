@@ -75,9 +75,4 @@ public interface CarPartsInfoDao {
                        @Param("carInfoId") Long carInfoId,
                        @Param("companyId") Long companyId,
                        @Param("partsCode") String partsCode);
-
-
-
-
-
 }

@@ -90,19 +90,23 @@ public interface CarsQueryDao {
      * App端添加毁型车辆
      */
     void updateBreakStatus(@Param("operatorId")Long operatorId,@Param("carInfoId")Long carInfoId,@Param("disId")Long disId);
+    /***
+     * App端-待上传报废证明车辆
+     */
+    List<Map<String, Object>> findProCars(@Param("findMsg") String findMsg,@Param("companyId")Long companyId);
+    /***
+     * App端-已上传报废证明车辆
+     */
+    List<Map<String, Object>> findProCarsComplete(@Param("findMsg") String findMsg,@Param("companyId")Long companyId);
+    /**
+     * App端修改上传报废证明车辆状态
+     */
+    void updateProStatus(@Param("carInfoId")Long carInfoId,@Param("disId")Long disId);
 
     /***
      * App端根据carInfoId查询车辆报废证明数据
      */
     List<Map<String, Object>> findProCarsById(@Param("carInfoId")Long carInfoId,@Param("companyId")Long companyId);
-
-    /***
-     * App端-报废车辆
-     */
-    List<Map<String, Object>> findProCars(@Param("findMsg") String findMsg,@Param("companyId")Long companyId);
-
-
-    List<Map<String, Object>> findProCarsComplete(@Param("findMsg") String findMsg,@Param("companyId")Long companyId);
     /***
      * App端-本部已处理
      */

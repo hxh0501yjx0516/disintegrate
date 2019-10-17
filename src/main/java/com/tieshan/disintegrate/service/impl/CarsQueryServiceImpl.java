@@ -228,6 +228,10 @@ public class CarsQueryServiceImpl implements CarsQueryService {
         //不管点击哪个按钮，先清空数据库
         carPicMapper.batchDeleteProPic(user.getCompany_id(), carPicData.getCarInfoId());
         pubMethod(carPicData, user);
+        if (carPicData.getStatus() == 2) {
+            //修改待上传状态值
+            carsQueryDao.updateProStatus(carPicData.getCarInfoId(), user.getCompany_id());
+        }
 
     }
 
