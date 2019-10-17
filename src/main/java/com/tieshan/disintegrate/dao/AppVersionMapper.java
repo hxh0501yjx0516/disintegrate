@@ -1,5 +1,8 @@
 package com.tieshan.disintegrate.dao;
 
+import com.tieshan.disintegrate.pojo.AppVersion;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,4 +21,12 @@ public interface AppVersionMapper {
      * @return
      */
     Map<String, Object> getAppVersion(int version_number, String app_type);
+
+    AppVersion selectOneByMap(Map<String, Object> map);
+
+    List<AppVersion> selectListByMap(Map<String, Object> map);
+
+    void insertAppVersion(AppVersion AppVersion);
+
+    void updateAppVersion(AppVersion AppVersion);
 }

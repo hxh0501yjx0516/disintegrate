@@ -26,5 +26,12 @@
         and disintegrate_plant_id=#{disId}
 
     </update>
+
+    <update id="updateProStatus">
+        update ts_car_processing
+        set is_upload_pic=2
+        where car_info_id=#{carInfoId}
+        and disintegrate_plant_id=#{disId}
+    </update>
     
 </mapper>

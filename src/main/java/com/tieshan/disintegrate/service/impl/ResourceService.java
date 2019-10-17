@@ -6,8 +6,10 @@ import com.tieshan.disintegrate.constant.ConStants;
 import com.tieshan.disintegrate.dao.ResourceMapper;
 import com.tieshan.disintegrate.pojo.Menu;
 import com.tieshan.disintegrate.pojo.Resource;
+import com.tieshan.disintegrate.pojo.SysUser;
 import com.tieshan.disintegrate.service.IResourceService;
 //import com.tieshan.disintegrate.util.SessionUtil;
+import com.tieshan.disintegrate.token.TokenService;
 import com.tieshan.disintegrate.util.IdWorker;
 import com.tieshan.disintegrate.util.PubMethod;
 import org.apache.shiro.crypto.hash.Hash;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
@@ -31,6 +34,8 @@ import java.util.stream.Collectors;
 public class ResourceService implements IResourceService {
     @Autowired
     private ResourceMapper resourceMapper;
+    @Autowired
+    private TokenService tokenService;
 
     //    @Override
 //    public List<Menu> menus() {
@@ -77,10 +82,10 @@ public class ResourceService implements IResourceService {
     }
 
     @Override
-    public List<Menu> departMenus(String depart_id) {
-
-
-        List<Menu> bodyList = resourceMapper.departTree(depart_id);
+    public List<Menu> departMenus(HttpServletRequest request) {
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        List<Menu> bodyList = resourceMapper.departTree(sysUser.getDepart_id() + "", sysUser.getCompany_code());
         Menu m = bodyList.remove(0);
         List<Menu> rootList = new ArrayList<>();
         rootList.add(m);
@@ -121,10 +126,12 @@ public class ResourceService implements IResourceService {
     }
 
     @Override
-    public int add(Resource resource) {
+    public int add(Resource resource, HttpServletRequest request) {
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken("token");
         IdWorker idWorker = new IdWorker(1, 1, 1);
         resource.setId(idWorker.nextId() + "");
-
+        resource.setCompany_code(sysUser.getCompany_code());
         return resourceMapper.save(resource);
     }
 
@@ -171,6 +178,11 @@ public class ResourceService implements IResourceService {
     @Override
     public List<Map<String, Object>> getNode() {
         return resourceMapper.getNode();
+    }
+
+    @Override
+    public Map<String, Object> getNodeById(String id) {
+        return resourceMapper.getNodeById(id);
     }
 
     // @Override

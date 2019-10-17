@@ -19,6 +19,8 @@ import java.io.Serializable;
 public class PartsInfoVo implements Serializable {
     private static final long serialVersionUID = -1281208248971156925L;
 
+    /**车辆Id*/
+    private Long CarInfoId;
     /**拆车件编号*/
     private String partsCode;
     /**拆车件名称*/

@@ -39,6 +39,7 @@ public class MenuController {
      * @return
      */
     @GetMapping("/departTree")
+
     public RestResult departTree(String depart_id) {
         RestResult restResult = null;
         try {
@@ -61,7 +62,7 @@ public class MenuController {
         try {
             String token = request.getHeader("token");
             SysUser sysUser = tokenService.getToken(token);
-            List<Menu> menuList = resourceService.departMenus(sysUser.getDepart_id() + "");
+            List<Menu> menuList = resourceService.departMenus( request);
             Map<String, Object> resultMap = new HashMap<>();
             resultMap.put("sysUser", sysUser);
             resultMap.put("menuList", menuList);
@@ -86,7 +87,7 @@ public class MenuController {
         SysUser sysUser = tokenService.getToken(token);
         resource.setOperator(sysUser.getLogin_name());
         try {
-            int num = resourceService.add(resource);
+            int num = resourceService.add(resource, request);
             if (num > 0) {
                 restResult = new RestResult("添加成功", null, ResultCode.SUCCESS.code());
             } else {
@@ -148,6 +149,23 @@ public class MenuController {
         RestResult restResult = null;
         try {
             restResult = new RestResult("返回tree", resourceService.getNode(), ResultCode.SUCCESS.code());
+        } catch (Exception e) {
+            log.info("获取资源失败----->" + e);
+            return new RestResult("获取资源失败", null, ResultCode.ERROR.code());
+        }
+        return restResult;
+    }
+
+    /**
+     * 获取资源节点
+     *
+     * @return
+     */
+    @PostMapping(value = "/getNodeById")
+    public RestResult getNodeById(String id) {
+        RestResult restResult = null;
+        try {
+            restResult = new RestResult("获取资源信息", resourceService.getNodeById(id), ResultCode.SUCCESS.code());
         } catch (Exception e) {
             log.info("获取资源失败----->" + e);
             return new RestResult("获取资源失败", null, ResultCode.ERROR.code());

@@ -17,4 +17,201 @@
                 ORDER BY id desc
                 LIMIT 1
     </select>
+
+    <resultMap type="com.tieshan.disintegrate.pojo.AppVersion" id="appVersionMap">
+        <result property="id" column="id"/>  <!--  -->
+        <result property="versionInfo" column="version_info"/>  <!-- 版本号 -->
+        <result property="versionNumber" column="version_number"/>  <!-- 版本编码 -->
+        <result property="versionType" column="version_type"/>  <!-- 是否更新  1:建议更新，2：强制升级 -->
+        <result property="appUrl" column="app_url"/>  <!-- app下载地址 -->
+        <result property="appType" column="app_type"/>  <!-- 1:android;2:ios -->
+        <result property="versionDescribe" column="version_describe"/>  <!-- 这次版本的描述 -->
+        <result property="createTime" column="create_time"/>  <!-- 创建时间 -->
+        <result property="isDelete" column="is_delete"/>  <!-- 是否删除。1.删除，2,正常 -->
+        <result property="operator" column="operator"/>  <!-- 创建人 -->
+    </resultMap>
+
+    <select id="selectOneByMap" resultMap="appVersionMap">
+        SELECT  id, version_info, version_number, version_type, app_url, app_type, version_describe, create_time,
+        is_delete, operator
+        FROM ts_app_version
+        <where>
+            <if test="id!=null">
+                AND id=#{id}  <!--  -->
+            </if>
+            <if test="versionInfo!=null and versionInfo!=''">
+                AND version_info=#{versionInfo}  <!-- 版本号 -->
+            </if>
+            <if test="versionNumber!=null">
+                AND version_number=#{versionNumber}  <!-- 版本编码 -->
+            </if>
+            <if test="versionType!=null and versionType!=''">
+                AND version_type=#{versionType}  <!-- 是否更新  1:建议更新，2：强制升级 -->
+            </if>
+            <if test="appUrl!=null and appUrl!=''">
+                AND app_url=#{appUrl}  <!-- app下载地址 -->
+            </if>
+            <if test="appType!=null and appType!=''">
+                AND app_type=#{appType}  <!-- 1:android;2:ios -->
+            </if>
+            <if test="versionDescribe!=null and versionDescribe!=''">
+                AND version_describe=#{versionDescribe}  <!-- 这次版本的描述 -->
+            </if>
+            <if test="createTime!=null">
+                AND create_time=#{createTime}  <!-- 创建时间 -->
+            </if>
+            <if test="isDelete!=null">
+                AND is_delete=#{isDelete}  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+            <if test="operator!=null and operator!=''">
+                AND operator=#{operator}  <!-- 创建人 -->
+            </if>
+        </where>
+    </select>
+
+    <select id="selectListByMap" resultMap="appVersionMap">
+        SELECT  id, version_info, version_number, version_type, app_url, app_type, version_describe, create_time,
+        is_delete, operator
+        FROM ts_app_version
+        <where>
+            <if test="id!=null">
+                AND id=#{id}  <!--  -->
+            </if>
+            <if test="versionInfo!=null and versionInfo!=''">
+                AND version_info=#{versionInfo}  <!-- 版本号 -->
+            </if>
+            <if test="versionNumber!=null">
+                AND version_number=#{versionNumber}  <!-- 版本编码 -->
+            </if>
+            <if test="versionType!=null and versionType!=''">
+                AND version_type=#{versionType}  <!-- 是否更新  1:建议更新，2：强制升级 -->
+            </if>
+            <if test="appUrl!=null and appUrl!=''">
+                AND app_url=#{appUrl}  <!-- app下载地址 -->
+            </if>
+            <if test="appType!=null and appType!=''">
+                AND app_type=#{appType}  <!-- 1:android;2:ios -->
+            </if>
+            <if test="versionDescribe!=null and versionDescribe!=''">
+                AND version_describe=#{versionDescribe}  <!-- 这次版本的描述 -->
+            </if>
+            <if test="createTime!=null">
+                AND create_time=#{createTime}  <!-- 创建时间 -->
+            </if>
+            <if test="isDelete!=null">
+                AND is_delete=#{isDelete}  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+            <if test="operator!=null and operator!=''">
+                AND operator=#{operator}  <!-- 创建人 -->
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertAppVersion">
+        INSERT INTO ts_app_version(
+        <trim suffixOverrides=",">
+            <if test="id!=null">
+                id,  <!--  -->
+            </if>
+            <if test="versionInfo!=null and versionInfo!=''">
+                version_info,  <!-- 版本号 -->
+            </if>
+            <if test="versionNumber!=null">
+                version_number,  <!-- 版本编码 -->
+            </if>
+            <if test="versionType!=null and versionType!=''">
+                version_type,  <!-- 是否更新  1:建议更新，2：强制升级 -->
+            </if>
+            <if test="appUrl!=null and appUrl!=''">
+                app_url,  <!-- app下载地址 -->
+            </if>
+            <if test="appType!=null and appType!=''">
+                app_type,  <!-- 1:android;2:ios -->
+            </if>
+            <if test="versionDescribe!=null and versionDescribe!=''">
+                version_describe,  <!-- 这次版本的描述 -->
+            </if>
+            <if test="createTime!=null">
+                create_time,  <!-- 创建时间 -->
+            </if>
+            <if test="isDelete!=null">
+                is_delete,  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+            <if test="operator!=null and operator!=''">
+                operator,  <!-- 创建人 -->
+            </if>
+        </trim>
+        )VALUES(
+        <trim suffixOverrides=",">
+            <if test="id!=null">
+                #{id},  <!--  -->
+            </if>
+            <if test="versionInfo!=null and versionInfo!=''">
+                #{versionInfo},  <!-- 版本号 -->
+            </if>
+            <if test="versionNumber!=null">
+                #{versionNumber},  <!-- 版本编码 -->
+            </if>
+            <if test="versionType!=null and versionType!=''">
+                #{versionType},  <!-- 是否更新  1:建议更新，2：强制升级 -->
+            </if>
+            <if test="appUrl!=null and appUrl!=''">
+                #{appUrl},  <!-- app下载地址 -->
+            </if>
+            <if test="appType!=null and appType!=''">
+                #{appType},  <!-- 1:android;2:ios -->
+            </if>
+            <if test="versionDescribe!=null and versionDescribe!=''">
+                #{versionDescribe},  <!-- 这次版本的描述 -->
+            </if>
+            <if test="createTime!=null">
+                #{createTime},  <!-- 创建时间 -->
+            </if>
+            <if test="isDelete!=null">
+                #{isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+            <if test="operator!=null and operator!=''">
+                #{operator},  <!-- 创建人 -->
+            </if>
+        </trim>
+        )
+    </insert>
+
+    <update id="updateAppVersion">
+        UPDATE ts_app_version
+        <trim prefix="set" suffixOverrides=",">
+            <if test="id!=null">
+                id=#{id},  <!--  -->
+            </if>
+            <if test="versionInfo!=null and versionInfo!=''">
+                version_info=#{versionInfo},  <!-- 版本号 -->
+            </if>
+            <if test="versionNumber!=null">
+                version_number=#{versionNumber},  <!-- 版本编码 -->
+            </if>
+            <if test="versionType!=null and versionType!=''">
+                version_type=#{versionType},  <!-- 是否更新  1:建议更新，2：强制升级 -->
+            </if>
+            <if test="appUrl!=null and appUrl!=''">
+                app_url=#{appUrl},  <!-- app下载地址 -->
+            </if>
+            <if test="appType!=null and appType!=''">
+                app_type=#{appType},  <!-- 1:android;2:ios -->
+            </if>
+            <if test="versionDescribe!=null and versionDescribe!=''">
+                version_describe=#{versionDescribe},  <!-- 这次版本的描述 -->
+            </if>
+            <if test="createTime!=null">
+                create_time=#{createTime},  <!-- 创建时间 -->
+            </if>
+            <if test="isDelete!=null">
+                is_delete=#{isDelete},  <!-- 是否删除。1.删除，2,正常 -->
+            </if>
+            <if test="operator!=null and operator!=''">
+                operator=#{operator},  <!-- 创建人 -->
+            </if>
+        </trim>
+        WHERE id=#{id}
+    </update>
+
 </mapper>

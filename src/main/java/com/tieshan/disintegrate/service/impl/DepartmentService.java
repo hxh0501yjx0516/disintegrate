@@ -9,7 +9,9 @@ import com.tieshan.disintegrate.util.PubMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @description: 部门业务类
@@ -58,5 +60,10 @@ public class DepartmentService implements IDepartmentService {
     @Override
     public int delDepart(long id) {
         return departmentMapper.delDepart(id);
+    }
+
+    @Override
+    public Map<String, Object> getDepartById(String id, HttpServletRequest request) {
+        return departmentMapper.getDepartById(id);
     }
 }

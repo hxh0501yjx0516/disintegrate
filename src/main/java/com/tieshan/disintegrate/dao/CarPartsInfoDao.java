@@ -20,6 +20,7 @@ public interface CarPartsInfoDao {
     /** APP - 查询待入库拆车件*/
     @Select({"<script>" +
             "        SELECT\n" +
+            "        \tIFNULL( i.id, '' ) AS carInfoId,\n" +
             "        \tIFNULL( p.parts_code, '' ) AS partsCode,\n" +
             "        \tIFNULL( p.parts_name, '' ) AS partsName,\n" +
             "        \tIFNULL( i.car_no, '' ) AS carNo,\n" +
@@ -34,7 +35,7 @@ public interface CarPartsInfoDao {
             "        \ti.disintegrate_plant_id = #{disintegratePlantId}\n" +
             "and p.parts_status=1" +
             "        \t<if test=\"findMsg != null and findMsg != ''\">\n" +
-            "                AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%','','%')\n" +
+            "                AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%',#{findMsg},'%')\n" +
             "            </if>" +
             "</script>"})
     List<PartsInfoVo> selectPreParts(@Param(value = "disintegratePlantId") Long disintegratePlantId,
@@ -42,6 +43,7 @@ public interface CarPartsInfoDao {
     /** APP - 查询已库拆车件*/
     @Select({"<script>" +
             "        SELECT\n" +
+            "        \tIFNULL( i.id, '' ) AS carInfoId,\n" +
             "        \tIFNULL( p.parts_code, '' ) AS partsCode,\n" +
             "        \tIFNULL( p.parts_name, '' ) AS partsName,\n" +
             "        \tIFNULL( i.car_no, '' ) AS carNo,\n" +
@@ -56,7 +58,7 @@ public interface CarPartsInfoDao {
             "        \ti.disintegrate_plant_id = #{disintegratePlantId}\n" +
             "and p.parts_status=2" +
             "        \t<if test=\"findMsg != null and findMsg != ''\">\n" +
-            "                AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%','','%')\n" +
+            "                AND CONCAT(i.car_code,i.car_no,i.car_name) LIKE CONCAT('%',#{findMsg},'%')\n" +
             "            </if>" +
             "</script>"})
     List<PartsInfoVo> selectIsParts(@Param(value = "disintegratePlantId") Long disintegratePlantId,
@@ -73,9 +75,4 @@ public interface CarPartsInfoDao {
                        @Param("carInfoId") Long carInfoId,
                        @Param("companyId") Long companyId,
                        @Param("partsCode") String partsCode);
-
-
-
-
-
 }
