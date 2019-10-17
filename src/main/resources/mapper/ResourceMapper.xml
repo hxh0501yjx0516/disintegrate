@@ -37,7 +37,6 @@
              IFNULL(r.id,'') as id,
              IFNULL(r.resource_name,'') as resource_name,
              IFNULL(r.resource_url,'') as resource_url,
-             IFNULL(r.resource_url,'') as resource_url,
              IFNULL(r.seq,'') as seq,
              IFNULL(r.pid,'') as pid
             FROM
@@ -54,6 +53,8 @@
             WHERE
                dt.id	= #{depart_id}
                 AND dr.resource_id = r.id
+                and dt.company_code= r.company_code
+                and dt.company_code=#{company_code}
                 )
                 AND r.resource_type = 1
             ORDER BY
@@ -77,7 +78,7 @@
 
                   resource_type = 1
             ORDER BY
-                seq
+                pid
     </select>
     <insert id="save">
                 INSERT INTO resource ( id, resource_name, resource_url,resource_describe, seq, pid,create_time, operator )
