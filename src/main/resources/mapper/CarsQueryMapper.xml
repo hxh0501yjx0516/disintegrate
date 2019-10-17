@@ -163,7 +163,7 @@
     <sql id="queryWhereIsHandle">
         <where>
             pro.is_destructive=2 and ent.dismantle_way!=5
-            ent.disintegrate_plant_id=#{companyId}
+            and ent.disintegrate_plant_id=#{companyId}
             <if test="findMsg!=null and findMsg!=''">
                 and concat(info.car_no,info.car_name,info.car_code)
                 like concat("%",#{findMsg},"%")
