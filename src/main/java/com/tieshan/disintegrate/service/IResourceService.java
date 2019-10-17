@@ -19,6 +19,7 @@ public interface IResourceService {
 
     /**
      * 查询部门右测的资源
+     *
      * @param depart_id
      * @return
      */
@@ -27,6 +28,7 @@ public interface IResourceService {
 
     /**
      * 查询登录人相关左侧菜单
+     *
      * @param depart_id
      * @return
      */
@@ -56,10 +58,17 @@ public interface IResourceService {
     int updateDR(String department_id, String resource_id);
 
     /**
-     *
      * @return
      */
     List<Map<String, Object>> getNode();
+
+
+    /**
+     * 获取节点
+     *
+     * @return
+     */
+    Map<String, Object> getNodeById(String id);
 
 
 //    /**

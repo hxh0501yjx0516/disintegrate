@@ -16,7 +16,7 @@ import java.util.Map;
  * @modified By:
  */
 public interface ResourceMapper {
-   /* *//**
+    /* *//**
      * 获取资源列表
      *
      * @param id 参数
@@ -73,8 +73,16 @@ public interface ResourceMapper {
 
     /**
      * 获取所有节点
+     *
      * @return
      */
     List<Map<String, Object>> getNode();
+
+    /**
+     * 获取节点
+     *
+     * @return
+     */
+    Map<String, Object> getNodeById(@Param("id") String id);
 
 }

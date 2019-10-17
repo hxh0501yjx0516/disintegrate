@@ -173,6 +173,11 @@ public class ResourceService implements IResourceService {
         return resourceMapper.getNode();
     }
 
+    @Override
+    public Map<String, Object> getNodeById(String id) {
+        return resourceMapper.getNodeById(id);
+    }
+
     // @Override
     private List<Menu> getResourceByDepartId(String department_id) {
         List<Map<String, Object>> mapList = resourceMapper.getDepartment_Resource(department_id);

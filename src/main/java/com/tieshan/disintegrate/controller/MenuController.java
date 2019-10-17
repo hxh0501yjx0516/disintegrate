@@ -154,4 +154,21 @@ public class MenuController {
         }
         return restResult;
     }
+
+    /**
+     * 获取资源节点
+     *
+     * @return
+     */
+    @PostMapping(value = "/getNodeById")
+    public RestResult getNodeById(String id) {
+        RestResult restResult = null;
+        try {
+            restResult = new RestResult("获取资源信息", resourceService.getNodeById(id), ResultCode.SUCCESS.code());
+        } catch (Exception e) {
+            log.info("获取资源失败----->" + e);
+            return new RestResult("获取资源失败", null, ResultCode.ERROR.code());
+        }
+        return restResult;
+    }
 }
