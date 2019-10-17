@@ -3,7 +3,7 @@ package com.tieshan.disintegrate.pojo;
 import lombok.Data;
 
 /**
- * @description:
+ * @description: 通知
  * @author: huxuanhua
  * @date: Created in 2019/10/14 11:30
  * @version: 1.0
@@ -16,6 +16,7 @@ public class Notice {
     private String msg_content;
     private String type;
     private String device_type;
+    private String is_push;
     private String datetime;
     private String operator;
     private String disintegrate_plant_id;

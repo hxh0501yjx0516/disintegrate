@@ -3,6 +3,7 @@ package com.tieshan.disintegrate.service;
 import com.tieshan.disintegrate.pojo.Menu;
 import com.tieshan.disintegrate.pojo.Resource;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -29,17 +30,17 @@ public interface IResourceService {
     /**
      * 查询登录人相关左侧菜单
      *
-     * @param depart_id
+     * @param request
      * @return
      */
-    public List<Menu> departMenus(String depart_id);
+    public List<Menu> departMenus( HttpServletRequest request);
 
     /**
      * 添加资源
      *
      * @param resource
      */
-    public int add(Resource resource);
+    public int add(Resource resource, HttpServletRequest request);
 
 
     /**

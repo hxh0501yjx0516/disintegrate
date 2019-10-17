@@ -81,10 +81,10 @@
                 pid
     </select>
     <insert id="save">
-                INSERT INTO resource ( id, resource_name, resource_url,resource_describe, seq, pid,create_time, operator )
+                INSERT INTO resource ( id, resource_name, resource_url,resource_describe, seq, pid,create_time, operator,company_code )
               VALUES
             (#{resource.id},#{resource.resource_name},#{resource.resource_url},#{resource.resource_describe},#{resource.seq}
-            ,#{resource.pid},now(),#{resource.operator})
+            ,#{resource.pid},now(),#{resource.operator},#{resource.company_code})
     </insert>
     <select id="getDepartment_Resource" resultType="java.util.Map">
 

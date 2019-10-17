@@ -30,7 +30,7 @@ public interface ResourceMapper {
      * @param depart_id 参数
      * @return
      */
-    List<Menu> departTree(@Param("depart_id") String depart_id);
+    List<Menu> departTree(@Param("depart_id") String depart_id, @Param("company_code") String company_code);
 
     /**
      * 获取所有资源

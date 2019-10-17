@@ -39,6 +39,7 @@ public class MenuController {
      * @return
      */
     @GetMapping("/departTree")
+
     public RestResult departTree(String depart_id) {
         RestResult restResult = null;
         try {
@@ -61,7 +62,7 @@ public class MenuController {
         try {
             String token = request.getHeader("token");
             SysUser sysUser = tokenService.getToken(token);
-            List<Menu> menuList = resourceService.departMenus(sysUser.getDepart_id() + "");
+            List<Menu> menuList = resourceService.departMenus( request);
             Map<String, Object> resultMap = new HashMap<>();
             resultMap.put("sysUser", sysUser);
             resultMap.put("menuList", menuList);
@@ -86,7 +87,7 @@ public class MenuController {
         SysUser sysUser = tokenService.getToken(token);
         resource.setOperator(sysUser.getLogin_name());
         try {
-            int num = resourceService.add(resource);
+            int num = resourceService.add(resource, request);
             if (num > 0) {
                 restResult = new RestResult("添加成功", null, ResultCode.SUCCESS.code());
             } else {
