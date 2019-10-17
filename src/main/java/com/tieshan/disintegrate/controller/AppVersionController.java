@@ -1,16 +1,17 @@
 package com.tieshan.disintegrate.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.sun.org.apache.regexp.internal.RE;
+import com.tieshan.disintegrate.annotation.LoginUser;
+import com.tieshan.disintegrate.pojo.AppVersion;
+import com.tieshan.disintegrate.pojo.SysUser;
 import com.tieshan.disintegrate.service.IAppVersionService;
 import com.tieshan.disintegrate.util.PubMethod;
 import com.tieshan.disintegrate.util.RestResult;
 import com.tieshan.disintegrate.util.ResultCode;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -51,5 +52,60 @@ public class AppVersionController {
             log.info("获取app版本异常--------->" + e);
         }
         return restResult;
+    }
+
+    /**
+     * 分页查询多个
+     *  @param params pageNum int    页码
+     *                pageSize int   页面大小
+     *                searchInfo     查询条件
+     * @return
+     */
+    @PostMapping(value = "/list")
+    public RestResult list(@RequestBody Map<String, Object> params) {
+        PageInfo<AppVersion> appVersionPageInfo = appVersionService.queryPage(params);
+        return new RestResult("查询成功", appVersionPageInfo, ResultCode.SUCCESS.code());
+    }
+
+    /**
+     * 查询一个
+     * @param params    id
+     * @return
+     */
+    @PostMapping(value = "/query")
+    public RestResult query(@RequestBody Map<String, Object> params) {
+        AppVersion query = appVersionService.query(params);
+        return new RestResult("查询成功", query, ResultCode.SUCCESS.code());
+    }
+
+    /**
+     * 添加一个
+     * @param   appVersion
+     * @return
+     */
+    @PostMapping(value = "/add")
+    public RestResult add(@RequestBody AppVersion appVersion, @LoginUser SysUser user) {
+        appVersionService.add(appVersion, user);
+        return new RestResult("添加成功", null, ResultCode.SUCCESS.code());
+    }
+    /**
+     * 修改
+     * @param   appVersion
+     * @return
+     */
+    @PostMapping(value = "/update")
+    public RestResult update(@RequestBody AppVersion appVersion) {
+        appVersionService.update(appVersion);
+        return new RestResult("修改成功", null, ResultCode.SUCCESS.code());
+    }
+    /**
+     * 删除
+     * @param   params  id
+     * @return
+     */
+    @PostMapping(value = "/del")
+    public RestResult del(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
+        appVersionService.del(params,user);
+        return new RestResult("删除成功", null, ResultCode.SUCCESS.code());
     }
 }
