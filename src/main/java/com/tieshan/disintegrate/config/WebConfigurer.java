@@ -43,6 +43,8 @@ public class WebConfigurer implements WebMvcConfigurer {
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
         simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
+        simpleModule.addSerializer(Integer.class, ToStringSerializer.instance);
+        simpleModule.addSerializer(Integer.TYPE, ToStringSerializer.instance);
         objectMapper.getSerializerProvider().setNullValueSerializer(
                 new JsonSerializer() {
                     @Override
@@ -53,9 +55,9 @@ public class WebConfigurer implements WebMvcConfigurer {
         );
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         //设置全局的时间转化
-//        SimpleDateFormat smt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        objectMapper.setDateFormat(smt);
-//        objectMapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));//解决时区差8小时问题
+        SimpleDateFormat smt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        objectMapper.setDateFormat(smt);
+        objectMapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));//解决时区差8小时问题
         objectMapper.registerModule(simpleModule);
         jackson2HttpMessageConverter.setObjectMapper(objectMapper);
         return new HttpMessageConverters(new HttpMessageConverter[]{jackson2HttpMessageConverter});

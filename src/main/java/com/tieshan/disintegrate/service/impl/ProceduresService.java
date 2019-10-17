@@ -89,7 +89,6 @@ public class ProceduresService implements IProceduresService {
     @Override
     @Transactional
     public void saveProcedures(ProceduresVo proceduresVo, SysUser user) {
-        log.info("proceduresVo---->>>>"+JSONUtils.toJSONString(proceduresVo));
         Map<String, Object> map = new HashMap<>();
         map.put("disintegratePlantId", user.getCompany_id());
         map.put("carInfoId", proceduresVo.getCarInfoId());
@@ -241,7 +240,7 @@ public class ProceduresService implements IProceduresService {
         } else {
             if (!StringUtils.isEmpty(params.get("queryId"))) {
                 carProcedurelog.setId(Long.valueOf(params.get("queryId").toString()));
-            }else{
+            } else {
                 carProcedurelog.setId(Long.valueOf(params.get("verificationResultId").toString()));
             }
             carProcedureLogMapper.updateCarProcedureLog(carProcedurelog);
@@ -572,6 +571,5 @@ public class ProceduresService implements IProceduresService {
         PageInfo<CarVerifyOrderVo> pageInfo = new PageInfo<>(carVerifyOrderVos);
         return pageInfo;
     }
-
 
 }
