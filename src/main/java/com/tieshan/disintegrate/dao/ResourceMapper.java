@@ -37,7 +37,7 @@ public interface ResourceMapper {
      *
      * @return
      */
-    List<Menu> getAllResource();
+    List<Menu> getAllResource(@Param("company_code") String company_code);
 
     /**
      * 增加资源
@@ -76,7 +76,7 @@ public interface ResourceMapper {
      *
      * @return
      */
-    List<Map<String, Object>> getNode();
+    List<Map<String, Object>> getNode( @Param("company_code") String company_code);
 
     /**
      * 获取节点

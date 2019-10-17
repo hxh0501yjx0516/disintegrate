@@ -53,8 +53,10 @@ public class ResourceService implements IResourceService {
 //        return menuList;
 //    }
     @Override
-    public List<Menu> departTree(String depart_id) {   //调用的方法入口
-        List<Menu> bodyList = getResourceByDepartId(depart_id);
+    public List<Menu> departTree(String depart_id, HttpServletRequest request) {   //调用的方法入口
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        List<Menu> bodyList = getResourceByDepartId(depart_id, sysUser.getCompany_code());
         Menu m = bodyList.remove(0);
         List<Menu> rootList = new ArrayList<>();
         rootList.add(m);
@@ -128,7 +130,7 @@ public class ResourceService implements IResourceService {
     @Override
     public int add(Resource resource, HttpServletRequest request) {
         String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken("token");
+        SysUser sysUser = tokenService.getToken(token);
         IdWorker idWorker = new IdWorker(1, 1, 1);
         resource.setId(idWorker.nextId() + "");
         resource.setCompany_code(sysUser.getCompany_code());
@@ -137,9 +139,10 @@ public class ResourceService implements IResourceService {
 
 
     @Override
-    public List<Menu> getResourceTree() {
-
-        List<Menu> bodyList = resourceMapper.getAllResource();
+    public List<Menu> getResourceTree(HttpServletRequest request) {
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        List<Menu> bodyList = resourceMapper.getAllResource(sysUser.getCompany_code());
 //        List<Menu> list = allResource(resourceList);
         Menu m = bodyList.remove(0);
         List<Menu> rootList = new ArrayList<>();
@@ -176,8 +179,10 @@ public class ResourceService implements IResourceService {
     }
 
     @Override
-    public List<Map<String, Object>> getNode() {
-        return resourceMapper.getNode();
+    public List<Map<String, Object>> getNode(HttpServletRequest request) {
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        return resourceMapper.getNode(sysUser.getCompany_code());
     }
 
     @Override
@@ -186,9 +191,9 @@ public class ResourceService implements IResourceService {
     }
 
     // @Override
-    private List<Menu> getResourceByDepartId(String department_id) {
+    private List<Menu> getResourceByDepartId(String department_id, String company_code) {
         List<Map<String, Object>> mapList = resourceMapper.getDepartment_Resource(department_id);
-        List<Menu> resourceList = resourceMapper.getAllResource();
+        List<Menu> resourceList = resourceMapper.getAllResource(company_code);
 
         if (!PubMethod.isEmpty(mapList)) {
             Map<String, Map<String, Object>> drMap = new HashMap<>();

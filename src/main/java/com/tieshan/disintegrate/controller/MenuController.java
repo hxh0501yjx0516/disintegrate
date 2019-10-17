@@ -40,10 +40,10 @@ public class MenuController {
      */
     @GetMapping("/departTree")
 
-    public RestResult departTree(String depart_id) {
+    public RestResult departTree(String depart_id, HttpServletRequest request) {
         RestResult restResult = null;
         try {
-            restResult = new RestResult("获取部门权限", resourceService.departTree(depart_id), ResultCode.SUCCESS.code());
+            restResult = new RestResult("获取部门权限", resourceService.departTree(depart_id, request), ResultCode.SUCCESS.code());
         } catch (Exception e) {
             log.info("获取部门权限失败------->", e);
             return new RestResult("获取部门权限失败", null, ResultCode.ERROR.code());
@@ -62,7 +62,7 @@ public class MenuController {
         try {
             String token = request.getHeader("token");
             SysUser sysUser = tokenService.getToken(token);
-            List<Menu> menuList = resourceService.departMenus( request);
+            List<Menu> menuList = resourceService.departMenus(request);
             Map<String, Object> resultMap = new HashMap<>();
             resultMap.put("sysUser", sysUser);
             resultMap.put("menuList", menuList);
@@ -106,10 +106,10 @@ public class MenuController {
      * @return
      */
     @GetMapping(value = "/allTree")
-    public RestResult resourceTree() {
+    public RestResult resourceTree(HttpServletRequest request) {
         RestResult restResult = null;
         try {
-            restResult = new RestResult("返回tree", resourceService.getResourceTree(), ResultCode.SUCCESS.code());
+            restResult = new RestResult("返回tree", resourceService.getResourceTree(request), ResultCode.SUCCESS.code());
         } catch (Exception e) {
             log.info("获取资源失败----->" + e);
             return new RestResult("获取资源失败", null, ResultCode.ERROR.code());
@@ -145,10 +145,10 @@ public class MenuController {
      * @return
      */
     @GetMapping(value = "/getNode")
-    public RestResult getNode() {
+    public RestResult getNode(HttpServletRequest request) {
         RestResult restResult = null;
         try {
-            restResult = new RestResult("返回tree", resourceService.getNode(), ResultCode.SUCCESS.code());
+            restResult = new RestResult("返回tree", resourceService.getNode(request), ResultCode.SUCCESS.code());
         } catch (Exception e) {
             log.info("获取资源失败----->" + e);
             return new RestResult("获取资源失败", null, ResultCode.ERROR.code());
