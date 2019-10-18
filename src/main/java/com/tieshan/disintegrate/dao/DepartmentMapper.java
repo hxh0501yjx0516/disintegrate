@@ -24,4 +24,7 @@ public interface DepartmentMapper {
     int updateDepart(@Param("depart") Department department);
 
     int delDepart(@Param("id") long id);
+
+    Map<String, Object> getDepartById(@Param("id") String id);
+
 }

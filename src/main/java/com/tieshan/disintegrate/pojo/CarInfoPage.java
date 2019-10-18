@@ -2,6 +2,7 @@ package com.tieshan.disintegrate.pojo;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +14,7 @@ import java.util.Map;
  * @modified By:
  */
 @Data
-public class CarInfoPage {
+public class CarInfoPage implements Serializable {
     // 车辆id
     private Long id;
     // 车辆编号

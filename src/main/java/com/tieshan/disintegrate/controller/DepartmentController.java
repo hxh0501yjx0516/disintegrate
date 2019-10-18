@@ -17,10 +17,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 
 /**
- * @description: 测试控制类, 分页
+ * @description: 部门控制类
  * @author: huxuanhua
  * @date: Created in 2019/8/28 18:07
  * @version: 1.0
@@ -191,6 +192,33 @@ public class DepartmentController {
         } catch (Exception e) {
             log.info("修改部门失败------->", e);
             return new RestResult("删除失败", null, ResultCode.ERROR.code());
+        }
+
+        return restResult;
+
+
+    }
+
+    /**
+     * 获取部门信息
+     *
+     * @param id
+     * @return
+     */
+    @PostMapping(value = "/getDepartById")
+    public RestResult getDepartById(String id, HttpServletRequest request) {
+        RestResult restResult = null;
+        try {
+            Map<String, Object> resultMap = departmentService.getDepartById(id, request);
+            if (!PubMethod.isEmpty(resultMap)) {
+                restResult = new RestResult("获取部门信息", resultMap, ResultCode.SUCCESS.code());
+            } else {
+                restResult = new RestResult("获取部门信息失败", null, ResultCode.ERROR.code());
+
+            }
+        } catch (Exception e) {
+            log.info("获取部门信息失败------->", e);
+            return new RestResult("获取部门信息失败", null, ResultCode.ERROR.code());
         }
 
         return restResult;

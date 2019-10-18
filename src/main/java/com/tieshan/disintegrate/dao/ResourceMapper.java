@@ -16,7 +16,7 @@ import java.util.Map;
  * @modified By:
  */
 public interface ResourceMapper {
-   /* *//**
+    /* *//**
      * 获取资源列表
      *
      * @param id 参数
@@ -30,14 +30,14 @@ public interface ResourceMapper {
      * @param depart_id 参数
      * @return
      */
-    List<Menu> departTree(@Param("depart_id") String depart_id);
+    List<Menu> departTree(@Param("depart_id") String depart_id, @Param("company_code") String company_code);
 
     /**
      * 获取所有资源
      *
      * @return
      */
-    List<Menu> getAllResource();
+    List<Menu> getAllResource(@Param("company_code") String company_code);
 
     /**
      * 增加资源
@@ -73,8 +73,24 @@ public interface ResourceMapper {
 
     /**
      * 获取所有节点
+     *
      * @return
      */
-    List<Map<String, Object>> getNode();
+    List<Map<String, Object>> getNode(@Param("company_code") String company_code);
+
+    /**
+     * 获取节点
+     *
+     * @return
+     */
+    Map<String, Object> getNodeById(@Param("id") String id);
+
+    /**
+     * 修改节点
+     *
+     * @param resource
+     * @return
+     */
+    int updateRS(@Param("resource") Resource resource);
 
 }

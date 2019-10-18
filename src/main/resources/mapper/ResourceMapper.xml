@@ -37,7 +37,6 @@
              IFNULL(r.id,'') as id,
              IFNULL(r.resource_name,'') as resource_name,
              IFNULL(r.resource_url,'') as resource_url,
-             IFNULL(r.resource_url,'') as resource_url,
              IFNULL(r.seq,'') as seq,
              IFNULL(r.pid,'') as pid
             FROM
@@ -54,6 +53,8 @@
             WHERE
                dt.id	= #{depart_id}
                 AND dr.resource_id = r.id
+                and dt.company_code= r.company_code
+                and dt.company_code=#{company_code}
                 )
                 AND r.resource_type = 1
             ORDER BY
@@ -76,14 +77,15 @@
             WHERE
 
                   resource_type = 1
+                  and company_code=#{company_code}
             ORDER BY
                 seq
     </select>
     <insert id="save">
-                INSERT INTO resource ( id, resource_name, resource_url,resource_describe, seq, pid,create_time, operator )
+                INSERT INTO resource ( id, resource_name, resource_url,resource_describe, seq, pid,create_time, operator,company_code )
               VALUES
             (#{resource.id},#{resource.resource_name},#{resource.resource_url},#{resource.resource_describe},#{resource.seq}
-            ,#{resource.pid},now(),#{resource.operator})
+            ,#{resource.pid},now(),#{resource.operator},#{resource.company_code})
     </insert>
     <select id="getDepartment_Resource" resultType="java.util.Map">
 
@@ -106,6 +108,32 @@
                 resource
 
     </select>
+    <select id="getNodeById" resultType="java.util.Map">
+
+            SELECT
+                IFNULL ( id, '' ) AS id,
+                IFNULL ( resource_name, '' ) AS resource_name,
+                IFNULL ( pid, '' ) AS pid,
+                IFNULL ( resource_url, '' ) AS resource_url,
+                IFNULL(seq,'') as seq
+
+            FROM
+                resource
+                where  id =#{id}
+
+    </select>
+    <update id="updateRS">
+                update  resource
+                 set
+                 resource_name =  #{resource.resource_name},
+                 resource_url =   #{resource.resource_url},
+                 pid=#{resource.pid},
+                 resource_url=#{resource.resource_url},
+                 seq =#{resource.seq}
+                where
+                 id = #{resource.id}
+
+    </update>
     <delete id="delDepartment_Resource">
          delete  from department_resource where  department_id=#{department_id}
     </delete>

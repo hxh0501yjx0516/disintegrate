@@ -2,6 +2,7 @@ package com.tieshan.disintegrate.pojo;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Date;
  * @modified By:
  */
 @Data
-public class Dictionary {
+public class Dictionary implements Serializable {
     private Long id;
     // 解体厂的id
     private Long disintegratePlantId;

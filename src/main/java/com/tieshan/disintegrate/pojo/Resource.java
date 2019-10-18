@@ -38,5 +38,6 @@ public class Resource implements java.io.Serializable {
     private String department_id;
     private String department_name;
     private String isHaving;
+    private String company_code;
 
 }

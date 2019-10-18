@@ -3,6 +3,7 @@ package com.tieshan.disintegrate.service;
 import com.tieshan.disintegrate.pojo.Menu;
 import com.tieshan.disintegrate.pojo.Resource;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -19,25 +20,27 @@ public interface IResourceService {
 
     /**
      * 查询部门右测的资源
+     *
      * @param depart_id
      * @return
      */
-    public List<Menu> departTree(String depart_id);
+    public List<Menu> departTree(String depart_id, HttpServletRequest request);
 
 
     /**
      * 查询登录人相关左侧菜单
-     * @param depart_id
+     *
+     * @param request
      * @return
      */
-    public List<Menu> departMenus(String depart_id);
+    public List<Menu> departMenus(HttpServletRequest request);
 
     /**
      * 添加资源
      *
      * @param resource
      */
-    public int add(Resource resource);
+    public int add(Resource resource, HttpServletRequest request);
 
 
     /**
@@ -45,7 +48,7 @@ public interface IResourceService {
      *
      * @return
      */
-    List<Menu> getResourceTree();
+    List<Menu> getResourceTree(HttpServletRequest request);
 
     /**
      * 更新部门和资源的关系
@@ -56,10 +59,25 @@ public interface IResourceService {
     int updateDR(String department_id, String resource_id);
 
     /**
+     * @return
+     */
+    List<Map<String, Object>> getNode(HttpServletRequest request);
+
+
+    /**
+     * 获取节点
      *
      * @return
      */
-    List<Map<String, Object>> getNode();
+    Map<String, Object> getNodeById(String id);
+
+    /**
+     * 修改资源
+     *
+     * @param resource
+     * @return
+     */
+    int updateRS(Resource resource);
 
 
 //    /**

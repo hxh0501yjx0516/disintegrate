@@ -2,7 +2,9 @@ package com.tieshan.disintegrate.service;
 
 import com.tieshan.disintegrate.pojo.Department;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @description:
@@ -60,4 +62,12 @@ public interface IDepartmentService {
      * @return
      */
     int delDepart(long id);
+
+    /**
+     * 获取部门
+     *
+     * @param id
+     * @return
+     */
+    Map<String, Object> getDepartById(String id, HttpServletRequest request);
 }

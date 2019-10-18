@@ -3,6 +3,7 @@ package com.tieshan.disintegrate.pojo;
 import lombok.Data;
 import org.hibernate.exception.DataException;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Date;
  * @modified By:
  */
 @Data
-public class CarEnter {
+public class CarEnter implements Serializable {
     // 车辆入场主键id
     private Long id;
     // 解体厂id
