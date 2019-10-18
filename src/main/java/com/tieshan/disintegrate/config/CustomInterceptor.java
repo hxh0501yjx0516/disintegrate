@@ -107,8 +107,6 @@ public class CustomInterceptor implements HandlerInterceptor {
                 sysLog.setMethod_url(request.getRequestURL().toString());
                 sysLog.setIp_addr(getIpAddr(request));
                 String yearMonth = getMonth(0);
-                System.err.println("判断参数------------>>>>>>>>>>>>>" + yearMonth);
-                System.err.println("请求------------>>>>>>>>>>>>>" + request.getRequestURL().toString());
                 int num = sysUserMapper.existTable(yearMonth);
                 if (num < 1) {
                     sysUserMapper.creatSyslog(yearMonth);//创建表

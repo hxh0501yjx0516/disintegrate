@@ -136,7 +136,7 @@ public class CarsQueryController {
         List<CaiPrePicVo> list = carsQueryService.doFindCars(carInfoId, user.getCompany_id());
         RestResult restResult = null;
         if (null == list || list.size() == 0) {
-            restResult = new RestResult("未查询到车辆预处理数据", list, ResultCode.SUCCESS.code());
+            restResult = new RestResult("未查询到车辆预处理数据", new Object(), ResultCode.SUCCESS.code());
         }
         restResult = new RestResult("查询车辆预处理数据成功", list, ResultCode.SUCCESS.code());
         return restResult;
@@ -204,7 +204,7 @@ public class CarsQueryController {
             }
         } catch (Exception e) {
             log.info("插入图片失败", e);
-            return new RestResult("插入图片失败", null, ResultCode.ERROR.code());
+            return new RestResult("插入图片失败", new Object(), ResultCode.ERROR.code());
         }
         return restResult;
 
@@ -239,7 +239,7 @@ public class CarsQueryController {
         pageInfo = new PageInfo<>(mapList);
         RestResult restResult = null;
         if (null == mapList || mapList.size() == 0) {
-            restResult = new RestResult("未查询到预拓号车辆信息", mapList, ResultCode.SUCCESS.code());
+            restResult = new RestResult("未查询到预拓号车辆信息", new Object(), ResultCode.SUCCESS.code());
         } else {
             restResult = new RestResult("查询预拓号车辆信息成功", pageInfo, ResultCode.SUCCESS.code());
         }
@@ -272,7 +272,7 @@ public class CarsQueryController {
         List<Map<String, Object>> list = carsQueryService.findCpTuoPic(carInfoId, user.getCompany_id());
         RestResult restResult = null;
         if (null == list || list.size() == 0) {
-            restResult = new RestResult("未查询到车辆拓号数据", list, ResultCode.SUCCESS.code());
+            restResult = new RestResult("未查询到车辆拓号数据", new Object(), ResultCode.SUCCESS.code());
         } else {
             restResult = new RestResult("查询车辆拓号数据成功", list, ResultCode.SUCCESS.code());
         }
@@ -343,7 +343,7 @@ public class CarsQueryController {
             }
         } catch (Exception e) {
             log.info("插入图片失败", e);
-            return new RestResult("插入图片失败", null, ResultCode.ERROR.code());
+            return new RestResult("插入图片失败", new Object(), ResultCode.ERROR.code());
         }
         return restResult;
     }
@@ -378,7 +378,7 @@ public class CarsQueryController {
         pageInfo = new PageInfo<>(mapList);
         RestResult restResult = null;
         if (null == mapList || mapList.size() == 0) {
-            restResult = new RestResult("未查询到预拆解车辆信息", mapList, ResultCode.SUCCESS.code());
+            restResult = new RestResult("未查询到预拆解车辆信息", new Object(), ResultCode.SUCCESS.code());
         } else {
             restResult = new RestResult("查询预拆解车辆信息成功", pageInfo, ResultCode.SUCCESS.code());
         }
@@ -452,7 +452,7 @@ public class CarsQueryController {
         List<CaiPrePicVo> list = carsQueryService.findPrePicById(carInfoId, user.getCompany_id());
         RestResult restResult = null;
         if (null == list || list.size() == 0) {
-            restResult = new RestResult("未查询到车辆初检信息图片", list, ResultCode.SUCCESS.code());
+            restResult = new RestResult("未查询到车辆初检信息图片", new Object(), ResultCode.SUCCESS.code());
         } else {
             restResult = new RestResult("查询车辆初检信息图片成功", list, ResultCode.SUCCESS.code());
         }
@@ -546,7 +546,7 @@ public class CarsQueryController {
             }
         } catch (Exception e) {
             log.info("插入图片失败", e);
-            return new RestResult("插入图片失败", null, ResultCode.ERROR.code());
+            return new RestResult("插入图片失败", new Object(), ResultCode.ERROR.code());
         }
         return restResult;
     }
@@ -591,7 +591,7 @@ public class CarsQueryController {
 
         } catch (Exception e) {
             log.info("插入图片失败", e);
-            return new RestResult("插入图片失败", null, ResultCode.ERROR.code());
+            return new RestResult("插入图片失败", new Object(), ResultCode.ERROR.code());
         }
         return restResult;
     }
