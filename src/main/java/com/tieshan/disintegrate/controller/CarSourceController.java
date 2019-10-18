@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -59,7 +60,7 @@ public class CarSourceController {
             pageInfo = new PageInfo<>(mapList);
         } catch (Exception e) {
             log.info("查询失败", e);
-            return new RestResult("查询失败", pageInfo, ResultCode.ERROR.code());
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
         }
         return new RestResult("查询成功", pageInfo, ResultCode.SUCCESS.code());
     }
@@ -149,9 +150,9 @@ public class CarSourceController {
             carSourceService.addCarSource(params, request);
         } catch (Exception e) {
             log.info("添加车源失败", e);
-            return new RestResult("添加车源失败", null, ResultCode.ERROR.code());
+            return new RestResult("添加车源失败", "", ResultCode.ERROR.code());
         }
-        return new RestResult("添加车源成功", null, ResultCode.SUCCESS.code());
+        return new RestResult("添加车源成功", "", ResultCode.SUCCESS.code());
     }
 
 //    /**
@@ -203,16 +204,15 @@ public class CarSourceController {
         try {
             int num = carSourceService.selectCarInfoNumByCarNo(carInfo.getCarNo(), request);
             if (num == 1){
-//                restResult = new RestResult("是否保存该车辆信息", "", ResultCode.SUCCESS.code());
                 return new RestResult("该车牌号已存在，不能重复保存", "", ResultCode.ERROR.code());
             }else {
                 carSourceService.addCar(carInfo, request);
             }
         } catch (Exception e) {
             log.info("添加车辆失败", e);
-            return new RestResult("添加失败", null, ResultCode.ERROR.code());
+            return new RestResult("添加失败", "", ResultCode.ERROR.code());
         }
-        return new RestResult("添加成功", null, ResultCode.SUCCESS.code());
+        return new RestResult("添加成功", "", ResultCode.SUCCESS.code());
     }
 
 
@@ -247,7 +247,7 @@ public class CarSourceController {
             carInfo = carSourceService.selectCarInfoById(id, request);
         } catch (Exception e) {
             log.info("查询车辆失败", e);
-            return new RestResult("查询失败", carInfo, ResultCode.ERROR.code());
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
         }
         return new RestResult("查询成功", carInfo, ResultCode.SUCCESS.code());
     }
@@ -450,7 +450,7 @@ public class CarSourceController {
                     if (num1 == 1) {
                         restResult = new RestResult("添加成功", "", ResultCode.SUCCESS.code());
                     } else {
-                        restResult = new RestResult("添加失败", " ", ResultCode.ERROR.code());
+                        restResult = new RestResult("添加失败", "", ResultCode.ERROR.code());
                     }
                 }
             }else {
@@ -458,7 +458,7 @@ public class CarSourceController {
             }
         } catch (Exception e) {
             log.info("添加失败", e);
-            return new RestResult("添加失败", " ", ResultCode.ERROR.code());
+            return new RestResult("添加失败", "", ResultCode.ERROR.code());
         }
         return restResult;
     }
@@ -483,7 +483,7 @@ public class CarSourceController {
             pageInfo = new PageInfo<>(mapList);
         } catch (Exception e) {
             log.info("查询失败", e);
-            return new RestResult("查询失败", null, ResultCode.ERROR.code());
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
         }
         return new RestResult("查询成功", pageInfo, ResultCode.SUCCESS.code());
     }
@@ -521,7 +521,7 @@ public class CarSourceController {
             carSurvey = carSourceService.selectCarSurveyByCarInfoId(id, request);
         } catch (Exception e) {
             log.info("查询失败", e);
-            return new RestResult("查询失败", null, ResultCode.ERROR.code());
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
         }
         return new RestResult("查询成功", carSurvey, ResultCode.SUCCESS.code());
     }
@@ -538,7 +538,7 @@ public class CarSourceController {
             carSourceService.editCarSurvey(carSurvey, request);
         } catch (Exception e) {
             log.info("修改失败", e);
-            return new RestResult("修改失败", null, ResultCode.ERROR.code());
+            return new RestResult("修改失败", "", ResultCode.ERROR.code());
         }
         return new RestResult("修改成功", null, ResultCode.SUCCESS.code());
     }
@@ -583,7 +583,7 @@ public class CarSourceController {
             pageInfo = new PageInfo<>(mapList);
         } catch (Exception e) {
             log.info("查询失败", e);
-            return new RestResult("查询失败", null, ResultCode.ERROR.code());
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
         }
         return new RestResult("查询成功", pageInfo, ResultCode.SUCCESS.code());
     }
@@ -602,7 +602,7 @@ public class CarSourceController {
             list = carSourceService.selectLocationListByPid(id, request);
         } catch (Exception e) {
             log.info("查询失败", e);
-            return new RestResult("查询失败", null, ResultCode.ERROR.code());
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
         }
         return new RestResult("查询成功", list, ResultCode.SUCCESS.code());
     }
@@ -621,7 +621,7 @@ public class CarSourceController {
                 restResult = new RestResult("添加车辆存放位置失败", "", ResultCode.ERROR.code());
             }else{
                 carSourceService.editCarInfoLocation(carInfo);
-                restResult = new RestResult("添加车辆存放位置成功", null, ResultCode.SUCCESS.code());
+                restResult = new RestResult("添加车辆存放位置成功", "", ResultCode.SUCCESS.code());
             }
         } catch (Exception e) {
             log.info("添加车辆存放位置失败", e);
@@ -651,7 +651,7 @@ public class CarSourceController {
             pageInfo = new PageInfo(mapList);
         }catch (Exception e){
             log.info("查询失败", e);
-            return new RestResult("查询失败", pageInfo,ResultCode.ERROR.code());
+            return new RestResult("查询失败", "",ResultCode.ERROR.code());
         }
         return new RestResult("查询成功", pageInfo, ResultCode.SUCCESS.code());
     }
@@ -683,7 +683,7 @@ public class CarSourceController {
 
     /**
      * PC:查询（某个拆解厂）首页每个状态下的车辆数量
-     * APP:查询首页每个状态下的车辆数量   1-车辆入场   2-等待初检   3-等待预处理   4-等待拓号  5-拆解方式  6-存放位置  7-未核档  8-待毁形车辆  9-待拆车辆  10-报废证明   11-核档不通过    12-入库管理
+     * APP:查询首页每个状态下的车辆数量   1-车辆入场   2-等待初检   3-等待预处理   4-等待拓号  5-拆解方式  6-存放位置  7-待核档  8-待毁形车辆  9-待拆车辆  10-报废证明   11-核档不通过    12-入库管理      13-未查询
      * @param request
      * @return
      */
@@ -694,7 +694,7 @@ public class CarSourceController {
             countMapList = carSourceService.selectCarInfoCount(request);
         }catch(Exception e){
             log.info("查询失败", e);
-            return new RestResult("查询失败", countMapList, ResultCode.ERROR.code());
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
         }
         return new RestResult("查询成功", countMapList, ResultCode.SUCCESS.code());
     }
@@ -719,7 +719,7 @@ public class CarSourceController {
             pageInfo = new PageInfo(mapList);
         }catch (Exception e){
             log.info("查询失败", e);
-            return new RestResult("查询失败", pageInfo, ResultCode.ERROR.code());
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
         }
         return new RestResult("查询成功", pageInfo, ResultCode.SUCCESS.code());
     }
@@ -738,7 +738,7 @@ public class CarSourceController {
             carInfoPage = carSourceService.selectCarInfo(request, carCode);
         }catch (Exception e){
             log.info("查询失败", e);
-            return new RestResult("查询失败", carInfoPage, ResultCode.ERROR.code());
+            return new RestResult("查询失败", "", ResultCode.ERROR.code());
         }
         return new RestResult("查询成功", carInfoPage, ResultCode.SUCCESS.code());
     }

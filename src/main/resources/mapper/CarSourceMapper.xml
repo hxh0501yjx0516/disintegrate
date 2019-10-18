@@ -88,9 +88,6 @@
             <if test="phone != null and phone != ''">
                 phone,
             </if>
-            <if test="count != null">
-                count,
-            </if>
             <if test="carLocation != null and carLocation != ''">
                 car_location,
             </if>
@@ -138,9 +135,6 @@
             </if>
             <if test="phone != null and phone != ''">
                 #{phone},
-            </if>
-            <if test="count != null">
-                #{count},
             </if>
             <if test="carLocation != null and carLocation != ''">
                 #{carLocation},
@@ -670,7 +664,7 @@
                 create_time = #{createTime}
             </if>
         </set>
-        WHERE id = #{id};
+        WHERE id = #{id}
     </update>
 
     <delete id="deleteCarInfoById" parameterType="java.lang.Long">
@@ -1454,6 +1448,8 @@
         ( SELECT '11', count( 1 ) AS num FROM ts_car_info i LEFT JOIN ts_car_processing p ON i.id = p.car_info_id WHERE p.is_verify = 3 AND i.disintegrate_plant_id = 1 )
         UNION ALL
         ( SELECT '12', count( 1 ) AS num FROM ts_car_info i LEFT JOIN ts_car_parts p ON i.id = p.car_info_id WHERE p.parts_status = 1 AND i.disintegrate_plant_id = 1 )
+         UNION ALL
+        ( SELECT '13', count( 1 ) AS num FROM ts_car_info i LEFT JOIN ts_car_processing p ON i.id = p.car_info_id WHERE p.is_query = 1 AND p.is_register = 2 AND i.disintegrate_plant_id = 1 )
     </select>
 
     <select id="selectSoftPrintCount" resultType="java.lang.Integer">
