@@ -112,8 +112,8 @@
 
             SELECT
                 IFNULL ( id, '' ) AS id,
-                IFNULL ( resource_name, '' ) AS resource_name
-                IFNULL ( pid, '' ) AS pid
+                IFNULL ( resource_name, '' ) AS resource_name,
+                IFNULL ( pid, '' ) AS pid,
                 IFNULL ( resource_url, '' ) AS resource_url
             FROM
                 resource
