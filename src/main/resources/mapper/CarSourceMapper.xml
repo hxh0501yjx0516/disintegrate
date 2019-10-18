@@ -88,9 +88,6 @@
             <if test="phone != null and phone != ''">
                 phone,
             </if>
-            <if test="count != null">
-                count,
-            </if>
             <if test="carLocation != null and carLocation != ''">
                 car_location,
             </if>
@@ -138,9 +135,6 @@
             </if>
             <if test="phone != null and phone != ''">
                 #{phone},
-            </if>
-            <if test="count != null">
-                #{count},
             </if>
             <if test="carLocation != null and carLocation != ''">
                 #{carLocation},
