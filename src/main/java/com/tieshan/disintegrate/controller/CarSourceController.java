@@ -155,23 +155,6 @@ public class CarSourceController {
         return new RestResult("添加车源成功", "", ResultCode.SUCCESS.code());
     }
 
-//    /**
-//     * APP: 增加车源    前端不用返回业务员id
-//     * @param carSource
-//     * @param request
-//     * @return
-//     */
-//    @PostMapping(value = "addCarSourceApp")
-//    public RestResult addCarSourceApp(@RequestBody CarSource carSource, HttpServletRequest request){
-//        try{
-//            carSourceService.addCarSourceApp(carSource, request);
-//        }catch (Exception e){
-//            log.info("添加车源失败", e);
-//            return new RestResult("添加车源失败", "", ResultCode.ERROR.code());
-//        }
-//        return new RestResult("添加车源成功", "", ResultCode.SUCCESS.code());
-//    }
-
 
     /**
      * 获得所有车辆处理方式和手续获取方式，以map结果放回    7     过

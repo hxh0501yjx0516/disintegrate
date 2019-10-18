@@ -21,6 +21,8 @@ public class CarSource implements Serializable {
 	private Long id;
 	// 解体厂id
 	private Long disintegratePlantId;
+	// 车辆台次
+	private String count;
 	// 联系人
 	private String contacts;
 	// 联系人电话

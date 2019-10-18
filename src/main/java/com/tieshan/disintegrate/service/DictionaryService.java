@@ -11,12 +11,6 @@ import java.util.List;
  */
 public interface DictionaryService {
 
-    /**
-     * 查询所有银行的名称
-     * @return
-     */
-    List<String> findBankNameList();
-
     List<String> selectProvinceCodeList();
 
     List<String> selectProceduresTypeList();

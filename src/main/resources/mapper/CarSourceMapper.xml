@@ -238,7 +238,8 @@
 		FROM
 			ts_dictionary
 		WHERE
-			first_type = #{firstName}
+			first_type = #{first
+			Name}
 	</select>
 
     <insert id="addCar" parameterType="com.tieshan.disintegrate.pojo.CarInfo">
@@ -579,19 +580,35 @@
 
     <select id="selectCarSource" parameterType="java.lang.Long" resultType="com.tieshan.disintegrate.pojo.CarSource">
         SELECT
-            IFNULL(id,'') AS id,
-	        IFNULL(create_time,'') AS createTime,
-	        IFNULL(contacts,'') AS contacts,
-	        IFNULL(phone,'') AS phone,
-            IFNULL(count,'') AS count,
-	        IFNULL(car_location,'') AS carLocation
+        	IFNULL( s.id, '' ) AS id,
+        	IFNULL( s.create_time, '' ) AS createTime,
+        	IFNULL( s.contacts, '' ) AS contacts,
+        	IFNULL( s.phone, '' ) AS phone,
+        	IFNULL( s.car_location, '' ) AS carLocation,
+        	CONCAT(
+        	    (
+                    SELECT
+                    	COUNT( e.id )
+                    FROM
+                    	ts_car_info AS i
+                    	LEFT JOIN ts_car_enter AS e ON i.id = e.car_info_id
+                    WHERE
+                    	i.car_source = #{id}
+                    	AND e.is_approach = 2
+                    	),
+                    	'/',
+                    	COUNT( i.id )
+                ) AS count
         FROM
-	        ts_car_source
+        	ts_car_source AS s
+        	LEFT JOIN ts_car_info AS i ON s.id = i.car_source
         WHERE
-	        id = #{id} AND disintegrate_plant_id = #{disintegratePlantId};
+        	s.id = #{id}
+        	AND s.disintegrate_plant_id = #{disintegratePlantId}
+        	AND i.car_source = #{id}
     </select>
 
-    <select id="selectCarInfoList" parameterType="java.lang.Long" resultType="java.util.Map">
+    <select id="selectCarInfoList" resultType="java.util.Map">
         SELECT
 	        IFNULL( id, '' ) AS id,
 	        IFNULL( car_source, '' ) AS carSource,
@@ -614,7 +631,7 @@
 	        ts_car_info
         WHERE
 	        car_source = #{carSource}
-	        AND disintegrate_plant_id = #{disintegratePlantId};
+	        AND disintegrate_plant_id = #{disintegratePlantId}
     </select>
 
 

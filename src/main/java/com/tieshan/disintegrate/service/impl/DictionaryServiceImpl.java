@@ -47,9 +47,4 @@ public class DictionaryServiceImpl implements DictionaryService {
         return dictionaryMapper.selectProvinceCodeList();
     }
 
-    @Override
-    public List<String> findBankNameList() {
-        return dictionaryMapper.findBankNameList();
-    }
-
 }

@@ -2,6 +2,7 @@ package com.tieshan.disintegrate.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.tieshan.disintegrate.dao.CarSourceMapper;
+import com.tieshan.disintegrate.dao.DictionaryMapper;
 import com.tieshan.disintegrate.dao.SysUserMapper;
 import com.tieshan.disintegrate.pojo.*;
 import com.tieshan.disintegrate.service.DictionaryService;
@@ -9,7 +10,6 @@ import com.tieshan.disintegrate.service.ICarSourceService;
 import com.tieshan.disintegrate.token.TokenService;
 import com.tieshan.disintegrate.util.IdWorker;
 import com.tieshan.disintegrate.util.PubMethod;
-import com.tieshan.disintegrate.vo.CarSalvageVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +41,9 @@ public class CarSourceService implements ICarSourceService {
 
     @Autowired
     private DictionaryService dictionaryService;
+
+    @Autowired
+    private DictionaryMapper dictionaryMapper;
 
     @Autowired
     private TokenService tokenService;
@@ -184,18 +187,7 @@ public class CarSourceService implements ICarSourceService {
      */
     @Override
     public List<Map<String, Object>> selectCarInfoList(Long id, HttpServletRequest request) {
-        List<Map<String, Object>> carInfoList = null;
-        String token = request.getHeader("token");
-        // 判断是pc端还是App端
-        String[] strArr = token.split("-");
-        SysUser sysUser = tokenService.getToken(token);
-//        if (strArr[0].equals("APP")){
-        // 查询所有处于当前状态的车辆id
-//            carInfoList = carSourceMapper.selectCarInfoListByIds(id, sysUser.getCompany_id());
-//        }else{
-        carInfoList = carSourceMapper.selectCarInfoList(id, sysUser.getCompany_id());
-//        }
-        return carInfoList;
+        return carSourceMapper.selectCarInfoList(id, getSysUser(request).getCompany_id());
     }
 
     /**
@@ -232,7 +224,7 @@ public class CarSourceService implements ICarSourceService {
         if (token.split("-")[0].equals("PC")) {
             carSourceList = carSourceMapper.selectCarSourceList(sysUser.getCompany_id(), sourceType, findMsg);
         } else {
-            carSourceList = carSourceMapper.selectCarSourceListApp(sysUser.getCompany_id(), sysUser.getId(), sysUser.getLogin_name(), findMsg);
+            carSourceList = carSourceMapper.selectCarSourceListApp(sysUser.getCompany_id(), sysUser.getId(), findMsg);
         }
         return carSourceList;
     }
@@ -358,7 +350,6 @@ public class CarSourceService implements ICarSourceService {
         carSource.setCreateTime(new Date());
         // 添加车源
         carSourceMapper.insertCarSource(carSource);
-
         // 保存银行的信息
         Bank bank = carSource.getBank();
         // 设置银行的信息
@@ -370,7 +361,6 @@ public class CarSourceService implements ICarSourceService {
         bank.setAccount(params.get("account").toString());
         // 设置银行的账户名称
         bank.setPayee(params.get("payee").toString());
-
         bank.setDisintegratePlantId(sysUser.getCompany_id());
         bank.setOperator(sysUser.getLogin_name());
         bank.setOperatorId(sysUser.getId());
@@ -396,7 +386,7 @@ public class CarSourceService implements ICarSourceService {
      */
     @Override
     public List<String> findBankNameList() {
-        return dictionaryService.findBankNameList();
+        return dictionaryMapper.findBankNameList();
     }
 
 
