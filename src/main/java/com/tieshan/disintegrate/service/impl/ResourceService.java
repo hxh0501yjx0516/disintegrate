@@ -190,6 +190,11 @@ public class ResourceService implements IResourceService {
         return resourceMapper.getNodeById(id);
     }
 
+    @Override
+    public int updateRS(Resource resource) {
+        return resourceMapper.updateRS(resource);
+    }
+
     // @Override
     private List<Menu> getResourceByDepartId(String department_id, String company_code) {
         List<Map<String, Object>> mapList = resourceMapper.getDepartment_Resource(department_id);

@@ -172,4 +172,26 @@ public class MenuController {
         }
         return restResult;
     }
+
+    /**
+     * 编辑资源
+     *
+     * @return
+     */
+    @PostMapping(value = "/updateRS")
+    public RestResult updateRS(@RequestBody Resource resource) {
+        RestResult restResult = null;
+        try {
+            int num = resourceService.updateRS(resource);
+            if (num > 0) {
+                restResult = new RestResult("编辑成功", null, ResultCode.SUCCESS.code());
+            } else {
+                restResult = new RestResult("编辑失败", null, ResultCode.SUCCESS.code());
+            }
+        } catch (Exception e) {
+            log.info("获取资源失败----->" + e);
+            return new RestResult("编辑失败", null, ResultCode.ERROR.code());
+        }
+        return restResult;
+    }
 }

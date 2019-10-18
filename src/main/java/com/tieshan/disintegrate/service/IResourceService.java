@@ -24,7 +24,7 @@ public interface IResourceService {
      * @param depart_id
      * @return
      */
-    public List<Menu> departTree(String depart_id,HttpServletRequest request);
+    public List<Menu> departTree(String depart_id, HttpServletRequest request);
 
 
     /**
@@ -70,6 +70,14 @@ public interface IResourceService {
      * @return
      */
     Map<String, Object> getNodeById(String id);
+
+    /**
+     * 修改资源
+     *
+     * @param resource
+     * @return
+     */
+    int updateRS(Resource resource);
 
 
 //    /**
