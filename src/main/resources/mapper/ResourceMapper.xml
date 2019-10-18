@@ -114,7 +114,9 @@
                 IFNULL ( id, '' ) AS id,
                 IFNULL ( resource_name, '' ) AS resource_name,
                 IFNULL ( pid, '' ) AS pid,
-                IFNULL ( resource_url, '' ) AS resource_url
+                IFNULL ( resource_url, '' ) AS resource_url,
+                IFNULL(seq,'') as seq
+
             FROM
                 resource
                 where  id =#{id}
@@ -126,7 +128,8 @@
                  resource_name =  #{resource.resource_name},
                  resource_url =   #{resource.resource_url},
                  pid=#{resource.pid},
-                 resource_url=#{resource.resource_url}
+                 resource_url=#{resource.resource_url},
+                 seq =#{resource.seq}
                 where
                  id = #{resource.id}
 
