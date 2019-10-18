@@ -26,7 +26,9 @@ public interface CarInfoMapper {
 
     void updateCarInfo(CarInfo CarInfo);
 
-    List<AppCarBaseVo> selectAppList(Map<String, Object> map);
+    List<AppCarVerificationVo> selectAppVerificationList(Map<String, Object> map);
+
+    List<AppCarQueryVo> selectAppQueryList(Map<String, Object> map);
 
     CarCustomerInfoVo selectCarCustomerInfo(Map<String, Object> map);
 

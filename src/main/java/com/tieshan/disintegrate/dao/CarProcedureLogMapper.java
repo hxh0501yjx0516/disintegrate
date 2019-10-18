@@ -2,6 +2,7 @@ package com.tieshan.disintegrate.dao;
 
 import com.tieshan.disintegrate.pojo.CarProcedureLog;
 import com.tieshan.disintegrate.vo.CarCustomerListVo;
+import com.tieshan.disintegrate.vo.CarProcedureQueryLog;
 import com.tieshan.disintegrate.vo.RecordHandleVo;
 import com.tieshan.disintegrate.vo.WebRecordHandleVo;
 import org.apache.ibatis.annotations.Mapper;
@@ -22,6 +23,8 @@ import java.util.Map;
 public interface CarProcedureLogMapper {
 
     CarProcedureLog selectOneByMap(Map<String, Object> map);
+
+    CarProcedureQueryLog selectOneQueryVoByMap(Map<String, Object> map);
 
     List<CarProcedureLog> selectListByMap(Map<String, Object> map);
 

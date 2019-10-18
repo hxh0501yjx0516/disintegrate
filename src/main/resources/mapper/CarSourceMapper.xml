@@ -88,9 +88,6 @@
             <if test="phone != null and phone != ''">
                 phone,
             </if>
-            <if test="count != null">
-                count,
-            </if>
             <if test="carLocation != null and carLocation != ''">
                 car_location,
             </if>
@@ -138,9 +135,6 @@
             </if>
             <if test="phone != null and phone != ''">
                 #{phone},
-            </if>
-            <if test="count != null">
-                #{count},
             </if>
             <if test="carLocation != null and carLocation != ''">
                 #{carLocation},
@@ -194,7 +188,10 @@
             <if test="sourceType != null and sourceType != ''">
                 AND  s.source_type = #{sourceType}
             </if>
-	        <include refid="queryMsg2"></include>
+        <if test="findMsg != null and findMsg != ''">
+            AND concat(s.contacts, s.phone, s.car_location)
+            LIKE concat("%",#{findMsg},"%")
+        </if>
     </select>
 
     <select id="selectCarSourceListApp" resultType="java.util.Map">
@@ -203,17 +200,21 @@
         IFNULL(s.contacts, '') AS contacts,   /*联系人*/
         IFNULL(s.phone,'') AS phone,   /*联系人电话*/
         IFNULL(s.car_location,'') AS carLocation,    /*联系人地址*/
-        IFNULL(s.count,'') AS count,     /*车辆台次*/
         IFNULL(b.bank_name,'') AS bankName,    /*银行名称*/
-        IFNULL(b.account,'') AS account             /*银行账号*/
+        IFNULL(b.account,'') AS account,             /*银行账号*/
+        COUNT(i.id) AS carCount             /*车辆了的数量*/
         FROM
         ts_car_source AS s
         LEFT JOIN ts_bank AS b ON s.bank_id = b.id
+        LEFT JOIN ts_car_info AS i ON s.id = i.car_source
         WHERE
         s.disintegrate_plant_id = #{disintegratePlantId} AND
-        s.create_operator = #{loginName} AND
-        s.create_operator_id = #{userId}
-        <include refid="queryMsg2"></include>
+        s.user_id = #{userId}
+        <if test="findMsg != null and findMsg != ''">
+            AND concat(s.contacts, s.phone, s.car_location)
+            LIKE concat("%",#{findMsg},"%")
+        </if>
+        GROUP BY i.car_source
     </select>
 
     <sql id="queryMsg2">
@@ -986,6 +987,31 @@
         WHERE
         	i.disintegrate_plant_id = #{disintegratePlantId}
         	AND i.id = #{id}
+    </select>
+
+    <select id="selectCarInfoById" resultType="com.tieshan.disintegrate.pojo.CarInfo">
+        SELECT
+        	IFNULL( id, '' ) AS id,
+        	IFNULL( contacts, '' ) AS contacts,
+        	IFNULL( contacts_phone, '' ) AS contactsPhone,
+        	IFNULL( car_no, '' ) AS carNo,
+        	IFNULL( car_name, '' ) AS carName,
+        	IFNULL( processing_type, '' ) AS processingType,
+        	IFNULL( processing_date, '' ) AS processingDate,
+        	IFNULL( procedures_type, '' ) AS proceduresType,
+        	IFNULL( remarks, '' ) AS remarks,
+        	IFNULL( contacts_address, '' ) AS contactsAddress,
+        	IFNULL( driv_license, '' ) AS drivLicense,
+        	IFNULL( regist_license, '' ) AS registLicense,
+        	IFNULL( people_license, '' ) AS peopleLicense,
+        	IFNULL( businese_license, '' ) AS busineseLicense,
+        	IFNULL( break_license, '' ) AS breakLicense,
+        	IFNULL( exception_license, '' ) AS exceptionLicense
+        FROM
+        	ts_car_info
+        WHERE
+        	id = #{id}
+        	AND disintegrate_plant_id = #{disintegratePlantId}
     </select>
 
     <select id="selectCarSurveyByCarInfoId" resultType="com.tieshan.disintegrate.pojo.CarSurvey">

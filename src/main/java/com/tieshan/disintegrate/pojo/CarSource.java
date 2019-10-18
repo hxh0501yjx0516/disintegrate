@@ -25,8 +25,6 @@ public class CarSource implements Serializable {
 	private String contacts;
 	// 联系人电话
 	private String phone;
-	// 车辆台次
-	private Integer count;
 	// 车源位置
 	private String carLocation;
 	// 业务员id

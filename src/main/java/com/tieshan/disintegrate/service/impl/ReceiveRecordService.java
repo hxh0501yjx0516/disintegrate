@@ -61,4 +61,10 @@ public class ReceiveRecordService implements IReceiveRecordService {
         carProcessing.setIsProcedureIssue(2);
         carProcessingMapper.updateCarProcessing(carProcessing);
     }
+
+    @Override
+    public ReceiveRecord query(Map<String, Object> params, SysUser user) {
+        params.put("disintegratePlantId", user.getCompany_id());
+        return receiveRecordMapper.selectOneByMap(params);
+    }
 }

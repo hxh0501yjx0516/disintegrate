@@ -53,22 +53,13 @@ public class NoticeService implements INoticeService {
     }
 
     @Override
-    @Transactional
-    public int insertNotice(Notice notice, HttpServletRequest request) {
-        String token = request.getHeader("token");
-        SysUser sysUser = tokenService.getToken(token);
-        IdWorker idWorker = new IdWorker(1, 1, 1);
-        notice.setOperator(sysUser.getLogin_name());
-        notice.setId(idWorker.nextId());
-        notice.setDatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-        notice.setDisintegrate_plant_id(sysUser.getCompany_id() + "");
-        int num = noticeMapper.insertNotice(notice);
+    public int push(String id, HttpServletRequest request) {
+        int num = noticeMapper.push(id);
         int resultNum = 0;
         if (num > 0) {
-
+            Notice notice = noticeMapper.pushNotice(id);
             Map<String, String> pushMap = object2Map(notice);
-            pushMap.remove("operator");
-            pushMap.remove("disintegrate_plant_id");
+            pushMap.remove("is_push");
             try {
                 if ("1".equals(pushMap.get("device_type"))) {
                     resultNum = JPushUtil.buildPushAndroid(pushMap);
@@ -93,7 +84,47 @@ public class NoticeService implements INoticeService {
     }
 
     @Override
-    public List<Map<String, Object>> selNotice(String type, String device_type, HttpServletRequest request,int page, int pageSize) {
+    @Transactional
+    public int insertNotice(Notice notice, HttpServletRequest request) {
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        IdWorker idWorker = new IdWorker(1, 1, 1);
+        notice.setOperator(sysUser.getLogin_name());
+        notice.setId(idWorker.nextId());
+        notice.setDatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        notice.setDisintegrate_plant_id(sysUser.getCompany_id() + "");
+        int num = noticeMapper.insertNotice(notice);
+//        int resultNum = 0;
+//        if (num > 0) {
+//
+//            Map<String, String> pushMap = object2Map(notice);
+//            pushMap.remove("operator");
+//            pushMap.remove("disintegrate_plant_id");
+//            try {
+//                if ("1".equals(pushMap.get("device_type"))) {
+//                    resultNum = JPushUtil.buildPushAndroid(pushMap);
+//
+//                } else if ("2".equals(pushMap.get("device_type"))) {
+//                    resultNum = JPushUtil.buildPushIOS(pushMap);
+//                } else {
+//                    pushMap.put("device_type", "1");
+//                    resultNum = JPushUtil.buildPushAndroid(pushMap);
+//                    pushMap.put("device_type", "2");
+//                    resultNum = JPushUtil.buildPushIOS(pushMap);
+//                }
+//
+//
+//            } catch (APIConnectionException e) {
+//                e.printStackTrace();
+//            } catch (APIRequestException e) {
+//                e.printStackTrace();
+//            }
+//        }
+        return num;
+    }
+
+    @Override
+    public List<Map<String, Object>> selNotice(String type, String device_type, HttpServletRequest request, int page, int pageSize) {
         String token = request.getHeader("token");
         SysUser sysUser = tokenService.getToken(token);
         PageHelper.startPage(page, pageSize);
@@ -106,6 +137,32 @@ public class NoticeService implements INoticeService {
     public Map<String, Object> selNoticeById(String id) {
         return noticeMapper.selNoticeById(id);
     }
+
+    @Override
+    public List<Map<String, Object>> selNoticePC(HttpServletRequest request, int page, int pageSize) {
+        String token = request.getHeader("token");
+        SysUser sysUser = tokenService.getToken(token);
+        PageHelper.startPage(page, pageSize);
+        PageHelper.orderBy("datetime desc");
+        List<Map<String, Object>> resultList = noticeMapper.selNoticePC(sysUser.getCompany_id() + "");
+        return resultList;
+    }
+
+    @Override
+    public Map<String, Object> selNoticeByIdPC(String id) {
+        return noticeMapper.selNoticeByIdPC(id);
+    }
+
+    @Override
+    public int delNoticeById(String id) {
+        return noticeMapper.delNoticeById(id);
+    }
+
+    @Override
+    public int upNotieById(Notice notice) {
+        return noticeMapper.upNotieById(notice);
+    }
+
 
     /**
      * 实体对象转成Map

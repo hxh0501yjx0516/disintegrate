@@ -14,7 +14,7 @@ import java.util.Date;
  * @version: 1.0.0
  */
 @Data
-public class AppCarBaseVo implements Serializable {
+public class AppCarVerificationVo implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
      * 车辆id

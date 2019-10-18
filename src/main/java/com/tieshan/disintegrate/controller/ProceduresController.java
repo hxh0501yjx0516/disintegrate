@@ -2,6 +2,7 @@ package com.tieshan.disintegrate.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.tieshan.disintegrate.annotation.LoginUser;
+import com.tieshan.disintegrate.pojo.ReceiveRecord;
 import com.tieshan.disintegrate.pojo.SysUser;
 import com.tieshan.disintegrate.service.IProceduresService;
 import com.tieshan.disintegrate.service.IReceiveRecordService;
@@ -69,7 +70,7 @@ public class ProceduresController {
     }
 
     /**
-     * 档案查询结果
+     * 保存手续查询结果
      * @param params carProcessingId    手续id
      *               queryResultId      查询结果id
      *               state              状态 1:未完成(暂存);2完成;3:不通过;
@@ -81,11 +82,11 @@ public class ProceduresController {
     @PostMapping(value = "/saveQueryResult")
     public RestResult saveQueryResult(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         proceduresService.recordQueryResult(params, user);
-        return new RestResult("保存成功", null, ResultCode.SUCCESS.code());
+        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
     }
 
     /**
-     * 档案核验结果
+     * 保存档案核验结果
      * @param params carProcessingId        手续id
      *               verificationResultId   档案核验结果id
      *               state                  状态 1:未完成(暂存);2完成;3:不通过;
@@ -97,7 +98,7 @@ public class ProceduresController {
     @PostMapping(value = "/saveVerificationResult")
     public RestResult saveVerificationResult(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         proceduresService.recordVerificationResult(params, user);
-        return new RestResult("保存成功", null, ResultCode.SUCCESS.code());
+        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
     }
 
     /**
@@ -113,7 +114,7 @@ public class ProceduresController {
     @PostMapping(value = "/saveQueryCustomerResult")
     public RestResult saveQueryCustomerResult(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         proceduresService.recordQueryCustomerResult(params, user);
-        return new RestResult("保存成功", null, ResultCode.SUCCESS.code());
+        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
     }
     /**
      * 保存档案核验客服处理结果
@@ -128,7 +129,7 @@ public class ProceduresController {
     @PostMapping(value = "/saveVerificationCustomerResult")
     public RestResult saveVerificationCustomerResult(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         proceduresService.recordVerificationCustomerResult(params, user);
-        return new RestResult("保存成功", null, ResultCode.SUCCESS.code());
+        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
     }
 
     /**
@@ -140,7 +141,7 @@ public class ProceduresController {
     @PostMapping(value = "/savePrintVerificationRecord")
     public RestResult savePrintVerificationRecord(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         proceduresService.savePrintVerificationRecord(params, user);
-        return new RestResult("保存成功", null, ResultCode.SUCCESS.code());
+        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
     }
 
     /**
@@ -152,7 +153,7 @@ public class ProceduresController {
     @PostMapping(value = "/saveUploadShangWeiDataRecord")
     public RestResult saveUploadShangWeiDataRecord(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         proceduresService.saveUploadShangWeiDataRecord(params, user);
-        return new RestResult("保存成功", null, ResultCode.SUCCESS.code());
+        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
     }
 
     /**
@@ -164,7 +165,7 @@ public class ProceduresController {
     @PostMapping(value = "/savePrintRecycleRecord")
     public RestResult savePrintRecycleRecord(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         proceduresService.savePrintRecycleRecord(params, user);
-        return new RestResult("保存成功", null, ResultCode.SUCCESS.code());
+        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
     }
     /**
      * 保存注销时间
@@ -176,7 +177,7 @@ public class ProceduresController {
     @PostMapping(value = "/saveLogoutTimeRecord")
     public RestResult saveLogoutTimeRecord(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         proceduresService.saveLogoutTimeRecord(params, user);
-        return new RestResult("保存成功", null, ResultCode.SUCCESS.code());
+        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
     }
     /**
      * 保存商委注销时间状态
@@ -188,7 +189,7 @@ public class ProceduresController {
     @PostMapping(value = "/saveAppointLogoutTimeRecord")
     public RestResult saveAppointLogoutTimeRecord(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         proceduresService.saveAppointLogoutTimeRecord(params, user);
-        return new RestResult("保存成功", null, ResultCode.SUCCESS.code());
+        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
     }
 
     /**
@@ -206,6 +207,20 @@ public class ProceduresController {
     }
 
     /**
+     * app-查询手续查询列表
+     * @param params pageNum int    页码
+     *               pageSize int   页面大小
+     *               isVerify int   1:未核档；2：已核档；3:核档不通过
+     * @param user
+     * @return
+     */
+    @PostMapping(value = "/queryAppQueryList")
+    public RestResult queryAppQueryList(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
+        PageInfo<AppCarQueryVo> appCarQueryVoPageInfo = proceduresService.queryAppQueryList(params, user);
+        return new RestResult("查询成功", appCarQueryVoPageInfo, ResultCode.SUCCESS.code());
+    }
+
+    /**
      * app-查询核档记录列表
      * @param params pageNum int    页码
      *               pageSize int   页面大小
@@ -215,7 +230,7 @@ public class ProceduresController {
      */
     @PostMapping(value = "/queryAppVerificationList")
     public RestResult queryAppVerificationList(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
-        PageInfo<AppCarBaseVo> carInfoPageInfo = proceduresService.queryAppVerificationList(params, user);
+        PageInfo<AppCarVerificationVo> carInfoPageInfo = proceduresService.queryAppVerificationList(params, user);
         return new RestResult("查询成功", carInfoPageInfo, ResultCode.SUCCESS.code());
     }
 
@@ -280,7 +295,7 @@ public class ProceduresController {
     @PostMapping(value = "/provideProcedureIssue")
     public RestResult provideProcedureIssue(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         receiveRecordService.save(params, user);
-        return new RestResult("保存成功", null, ResultCode.SUCCESS.code());
+        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
     }
     /**
      * web-查询手续管理列表
@@ -294,6 +309,17 @@ public class ProceduresController {
     public RestResult queryProcedureVoList(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         PageInfo<CarProcedureListVo> carProcedureListVoPageInfo = proceduresService.queryProcedureVoList(params, user);
         return new RestResult("查询成功", carProcedureListVoPageInfo, ResultCode.SUCCESS.code());
+    }
+
+    /**
+     * 查询单条手续发放记录
+     * @param params    carInfoId       车辆id
+     * @return
+     */
+    @PostMapping(value = "/queryProcedureIssueVo")
+    public RestResult queryProcedureIssueVo(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
+        ReceiveRecord query = receiveRecordService.query(params, user);
+        return new RestResult("查询成功", query, ResultCode.SUCCESS.code());
     }
 
     /**

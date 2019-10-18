@@ -15,11 +15,25 @@
     </select>
     <insert id="insertNotice">
         insert into
-            ts_notice(id,msg_title,msg_content,type,device_type,datetime,operator,disintegrate_plant_id)
+            ts_notice(id,msg_title,msg_content,type,device_type,datetime,operator,disintegrate_plant_id,is_push)
         values
          (#{notice.id},#{notice.msg_title},#{notice.msg_content},#{notice.type}
-         ,#{notice.device_type},#{notice.datetime},#{notice.operator},#{notice.disintegrate_plant_id})
+         ,#{notice.device_type},#{notice.datetime},#{notice.operator},#{notice.disintegrate_plant_id},#{notice.is_push})
     </insert>
+    <select id="selNoticePC" resultType="java.util.Map">
+            SELECT
+                IFNULL( id, '' ) AS id,
+                IFNULL( msg_title, '' ) AS msg_title,
+                IFNULL(msg_content, '' ) AS msg_content,
+                IFNULL( type, '' ) AS type,
+                IFNULL( datetime, '' ) AS datetime,
+                IFNULL( is_push, '' ) AS is_push,
+                IFNULL( device_type, '' ) AS device_type
+            FROM
+                ts_notice
+                WHERE
+                 disintegrate_plant_id=#{disintegrate_plant_id}
+    </select>
     <select id="selNotice" resultType="java.util.Map">
             SELECT
                 IFNULL( id, '' ) AS id,
@@ -32,6 +46,7 @@
                 WHERE type=#{type}
                   and device_type=#{device_type}
                     and disintegrate_plant_id=#{disintegrate_plant_id}
+                    and is_push=2
     </select>
     <select id="selNoticeById" resultType="java.util.Map">
 
@@ -46,4 +61,46 @@
                 WHERE id=#{id}
 
     </select>
+    <select id="selNoticeByIdPC" resultType="java.util.Map">
+        SELECT
+                IFNULL( id, '' ) AS id,
+                IFNULL(msg_title, '' ) AS msg_title,
+                IFNULL(msg_content, '' ) AS msg_content,
+                IFNULL( type, '' ) AS type,
+                IFNULL( datetime, '' ) AS datetime,
+                IFNULL( is_push, '' ) AS is_push,
+                IFNULL( device_type, '' ) AS device_type
+            FROM
+                ts_notice
+                WHERE id=#{id}
+
+    </select>
+    <select id="pushNotice" resultType="com.tieshan.disintegrate.pojo.Notice">
+        SELECT
+                IFNULL( id, '' ) AS id,
+                IFNULL(msg_title, '' ) AS msg_title,
+                IFNULL(msg_content, '' ) AS msg_content,
+                IFNULL( type, '' ) AS type,
+                IFNULL( datetime, '' ) AS datetime,
+                IFNULL( is_push, '' ) AS is_push
+                IFNULL( device_type, '' ) AS device_type
+            FROM
+                ts_notice
+                WHERE id=#{id}
+
+    </select>
+    <update id="delNoticeById">
+       UPDATE ts_notice set is_delete=2 WHERE id=#{id}
+    </update>
+    <update id="upNotieById">
+            UPDATE ts_notice
+            SET
+            device_type = #{notice.device_type},
+            msg_title=#{notice.msg_title},
+            msg_content=#{notice.msg_content}
+            WHERE id=#{id}
+    </update>
+    <update id="push">
+       UPDATE ts_notice set is_push=2 WHERE id=#{id}
+    </update>
 </mapper>

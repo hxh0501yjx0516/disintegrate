@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Date;
  * @modified By:
  */
 @Data
-public class CarSalvage {
+public class CarSalvage implements Serializable {
     // id
     @Id
     private Long id;
