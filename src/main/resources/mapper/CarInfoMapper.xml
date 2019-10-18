@@ -94,7 +94,7 @@
         <collection property="queryRecord" column="car_info_id"
                     select="com.tieshan.disintegrate.dao.CarProcedureLogMapper.selectWebProcedureVo"/>
     </resultMap>
-    <resultMap type="com.tieshan.disintegrate.vo.AppCarBaseVo" id="appCarBaseVo">
+    <resultMap type="com.tieshan.disintegrate.vo.AppCarVerificationVo" id="appCarVerificationVo">
         <result property="carInfoId" column="car_info_id"/>  <!--  -->
         <result property="carCode" column="car_code"/>  <!-- 车辆编号 -->
         <result property="carNo" column="car_no"/>  <!-- 车牌号 -->
@@ -102,8 +102,19 @@
         <result property="vin" column="vin"/>  <!-- vin -->
         <result property="isVerify" column="is_verify"/>
         <result property="carProcessingId" column="car_processing_id"/>
-        <association property="verificationResult" column="{carInfoId=car_info_id,carProcessingId=car_processing_id}"
+        <association property="verificationResult" column="car_info_id"
                      select="com.tieshan.disintegrate.dao.CarProcedureLogMapper.selectAppOneByMap"/>
+    </resultMap>
+    <resultMap type="com.tieshan.disintegrate.vo.AppCarQueryVo" id="appCarQueryVo">
+        <result property="carInfoId" column="car_info_id"/>  <!--  -->
+        <result property="carCode" column="car_code"/>  <!-- 车辆编号 -->
+        <result property="carNo" column="car_no"/>  <!-- 车牌号 -->
+        <result property="approachTime" column="ascription"/>  <!-- 车辆归属 -->
+        <result property="vin" column="vin"/>  <!-- vin -->
+        <result property="isQuery" column="is_query"/>
+        <result property="carProcessingId" column="car_processing_id"/>
+        <association property="queryResult" column="car_info_id"
+                     select="com.tieshan.disintegrate.dao.CarProcedureLogMapper.selectOneQueryVoByMap"/>
     </resultMap>
     <resultMap type="com.tieshan.disintegrate.vo.CarProcedureIssueVo" id="crProcedureIssueVo">
         <result property="carInfoId" column="car_info_id"/>  <!--  -->
@@ -229,7 +240,7 @@
             </if>
         </where>
     </select>
-    <select id="selectAppList" resultMap="appCarBaseVo">
+    <select id="selectAppVerificationList" resultMap="appCarVerificationVo">
         SELECT i.id car_info_id,i.car_code, e.approach_time,i.car_no,ie.vin,p.is_verify,p.id car_processing_id
         FROM ts_car_info i
         left join ts_car_enter e on i.id=e.car_info_id
@@ -238,9 +249,6 @@
         <where>
             <if test="disintegratePlantId!=null">
                 AND i.disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
-            </if>
-            <if test="isQuery!=null">
-                AND p.is_query=#{isQuery} and p.is_register=2
             </if>
             <if test="isVerify!=null">
                 AND p.is_verify=#{isVerify} and p.is_query=2
@@ -340,6 +348,28 @@
             </if>
             <if test="isVerify!=null">
                 AND p.is_verify=#{isVerify}
+            </if>
+        </where>
+    </select>
+    <select id="selectAppQueryList" resultMap="appCarQueryVo">
+        SELECT i.id car_info_id,i.car_code, e.approach_time,i.car_no,ie.vin,p.is_query,p.id car_processing_id
+        FROM ts_car_info i
+        left join ts_car_enter e on i.id=e.car_info_id
+        left join ts_car_identity ie on i.id=ie.car_info_id
+        left join ts_car_processing p on i.id=p.car_info_id
+        <where>
+            <if test="disintegratePlantId!=null">
+                AND i.disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
+            </if>
+            <if test="isQuery!=null">
+                AND p.is_query=#{isQuery} and p.is_register=2
+            </if>
+            <if test="isQuery==null or isQuery==''">
+                and p.is_verify!='' and p.is_register=2
+            </if>
+            <if test="searchInfo!=null and searchInfo!=''">
+                and concat(i.contacts,i.contacts_phone,i.car_name,i.car_no,i.car_code)
+                like concat("%",#{searchInfo},"%")
             </if>
         </where>
     </select>

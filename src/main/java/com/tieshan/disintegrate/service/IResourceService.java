@@ -24,7 +24,7 @@ public interface IResourceService {
      * @param depart_id
      * @return
      */
-    public List<Menu> departTree(String depart_id);
+    public List<Menu> departTree(String depart_id, HttpServletRequest request);
 
 
     /**
@@ -33,7 +33,7 @@ public interface IResourceService {
      * @param request
      * @return
      */
-    public List<Menu> departMenus( HttpServletRequest request);
+    public List<Menu> departMenus(HttpServletRequest request);
 
     /**
      * 添加资源
@@ -48,7 +48,7 @@ public interface IResourceService {
      *
      * @return
      */
-    List<Menu> getResourceTree();
+    List<Menu> getResourceTree(HttpServletRequest request);
 
     /**
      * 更新部门和资源的关系
@@ -61,7 +61,7 @@ public interface IResourceService {
     /**
      * @return
      */
-    List<Map<String, Object>> getNode();
+    List<Map<String, Object>> getNode(HttpServletRequest request);
 
 
     /**
@@ -70,6 +70,14 @@ public interface IResourceService {
      * @return
      */
     Map<String, Object> getNodeById(String id);
+
+    /**
+     * 修改资源
+     *
+     * @param resource
+     * @return
+     */
+    int updateRS(Resource resource);
 
 
 //    /**

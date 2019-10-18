@@ -39,7 +39,9 @@ public interface IProceduresService {
 
     void saveAppointLogoutTimeRecord(Map<String, Object> params, SysUser user);
 
-    PageInfo<AppCarBaseVo> queryAppVerificationList(Map<String, Object> params, SysUser user);
+    PageInfo<AppCarVerificationVo> queryAppVerificationList(Map<String, Object> params, SysUser user);
+
+    PageInfo<AppCarQueryVo> queryAppQueryList(Map<String, Object> params, SysUser user);
 
     CarCustomerInfoVo queryCarCustomerInfo(Map<String, Object> params, SysUser user);
 

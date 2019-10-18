@@ -17,6 +17,20 @@
         <result property="state" column="state"/>  <!-- 1:未完成;2完成；3:暂存 4：退车（对应客服） -->
         <result property="isDelete" column="is_delete"/>  <!-- 是否删除。1.删除，2,正常 -->
     </resultMap>
+    <resultMap type="com.tieshan.disintegrate.vo.CarProcedureQueryLog" id="carProcedureQueryLogMap">
+        <result property="id" column="id"/>  <!--  -->
+        <result property="disintegratePlantId" column="disintegrate_plant_id"/>  <!-- 解体厂id -->
+        <result property="procedureLogId" column="procedure_log_id"/>  <!-- 父id -->
+        <result property="carInfoId" column="car_info_id"/>  <!-- 车辆信息主键id -->
+        <result property="type" column="type"/>  <!-- 1：查询历史；2：核档历史；3：客服历史； -->
+        <result property="result" column="result"/>  <!-- 结果 -->
+        <result property="remark" column="remark"/>  <!-- 备注 -->
+        <result property="createTime" column="create_time"/>  <!-- 发生时间 -->
+        <result property="operatorId" column="operator_id"/>  <!-- 操作人id -->
+        <result property="operatorName" column="operator"/>  <!-- 操作人 -->
+        <result property="state" column="state"/>  <!-- 1:未完成;2完成；3:暂存 4：退车（对应客服） -->
+        <result property="isDelete" column="is_delete"/>  <!-- 是否删除。1.删除，2,正常 -->
+    </resultMap>
     <resultMap type="com.tieshan.disintegrate.vo.RecordHandleVo" id="recordHandleVoMap">
         <result property="id" column="id"/>  <!--  -->
         <result property="result" column="result"/>  <!-- 结果 -->
@@ -135,29 +149,8 @@
             <if test="carInfoId!=null">
                 AND car_info_id=#{carInfoId}  <!-- 车辆信息主键id -->
             </if>
-            <if test="type!=null">
-                AND type=#{type}  <!-- 1：查询历史；2：核档历史；3：客服历史； -->
-            </if>
-            <if test="result!=null and result!=''">
-                AND result=#{result}  <!-- 结果 -->
-            </if>
-            <if test="remark!=null and remark!=''">
-                AND remark=#{remark}  <!-- 备注 -->
-            </if>
-            <if test="createTime!=null">
-                AND create_time=#{createTime}  <!-- 发生时间 -->
-            </if>
-            <if test="operatorId!=null">
-                AND operator_id=#{operatorId}  <!-- 操作人id -->
-            </if>
-            <if test="operator!=null and operator!=''">
-                AND operator=#{operator}  <!-- 操作人 -->
-            </if>
             <if test="state!=null">
                 AND state=#{state}  <!-- 1:未完成;2完成；3:暂存 4：退车（对应客服） -->
-            </if>
-            <if test="isDelete!=null">
-                AND is_delete=#{isDelete}  <!-- 是否删除。1.删除，2,正常 -->
             </if>
         </where>
         order by create_time limit 1
@@ -203,6 +196,30 @@
         FROM ts_car_procedure_log l
         left join ts_car_procedure_log lm on l.id= lm.procedure_log_id
         where l.car_info_id=#{carInfoId} AND (l.type=1 or l.type=2)  order by l.create_time
+    </select>
+    <select id="selectOneQueryVoByMap" resultMap="carProcedureQueryLogMap">
+        SELECT  id, disintegrate_plant_id, procedure_log_id, car_info_id, type, result, remark, create_time,
+        operator_id, operator, state, is_delete
+        FROM ts_car_procedure_log
+        <where>
+            type=1
+            <if test="id!=null">
+                AND id=#{id}  <!--  -->
+            </if>
+            <if test="disintegratePlantId!=null">
+                AND disintegrate_plant_id=#{disintegratePlantId}  <!-- 解体厂id -->
+            </if>
+            <if test="procedureLogId!=null">
+                AND procedure_log_id=#{procedureLogId}  <!-- 父id -->
+            </if>
+            <if test="carInfoId!=null">
+                AND car_info_id=#{carInfoId}  <!-- 车辆信息主键id -->
+            </if>
+            <if test="state!=null">
+                AND state=#{state}  <!-- 1:未完成;2完成；3:暂存 4：退车（对应客服） -->
+            </if>
+        </where>
+        order by create_time limit 1
     </select>
     <insert id="insertCarProcedureLog">
         INSERT INTO ts_car_procedure_log(
