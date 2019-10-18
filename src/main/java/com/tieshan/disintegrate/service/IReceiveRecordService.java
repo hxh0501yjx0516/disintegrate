@@ -1,5 +1,6 @@
 package com.tieshan.disintegrate.service;
 
+import com.tieshan.disintegrate.pojo.ReceiveRecord;
 import com.tieshan.disintegrate.pojo.SysUser;
 
 import java.util.Map;
@@ -13,4 +14,6 @@ import java.util.Map;
 public interface IReceiveRecordService {
 
     void save(Map<String, Object> params, SysUser user);
+
+    ReceiveRecord query(Map<String, Object> params, SysUser user);
 }

@@ -1,6 +1,5 @@
 package com.tieshan.disintegrate.service.impl;
 
-import com.alibaba.druid.support.json.JSONUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.tieshan.disintegrate.dao.*;
@@ -11,7 +10,6 @@ import com.tieshan.disintegrate.util.IdWorker;
 import com.tieshan.disintegrate.vo.*;
 import lombok.extern.apachecommons.CommonsLog;
 import org.apache.commons.lang3.time.DateUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -145,6 +143,7 @@ public class ProceduresService implements IProceduresService {
     @Transactional
     public void recordQueryResult(Map<String, Object> params, SysUser user) {
         params.put("disintegratePlantId", user.getCompany_id());
+        params.put("id", params.get("carProcessingId"));
         CarProcessing carProcessing = carProcessingMapper.selectOneByMap(params);
         if (carProcessing == null) {
             throw new CustomException("查询失败！");
@@ -173,12 +172,16 @@ public class ProceduresService implements IProceduresService {
         carProcedurelog.setState(state);
 
 
-        if (StringUtils.isEmpty(params.get("queryId"))) {
+        if (StringUtils.isEmpty(params.get("queryId")) && StringUtils.isEmpty(params.get("queryResultId"))) {
             IdWorker idWorker = new IdWorker(1, 1, 1);
             carProcedurelog.setId(idWorker.nextId());
             carProcedureLogMapper.insertCarProcedureLog(carProcedurelog);
         } else {
-            carProcedurelog.setId(Long.valueOf(params.get("queryId").toString()));
+            if (!StringUtils.isEmpty(params.get("queryId"))) {
+                carProcedurelog.setId(Long.valueOf(params.get("queryId").toString()));
+            } else {
+                carProcedurelog.setId(Long.valueOf(params.get("queryResultId").toString()));
+            }
             carProcedureLogMapper.updateCarProcedureLog(carProcedurelog);
         }
 
@@ -463,14 +466,26 @@ public class ProceduresService implements IProceduresService {
     }*/
 
     @Override
-    public PageInfo<AppCarBaseVo> queryAppVerificationList(Map<String, Object> params, SysUser user) {
+    public PageInfo<AppCarVerificationVo> queryAppVerificationList(Map<String, Object> params, SysUser user) {
         params.put("disintegratePlantId", user.getCompany_id());
         PageHelper.startPage(
                 StringUtils.isEmpty(params.get("pageNum")) ? 1 : Integer.parseInt(String.valueOf(params.get("pageNum"))),
                 StringUtils.isEmpty(params.get("pageSize")) ? 10 : Integer.parseInt(String.valueOf(params.get("pageSize"))));
-        PageHelper.orderBy("create_time desc");
-        List<AppCarBaseVo> carInfos = carInfoMapper.selectAppList(params);
-        PageInfo<AppCarBaseVo> pageInfo = new PageInfo<>(carInfos);
+        PageHelper.orderBy("e.approach_time desc");
+        List<AppCarVerificationVo> carInfos = carInfoMapper.selectAppVerificationList(params);
+        PageInfo<AppCarVerificationVo> pageInfo = new PageInfo<>(carInfos);
+        return pageInfo;
+    }
+
+    @Override
+    public PageInfo<AppCarQueryVo> queryAppQueryList(Map<String, Object> params, SysUser user) {
+        params.put("disintegratePlantId", user.getCompany_id());
+        PageHelper.startPage(
+                StringUtils.isEmpty(params.get("pageNum")) ? 1 : Integer.parseInt(String.valueOf(params.get("pageNum"))),
+                StringUtils.isEmpty(params.get("pageSize")) ? 10 : Integer.parseInt(String.valueOf(params.get("pageSize"))));
+        PageHelper.orderBy("e.approach_time desc");
+        List<AppCarQueryVo> appCarQueryVos = carInfoMapper.selectAppQueryList(params);
+        PageInfo<AppCarQueryVo> pageInfo = new PageInfo<>(appCarQueryVos);
         return pageInfo;
     }
 

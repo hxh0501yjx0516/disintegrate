@@ -86,7 +86,7 @@ public class AppVersionController {
     @PostMapping(value = "/add")
     public RestResult add(@RequestBody AppVersion appVersion, @LoginUser SysUser user) {
         appVersionService.add(appVersion, user);
-        return new RestResult("添加成功", null, ResultCode.SUCCESS.code());
+        return new RestResult("添加成功", "", ResultCode.SUCCESS.code());
     }
     /**
      * 修改
@@ -96,7 +96,7 @@ public class AppVersionController {
     @PostMapping(value = "/update")
     public RestResult update(@RequestBody AppVersion appVersion) {
         appVersionService.update(appVersion);
-        return new RestResult("修改成功", null, ResultCode.SUCCESS.code());
+        return new RestResult("修改成功", "", ResultCode.SUCCESS.code());
     }
     /**
      * 删除
@@ -106,6 +106,6 @@ public class AppVersionController {
     @PostMapping(value = "/del")
     public RestResult del(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         appVersionService.del(params,user);
-        return new RestResult("删除成功", null, ResultCode.SUCCESS.code());
+        return new RestResult("删除成功", "", ResultCode.SUCCESS.code());
     }
 }
