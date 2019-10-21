@@ -62,7 +62,6 @@ public interface CarSourceMapper {
 
     List<Map<String, Object>> selectCarSourceListApp(@Param(value = "disintegratePlantId") Long disintegratePlantId,
                                                      @Param(value = "userId") Long id,
-                                                     @Param(value = "loginName") String loginName,
                                                      @Param(value = "findMsg") String findMsg);
 
 //    List<Long> selectCarInfoIdList(Long disintegratePlantId);
