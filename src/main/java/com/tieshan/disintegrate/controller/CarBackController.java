@@ -40,7 +40,7 @@ public class CarBackController {
     @PostMapping(value = "/savePrintCarBackRecord")
     public RestResult savePrintCarBackRecord(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         carBackService.savePrintCarBackRecord(params,user);
-        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
+        return new RestResult("保存成功", null, ResultCode.SUCCESS.code());
     }
 
     /**
@@ -52,7 +52,7 @@ public class CarBackController {
     @PostMapping(value = "/saveReceiveCarRecord")
     public RestResult saveReceiveCarRecord(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         carBackService.saveReceiveCarRecord(params,user);
-        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
+        return new RestResult("保存成功", null, ResultCode.SUCCESS.code());
     }
 
     /**

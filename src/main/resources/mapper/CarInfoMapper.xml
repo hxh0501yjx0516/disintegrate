@@ -98,7 +98,7 @@
         <result property="carInfoId" column="car_info_id"/>  <!--  -->
         <result property="carCode" column="car_code"/>  <!-- 车辆编号 -->
         <result property="carNo" column="car_no"/>  <!-- 车牌号 -->
-        <result property="approachTime" column="ascription"/>  <!-- 车辆归属 -->
+        <result property="approachTime" column="approach_time"/>  <!-- 入场时间 -->
         <result property="vin" column="vin"/>  <!-- vin -->
         <result property="isVerify" column="is_verify"/>
         <result property="carProcessingId" column="car_processing_id"/>
@@ -109,7 +109,7 @@
         <result property="carInfoId" column="car_info_id"/>  <!--  -->
         <result property="carCode" column="car_code"/>  <!-- 车辆编号 -->
         <result property="carNo" column="car_no"/>  <!-- 车牌号 -->
-        <result property="approachTime" column="ascription"/>  <!-- 车辆归属 -->
+        <result property="approachTime" column="approach_time"/>  <!-- 入场时间 -->
         <result property="vin" column="vin"/>  <!-- vin -->
         <result property="isQuery" column="is_query"/>
         <result property="carProcessingId" column="car_processing_id"/>

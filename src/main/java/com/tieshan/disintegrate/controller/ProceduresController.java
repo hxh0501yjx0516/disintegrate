@@ -54,7 +54,7 @@ public class ProceduresController {
     @PostMapping(value = "/saveProcedures")
     public RestResult saveProcedures(@RequestBody ProceduresVo proceduresVo, @LoginUser SysUser user) {
         proceduresService.saveProcedures(proceduresVo, user);
-        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
+        return new RestResult("保存成功", null, ResultCode.SUCCESS.code());
     }
 
     /**
@@ -82,7 +82,7 @@ public class ProceduresController {
     @PostMapping(value = "/saveQueryResult")
     public RestResult saveQueryResult(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         proceduresService.recordQueryResult(params, user);
-        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
+        return new RestResult("保存成功", null, ResultCode.SUCCESS.code());
     }
 
     /**
@@ -98,7 +98,7 @@ public class ProceduresController {
     @PostMapping(value = "/saveVerificationResult")
     public RestResult saveVerificationResult(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         proceduresService.recordVerificationResult(params, user);
-        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
+        return new RestResult("保存成功", null, ResultCode.SUCCESS.code());
     }
 
     /**
@@ -114,7 +114,7 @@ public class ProceduresController {
     @PostMapping(value = "/saveQueryCustomerResult")
     public RestResult saveQueryCustomerResult(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         proceduresService.recordQueryCustomerResult(params, user);
-        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
+        return new RestResult("保存成功", null, ResultCode.SUCCESS.code());
     }
     /**
      * 保存档案核验客服处理结果
@@ -129,7 +129,7 @@ public class ProceduresController {
     @PostMapping(value = "/saveVerificationCustomerResult")
     public RestResult saveVerificationCustomerResult(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         proceduresService.recordVerificationCustomerResult(params, user);
-        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
+        return new RestResult("保存成功", null, ResultCode.SUCCESS.code());
     }
 
     /**
@@ -141,7 +141,7 @@ public class ProceduresController {
     @PostMapping(value = "/savePrintVerificationRecord")
     public RestResult savePrintVerificationRecord(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         proceduresService.savePrintVerificationRecord(params, user);
-        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
+        return new RestResult("保存成功", null, ResultCode.SUCCESS.code());
     }
 
     /**
@@ -153,7 +153,7 @@ public class ProceduresController {
     @PostMapping(value = "/saveUploadShangWeiDataRecord")
     public RestResult saveUploadShangWeiDataRecord(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         proceduresService.saveUploadShangWeiDataRecord(params, user);
-        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
+        return new RestResult("保存成功", null, ResultCode.SUCCESS.code());
     }
 
     /**
@@ -165,7 +165,7 @@ public class ProceduresController {
     @PostMapping(value = "/savePrintRecycleRecord")
     public RestResult savePrintRecycleRecord(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         proceduresService.savePrintRecycleRecord(params, user);
-        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
+        return new RestResult("保存成功", null, ResultCode.SUCCESS.code());
     }
     /**
      * 保存注销时间
@@ -177,7 +177,7 @@ public class ProceduresController {
     @PostMapping(value = "/saveLogoutTimeRecord")
     public RestResult saveLogoutTimeRecord(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         proceduresService.saveLogoutTimeRecord(params, user);
-        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
+        return new RestResult("保存成功", null, ResultCode.SUCCESS.code());
     }
     /**
      * 保存商委注销时间状态
@@ -295,7 +295,7 @@ public class ProceduresController {
     @PostMapping(value = "/provideProcedureIssue")
     public RestResult provideProcedureIssue(@RequestBody Map<String, Object> params, @LoginUser SysUser user) {
         receiveRecordService.save(params, user);
-        return new RestResult("保存成功", "", ResultCode.SUCCESS.code());
+        return new RestResult("保存成功", null, ResultCode.SUCCESS.code());
     }
     /**
      * web-查询手续管理列表

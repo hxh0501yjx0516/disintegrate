@@ -21,6 +21,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.TimeZone;
 
 @Configuration
@@ -40,19 +41,19 @@ public class WebConfigurer implements WebMvcConfigurer {
     public HttpMessageConverters customConverters() {
         MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setSerializerFactory(objectMapper.getSerializerFactory()
+                .withSerializerModifier(new MyBeanSerializerModifier()));
+
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
         simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
         simpleModule.addSerializer(Integer.class, ToStringSerializer.instance);
         simpleModule.addSerializer(Integer.TYPE, ToStringSerializer.instance);
-        objectMapper.getSerializerProvider().setNullValueSerializer(
-                new JsonSerializer() {
-                    @Override
-                    public void serialize(Object o, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-                        jsonGenerator.writeString("");
-                    }
-                }
-        );
+        /*objectMapper.getSerializerProvider().setNullValueSerializer(
+                new CustomizeNullJsonSerializer
+                .NullStringJsonSerializer()
+        );*/
+
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         //设置全局的时间转化
         SimpleDateFormat smt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
